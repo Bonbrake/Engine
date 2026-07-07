@@ -1,0 +1,11 @@
+{
+  "name": "zombie-engine",
+  "version": "0.1.0",
+  "dependencies": [
+    "entt",
+    "glm",
+    "joltphysics",
+    "sdl3",
+    "vk-bootstrap"
+  ]
+}
