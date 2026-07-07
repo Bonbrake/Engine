@@ -10,8 +10,12 @@ find_package(vk-bootstrap CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(entt CONFIG REQUIRED)
 find_package(joltphysics CONFIG REQUIRED)
+find_package(vulkan_memory_allocator CONFIG REQUIRED)
 
-add_executable(ZombieEngine src/core/Application.cpp)
+file(GLOB_RECURSE SRC_FILES "src/*.cpp")
+
+add_executable(ZombieEngine ${SRC_FILES})
+target_include_directories(ZombieEngine PRIVATE src)
 
 target_link_libraries(ZombieEngine PRIVATE
     SDL3::SDL3
@@ -20,6 +24,7 @@ target_link_libraries(ZombieEngine PRIVATE
     glm::glm
     EnTT::EnTT
     JoltPhysics::JoltPhysics
+    GPUOpen::vulkan_memory_allocator
 )
 
 # Vulkan validation layers ON in Debug and OFF in Release
