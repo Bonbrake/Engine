@@ -2,11 +2,32 @@
   "name": "zombie-engine",
   "version": "0.1.0",
   "dependencies": [
+    "catch2",
+    "cxxopts",
+    "enkits",
     "entt",
+    "fastgltf",
     "glm",
-    "joltphysics",
-    "sdl3",
+    {
+      "name": "imgui",
+      "features": ["sdl3-binding", "vulkan-binding", "freetype"]
+    },
+    {
+      "name": "msdfgen",
+      "default-features": false,
+      "features": ["extensions"]
+    },
+    "nlohmann-json",
+    {
+      "name": "sdl3",
+      "features": ["vulkan"]
+    },
+    "spdlog",
+    "stb",
     "vk-bootstrap",
-    "vulkan-memory-allocator"
+    "volk",
+    "vulkan-memory-allocator",
+    "shaderc",
+    "spirv-reflect"
   ]
 }

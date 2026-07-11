@@ -1,0 +1,24 @@
+#version 450
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(set = 0, binding = 0, r32f) uniform readonly image2D inDepth;
+layout(set = 0, binding = 1, r32f) uniform writeonly image2D outDepth;
+
+void main() {
+    ivec2 pos = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 srcPos = pos * 2;
+    
+    // Bounds check
+    ivec2 size = imageSize(outDepth);
+    if (pos.x >= size.x || pos.y >= size.y) return;
+
+    float d0 = imageLoad(inDepth, srcPos).r;
+    float d1 = imageLoad(inDepth, srcPos + ivec2(1, 0)).r;
+    float d2 = imageLoad(inDepth, srcPos + ivec2(0, 1)).r;
+    float d3 = imageLoad(inDepth, srcPos + ivec2(1, 1)).r;
+    
+    // Standard Z (0 to 1), where 1 is the far plane. 
+    // To be conservative for occlusion culling, we must take the furthest depth (max of 4 pixels).
+    float d = max(max(d0, d1), max(d2, d3));
+    imageStore(outDepth, pos, vec4(d, 0.0, 0.0, 0.0));
+}

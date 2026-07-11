@@ -1,32 +1,42 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <vulkan/vulkan.h>
+#include <volk.h>
 #include <VkBootstrap.h>
-#include <vector>
+#include <memory>
+
+namespace debug { class ImGuiOverlay; }
 
 namespace render {
+
+class Device;
+class Swapchain;
+class AssetManager;
+class MaterialSystem;
 
 class VulkanContext {
 public:
     VulkanContext(SDL_Window* window);
     ~VulkanContext();
 
-    VulkanContext(const VulkanContext&) = delete;
-    VulkanContext& operator=(const VulkanContext&) = delete;
+    void renderFrame(debug::ImGuiOverlay* imguiOverlay);
 
-    vkb::Instance instance;
-    VkSurfaceKHR surface;
-    vkb::Device device;
-    vkb::Swapchain swapchain;
-
-    VkQueue graphics_queue;
-    uint32_t graphics_queue_index;
-    std::vector<VkImage> swapchain_images;
-    std::vector<VkImageView> swapchain_image_views;
+    vkb::Instance getInstance() const { return vkbInstance_; }
+    VkSurfaceKHR getSurface() const { return surface_; }
+    Device* getDevice() const { return device_.get(); }
 
 private:
-    SDL_Window* window_{nullptr};
+    void initVulkan(SDL_Window* window);
+    void cleanup();
+
+    vkb::Instance vkbInstance_;
+    VkSurfaceKHR surface_ = VK_NULL_HANDLE;
+    SDL_Window* window_ = nullptr;
+
+    std::unique_ptr<Device> device_;
+    std::unique_ptr<Swapchain> swapchain_;
+    std::unique_ptr<AssetManager> assetManager_;
+    std::unique_ptr<MaterialSystem> materialSystem_;
 };
 
 } // namespace render

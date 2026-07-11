@@ -1,0 +1,38 @@
+[
+  {
+    "Transform": {
+      "position": [10.0, 20.0, 30.0],
+      "rotation": [1.0, 0.0, 0.0, 0.0],
+      "scale": [2.0, 2.0, 2.0]
+    },
+    "Health": {
+      "current": 80.0,
+      "max": 120.0
+    },
+    "StableId": {
+      "uuid": 9999
+    },
+    "BulletComponent": {
+      "velocity": [1.0, 2.0, 3.0],
+      "mass": 0.05,
+      "dragCoefficient": 0.25,
+      "flags": 1
+    }
+  },
+  {
+    "Transform": {
+      "position": [5.0, 5.0, 5.0]
+    },
+    "Health": {
+      "max": 150.0
+    }
+  },
+  {
+    "Transform": {
+      "position": [0.0, 0.0, 0.0]
+    },
+    "UnregisteredComponent": {
+      "some_value": 42
+    }
+  }
+]

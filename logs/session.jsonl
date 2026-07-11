@@ -1,0 +1,43 @@
+{"timestamp":"2026-07-11T18:12:59.121173","level":"info","message":"Initializing Engine..."}
+{"timestamp":"2026-07-11T18:12:59.121688","level":"info","message":"JobSystem initialized with 16 threads"}
+{"timestamp":"2026-07-11T18:12:59.121721","level":"info","message":"RAII Init: JobSystem"}
+{"timestamp":"2026-07-11T18:12:59.121960","level":"info","message":"MetaRegistry initialized with 9 reflected components"}
+{"timestamp":"2026-07-11T18:12:59.273894","level":"info","message":"Selected GPU: NVIDIA GeForce RTX 2070 SUPER"}
+{"timestamp":"2026-07-11T18:12:59.274239","level":"info","message":"VERIFICATION SUCCESS: 8K maxImageDimension2D limit and multi-RT (maxColorAttachments >= 8) verified."}
+{"timestamp":"2026-07-11T18:12:59.342674","level":"info","message":"Async Compute queue established at family index 2"}
+{"timestamp":"2026-07-11T18:12:59.342711","level":"info","message":"Created timestamp query pool with capacity 96"}
+{"timestamp":"2026-07-11T18:12:59.344689","level":"info","message":"VMA Allocator initialized"}
+{"timestamp":"2026-07-11T18:12:59.345468","level":"info","message":"Device Local Heap 0 Headroom: 7217.8477 MB"}
+{"timestamp":"2026-07-11T18:12:59.345482","level":"info","message":"Device Local Heap 2 Headroom: 0 MB"}
+{"timestamp":"2026-07-11T18:12:59.345667","level":"info","message":"ShaderManager: Shader Object support status = SUPPORTED"}
+{"timestamp":"2026-07-11T18:12:59.345680","level":"info","message":"RAII Init: VulkanInstance"}
+{"timestamp":"2026-07-11T18:12:59.345682","level":"info","message":"RAII Init: Device"}
+{"timestamp":"2026-07-11T18:12:59.345854","level":"info","message":"ShaderCacheGC: Cache size is within limits (36 bytes)"}
+{"timestamp":"2026-07-11T18:12:59.346260","level":"info","message":"AssetManager initialized"}
+{"timestamp":"2026-07-11T18:12:59.346272","level":"info","message":"RAII Init: AssetManager"}
+{"timestamp":"2026-07-11T18:12:59.347302","level":"info","message":"MaterialSystem Initialized: Capacity 4096, Aligned Block Size 64 bytes"}
+{"timestamp":"2026-07-11T18:12:59.347375","level":"info","message":"RAII Init: MaterialSystem"}
+{"timestamp":"2026-07-11T18:12:59.347473","level":"info","message":"VERIFICATION SUCCESS: Dense Geometry compression verified. Position error: 0.0028907245, Normal cosine: 0.99999225"}
+{"timestamp":"2026-07-11T18:12:59.347561","level":"error","message":"Failed to load texture: assets/textures/nonexistent.png"}
+{"timestamp":"2026-07-11T18:12:59.347579","level":"warning","message":"MaterialSystem CreateMaterial failed: Invalid or missing albedo texture handle"}
+{"timestamp":"2026-07-11T18:12:59.347582","level":"info","message":"VERIFICATION SUCCESS: Material creation failure correctly propagated on nonexistent texture."}
+{"timestamp":"2026-07-11T18:12:59.351925","level":"info","message":"Loaded texture assets/textures/test.png (1x1)"}
+{"timestamp":"2026-07-11T18:12:59.351944","level":"info","message":"VERIFICATION SUCCESS: Loaded test.png. Handle index: 0"}
+{"timestamp":"2026-07-11T18:12:59.351954","level":"info","message":"VERIFICATION SUCCESS: Created material. Handle index: 0, Offset: 0 bytes"}
+{"timestamp":"2026-07-11T18:12:59.352976","level":"error","message":"MaterialSystem overflow: Maximum capacity of 4096 materials reached"}
+{"timestamp":"2026-07-11T18:12:59.352981","level":"info","message":"VERIFICATION SUCCESS: Overflow triggered exactly at index 4096 (total material count: 4096)"}
+{"timestamp":"2026-07-11T18:12:59.353353","level":"info","message":"Frame 0 TickHash 0"}
+{"timestamp":"2026-07-11T18:12:59.353364","level":"info","message":"Triggering clean quit at frame 1"}
+{"timestamp":"2026-07-11T18:12:59.353366","level":"info","message":"Frame 1 TickHash 0"}
+{"timestamp":"2026-07-11T18:12:59.353458","level":"info","message":"DIAGNOSTIC SUCCESS: Core systems verified."}
+{"timestamp":"2026-07-11T18:12:59.353748","level":"info","message":"DIAGNOSTIC SUCCESS: ECS and cache safeguards verified."}
+{"timestamp":"2026-07-11T18:12:59.353755","level":"info","message":"HEADLESS CI SMOKE TEST: SUCCESS"}
+{"timestamp":"2026-07-11T18:12:59.353810","level":"info","message":"RAII Shutdown: MaterialSystem"}
+{"timestamp":"2026-07-11T18:12:59.353825","level":"info","message":"RAII Shutdown: AssetManager"}
+{"timestamp":"2026-07-11T18:12:59.353992","level":"info","message":"AssetManager destroyed"}
+{"timestamp":"2026-07-11T18:12:59.354293","level":"info","message":"Saved pipeline cache to pipeline_cache.bin"}
+{"timestamp":"2026-07-11T18:12:59.354409","level":"info","message":"RAII Shutdown: Device"}
+{"timestamp":"2026-07-11T18:12:59.389579","level":"info","message":"RAII Shutdown: VulkanInstance"}
+{"timestamp":"2026-07-11T18:12:59.390771","level":"info","message":"JobSystem shut down"}
+{"timestamp":"2026-07-11T18:12:59.390785","level":"info","message":"RAII Shutdown: JobSystem"}
+{"timestamp":"2026-07-11T18:12:59.390789","level":"info","message":"Engine Shutdown Complete."}

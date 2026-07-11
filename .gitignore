@@ -1,0 +1,9 @@
+build/
+vcpkg_installed/
+.vs/
+out/
+bin/
+*.user
+*.suo
+*.db
+*.opendb

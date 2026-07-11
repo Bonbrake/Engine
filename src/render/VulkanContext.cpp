@@ -1,75 +1,192 @@
 #include "VulkanContext.h"
+#include "Device.h"
+#include "Swapchain.h"
+#include "../core/Logger.h"
+#include "../core/Config.h"
+#include "../core/Platform.h"
+#include "PipelineCacheManager.h"
+#include "MaterialSystem.h"
+#include "AssetManager.h"
+#include "ShaderManager.h"
+#include "../core/TeardownTracker.h"
 #include <SDL3/SDL_vulkan.h>
-#include <iostream>
-#include <stdexcept>
-
-#ifndef ENABLE_VULKAN_VALIDATION_LAYERS
-#define ENABLE_VULKAN_VALIDATION_LAYERS 0
-#endif
 
 namespace render {
 
 VulkanContext::VulkanContext(SDL_Window* window) : window_(window) {
-    uint32_t ext_count = 0;
-    const char* const* extensions = SDL_Vulkan_GetInstanceExtensions(&ext_count);
-    if (!extensions) {
-        throw std::runtime_error("Failed to get SDL Vulkan extensions");
+    initVulkan(window);
+}
+
+VulkanContext::~VulkanContext() {
+    cleanup();
+}
+
+void VulkanContext::initVulkan(SDL_Window* window) {
+    if (volkInitialize() != VK_SUCCESS) {
+        LOG_CRITICAL("Failed to initialize volk");
+        core::Platform::triggerBreakpoint();
     }
 
     vkb::InstanceBuilder builder;
-    builder.set_app_name("Zombie Engine")
-           .request_validation_layers(ENABLE_VULKAN_VALIDATION_LAYERS)
+    
+    // Require Vulkan 1.4 API
+    builder.require_api_version(1, 4, 0)
+           .set_app_name("ZombieEngine")
+           .set_engine_name("Antigravity2")
+           .request_validation_layers(core::Config::get().devMode)
            .use_default_debug_messenger();
 
-    for (uint32_t i = 0; i < ext_count; ++i) {
-        builder.enable_extension(extensions[i]);
+    if (!core::Config::get().headless) {
+        // Platform specific surface extensions would be requested here if we weren't using SDL
+        // vkb handles basic surface extensions if we provide a dummy surface, or we enable them manually.
+        // Actually SDL requires us to enable surface extensions ourselves, or vkb instance builder does it?
+        // vkbInstanceBuilder enables surface extensions automatically.
+    } else {
+        builder.set_headless();
     }
 
     auto inst_ret = builder.build();
     if (!inst_ret) {
-        throw std::runtime_error("Failed to create Vulkan instance");
+        LOG_CRITICAL("Failed to create Vulkan instance: {}", inst_ret.error().message());
+        core::Platform::triggerBreakpoint();
     }
-    instance = inst_ret.value();
+    vkbInstance_ = inst_ret.value();
+    volkLoadInstance(vkbInstance_.instance);
 
-    if (!SDL_Vulkan_CreateSurface(window_, instance.instance, nullptr, &surface)) {
-        throw std::runtime_error("Failed to create Vulkan surface");
+    if (!core::Config::get().headless && window) {
+        if (!SDL_Vulkan_CreateSurface(window, vkbInstance_.instance, nullptr, &surface_)) {
+            LOG_CRITICAL("Failed to create Vulkan surface: {}", SDL_GetError());
+            core::Platform::triggerBreakpoint();
+        }
     }
 
-    vkb::PhysicalDeviceSelector selector{instance};
-    auto phys_ret = selector.set_surface(surface).set_minimum_version(1, 1).select();
-    if (!phys_ret) {
-        throw std::runtime_error("Failed to select Vulkan physical device");
+    // Initialize Device and Swapchain
+    device_ = std::make_unique<Device>(this);
+    ShaderManager::init(device_.get());
+    
+    core::TeardownTracker::RegisterInit(core::TeardownTracker::Stage::VulkanInstance, "VulkanInstance");
+    core::TeardownTracker::RegisterInit(core::TeardownTracker::Stage::Device, "Device");
+
+    // Initialize PipelineCache
+    PipelineCacheManager::init(device_.get(), "pipeline_cache.bin");
+
+    if (!core::Config::get().headless) {
+        swapchain_ = std::make_unique<Swapchain>(device_.get(), window_);
+        core::TeardownTracker::RegisterInit(core::TeardownTracker::Stage::Swapchain, "Swapchain");
     }
 
-    vkb::DeviceBuilder device_builder{phys_ret.value()};
-    auto dev_ret = device_builder.build();
-    if (!dev_ret) {
-        throw std::runtime_error("Failed to create Vulkan device");
+    assetManager_ = std::make_unique<AssetManager>();
+    assetManager_->Initialize(device_.get());
+    core::TeardownTracker::RegisterInit(core::TeardownTracker::Stage::AssetManager, "AssetManager");
+    
+    materialSystem_ = std::make_unique<MaterialSystem>();
+    materialSystem_->Initialize(device_.get());
+    core::TeardownTracker::RegisterInit(core::TeardownTracker::Stage::MaterialSystem, "MaterialSystem");
+    
+    // 0. Verify Dense Geometry Format round-trip compression
+    Vertex testV{ {1.2f, -3.4f, 5.6f}, {0.0f, 1.0f, 0.0f}, {0.2f, 0.8f} };
+    CompressedVertex cv = CompressVertex(testV);
+    Vertex decompV = DecompressVertex(cv);
+    float posDiff = glm::distance(testV.position, decompV.position);
+    float normCos = glm::dot(testV.normal, decompV.normal);
+    ENGINE_ASSERT(posDiff < 0.05f, "Compressed position error too large!");
+    ENGINE_ASSERT(normCos > 0.99f, "Compressed normal error too large!");
+    LOG_INFO("VERIFICATION SUCCESS: Dense Geometry compression verified. Position error: {}, Normal cosine: {}", posDiff, normCos);
+
+    // 1. Verify failure path for non-existent texture
+    ecs::Handle nonexistentTex = assetManager_->LoadTexture("assets/textures/nonexistent.png");
+    render::MaterialAsset invalidMat;
+    invalidMat.albedoTexture = nonexistentTex;
+    ecs::Handle failedMat = materialSystem_->CreateMaterial(invalidMat, assetManager_.get());
+    if (failedMat.index == 0xFFFFFFFF) {
+        LOG_INFO("VERIFICATION SUCCESS: Material creation failure correctly propagated on nonexistent texture.");
     }
-    device = dev_ret.value();
 
-    vkb::SwapchainBuilder swapchain_builder{device};
-    auto swap_ret = swapchain_builder.build();
-    if (!swap_ret) {
-        throw std::runtime_error("Failed to create Vulkan swapchain");
+    // 2. Verify success path for valid texture
+    ecs::Handle texHandle = assetManager_->LoadTexture("assets/textures/test.png");
+    if (texHandle.index != 0xFFFFFFFF) {
+        LOG_INFO("VERIFICATION SUCCESS: Loaded test.png. Handle index: {}", texHandle.index);
+        
+        render::MaterialAsset dummyMat;
+        dummyMat.albedoTexture = texHandle;
+        ecs::Handle matHandle = materialSystem_->CreateMaterial(dummyMat, assetManager_.get());
+        if (matHandle.index != 0xFFFFFFFF) {
+            LOG_INFO("VERIFICATION SUCCESS: Created material. Handle index: {}, Offset: {} bytes", 
+                     matHandle.index, matHandle.index * materialSystem_->GetAlignedBlockSize());
+            
+            // 3. Verify overflow (MAX_MATERIALS = 4096)
+            bool overflowFailed = false;
+            std::vector<ecs::Handle> testMaterials;
+            testMaterials.push_back(matHandle);
+            for (uint32_t i = 0; i < 4096; i++) {
+                ecs::Handle h = materialSystem_->CreateMaterial(dummyMat, assetManager_.get());
+                if (h.index == 0xFFFFFFFF) {
+                    LOG_INFO("VERIFICATION SUCCESS: Overflow triggered exactly at index {} (total material count: 4096)", i + 1);
+                    overflowFailed = true;
+                    break;
+                } else {
+                    testMaterials.push_back(h);
+                }
+            }
+            if (!overflowFailed) {
+                LOG_ERROR("VERIFICATION FAILURE: MAX_MATERIALS overflow check failed!");
+            }
+            
+            // Clean up dummy test materials to avoid startup saturation
+            for (auto h : testMaterials) {
+                materialSystem_->DestroyMaterial(h);
+            }
+        } else {
+            LOG_ERROR("VERIFICATION FAILURE: Failed to create material with valid texture!");
+        }
+    } else {
+        LOG_ERROR("VERIFICATION FAILURE: Failed to load test.png!");
     }
-    swapchain = swap_ret.value();
-
-    swapchain_images = swapchain.get_images().value();
-    swapchain_image_views = swapchain.get_image_views().value();
-
-    graphics_queue = device.get_queue(vkb::QueueType::graphics).value();
-    graphics_queue_index = device.get_queue_index(vkb::QueueType::graphics).value();
 }
 
-VulkanContext::~VulkanContext() {
-    for (auto image_view : swapchain_image_views) {
-        vkDestroyImageView(device.device, image_view, nullptr);
+void VulkanContext::cleanup() {
+    if (device_) {
+        device_->waitIdle();
+        core::TeardownTracker::RegisterShutdown(core::TeardownTracker::Stage::MaterialSystem);
+        if (materialSystem_) {
+            materialSystem_->Destroy();
+        }
+        core::TeardownTracker::RegisterShutdown(core::TeardownTracker::Stage::AssetManager);
+        if (assetManager_) {
+            assetManager_->Destroy();
+        }
+        ShaderManager::shutdown();
+        PipelineCacheManager::shutdown(device_.get());
     }
-    vkb::destroy_swapchain(swapchain);
-    vkb::destroy_device(device);
-    vkb::destroy_surface(instance.instance, surface);
-    vkb::destroy_instance(instance);
+
+    materialSystem_.reset();
+    assetManager_.reset();
+
+    if (!core::Config::get().headless) {
+        core::TeardownTracker::RegisterShutdown(core::TeardownTracker::Stage::Swapchain);
+    }
+    swapchain_.reset();
+    
+    core::TeardownTracker::RegisterShutdown(core::TeardownTracker::Stage::Device);
+    device_.reset();
+
+    if (surface_) {
+        vkb::destroy_surface(vkbInstance_.instance, surface_);
+        surface_ = VK_NULL_HANDLE;
+    }
+    
+    core::TeardownTracker::RegisterShutdown(core::TeardownTracker::Stage::VulkanInstance);
+    vkb::destroy_instance(vkbInstance_);
+}
+
+void VulkanContext::renderFrame(debug::ImGuiOverlay* imguiOverlay) {
+    if (core::Config::get().headless) {
+        return; 
+    }
+
+    if (swapchain_) {
+        swapchain_->acquireAndPresent(imguiOverlay, materialSystem_.get());
+    }
 }
 
 } // namespace render
