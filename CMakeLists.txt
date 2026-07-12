@@ -26,6 +26,49 @@ find_package(Tracy CONFIG REQUIRED)
 
 option(ENGINE_ENABLE_PROFILING "Enable Tracy Profiling" OFF)
 
+# Sanitizer strategy (toolchain revision 2026-07-12):
+#   Windows local  -> MSVC native ASan only (fast smoke check, no ClangCL needed).
+#   WSL2 / Linux CI -> clang + ASan/UBSan/TSan (full matrix, authoritative results).
+# The Windows ClangCL toolchain requirement was dropped: host OS build 10.0.26220 is
+# outside VS2022's supported range, so ClangCL cannot be installed here. WSL2 sidesteps
+# the OS/VS wall entirely and mirrors the Linux CI runner. TSan was never viable on
+# Windows; it runs under the same WSL2/Linux path as UBSan.
+set(ENGINE_SANITIZE "NONE" CACHE STRING "Sanitizer to enable (NONE, ASAN, UBSAN, TSAN)")
+set_property(CACHE ENGINE_SANITIZE PROPERTY STRINGS "NONE" "ASAN" "UBSAN" "TSAN")
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    # Windows only supports ASan locally, and MSVC provides it natively (-fsanitize=address
+    # is accepted by cl.exe). No ClangCL requirement. UBSan/TSan are not available on the
+    # MSVC toolchain — route them to WSL2/Linux instead of hard-failing here.
+    if(ENGINE_SANITIZE STREQUAL "UBSAN" OR ENGINE_SANITIZE STREQUAL "TSAN")
+        message(FATAL_ERROR "${ENGINE_SANITIZE} is not available on the Windows/MSVC toolchain. "
+            "Run UBSAN/TSAN builds under WSL2 or Linux CI with clang (e.g. `cmake -B build-wsl -S . "
+            "-DCMAKE_CXX_COMPILER=clang++ -DENGINE_SANITIZE=${ENGINE_SANITIZE}`).")
+    endif()
+endif()
+
+if(NOT ENGINE_SANITIZE STREQUAL "NONE")
+    if(ENGINE_SANITIZE STREQUAL "ASAN")
+        set(SANITIZE_FLAGS "-fsanitize=address")
+        if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+            # ASan on Windows (MSVC) does not support debug runtime libraries (-MDd/-MTd)
+            set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+            # Workaround for STL container annotation ABI mismatch with uninstrumented vcpkg libs
+            add_compile_definitions(_DISABLE_STRING_ANNOTATION _DISABLE_VECTOR_ANNOTATION)
+        endif()
+    elseif(ENGINE_SANITIZE STREQUAL "UBSAN")
+        set(SANITIZE_FLAGS "-fsanitize=undefined")
+    elseif(ENGINE_SANITIZE STREQUAL "TSAN")
+        set(SANITIZE_FLAGS "-fsanitize=thread")
+    endif()
+
+    add_compile_options(${SANITIZE_FLAGS})
+    add_link_options(${SANITIZE_FLAGS})
+endif()
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
 find_program(GLSLC glslc REQUIRED)
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
@@ -134,4 +177,12 @@ target_compile_definitions(ZombieEngine PRIVATE
     # M2 spec: Jolt must be built with these defines for bit-identical physics across compiler/CPU
     JPH_CROSS_PLATFORM_DETERMINISTIC
     JPH_DOUBLE_PRECISION
+)
+
+# Static Analysis Target
+# We use a custom target so it doesn't block the standard build per the directive
+add_custom_target(run_clang_tidy
+    COMMAND clang-tidy -p ${CMAKE_BINARY_DIR} ${SRC_FILES}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Running clang-tidy static analysis"
 )
