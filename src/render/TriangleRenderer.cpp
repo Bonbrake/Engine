@@ -388,7 +388,13 @@ void TriangleRenderer::createPipelines(Device* device, VkFormat colorFormat) {
     cullPipelineLayout = computeLayoutData.pipelineLayout;
 
     bool compat = PipelineCompatibility::ValidateLayoutCompatibility(graphicsSetLayouts, computeSetLayouts);
-    LOG_INFO("VERIFICATION SUCCESS: Validated graphics vs compute pipeline layout compatibility: {}", compat ? "COMPATIBLE" : "INCOMPATIBLE");
+    if (compat) {
+        LOG_INFO("Pipeline layout compatibility check PASS: graphics vs compute set layouts match");
+    } else {
+        LOG_WARN("Pipeline layout compatibility check: graphics vs compute set 0 DIFFERS. "
+                 "Note: graphics and compute-cull are distinct shader stages with legitimately "
+                 "different layouts — this needs diagnosis before treating it as a defect.");
+    }
     
     VkComputePipelineCreateInfo computeInfo{VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
     computeInfo.stage = cullStage;

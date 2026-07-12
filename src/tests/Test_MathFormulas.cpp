@@ -44,8 +44,8 @@ TEST_CASE("ComputeSubdividedCellKey Bit Packing", "[M1-EXT-08]") {
 // ---------------------------------------------------------
 TEST_CASE("CommandPoolMatrix Index Mapping", "[M1-EXT-03]") {
     render::CommandPoolMatrix matrix;
-    // We don't need to Initialize with a real device to test GetPoolIndex
-    matrix.Initialize(VK_NULL_HANDLE, 0, 3, 4); // 3 frames, 4 threads
+    // Configure layout only (no Vulkan device needed) to test the pure index math.
+    matrix.ConfigureLayout(3, 4); // 3 frames, 4 threads
 
     // Valid bounds
     REQUIRE(matrix.GetPoolIndex(0, 0) == 0);
@@ -56,6 +56,13 @@ TEST_CASE("CommandPoolMatrix Index Mapping", "[M1-EXT-03]") {
     // Out of bounds / assert case (Death test equivalent via exception)
     REQUIRE_THROWS_AS(matrix.GetPoolIndex(0, 4), std::out_of_range);
     REQUIRE_THROWS_AS(matrix.GetPoolIndex(1, 5), std::out_of_range);
+}
+
+TEST_CASE("CommandPoolMatrix Initialize rejects null device", "[M1-EXT-03]") {
+    render::CommandPoolMatrix matrix;
+    // A null VkDevice would null-deref inside the Vulkan loader (dispatch table read);
+    // Initialize must reject it up front rather than crash.
+    REQUIRE_THROWS_AS(matrix.Initialize(VK_NULL_HANDLE, 0, 3, 4), std::invalid_argument);
 }
 
 // ---------------------------------------------------------
