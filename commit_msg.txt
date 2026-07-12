@@ -1,0 +1,9 @@
+🧹 [Code Health] Generalize Memory Alignment
+
+🎯 What: Generalized `AlignToCacheLine` to `AlignSize(size, alignment)`, which takes an arbitrary alignment value (defaulting to 64). Also removed an unimplemented VMA wrapper `TODO` comment from `src/core/Memory.h`, since that logic does not belong in the core file.
+
+💡 Why: Reduces code coupling by treating this as a general arithmetic utility instead of a Vulkan/enkiTS-specific wrapper. This makes it usable outside of just cache-lines without introducing architectural dependencies into `Memory.h`.
+
+✅ Verification: Verified the math via a standalone C++ test validating sizes (0, 1, 63, 64, 65, near-SIZE_MAX boundaries) against arbitrary alignments (16, 32, 64). Note that Catch2 death tests crash the test suite, so `assert` conditions (alignment must be > 0 and power-of-two, size overflow) are enforced in the header but tested through valid paths rather than deliberate test crashes. Also note that the preconditions rely on `assert`, which will compile out in Release (`NDEBUG`) builds—this is intentional to avoid hot-path performance hits, but developers must provide correct values.
+
+✨ Result: A cleaner, decoupled `Memory.h` ready for reuse across both engine code and future allocator wrappers.
