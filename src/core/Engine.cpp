@@ -245,6 +245,13 @@ void Engine::mainLoop() {
             for (const auto& ev : Input::getState().events) {
                 imguiOverlay_.ProcessEvent(&ev);
             }
+#if ENGINE_DEV_TOOLS
+            // [M2-#4] Dev-only: spawn a Jolt body so the debug-draw overlay has
+            // non-empty input. One-shot, devMode-gated; never runs in headless/CI.
+            if (Config::get().devMode) {
+                spawnDevTestBody_();
+            }
+#endif
         }
 
         while (accumulator >= FIXED_DT) {
@@ -262,6 +269,20 @@ void Engine::mainLoop() {
 
             // [M2] Fixed-step physics tick
             physicsTick();
+
+#if ENGINE_DEV_TOOLS
+            // [M2-#4] Dev-only: fire one lethal DamageEvent against the dev test body
+            // at ~2s so the real damage->mesh-swap->collider-removal path runs live.
+            if (Config::get().devMode && !devTestDamageFired_ && frameCount >= 120 && devTestEntity_ != entt::null) {
+                devTestDamageFired_ = true;
+                ecs::DamageEvent dmg;
+                dmg.amount = 150.0f;
+                dmg.target = devTestEntity_;
+                dmg.tag = ecs::DamageEvent::DamageTag::Environmental;
+                eventBus_->enqueue(dmg);
+                LOG_INFO("[DEV-TEST-BODY] enqueued lethal DamageEvent (150) against ent {}", static_cast<uint32_t>(devTestEntity_));
+            }
+#endif
 
             // Fixed update tick hash
             tickHash ^= std::hash<size_t>{}(Input::getState().events.size()) + 0x9e3779b9 + (tickHash << 6) + (tickHash >> 2);
@@ -453,6 +474,40 @@ void Engine::physicsTick() {
         eventBus_->flush();
     }
 }
+
+#if ENGINE_DEV_TOOLS
+// [M2-#4] Dev-only scaffolding (devMode && !headless). Spawns one Jolt box so the
+// debug-draw overlay (drawBodies() -> PhysicsDebugRenderer -> ImGui background list)
+// has non-empty input to project over the scene. Reuses physicsSystem_->createBox().
+// Also enqueues a lethal DamageEvent at ~2s so the real damage->mesh-swap->collider
+// removal path runs live (re-confirms M2 #3 mechanism, not just headless).
+void Engine::spawnDevTestBody_() {
+    if (devTestBodySpawned_) return;
+    if (!physicsSystem_) return;
+
+    auto& registry = ecsContext_->GetRegistry();
+    entt::entity ent = registry.create();
+    registry.emplace<ecs::Transform>(ent, glm::dvec3(0.0, 2.0, 0.0));
+    registry.emplace<ecs::Health>(ent, 100.0f, 100.0f);
+    ecs::DestructibleComponent destr;
+    destr.intactMeshHandle    = 1;
+    destr.destroyedMeshHandle = 2;
+    registry.emplace<ecs::DestructibleComponent>(ent, destr);
+
+    JPH::BodyID bodyId = physicsSystem_->createBox(
+        glm::dvec3(0.0, 2.0, 0.0),
+        glm::vec3(1.0f, 1.0f, 1.0f),
+        false,   // not static
+        50.0f    // mass
+    );
+    registry.emplace<physics::PhysicsBodyComponent>(ent, bodyId);
+
+    devTestEntity_ = ent;
+    devTestBodySpawned_ = true;
+    LOG_INFO("[DEV-TEST-BODY] spawned Jolt box body 0x{:X} (ent {}) at (0,2,0); will take lethal damage at frame 120",
+        bodyId.GetIndexAndSequenceNumber(), static_cast<uint32_t>(ent));
+}
+#endif
 
 #if ENGINE_DEV_TOOLS
 
