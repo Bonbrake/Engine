@@ -6,6 +6,8 @@
 #include "../core/Logger.h"
 #include "../core/Config.h"
 #include "../core/Platform.h"
+#include <unordered_set>
+#include <string_view>
 
 namespace render {
 
@@ -114,15 +116,13 @@ void Device::createLogicalDevice() {
     vkb::DeviceBuilder deviceBuilder{vkbDevice_.physical_device};
 
     auto available_extensions = vkbDevice_.physical_device.get_extensions();
+    // O(N) conversion to a hash set for O(1) membership lookups.
+    // Uses string_view pointing directly into available_extensions array to avoid allocation overhead.
+    // Safe because available_extensions outlives this set within the current scope.
+    std::unordered_set<std::string_view> extSet(available_extensions.begin(), available_extensions.end());
 
     // 1. Descriptor Buffer Extension Gating
-    bool supportsDescBuffer = false;
-    for (const auto& ext : available_extensions) {
-        if (ext == VK_EXT_DESCRIPTOR_BUFFER_EXTENSION_NAME) {
-            supportsDescBuffer = true;
-            break;
-        }
-    }
+    bool supportsDescBuffer = extSet.contains(VK_EXT_DESCRIPTOR_BUFFER_EXTENSION_NAME);
     VkPhysicalDeviceDescriptorBufferFeaturesEXT descBufferFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_BUFFER_FEATURES_EXT};
     if (supportsDescBuffer && !core::Config::get().forceTier0) {
         deviceBuilder.add_extension(VK_EXT_DESCRIPTOR_BUFFER_EXTENSION_NAME);
@@ -132,13 +132,7 @@ void Device::createLogicalDevice() {
     }
 
     // 2. Shader Object Extension Gating
-    bool supportsShaderObject = false;
-    for (const auto& ext : available_extensions) {
-        if (ext == VK_EXT_SHADER_OBJECT_EXTENSION_NAME) {
-            supportsShaderObject = true;
-            break;
-        }
-    }
+    bool supportsShaderObject = extSet.contains(VK_EXT_SHADER_OBJECT_EXTENSION_NAME);
     VkPhysicalDeviceShaderObjectFeaturesEXT shaderObjectFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_OBJECT_FEATURES_EXT};
     if (supportsShaderObject && !core::Config::get().forceTier0) {
         deviceBuilder.add_extension(VK_EXT_SHADER_OBJECT_EXTENSION_NAME);
@@ -148,13 +142,7 @@ void Device::createLogicalDevice() {
     }
 
     // 3. Unified Image Layouts KHR Extension Gating
-    bool supportsUnifiedLayouts = false;
-    for (const auto& ext : available_extensions) {
-        if (ext == VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME) {
-            supportsUnifiedLayouts = true;
-            break;
-        }
-    }
+    bool supportsUnifiedLayouts = extSet.contains(VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME);
     VkPhysicalDeviceUnifiedImageLayoutsFeaturesKHR unifiedLayoutFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFIED_IMAGE_LAYOUTS_FEATURES_KHR};
     if (supportsUnifiedLayouts && !core::Config::get().forceTier0) {
         deviceBuilder.add_extension(VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME);
@@ -295,15 +283,19 @@ void Device::checkCapabilities() {
     caps_.isTier0 = false; 
     
     auto available_extensions = vkbDevice_.physical_device.get_extensions();
-    bool hasUnifiedExtension = false;
-    for (const auto& ext : available_extensions) {
-        if (ext == VK_EXT_GRAPHICS_PIPELINE_LIBRARY_EXTENSION_NAME) caps_.graphicsPipelineLibrary = true;
-        if (ext == VK_EXT_DESCRIPTOR_BUFFER_EXTENSION_NAME) caps_.descriptorBuffer = true;
-        if (ext == VK_EXT_MESH_SHADER_EXTENSION_NAME) caps_.meshShaders = true;
-        if (ext == VK_EXT_ATTACHMENT_FEEDBACK_LOOP_LAYOUT_EXTENSION_NAME) caps_.attachmentFeedbackLoop = true;
-        if (ext == VK_EXT_SHADER_OBJECT_EXTENSION_NAME) caps_.shaderObject = true;
-        if (ext == VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME) hasUnifiedExtension = true;
-    }
+
+    // O(N) conversion to a hash set for O(1) membership lookups.
+    // Uses string_view pointing directly into available_extensions array to avoid allocation overhead.
+    // Safe because available_extensions outlives this set within the current scope.
+    std::unordered_set<std::string_view> extSet(available_extensions.begin(), available_extensions.end());
+
+    caps_.graphicsPipelineLibrary = extSet.contains(VK_EXT_GRAPHICS_PIPELINE_LIBRARY_EXTENSION_NAME);
+    caps_.descriptorBuffer = extSet.contains(VK_EXT_DESCRIPTOR_BUFFER_EXTENSION_NAME);
+    caps_.meshShaders = extSet.contains(VK_EXT_MESH_SHADER_EXTENSION_NAME);
+    caps_.attachmentFeedbackLoop = extSet.contains(VK_EXT_ATTACHMENT_FEEDBACK_LOOP_LAYOUT_EXTENSION_NAME);
+    caps_.shaderObject = extSet.contains(VK_EXT_SHADER_OBJECT_EXTENSION_NAME);
+
+    bool hasUnifiedExtension = extSet.contains(VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME);
     
     if (hasUnifiedExtension) {
         VkPhysicalDeviceUnifiedImageLayoutsFeaturesKHR unifiedLayoutFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFIED_IMAGE_LAYOUTS_FEATURES_KHR};
