@@ -138,15 +138,23 @@ void VulkanContext::initVulkan(SDL_Window* window) {
                 LOG_ERROR("VERIFICATION FAILURE: MAX_MATERIALS overflow check failed!");
             }
             
+            // Dev-test mesh load (asset-manager self-test, pairs with the texture self-test above)
+            devTestMeshHandle_ = assetManager_->LoadMesh("assets/models/dev_test_cube.glb");
+            if (devTestMeshHandle_.generation != 0) {  // valid Insert => generation >= 1; Handle() null => 0
+                LOG_INFO("VERIFICATION SUCCESS: Loaded dev_test_cube.glb. Mesh handle index: {}", devTestMeshHandle_.index);
+                // [Slice 0a] Hand the loaded mesh to the renderer so draw() renders it as a gated cube.
+                if (swapchain_ && swapchain_->triangleRenderer()) {
+                    swapchain_->triangleRenderer()->setDevTestMesh(assetManager_->GetMesh(devTestMeshHandle_));
+                    LOG_INFO("[Slice 0a] Dev-test cube wired into TriangleRenderer.");
+                }
+            } else {
+                LOG_ERROR("VERIFICATION FAILURE: dev_test_cube.glb load failed!");
+            }
             // Clean up dummy test materials to avoid startup saturation
             for (auto h : testMaterials) {
                 materialSystem_->DestroyMaterial(h);
             }
-        } else {
-            LOG_ERROR("VERIFICATION FAILURE: Failed to create material with valid texture!");
         }
-    } else {
-        LOG_ERROR("VERIFICATION FAILURE: Failed to load test.png!");
     }
 }
 
@@ -194,6 +202,13 @@ void VulkanContext::renderFrame(debug::ImGuiOverlay* imguiOverlay) {
     }
 
     if (swapchain_) {
+        // Frame-dump: request a capture on the matching render-call index (windowed only).
+        const auto& cfg = core::Config::get();
+        if (!cfg.dumpFramePath.empty() && cfg.dumpFrameAt >= 0 &&
+            renderCallCount_ == static_cast<uint64_t>(cfg.dumpFrameAt)) {
+            swapchain_->requestDump(cfg.dumpFramePath);
+        }
+        renderCallCount_++;
         swapchain_->acquireAndPresent(imguiOverlay, materialSystem_.get());
     }
 }

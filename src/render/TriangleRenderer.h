@@ -2,9 +2,11 @@
 #include <volk.h>
 #include <vk_mem_alloc.h>
 #include <vector>
+#include "AssetTypes.h"
 
 namespace render {
 class Device;
+class MeshAsset;
 class TriangleRenderer {
 public:
     void init(Device* device, VkFormat colorFormat);
@@ -13,6 +15,9 @@ public:
     // Add cull function for compute pass
     void cull(VkCommandBuffer cmd, uint32_t imageIndex, VkImageView currentDepthView, Device* device);
     void draw(VkCommandBuffer cmd, uint32_t imageIndex, class MaterialSystem* materialSystem);
+    
+    // Slice 0a: dev-test mesh (first LoadMesh) rendered as a gated cube in --dev.
+    void setDevTestMesh(MeshAsset* mesh) { devTestMesh_ = mesh; }
     
     // For logging reduction
     void readbackCount(Device* device, uint32_t imageIndex);
@@ -25,6 +30,10 @@ private:
     VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
     VkPipeline pipeline = VK_NULL_HANDLE;
     VkPipeline wireframePipeline = VK_NULL_HANDLE; // [M1-EXT-04] Derivative variant
+    VkPipeline meshPipeline = VK_NULL_HANDLE;       // Slice 0a: dev-test cube (pos+normal, 32B stride)
+    
+    // Slice 0a: dev-test mesh handle (first LoadMesh), gated to --dev rendering.
+    MeshAsset* devTestMesh_ = nullptr;
     
     VkPipelineLayout cullPipelineLayout = VK_NULL_HANDLE;
     VkPipeline cullPipeline = VK_NULL_HANDLE;

@@ -4,6 +4,13 @@
 #include "../core/JobSystem.h"
 #include "../debug/ImGuiOverlay.h"
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
+#include <vk_mem_alloc.h>
+#include <vector>
+#include <cstring>
+#include <algorithm>
+
 namespace render {
 
 Swapchain::Swapchain(Device* device, SDL_Window* window) 
@@ -37,6 +44,7 @@ void Swapchain::create() {
     auto vkb_swapchain_ret = swapchainBuilder
         .use_default_format_selection()
         .set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR)
+        .add_image_usage_flags(VK_IMAGE_USAGE_TRANSFER_SRC_BIT) // frame-dump: allow copy-to-buffer
         .build();
 
     if (!vkb_swapchain_ret) {
@@ -311,6 +319,75 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
         imguiOverlay->SetPassTimings(lastFrameTimings_, device_->getCapabilities().queryTimestamps);
     }
 
+    // Frame-dump: capture this swapchain image to a PNG. Records a barrier pair
+    // sandwiching a copy-to-buffer into the frame command buffer BEFORE the
+    // present barrier below (which expects oldLayout=COLOR_ATTACHMENT_OPTIMAL,
+    // so barrier B restores exactly that). Zero-cost when pendingDumpPath_ empty.
+    VkBuffer dumpBuffer = VK_NULL_HANDLE;
+    VmaAllocation dumpAlloc = VK_NULL_HANDLE;
+    VmaAllocationInfo dumpAllocInfo{};
+    const uint32_t dumpW = vkbSwapchain_.extent.width;
+    const uint32_t dumpH = vkbSwapchain_.extent.height;
+    const bool doDump = !pendingDumpPath_.empty();
+    if (doDump) {
+        VkDeviceSize dumpSize = (VkDeviceSize)dumpW * dumpH * 4;
+        VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+        bufInfo.size = dumpSize;
+        bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+        VmaAllocationCreateInfo allocInfo{};
+        allocInfo.usage = VMA_MEMORY_USAGE_AUTO;
+        allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT;
+        if (vmaCreateBuffer(device_->getAllocator(), &bufInfo, &allocInfo, &dumpBuffer, &dumpAlloc, &dumpAllocInfo) != VK_SUCCESS) {
+            LOG_ERROR("Frame-dump: failed to allocate readback buffer ({}x{})", dumpW, dumpH);
+            dumpBuffer = VK_NULL_HANDLE;
+        } else {
+            // Barrier A: COLOR_ATTACHMENT_OPTIMAL -> TRANSFER_SRC_OPTIMAL
+            VkImageMemoryBarrier2 toSrc{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2};
+            toSrc.srcStageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+            toSrc.srcAccessMask = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT;
+            toSrc.dstStageMask = VK_PIPELINE_STAGE_2_COPY_BIT;
+            toSrc.dstAccessMask = VK_ACCESS_2_TRANSFER_READ_BIT;
+            toSrc.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            toSrc.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            toSrc.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            toSrc.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            toSrc.image = swapchainImages_[imageIndex];
+            toSrc.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+            VkDependencyInfo depA{VK_STRUCTURE_TYPE_DEPENDENCY_INFO};
+            depA.imageMemoryBarrierCount = 1;
+            depA.pImageMemoryBarriers = &toSrc;
+            vkCmdPipelineBarrier2(cmd, &depA);
+
+            VkBufferImageCopy region{};
+            region.bufferOffset = 0;
+            region.bufferRowLength = 0;   // tightly packed
+            region.bufferImageHeight = 0;
+            region.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
+            region.imageOffset = {0, 0, 0};
+            region.imageExtent = {dumpW, dumpH, 1};
+            vkCmdCopyImageToBuffer(cmd, swapchainImages_[imageIndex],
+                VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dumpBuffer, 1, &region);
+
+            // Barrier B: TRANSFER_SRC_OPTIMAL -> COLOR_ATTACHMENT_OPTIMAL
+            // (restores the layout the present barrier below expects).
+            VkImageMemoryBarrier2 backToColor{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2};
+            backToColor.srcStageMask = VK_PIPELINE_STAGE_2_COPY_BIT;
+            backToColor.srcAccessMask = VK_ACCESS_2_TRANSFER_READ_BIT;
+            backToColor.dstStageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+            backToColor.dstAccessMask = VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT;
+            backToColor.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+            backToColor.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            backToColor.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            backToColor.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            backToColor.image = swapchainImages_[imageIndex];
+            backToColor.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+            VkDependencyInfo depB{VK_STRUCTURE_TYPE_DEPENDENCY_INFO};
+            depB.imageMemoryBarrierCount = 1;
+            depB.pImageMemoryBarriers = &backToColor;
+            vkCmdPipelineBarrier2(cmd, &depB);
+        }
+    }
+
     VkImageMemoryBarrier2 barrierToPresent{};
     barrierToPresent.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2;
     barrierToPresent.srcStageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -363,6 +440,28 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
 
     if (vkQueueSubmit(device_->getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
         LOG_ERROR("Failed to submit draw command buffer!");
+    }
+
+    // Frame-dump: the copy rode the submit above. Wait for the GPU, make the
+    // host mapping visible, swizzle BGRA->RGBA, and write the PNG. One-shot.
+    if (doDump && dumpBuffer != VK_NULL_HANDLE) {
+        vkDeviceWaitIdle(device_->getLogicalDevice()); // ensure copy completed before host read
+        vmaInvalidateAllocation(device_->getAllocator(), dumpAlloc, 0, VK_WHOLE_SIZE); // no-op if HOST_COHERENT
+        auto* pixels = static_cast<uint8_t*>(dumpAllocInfo.pMappedData);
+        if (pixels) {
+            const size_t pxCount = (size_t)dumpW * dumpH;
+            for (size_t i = 0; i < pxCount; ++i) {
+                std::swap(pixels[i * 4 + 0], pixels[i * 4 + 2]); // B<->R
+            }
+            int ok = stbi_write_png(pendingDumpPath_.c_str(), (int)dumpW, (int)dumpH, 4, pixels, (int)dumpW * 4);
+            if (ok) {
+                LOG_INFO("Frame-dump: wrote {} ({}x{})", pendingDumpPath_, dumpW, dumpH);
+            } else {
+                LOG_ERROR("Frame-dump: stbi_write_png failed for {}", pendingDumpPath_);
+            }
+        }
+        vmaDestroyBuffer(device_->getAllocator(), dumpBuffer, dumpAlloc);
+        pendingDumpPath_.clear();
     }
 
     VkPresentInfoKHR presentInfo{};

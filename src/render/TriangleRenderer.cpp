@@ -4,6 +4,8 @@
 #include "PipelineBuilder.h"
 #include "../core/Logger.h"
 #include "../core/CVarSystem.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <fstream>
 #include <vector>
 #include <string.h>
@@ -371,6 +373,47 @@ void TriangleRenderer::createPipelines(Device* device, VkFormat colorFormat) {
         wireframePipeline = pipelines[1]; // Store it, need to declare this in TriangleRenderer.h
     }
 
+    // [Slice 0a] Dev-test cube pipeline: matches MeshAsset vertex layout (pos+normal, 32B stride).
+    // Uses its own shader (simple_mesh.vert) which does NOT apply the per-instance offset that
+    // simple.vert uses for the demo triangles. No instance/descriptor buffers needed.
+    auto meshVertCode = readFile("build/shaders/simple_mesh.vert.spv");
+    VkShaderModule meshVertModule = createShaderModule(device->getLogicalDevice(), meshVertCode);
+
+    VkPipelineShaderStageCreateInfo meshVertStage = vertStageInfo;
+    meshVertStage.module = meshVertModule;
+    VkPipelineShaderStageCreateInfo meshStages[] = { meshVertStage, fragStageInfo };
+
+    VkVertexInputBindingDescription meshBinding{};
+    meshBinding.binding = 0;
+    meshBinding.stride = sizeof(float) * 8; // vec3 pos + vec3 normal + vec2 uv (AssetTypes.h Vertex)
+    meshBinding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+    VkVertexInputAttributeDescription meshAttribs[2]{};
+    meshAttribs[0].binding = 0; meshAttribs[0].location = 0;
+    meshAttribs[0].format = VK_FORMAT_R32G32B32_SFLOAT; meshAttribs[0].offset = 0;
+    meshAttribs[1].binding = 0; meshAttribs[1].location = 1;
+    meshAttribs[1].format = VK_FORMAT_R32G32B32_SFLOAT; meshAttribs[1].offset = sizeof(float) * 3;
+
+    VkPipelineVertexInputStateCreateInfo meshVii{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
+    meshVii.vertexBindingDescriptionCount = 1;
+    meshVii.pVertexBindingDescriptions = &meshBinding;
+    meshVii.vertexAttributeDescriptionCount = 2;
+    meshVii.pVertexAttributeDescriptions = meshAttribs;
+
+    VkPipelineRasterizationStateCreateInfo meshRast = rasterizer;
+    meshRast.cullMode = VK_CULL_MODE_NONE; // whole cube visible from front
+
+    VkGraphicsPipelineCreateInfo meshInfo = pipelineInfo;
+    meshInfo.stageCount = 2;
+    meshInfo.pStages = meshStages;
+    meshInfo.pVertexInputState = &meshVii;
+    meshInfo.pRasterizationState = &meshRast;
+    // meshInfo.layout = pipelineLayout (shared, push-constant compatible); depthStencil from pipelineInfo.
+    std::vector<VkGraphicsPipelineCreateInfo> meshBatch = { meshInfo };
+    auto meshPipelines = PipelineBuilder::buildPipelines(meshBatch, device);
+    if (!meshPipelines.empty()) meshPipeline = meshPipelines[0];
+    vkDestroyShaderModule(device->getLogicalDevice(), meshVertModule, nullptr);
+
     vkDestroyShaderModule(device->getLogicalDevice(), vertModule, nullptr);
     vkDestroyShaderModule(device->getLogicalDevice(), fragModule, nullptr);
 
@@ -417,6 +460,7 @@ void TriangleRenderer::cleanup(Device* device) {
 
     if (pipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), pipeline, nullptr);
     if (wireframePipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), wireframePipeline, nullptr);
+    if (meshPipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), meshPipeline, nullptr);
     if (pipelineLayout != VK_NULL_HANDLE) vkDestroyPipelineLayout(device->getLogicalDevice(), pipelineLayout, nullptr);
     if (cullPipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), cullPipeline, nullptr);
     
@@ -537,6 +581,47 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
     ZoneScoped;
 #endif
     if (pipeline == VK_NULL_HANDLE) return;
+
+    // [Slice 0a] Dev-test cube: when a dev mesh is set, draw it directly (bypassing the
+    // demo-triangle indirect/compute-cull path). Gated to --dev via setDevTestMesh() only
+    // being called from VulkanContext in dev mode. Keeps occlusion-query + count-readback intact.
+    if (devTestMesh_ && devTestMesh_->vertexBuffer != VK_NULL_HANDLE &&
+        devTestMesh_->indexBuffer != VK_NULL_HANDLE && meshPipeline != VK_NULL_HANDLE) {
+
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, meshPipeline);
+
+        VkViewport viewport{};
+        viewport.width = 800.0f;
+        viewport.height = 600.0f;
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(cmd, 0, 1, &viewport);
+        VkRect2D scissor{};
+        scissor.extent = {800, 600};
+        vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+        // Real perspective MVP: camera at (0,0,4) looking at origin; near=0.1 far=10 to pass depth test.
+        // Tilt the cube so 3 faces are visible (unambiguous 3D), centered at origin.
+        glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10.0f);
+        glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f)) *
+                           glm::rotate(glm::mat4(1.0f), glm::radians(20.0f), glm::vec3(1.0f, 0.0f, 0.0f)) *
+                           glm::scale(glm::mat4(1.0f), glm::vec3(0.7f));
+        glm::mat4 mvp = proj * view * model;
+
+        struct PC { float mvp[16]; uint32_t instanceCount; uint32_t frameCounter; uint32_t cullEnabled; } pc;
+        memcpy(pc.mvp, &mvp[0][0], sizeof(pc.mvp));
+        pc.instanceCount = 1;
+        pc.frameCounter = frameCounter;
+        pc.cullEnabled = 0;
+        vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
+
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(cmd, 0, 1, &devTestMesh_->vertexBuffer, offsets);
+        vkCmdBindIndexBuffer(cmd, devTestMesh_->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+        vkCmdDrawIndexed(cmd, devTestMesh_->indexCount, 1, 0, 0, 0);
+        return; // cube done; skip demo-triangle path
+    }
 
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
     

@@ -4,6 +4,7 @@
 #include <volk.h>
 #include <VkBootstrap.h>
 #include <memory>
+#include "ecs/GenerationalTable.h"
 
 namespace debug { class ImGuiOverlay; }
 
@@ -37,6 +38,12 @@ private:
     std::unique_ptr<Swapchain> swapchain_;
     std::unique_ptr<AssetManager> assetManager_;
     std::unique_ptr<MaterialSystem> materialSystem_;
+
+    // Dev-test mesh handle: first-ever LoadMesh invocation (Slice-0a A1 precondition).
+    ecs::Handle devTestMeshHandle_{0xFFFFFFFF, 0};
+
+    // Frame-dump: counts executed windowed render calls; matched against Config::dumpFrameAt.
+    uint64_t renderCallCount_ = 0;
 };
 
 } // namespace render

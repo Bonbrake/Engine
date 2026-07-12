@@ -23,6 +23,13 @@ public:
     void acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, class MaterialSystem* materialSystem = nullptr);
     void recreate();
 
+    // Slice 0a: access the owned renderer to wire the dev-test mesh (gated to --dev).
+    TriangleRenderer* triangleRenderer() { return &triangleRenderer_; }
+
+    // Frame-dump: request the next acquireAndPresent to capture the swapchain
+    // image to a PNG at `path`. One-shot; cleared after the dump is written.
+    void requestDump(const std::string& path) { pendingDumpPath_ = path; }
+
 private:
     void create();
     void cleanup();
@@ -56,6 +63,8 @@ private:
 
     TriangleRenderer triangleRenderer_;
     FramePacing framePacing_;
+
+    std::string pendingDumpPath_; // non-empty => capture this frame to PNG (one-shot)
 };
 
 } // namespace render

@@ -23,6 +23,8 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         int cl_crashFrame = -1;
         int cl_quitFrame = -1;
         std::string cl_settingsPath = "settings.json";
+        std::string cl_dumpFramePath;
+        int cl_dumpFrameAt = -1;
 
         options.add_options()
             ("headless", "Run without display", cxxopts::value<bool>(cl_headless))
@@ -32,6 +34,8 @@ void Config::parseCommandLine(int argc, char* argv[]) {
             ("replay-input", "Replay recorded input", cxxopts::value<bool>(cl_replayInput))
             ("crash-frame", "Crash at specific frame number", cxxopts::value<int>(cl_crashFrame)->default_value("-1"))
             ("quit-frame", "Quit at specific frame number", cxxopts::value<int>(cl_quitFrame)->default_value("-1"))
+            ("dump-frame-png", "Dump a rendered frame to this PNG path (windowed --dev only)", cxxopts::value<std::string>(cl_dumpFramePath)->default_value(""))
+            ("dump-frame-at", "Render-call index at which to dump the frame", cxxopts::value<int>(cl_dumpFrameAt)->default_value("-1"))
             ("settings", "Path to settings.json", cxxopts::value<std::string>(cl_settingsPath)->default_value("settings.json"))
             ("h,help", "Print usage");
 
@@ -54,6 +58,8 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         if (result.count("replay-input")) { replayInput = cl_replayInput; overriddenFields.insert("replayInput"); }
         if (result.count("crash-frame")) { crashFrame = cl_crashFrame; overriddenFields.insert("crashFrame"); }
         if (result.count("quit-frame")) { quitFrame = cl_quitFrame; overriddenFields.insert("quitFrame"); }
+        if (result.count("dump-frame-png")) { dumpFramePath = cl_dumpFramePath; overriddenFields.insert("dumpFramePath"); }
+        if (result.count("dump-frame-at")) { dumpFrameAt = cl_dumpFrameAt; overriddenFields.insert("dumpFrameAt"); }
 
     } catch (const cxxopts::exceptions::exception& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;

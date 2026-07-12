@@ -14,6 +14,9 @@ struct Config {
     int crashFrame = -1;
     int quitFrame = -1;
     std::string settingsPath = "settings.json";
+    // Frame-dump tool (windowed --dev only; headless has no swapchain to capture).
+    std::string dumpFramePath;   // empty => disabled
+    int dumpFrameAt = -1;        // render-call index to capture; -1 => disabled
     std::unordered_set<std::string> overriddenFields;
 
     static Config& get();

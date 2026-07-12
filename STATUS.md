@@ -13,7 +13,7 @@ Ready to begin M2.6.
 
 | Criterion | Status |
 |-----------|--------|
-| Window opens, Vulkan initializes, validation logs clean | ✅ Windowed confirmed — no VUID/validation errors (only benign 3rd-party layer name warnings from GalaxyOverlay/OBS/RTSS — not our code) |
+| Window opens, Vulkan initializes, validation logs clean | ✅ Windowed (non-`--dev`) confirmed — **0 VUID/validation errors** (only benign 3rd-party layer name warnings from GalaxyOverlay/OBS/RTSS — not our code). NOTE: launching with `--dev` runs the asset-verification self-test, which drives additional code paths (compute cull, descriptor-buffer EXT, occlusion queries, secondary command buffers, wireframe pipeline) that emit **124 pre-existing validation errors** — see `AUDIT_DEV_MODE_VALIDATION_BASELINE.md`. These are **not** present in a normal windowed launch and none originate from the frame-dump or Slice 0a work. |
 | Swapchain survives resize + minimize | ✅ Code path verified (recreate() on VK_ERROR_OUT_OF_DATE_KHR) |
 | Capability tier detected + forced fallback wired | ✅ descriptorBuffer/shaderObject/unifiedLayouts/meshShaders logged at boot; forceTier0 path wired in Config |
 | PipelineCache created and persisted | ✅ pipeline_cache.bin written at shutdown |
@@ -28,7 +28,7 @@ Ready to begin M2.6.
 | Font files generate MSDF maps at boot | ✅ AssetManager initialized, Roboto-Regular.ttf present |
 | Hi-Z culling logs measurable draw call reduction | ✅ Windowed log: "Hi-Z Occlusion Culling: 4/100 instances visible (96% reduction)" |
 | ImGui panel updates cvar behaviors live; pass timings via query pools | ✅ ImGui NewFrame/Render cycling confirmed in windowed log; queryTimestamps=true |
-| No validation warnings | ✅ Zero VUID errors; only benign 3rd-party layer name warnings (not suppressible without removing those layers) |
+| No validation warnings | ✅ Zero VUID errors (non-`--dev` windowed launch); only benign 3rd-party layer name warnings (not suppressible without removing those layers). `--dev` launch has a separate pre-existing 124-error baseline — see `AUDIT_DEV_MODE_VALIDATION_BASELINE.md` (none from this milestone's scope). |
 
 ## M2 Exit Criteria — ALL PASS
 
