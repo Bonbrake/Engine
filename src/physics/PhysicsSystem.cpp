@@ -25,7 +25,15 @@ static JPH::Vec3 toJPH(const glm::vec3& v)  { return JPH::Vec3(v.x, v.y, v.z); }
 static JPH::DVec3 toJPHD(const glm::dvec3& v) { return JPH::DVec3(v.x, v.y, v.z); }
 static JPH::Quat toJPHQ(const glm::quat& q)  { return JPH::Quat(q.x, q.y, q.z, q.w); }
 static glm::dvec3 fromJPH(const JPH::DVec3& v) { return glm::dvec3(v.GetX(), v.GetY(), v.GetZ()); }
-static glm::quat  fromJPHQ(const JPH::Quat& q)  { return glm::quat(q.GetW(), q.GetX(), q.GetY(), q.GetZ()); }
+
+// [M2.6] Test seams: forward the file-local double-precision converters (Jolt built with
+// JPH_DOUBLE_PRECISION, so dvec3<->DVec3 is bit-exact). Kept as thin wrappers so the
+// round-trip unit test exercises the real conversion path, not a copy.
+JPH::DVec3 PhysicsSystem::ToJPHD(const glm::dvec3& v) { return toJPHD(v); }
+glm::dvec3 PhysicsSystem::FromJPH(const JPH::DVec3& v) { return fromJPH(v); }
+// Rotation: Jolt::Quat is single-precision (float x,y,z,w) by design, so this is a
+// lossless float->double widening into dquat. Position (see fromJPH) is the double-exact path.
+static glm::dquat fromJPHQ(const JPH::Quat& q)  { return glm::dquat(q.GetW(), q.GetX(), q.GetY(), q.GetZ()); }
 
 void PhysicsSystem::initializeGlobal() {
     if (!s_JoltInitialized) {

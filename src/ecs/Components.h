@@ -6,9 +6,9 @@
 namespace ecs {
 
 struct Transform {
-    glm::vec3 position{0.0f};
-    glm::quat rotation{1.0f, 0.0f, 0.0f, 0.0f};
-    glm::vec3 scale{1.0f};
+    glm::dvec3 position{0.0, 0.0, 0.0};   // double-precision authoritative world position
+    glm::dquat rotation{1.0, 0.0, 0.0, 0.0};
+    glm::dvec3 scale{1.0, 1.0, 1.0};
 };
 
 struct Health {

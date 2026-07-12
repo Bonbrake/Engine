@@ -102,17 +102,20 @@ static ecs::DamageEvent::DamageTag ParseDamageTag(const std::string& str) {
 bool MetaRegistry::EmplaceComponent(const std::string& name, entt::registry& registry, entt::entity entity, const nlohmann::json& json) {
     if (name == "Transform") {
         ecs::Transform t;
+        // [M2.6] Transform is double-precision (dvec3/dquat/dvec3). Read JSON as double so
+        // km-scale positions survive save/load bit-exact; Jolt::Quat is float by design, so
+        // rotation is read as double then widened (lossless) into dquat.
         if (json.contains("position") && json["position"].is_array() && json["position"].size() >= 3) {
             auto pos = json["position"];
-            t.position = glm::vec3(pos[0].get<float>(), pos[1].get<float>(), pos[2].get<float>());
+            t.position = glm::dvec3(pos[0].get<double>(), pos[1].get<double>(), pos[2].get<double>());
         }
         if (json.contains("rotation") && json["rotation"].is_array() && json["rotation"].size() >= 4) {
             auto rot = json["rotation"];
-            t.rotation = glm::quat(rot[0].get<float>(), rot[1].get<float>(), rot[2].get<float>(), rot[3].get<float>());
+            t.rotation = glm::dquat(rot[0].get<double>(), rot[1].get<double>(), rot[2].get<double>(), rot[3].get<double>());
         }
         if (json.contains("scale") && json["scale"].is_array() && json["scale"].size() >= 3) {
             auto scl = json["scale"];
-            t.scale = glm::vec3(scl[0].get<float>(), scl[1].get<float>(), scl[2].get<float>());
+            t.scale = glm::dvec3(scl[0].get<double>(), scl[1].get<double>(), scl[2].get<double>());
         }
         registry.emplace<ecs::Transform>(entity, t);
         return true;

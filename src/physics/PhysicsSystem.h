@@ -179,6 +179,13 @@ public:
     // Mirror Jolt transforms back to EnTT Transform components
     void mirrorTransforms(entt::registry& registry);
 
+    // [M2.6] Exposed for unit tests: double-precision position conversion
+    // (dvec3 <-> Jolt DVec3). Jolt::Quat is single-precision by design, so the
+    // analogous fromJPHQ is tested for float-precision losslessness, not double.
+    // Defined in PhysicsSystem.cpp (the file-local toJPHD/fromJPH statics live there).
+    static JPH::DVec3 ToJPHD(const glm::dvec3& v);
+    static glm::dvec3 FromJPH(const JPH::DVec3& v);
+
 #ifdef JPH_DEBUG_RENDERER
     PhysicsDebugRenderer* getDebugRenderer() const { return debugRenderer_.get(); }
     void drawBodies();
