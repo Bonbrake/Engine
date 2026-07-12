@@ -1,11 +1,11 @@
 # The Endless Quarantine — Engine Status
 
 ## Active Branch
-`Main`
+`m2/physics-destruction`
 
 ## Current Milestone
-**M2 — COMPLETE** ✅  
-Ready to begin M2.6.
+**M2.6 — Phase 1 COMPLETE** ✅  
+Transform double-precision (dvec3/dquat/dvec3); B2 (silent double→float truncation) closed at physics write-back + persistence boundary. Sector size 512 frozen through M4.
 
 ---
 
@@ -43,9 +43,11 @@ Ready to begin M2.6.
 ---
 
 ## Last Verified Build
-- Branch: `Main`  
-- Last commit: `4e4684a` — Add STATUS.md  
+- Branch: `m2/physics-destruction`  
+- Last commit: `66af99e` — [M2.6] Phase 1: Transform double-precision (dvec3/dquat) - close B2  
 - Headless CI: **PASS** (`HEADLESS CI SMOKE TEST: SUCCESS`)
+- ZombieEngineTests: **PASS** (9 cases / 49 assertions; [M2.6] 2 cases / 14 assertions)
+- Build: `cmake --build --config Debug` EXIT=0
 - Windowed smoke test: **PASS** (2026-07-11, RTX 2070 Super)
 - GPU: NVIDIA GeForce RTX 2070 SUPER
 
@@ -56,8 +58,25 @@ Ready to begin M2.6.
 - `1ee9145` — Update engine with latest changes (full codebase, Batch 1+2)
 - `eb19957` — Batch 3: extension gating, triple-buffer fix, render tests
 - `4e4684a` — Add STATUS.md
-- *(pending)* — M2 cleanup: physics debug renderer and soft asset mitigation
+- `66af99e` — [M2.6] Phase 1: Transform double-precision (dvec3/dquat) - close B2
 
-## Next Session: M2.6
+## M2.6 Phase 1 — Exit Criteria (CLOSED)
+| Criterion | Status |
+|-----------|--------|
+| Transform authoritative world position is double-precision | ✅ `dvec3/dquat/dvec3` (Components.h:8-12) |
+| Physics write-back (mirrorTransforms) preserves double position | ✅ `fromJPH` → dvec3; `fromJPHQ` → dquat (lossless) |
+| MetaRegistry load path reads Transform as double (no float narrowing) | ✅ EmplaceComponent lines 110/114/118 |
+| Round-trip at double-epsilon proven (not just green build) | ✅ Test_TransformPrecision.cpp [M2.6] 14 assertions pass; ad-hoc probe agrees |
+| Engine.cpp:490 spawn path type-correct | ✅ `emplace<Transform>(ent, glm::dvec3(...))`, exercised by --headless |
+
+### M2.6 Phase 1 — Carried caveats (verbatim)
+- **C-caveat:** render-path rebasing is not applicable yet — no scene path consumes
+  Transform to produce draws (per `AUDIT_M1_SCENE_RENDER_GAP.md`), so Phase 1 closes on
+  physics/ECS/persistence only, not render.
+- **Open audit item (NOT fixed this pass):** `SpatialHash.cpp:51-52,134-135` still read
+  Transform position into `float` — undetermined local-vs-world-space question, left flagged.
+- `Engine.cpp:558-562` also read `.position.x/.z` into float — audit-only, not fixed.
+
+## Next Session: M2.6 Phase 2 (fly-camera) or beat
 Load `milestones_M0-M13_antigravity/03_M2_6.md`.  
 Read STATUS.md first. Confirm branch. Check .gitignore covers build/ and vcpkg_installed/.
