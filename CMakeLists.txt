@@ -44,11 +44,20 @@ foreach(SHADER ${SHADERS})
     list(APPEND SPV_FILES ${OUTPUT})
 endforeach()
 
-add_executable(ZombieEngine ${SRC_FILES} ${INC_FILES} ${SPV_FILES})
-target_include_directories(ZombieEngine PRIVATE src)
-target_compile_definitions(ZombieEngine PRIVATE ENGINE_DEV_TOOLS)
+list(REMOVE_ITEM SRC_FILES "${CMAKE_SOURCE_DIR}/src/main.cpp")
+add_library(ZombieEngineCore STATIC ${SRC_FILES} ${INC_FILES} ${SPV_FILES})
+add_executable(ZombieEngine src/main.cpp)
+add_executable(ZombieEngineTests tests/unit_tests.cpp)
+target_link_libraries(ZombieEngine PRIVATE ZombieEngineCore)
+target_link_libraries(ZombieEngineTests PRIVATE ZombieEngineCore Catch2::Catch2)
+include(CTest)
+enable_testing()
+add_test(NAME UnitTests COMMAND ZombieEngineTests)
+target_include_directories(ZombieEngineCore PUBLIC src)
+target_include_directories(ZombieEngineTests PRIVATE src)
+target_compile_definitions(ZombieEngineCore PUBLIC ENGINE_DEV_TOOLS)
 
-target_link_libraries(ZombieEngine PRIVATE
+target_link_libraries(ZombieEngineCore PUBLIC
     SDL3::SDL3
     Vulkan::Headers
     vk-bootstrap::vk-bootstrap
@@ -68,10 +77,10 @@ target_link_libraries(ZombieEngine PRIVATE
     fastgltf::fastgltf
 )
 
-target_include_directories(ZombieEngine PRIVATE ${STB_INCLUDE_DIR})
+target_include_directories(ZombieEngineCore PUBLIC ${STB_INCLUDE_DIR})
 
 # Vulkan validation layers ON in Debug and OFF in Release
-target_compile_definitions(ZombieEngine PRIVATE
+target_compile_definitions(ZombieEngineCore PUBLIC
     IMGUI_IMPL_VULKAN_HAS_DYNAMIC_RENDERING=1
     IMGUI_IMPL_VULKAN_USE_VOLK=1
     $<$<CONFIG:Debug>:ENABLE_VULKAN_VALIDATION_LAYERS=1>

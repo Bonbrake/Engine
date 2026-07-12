@@ -17,7 +17,11 @@ public:
         auto current_time = std::chrono::high_resolution_clock::now();
         double frame_time = std::chrono::duration<double>(current_time - last_time_).count();
         last_time_ = current_time;
+        update(frame_time);
+    }
 
+    // Overload for injecting deterministic delta times in tests
+    static void update(double frame_time) {
         if (frame_time > 0.25)
             frame_time = 0.25;
 
