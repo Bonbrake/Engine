@@ -28,6 +28,10 @@ file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 file(GLOB_RECURSE INC_FILES "src/*.h")
 list(APPEND SRC_FILES "src/debug/imgui_impl_vulkan.cpp")
 
+# Filter out main.cpp for the core library
+set(CORE_SRC_FILES ${SRC_FILES})
+list(FILTER CORE_SRC_FILES EXCLUDE REGEX "src/main\\.cpp$")
+
 # Compile shaders
 set(SHADERS simple.vert simple.frag cull.comp depth_pyramid.comp)
 set(SPV_FILES "")
@@ -44,11 +48,12 @@ foreach(SHADER ${SHADERS})
     list(APPEND SPV_FILES ${OUTPUT})
 endforeach()
 
-add_executable(ZombieEngine ${SRC_FILES} ${INC_FILES} ${SPV_FILES})
-target_include_directories(ZombieEngine PRIVATE src)
-target_compile_definitions(ZombieEngine PRIVATE ENGINE_DEV_TOOLS)
+# Core Library
+add_library(ZombieEngineCore STATIC ${CORE_SRC_FILES} ${INC_FILES} ${SPV_FILES})
+target_include_directories(ZombieEngineCore PUBLIC src ${STB_INCLUDE_DIR})
+target_compile_definitions(ZombieEngineCore PUBLIC ENGINE_DEV_TOOLS)
 
-target_link_libraries(ZombieEngine PRIVATE
+target_link_libraries(ZombieEngineCore PUBLIC
     SDL3::SDL3
     Vulkan::Headers
     vk-bootstrap::vk-bootstrap
@@ -58,7 +63,7 @@ target_link_libraries(ZombieEngine PRIVATE
     enkiTS::enkiTS
     nlohmann_json::nlohmann_json
     cxxopts::cxxopts
-    Catch2::Catch2
+    Catch2::Catch2 Catch2::Catch2WithMain
     GPUOpen::VulkanMemoryAllocator
     EnTT::EnTT
     imgui::imgui
@@ -68,10 +73,7 @@ target_link_libraries(ZombieEngine PRIVATE
     fastgltf::fastgltf
 )
 
-target_include_directories(ZombieEngine PRIVATE ${STB_INCLUDE_DIR})
-
-# Vulkan validation layers ON in Debug and OFF in Release
-target_compile_definitions(ZombieEngine PRIVATE
+target_compile_definitions(ZombieEngineCore PUBLIC
     IMGUI_IMPL_VULKAN_HAS_DYNAMIC_RENDERING=1
     IMGUI_IMPL_VULKAN_USE_VOLK=1
     $<$<CONFIG:Debug>:ENABLE_VULKAN_VALIDATION_LAYERS=1>
@@ -79,3 +81,13 @@ target_compile_definitions(ZombieEngine PRIVATE
     $<$<NOT:$<CONFIG:Debug>>:ENABLE_VULKAN_VALIDATION_LAYERS=0>
     SHADER_DIR=\"${CMAKE_BINARY_DIR}/shaders\"
 )
+
+# Main Executable
+add_executable(ZombieEngine src/main.cpp)
+target_link_libraries(ZombieEngine PRIVATE ZombieEngineCore)
+
+# Tests Executable
+enable_testing()
+add_executable(ZombieEngineTests tests/unit_tests.cpp)
+target_link_libraries(ZombieEngineTests PRIVATE ZombieEngineCore)
+add_test(NAME AllTests COMMAND ZombieEngineTests)
