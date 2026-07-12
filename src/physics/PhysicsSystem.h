@@ -11,12 +11,18 @@
 #include <Jolt/Physics/Body/BodyInterface.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/Body/BodyActivationListener.h>
 #include <Jolt/Physics/EPhysicsUpdateError.h>
 #include <entt/entt.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <cstdint>
 #include <memory>
+#include <vector>
+#include <mutex>
+#include <shared_mutex>
+#include <unordered_map>
+#include <enkiTS/TaskScheduler.h>
 
 namespace ecs { struct Transform; struct Health; }
 
@@ -25,6 +31,55 @@ namespace physics {
 #ifdef JPH_DEBUG_RENDERER
 class PhysicsDebugRenderer;
 #endif
+
+// [M2-EXT-03] Spatial query deduplication cache
+struct LineQuery {
+    glm::vec3 start;
+    glm::vec3 end;
+    bool operator==(const LineQuery& other) const {
+        return start == other.start && end == other.end;
+    }
+};
+
+struct LineQueryHash {
+    size_t operator()(const LineQuery& q) const {
+        std::hash<float> h;
+        // Robust 6-float CombineHash
+        size_t res = 17;
+        res = res * 31 + h(q.start.x);
+        res = res * 31 + h(q.start.y);
+        res = res * 31 + h(q.start.z);
+        res = res * 31 + h(q.end.x);
+        res = res * 31 + h(q.end.y);
+        res = res * 31 + h(q.end.z);
+        return res;
+    }
+};
+
+// [M2-EXT-01] Pending shape swap definition
+struct PendingShapeSwap {
+    JPH::BodyID bodyId;
+    JPH::ShapeRefC newShape;
+};
+
+// [M2-EXT-05] Mechanical Muscle Exhaustion Joint-Friction Damping Adder
+// Inline math helper for M2.9 CharacterVirtual consumption
+inline glm::vec3 ApplyPhysiologicalVelocityDamping(const glm::vec3& targetVelocity, float liveWBalance, float maxWBalance) {
+    float scalar = (maxWBalance > 0.001f) ? (liveWBalance / maxWBalance) : 0.35f;
+    float cExhaust = std::clamp(scalar, 0.35f, 1.0f);
+    return targetVelocity * cExhaust;
+}
+
+// [M2-EXT-07] Kinematic Virtual Sweep Tunneling Safeguard
+// Stopgap for kinematic character motion which doesn't use standard dynamic CCD
+inline JPH::AABox VirtualSweepTunnelingSafeguard(const JPH::AABox& currentBounds, const JPH::Vec3& velocity, float dt) {
+    JPH::Vec3 displacement = velocity * dt;
+    JPH::AABox projected = currentBounds;
+    projected.Translate(displacement);
+    JPH::AABox swept = currentBounds;
+    swept.Encapsulate(projected);
+    return swept;
+}
 
 // Object layers — kept minimal for M2; expanded in M2.6+
 namespace Layers {
@@ -86,6 +141,12 @@ struct PhysicsBodyComponent {
     JPH::BodyID bodyId;
 };
 
+// Extracted sleep event data from Jolt background threads
+struct BodyActivationEvent {
+    JPH::BodyID bodyId;
+    bool isActivated;
+};
+
 class PhysicsSystem {
 public:
     static void initializeGlobal();
@@ -96,6 +157,8 @@ public:
     PhysicsSystem();
     ~PhysicsSystem();
 
+    void setTaskScheduler(enki::TaskScheduler* ts) { taskScheduler_ = ts; }
+
     // Non-copyable
     PhysicsSystem(const PhysicsSystem&) = delete;
     PhysicsSystem& operator=(const PhysicsSystem&) = delete;
@@ -103,6 +166,15 @@ public:
     // Step physics by one fixed tick. Call once per game tick.
     // dt accumulation is handled by the caller (Engine).
     void step(entt::registry& registry, entt::dispatcher& dispatcher);
+
+    // [M2-EXT-03] Cached narrow-phase raycast. Thread-safe for concurrent AI readers.
+    bool CachedRayCast(const glm::vec3& start, const glm::vec3& end, JPH::RayCastResult& outHit);
+
+    // [M2-EXT-01] Enqueue an async collision bake and swap task
+    void QueueAsyncCollisionSwap(JPH::BodyID bodyId, const std::vector<glm::vec3>& vertices, const std::vector<uint32_t>& indices, JPH::ShapeRefC proxyShape);
+
+    // Exposed for EXT-01 background tasks
+    JPH::PhysicsSystem* GetRawSystem() { return physicsSystem_; }
 
     // Mirror Jolt transforms back to EnTT Transform components
     void mirrorTransforms(entt::registry& registry);
@@ -145,6 +217,37 @@ private:
 #ifdef JPH_DEBUG_RENDERER
     std::unique_ptr<PhysicsDebugRenderer> debugRenderer_;
 #endif
+    
+    // [M2-EXT-03] Cache state
+    std::unordered_map<LineQuery, JPH::RayCastResult, LineQueryHash> queryCache_;
+    std::shared_mutex queryCacheMutex_;
+
+    // [M2-EXT-01] Pending swaps
+    std::vector<PendingShapeSwap> pendingSwaps_;
+    std::mutex pendingSwapsMutex_;
+    friend class AsyncCollisionBaker;
+
+    // [M2-EXT-02] Activation events
+    class ActivationListener : public JPH::BodyActivationListener {
+    public:
+        void OnBodyActivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override {
+            std::lock_guard lock(mutex_);
+            events_.push_back({inBodyID, true});
+        }
+
+        void OnBodyDeactivated(const JPH::BodyID& inBodyID, JPH::uint64 inBodyUserData) override {
+            std::lock_guard lock(mutex_);
+            events_.push_back({inBodyID, false});
+        }
+
+        std::mutex mutex_;
+        std::vector<BodyActivationEvent> events_;
+    };
+    
+    ActivationListener activationListener_;
+    
+    // Reference to the global task scheduler for [M2-EXT-01]
+    enki::TaskScheduler* taskScheduler_ = nullptr;
 };
 
 } // namespace physics

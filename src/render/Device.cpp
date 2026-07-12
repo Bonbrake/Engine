@@ -94,6 +94,11 @@ void Device::selectPhysicalDevice(VulkanContext* context) {
     physDevice.enable_extension_if_present(VK_EXT_SHADER_OBJECT_EXTENSION_NAME);
     physDevice.enable_extension_if_present(VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME);
     
+    // Vendor diagnostic extensions
+    physDevice.enable_extension_if_present(VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME);
+    physDevice.enable_extension_if_present(VK_NV_DEVICE_DIAGNOSTICS_CONFIG_EXTENSION_NAME);
+    physDevice.enable_extension_if_present(VK_AMD_BUFFER_MARKER_EXTENSION_NAME);
+    
     LOG_INFO("Selected GPU: {}", physDevice.name);
     
     vkbDevice_.physical_device = physDevice;
@@ -164,6 +169,23 @@ void Device::createLogicalDevice() {
         unifiedLayoutFeatures.unifiedImageLayouts = VK_TRUE;
         *pNextChain = &unifiedLayoutFeatures;
         pNextChain = &unifiedLayoutFeatures.pNext;
+    }
+
+    // 4. Vendor Diagnostics Gating
+    bool supportsNVCheckpoints = false;
+    bool supportsNVConfig = false;
+    bool supportsAMDMarkers = false;
+    for (const auto& ext : available_extensions) {
+        if (ext == VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME) supportsNVCheckpoints = true;
+        if (ext == VK_NV_DEVICE_DIAGNOSTICS_CONFIG_EXTENSION_NAME) supportsNVConfig = true;
+        if (ext == VK_AMD_BUFFER_MARKER_EXTENSION_NAME) supportsAMDMarkers = true;
+    }
+    
+    VkPhysicalDeviceDiagnosticsConfigFeaturesNV nvConfigFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DIAGNOSTICS_CONFIG_FEATURES_NV};
+    if (supportsNVCheckpoints && supportsNVConfig) {
+        nvConfigFeatures.diagnosticsConfig = VK_TRUE;
+        *pNextChain = &nvConfigFeatures;
+        pNextChain = &nvConfigFeatures.pNext;
     }
 
     deviceBuilder.add_pNext(&features13);
@@ -306,6 +328,9 @@ void Device::checkCapabilities() {
         if (ext == VK_EXT_ATTACHMENT_FEEDBACK_LOOP_LAYOUT_EXTENSION_NAME) caps_.attachmentFeedbackLoop = true;
         if (ext == VK_EXT_SHADER_OBJECT_EXTENSION_NAME) caps_.shaderObject = true;
         if (ext == VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME) hasUnifiedExtension = true;
+        
+        if (ext == VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME) caps_.supportsNVCheckpoints = true;
+        if (ext == VK_AMD_BUFFER_MARKER_EXTENSION_NAME) caps_.supportsAMDMarkers = true;
     }
     
     if (hasUnifiedExtension) {
@@ -320,6 +345,7 @@ void Device::checkCapabilities() {
 
     VkPhysicalDeviceProperties props;
     vkGetPhysicalDeviceProperties(vkbDevice_.physical_device.physical_device, &props);
+    caps_.vendorID = props.vendorID;
 
     // [M0] 8K Texture / Multi-RT Guarantee Checks
     ENGINE_ASSERT(props.limits.maxImageDimension2D >= 8192, "GPU maxImageDimension2D limit ({}) is less than 8K (8192)!", props.limits.maxImageDimension2D);

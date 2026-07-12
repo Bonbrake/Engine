@@ -24,6 +24,7 @@ private:
 
     VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
     VkPipeline pipeline = VK_NULL_HANDLE;
+    VkPipeline wireframePipeline = VK_NULL_HANDLE; // [M1-EXT-04] Derivative variant
     
     VkPipelineLayout cullPipelineLayout = VK_NULL_HANDLE;
     VkPipeline cullPipeline = VK_NULL_HANDLE;
@@ -56,6 +57,10 @@ private:
     // Readback buffer
     VkBuffer countReadbackBuffer[3] = { VK_NULL_HANDLE, VK_NULL_HANDLE, VK_NULL_HANDLE };
     VmaAllocation countReadbackAllocation[3] = { VK_NULL_HANDLE, VK_NULL_HANDLE, VK_NULL_HANDLE };
+
+    // [M1-EXT-03] Occlusion Query Double-Buffering
+    VkQueryPool occlusionPools[3] = { VK_NULL_HANDLE, VK_NULL_HANDLE, VK_NULL_HANDLE };
+    uint32_t occlusionResults[100] = {0}; // Results for 100 instances
 
     // To track current frame across functions
     uint32_t frameCounter = 0;

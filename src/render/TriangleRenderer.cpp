@@ -9,6 +9,10 @@
 #include <vector>
 #include <string.h>
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif
+
 namespace render {
 
 struct InstanceData {
@@ -353,7 +357,20 @@ void TriangleRenderer::createPipelines(Device* device, VkFormat colorFormat) {
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = &dynamicState;
     pipelineInfo.layout = pipelineLayout;
-    vkCreateGraphicsPipelines(device->getLogicalDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline);
+    
+    // Create a wireframe variant for derivative testing
+    VkPipelineRasterizationStateCreateInfo wireframeRasterizer = rasterizer;
+    wireframeRasterizer.polygonMode = VK_POLYGON_MODE_LINE;
+    VkGraphicsPipelineCreateInfo wireframeInfo = pipelineInfo;
+    wireframeInfo.pRasterizationState = &wireframeRasterizer;
+
+    std::vector<VkGraphicsPipelineCreateInfo> batch = { pipelineInfo, wireframeInfo };
+    // [M1-EXT-04] Batched Pipeline Creation + Pipeline Derivatives
+    auto pipelines = PipelineBuilder::buildPipelines(batch, device);
+    if (pipelines.size() >= 2) {
+        pipeline = pipelines[0];
+        wireframePipeline = pipelines[1]; // Store it, need to declare this in TriangleRenderer.h
+    }
 
     vkDestroyShaderModule(device->getLogicalDevice(), vertModule, nullptr);
     vkDestroyShaderModule(device->getLogicalDevice(), fragModule, nullptr);
@@ -384,10 +401,26 @@ void TriangleRenderer::init(Device* device, VkFormat colorFormat) {
     createBuffers(device);
     createPipelines(device, colorFormat);
     createDescriptorSets(device);
+    
+    // [M1-EXT-03] Occlusion Query Pools
+    VkQueryPoolCreateInfo queryPoolInfo{VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO};
+    queryPoolInfo.queryType = VK_QUERY_TYPE_OCCLUSION;
+    queryPoolInfo.queryCount = 100;
+    for (int i = 0; i < 3; i++) {
+        vkCreateQueryPool(device->getLogicalDevice(), &queryPoolInfo, nullptr, &occlusionPools[i]);
+    }
 }
 
 void TriangleRenderer::cleanup(Device* device) {
+    for (int i = 0; i < 3; i++) {
+        if (occlusionPools[i] != VK_NULL_HANDLE) {
+            vkDestroyQueryPool(device->getLogicalDevice(), occlusionPools[i], nullptr);
+            occlusionPools[i] = VK_NULL_HANDLE;
+        }
+    }
+
     if (pipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), pipeline, nullptr);
+    if (wireframePipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), wireframePipeline, nullptr);
     if (pipelineLayout != VK_NULL_HANDLE) vkDestroyPipelineLayout(device->getLogicalDevice(), pipelineLayout, nullptr);
     if (cullPipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), cullPipeline, nullptr);
     
@@ -504,6 +537,9 @@ void TriangleRenderer::cull(VkCommandBuffer cmd, uint32_t imageIndex, VkImageVie
 }
 
 void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSystem* materialSystem) {
+#ifdef TRACY_ENABLE
+    ZoneScoped;
+#endif
     if (pipeline == VK_NULL_HANDLE) return;
 
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
@@ -563,8 +599,14 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
     pc.cullEnabled = (cullCvar && cullCvar->val.b) ? 1 : 0;
     vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(PC), &pc);
 
+    // [M1-EXT-03] Occlusion Query Double-Buffering
+    vkCmdResetQueryPool(cmd, occlusionPools[imageIndex], 0, 100);
+    vkCmdBeginQuery(cmd, occlusionPools[imageIndex], 0, 0);
+    
     // M1 Exit Criterion 1: vkCmdDrawIndexedIndirectCount
     vkCmdDrawIndexedIndirectCount(cmd, indirectBuffer[imageIndex], 0, countBuffer[imageIndex], 0, 100, sizeof(DrawIndexedIndirectCommand));
+
+    vkCmdEndQuery(cmd, occlusionPools[imageIndex], 0);
 
     // After drawing, copy count buffer to readback buffer for logging
     VkBufferMemoryBarrier2 copyBarrier{VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER_2};
@@ -590,9 +632,20 @@ void TriangleRenderer::readbackCount(Device* device, uint32_t imageIndex) {
         vmaMapMemory(device->getAllocator(), countReadbackAllocation[imageIndex], &mapped);
         uint32_t count = *(uint32_t*)mapped;
         vmaUnmapMemory(device->getAllocator(), countReadbackAllocation[imageIndex]);
+        
+        // [M1-EXT-03] Occlusion Query Double-Buffering
+        // Read without VK_QUERY_RESULT_WAIT_BIT to avoid GPU/CPU sync stall
+        if (occlusionPools[imageIndex] != VK_NULL_HANDLE) {
+            VkResult res = vkGetQueryPoolResults(device->getLogicalDevice(), occlusionPools[imageIndex], 0, 1, sizeof(uint32_t), &occlusionResults[0], sizeof(uint32_t), 0);
+            if (res == VK_SUCCESS && frameCounter % 10 == 0) {
+                // Log the hardware occlusion query result (passed samples)
+                LOG_INFO("Hardware Occlusion Query: {} samples passed", occlusionResults[0]);
+            }
+        }
+        
         // Ensure we print only occasionally so we don't spam the log, or log if count < 100
         if (frameCounter % 10 == 0) {
-            LOG_INFO("Hi-Z Occlusion Culling: {}/100 instances visible ({}% reduction)", count, 100 - count);
+            LOG_INFO("Hi-Z Compute Culling: {}/100 instances visible ({}% reduction)", count, 100 - count);
         }
     }
 }

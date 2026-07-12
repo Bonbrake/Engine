@@ -1,4 +1,5 @@
 #include "SpatialHash.h"
+#include "Components.h"
 #include <algorithm>
 
 namespace ecs {
@@ -24,7 +25,7 @@ uint64_t SpatialHash::GetEntityTargetKey(float x, float z, bool isSubdivided) co
     return ComputeSubdividedCellKey(parentKey, subX, subZ);
 }
 
-void SpatialHash::Insert(entt::entity entity, float x, float z) {
+void SpatialHash::Insert(entt::entity entity, float x, float z, entt::registry* registry) {
     uint64_t parentKey = SpatialHashKey(x, z);
     auto& header = headers[parentKey];
     
@@ -40,10 +41,32 @@ void SpatialHash::Insert(entt::entity entity, float x, float z) {
         buckets.erase(parentKey);
         
         for (entt::entity ent : tempEntities) {
-            auto posIt = entityPositions.find(ent);
-            if (posIt != entityPositions.end()) {
-                float px = posIt->second.first;
-                float pz = posIt->second.second;
+            float px = 0.0f, pz = 0.0f;
+            bool foundPos = false;
+            
+            // [M1-EXT-08] Recompute leaf quadrant using the entity's actual position if registry is provided
+            if (registry && registry->valid(ent)) {
+                auto* transform = registry->try_get<Transform>(ent);
+                if (transform) {
+                    px = transform->position.x;
+                    pz = transform->position.z;
+                    foundPos = true;
+                    // Update cache to match actual position
+                    entityPositions[ent] = {px, pz}; 
+                }
+            }
+            
+            // Fallback to cached position if no registry or transform
+            if (!foundPos) {
+                auto posIt = entityPositions.find(ent);
+                if (posIt != entityPositions.end()) {
+                    px = posIt->second.first;
+                    pz = posIt->second.second;
+                    foundPos = true;
+                }
+            }
+
+            if (foundPos) {
                 uint64_t targetKey = GetEntityTargetKey(px, pz, true);
                 buckets[targetKey].push_back(ent);
                 
@@ -82,15 +105,45 @@ void SpatialHash::Remove(entt::entity entity, float x, float z) {
     entityPositions.erase(entity);
 }
 
-void SpatialHash::Update(entt::entity entity, float oldX, float oldZ, float newX, float newZ) {
+void SpatialHash::Update(entt::entity entity, float oldX, float oldZ, float newX, float newZ, entt::registry* registry) {
     Remove(entity, oldX, oldZ);
-    Insert(entity, newX, newZ);
+    Insert(entity, newX, newZ, registry);
 }
 
 void SpatialHash::Clear() {
     headers.clear();
     buckets.clear();
     entityPositions.clear();
+}
+
+void SpatialHash::Rebucket(entt::registry& registry) {
+    std::vector<std::tuple<entt::entity, float, float, float, float>> toUpdate;
+    std::vector<std::tuple<entt::entity, float, float>> toRemove;
+    
+    for (const auto& [entity, pos] : entityPositions) {
+        if (!registry.valid(entity)) {
+            toRemove.push_back({entity, pos.first, pos.second});
+            continue;
+        }
+        auto* transform = registry.try_get<Transform>(entity);
+        if (!transform) {
+            toRemove.push_back({entity, pos.first, pos.second});
+            continue;
+        }
+        
+        float newX = transform->position.x;
+        float newZ = transform->position.z;
+        if (newX != pos.first || newZ != pos.second) {
+            toUpdate.push_back({entity, pos.first, pos.second, newX, newZ});
+        }
+    }
+    
+    for (const auto& rm : toRemove) {
+        Remove(std::get<0>(rm), std::get<1>(rm), std::get<2>(rm));
+    }
+    for (const auto& update : toUpdate) {
+        Update(std::get<0>(update), std::get<1>(update), std::get<2>(update), std::get<3>(update), std::get<4>(update), &registry);
+    }
 }
 
 std::vector<entt::entity> SpatialHash::QueryCell(int32_t cx, int32_t cz) const {

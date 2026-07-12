@@ -11,6 +11,10 @@
 #include "../core/TeardownTracker.h"
 #include <SDL3/SDL_vulkan.h>
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif
+
 namespace render {
 
 VulkanContext::VulkanContext(SDL_Window* window) : window_(window) {
@@ -182,6 +186,9 @@ void VulkanContext::cleanup() {
 }
 
 void VulkanContext::renderFrame(debug::ImGuiOverlay* imguiOverlay) {
+#ifdef TRACY_ENABLE
+    ZoneScoped;
+#endif
     if (core::Config::get().headless) {
         return; 
     }

@@ -23,6 +23,10 @@ struct CapabilityTier {
     bool queryTimestamps = false;
     bool shaderObject = false;
     
+    uint32_t vendorID = 0;
+    bool supportsNVCheckpoints = false;
+    bool supportsAMDMarkers = false;
+    
     // Tier-0 minimum hardware constraint check
     bool isTier0 = true;
 };

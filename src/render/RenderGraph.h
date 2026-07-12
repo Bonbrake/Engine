@@ -20,6 +20,7 @@ struct PassDependency {
 
 struct PassAttachment {
     VkImageView view = VK_NULL_HANDLE;
+    VkFormat format = VK_FORMAT_UNDEFINED;
     VkImageLayout layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     VkAttachmentLoadOp loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     VkAttachmentStoreOp storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -41,6 +42,9 @@ struct PassNode {
     std::function<void(VkCommandBuffer)> executeCallback;
 };
 
+class Device;
+class CommandPoolMatrix;
+
 // Centralized Render Graph with topologically sorted barriers/transitions
 class RenderGraph {
 public:
@@ -56,7 +60,7 @@ public:
 
     // [M1-EXT-10] Render Graph Pass Dependency DAG Flattener
     // Compiles the framegraph to auto-insert barriers/transitions instead of hand-placed ones
-    void CompileAndExecute(VkCommandBuffer cmd, VkQueryPool pool = VK_NULL_HANDLE, uint32_t baseQueryIndex = 0, std::vector<std::string>* executedPassNames = nullptr);
+    void CompileAndExecute(VkCommandBuffer cmd, class Device* device, class CommandPoolMatrix* poolMatrix, uint32_t frameIndex, VkQueryPool pool = VK_NULL_HANDLE, uint32_t baseQueryIndex = 0, std::vector<std::string>* executedPassNames = nullptr);
 
 private:
     std::vector<PassNode> passes;

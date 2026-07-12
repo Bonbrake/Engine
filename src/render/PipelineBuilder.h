@@ -18,6 +18,9 @@ public:
     // Builds a single VkPipelineLayout and an array of VkDescriptorSetLayouts from a set of SPIR-V modules.
     // Call this exactly once per pipeline (e.g. passing [vert, frag] together, or [comp] alone).
     static PipelineLayoutData buildLayouts(const std::vector<std::vector<uint32_t>>& spirvModules, Device* device);
+
+    // [M1-EXT-04] Batched Pipeline Creation + Derivatives
+    static std::vector<VkPipeline> buildPipelines(std::vector<VkGraphicsPipelineCreateInfo>& pipelineInfos, Device* device);
 };
 
 } // namespace render

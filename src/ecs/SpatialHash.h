@@ -32,11 +32,14 @@ public:
     static constexpr float CELL_SIZE = 2.0f;
     static constexpr uint32_t SUBDIVISION_THRESHOLD = 64;
 
-    void Insert(entt::entity entity, float x, float z);
+    void Insert(entt::entity entity, float x, float z, entt::registry* registry = nullptr);
     void Remove(entt::entity entity, float x, float z);
-    void Update(entt::entity entity, float oldX, float oldZ, float newX, float newZ);
+    void Update(entt::entity entity, float oldX, float oldZ, float newX, float newZ, entt::registry* registry = nullptr);
 
     void Clear();
+
+    // [M1-EXT-08] Quadtree Re-Bucketing
+    void Rebucket(entt::registry& registry);
 
     // Query APIs
     std::vector<entt::entity> QueryRadius(float x, float z, float radius) const;

@@ -7,8 +7,12 @@
 #include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/Collision/Shape/MeshShape.h>
+#include <Jolt/Physics/Collision/RayCast.h>
+#include <Jolt/Physics/Collision/CastResult.h>
 #include <glm/glm.hpp>
 #include "PhysicsDebugRenderer.h"
+#include "../events/EventBus.h"
 
 // Jolt uses right-handed Y-up — matches spec.
 // JPH_CROSS_PLATFORM_DETERMINISTIC and JPH_DOUBLE_PRECISION enforced by CMake defines.
@@ -34,21 +38,20 @@ void PhysicsSystem::initializeGlobal() {
 
 PhysicsSystem::PhysicsSystem()
     // Jolt JobSystemThreadPool: dedicated, NOT enkiTS (spec: two job systems only)
-    : joltJobs_(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers,
-                static_cast<int>(std::thread::hardware_concurrency()) - 1),
+    : joltJobs_(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, 1),
       tempAllocator_(10 * 1024 * 1024)
 {
-
     physicsSystem_ = new JPH::PhysicsSystem();
     physicsSystem_->Init(MAX_BODIES, NUM_BODY_MUTEXES, MAX_BODY_PAIRS,
                          MAX_CONTACT_CONSTRAINTS,
                          bpLayerInterface_, objVsBpFilter_, objLayerFilter_);
+    physicsSystem_->SetBodyActivationListener(&activationListener_);
 
 #ifdef JPH_DEBUG_RENDERER
     debugRenderer_ = std::make_unique<PhysicsDebugRenderer>();
 #endif
 
-    // Right-handed Y-up gravity (spec: Y-up alignment)
+    // M2-EXT-04 V_maxLimit safety ceiling
     physicsSystem_->SetGravity(JPH::Vec3(0.0f, -9.81f, 0.0f));
 
     LOG_INFO("PhysicsSystem: Jolt {} initialized. JPH_CROSS_PLATFORM_DETERMINISTIC=1 JPH_DOUBLE_PRECISION=1",
@@ -58,12 +61,29 @@ PhysicsSystem::PhysicsSystem()
 PhysicsSystem::~PhysicsSystem() {
     delete physicsSystem_;
     physicsSystem_ = nullptr;
-    // Factory/types are process-lifetime singletons; leave registered.
 }
 
 void PhysicsSystem::step(entt::registry& registry, entt::dispatcher& dispatcher) {
-    // Fixed-timestep: caller is responsible for accumulator; we step once per call.
-    // EMotionQuality::LinearCast set per-body in createBox/createSphere for CCD.
+    if (!physicsSystem_) return;
+
+    {
+        // [M2-EXT-03] Clear query cache at the start of every fixed tick
+        std::unique_lock lock(queryCacheMutex_);
+        queryCache_.clear();
+    }
+
+    {
+        // [M2-EXT-01] Drain pending collision swaps before Jolt spins up its job graph
+        std::lock_guard lock(pendingSwapsMutex_);
+        auto& bi = physicsSystem_->GetBodyInterface();
+        for (const auto& swap : pendingSwaps_) {
+            // Safely swap the proxy shape for the cooked one
+            bi.SetShape(swap.bodyId, swap.newShape, true, JPH::EActivation::Activate);
+        }
+        pendingSwaps_.clear();
+    }
+
+    // Pass dedicated Jolt job system (distinct from enkiTS)
     JPH::EPhysicsUpdateError err = physicsSystem_->Update(
         FIXED_DT, COLLISION_STEPS, &tempAllocator_, &joltJobs_);
 
@@ -75,10 +95,126 @@ void PhysicsSystem::step(entt::registry& registry, entt::dispatcher& dispatcher)
     // Mirror Jolt transforms into EnTT
     mirrorTransforms(registry);
 
-    // [M2-EXT-02] Sleep event bridge: walk active-body set and detect transitions
-    // Real implementation requires a Jolt ContactListener; for M2 we poll body sleep state.
-    // Dispatcher bridge kept here for downstream subscribers (M7-EXT-01 etc.)
-    (void)dispatcher; // wired at M7 when first subscriber appears
+    // [M2-EXT-02] Sleep event bridge: drain background activation events
+    std::vector<BodyActivationEvent> events;
+    {
+        std::lock_guard lock(activationListener_.mutex_);
+        events.swap(activationListener_.events_);
+    }
+
+    if (!events.empty()) {
+        auto view = registry.view<PhysicsBodyComponent, ecs::StableId>();
+        for (const auto& ev : events) {
+            for (auto [entity, phys, stableId] : view.each()) {
+                if (phys.bodyId == ev.bodyId) {
+                    dispatcher.enqueue<events::HibernationEvent>({stableId.uuid, !ev.isActivated});
+                    break;
+                }
+            }
+        }
+    }
+}
+
+// [M2-EXT-03] Continuous Narrow-Phase Contact Point Query Collector Cache
+bool PhysicsSystem::CachedRayCast(const glm::vec3& start, const glm::vec3& end, JPH::RayCastResult& outHit) {
+    if (!physicsSystem_) return false;
+
+    LineQuery q{start, end};
+    
+    // Fast path: shared read lock
+    {
+        std::shared_lock lock(queryCacheMutex_);
+        auto it = queryCache_.find(q);
+        if (it != queryCache_.end()) {
+            outHit = it->second;
+            // The Jolt struct has a fraction < 1.0 if it's a hit
+            return outHit.mFraction < 1.0f;
+        }
+    }
+
+    // Miss: perform actual raycast
+    JPH::RVec3 jphStart = toJPHD(start);
+    JPH::Vec3 jphDir = toJPH(end - start);
+    JPH::RRayCast ray(jphStart, jphDir);
+    
+    JPH::RayCastResult hit;
+    bool hasHit = physicsSystem_->GetNarrowPhaseQuery().CastRay(
+        ray, 
+        hit, 
+        JPH::SpecifiedBroadPhaseLayerFilter(BroadPhaseLayers::MOVING), 
+        JPH::SpecifiedObjectLayerFilter(Layers::MOVING)
+    );
+
+    // Store in cache (requires exclusive lock)
+    {
+        std::unique_lock lock(queryCacheMutex_);
+        queryCache_[q] = hit;
+    }
+
+    outHit = hit;
+    return hasHit;
+}
+
+// [M2-EXT-01] Async Collision Baking Task
+class AsyncCollisionBaker : public enki::ITaskSet {
+public:
+    AsyncCollisionBaker(PhysicsSystem* sys, JPH::BodyID bid, std::vector<glm::vec3> verts, std::vector<uint32_t> idx)
+        : sys_(sys), bodyId_(bid), vertices_(std::move(verts)), indices_(std::move(idx)) {}
+
+    void ExecuteRange(enki::TaskSetPartition range, uint32_t threadnum) override {
+        if (vertices_.empty() || indices_.empty()) return;
+
+        // Cook the mesh offline
+        JPH::VertexList jphVertices;
+        jphVertices.reserve(vertices_.size());
+        for (const auto& v : vertices_) {
+            jphVertices.push_back(JPH::Float3(v.x, v.y, v.z));
+        }
+        
+        JPH::IndexedTriangleList jphTriangles;
+        jphTriangles.reserve(indices_.size() / 3);
+        for (size_t i = 0; i < indices_.size(); i += 3) {
+            jphTriangles.push_back(JPH::IndexedTriangle(indices_[i], indices_[i+1], indices_[i+2]));
+        }
+
+        JPH::MeshShapeSettings meshSettings(jphVertices, jphTriangles);
+        JPH::ShapeSettings::ShapeResult shapeResult = meshSettings.Create();
+
+        if (shapeResult.HasError()) {
+            LOG_ERROR("AsyncCollisionBaker: Failed to bake shape: {}", shapeResult.GetError().c_str());
+            return;
+        }
+
+        JPH::ShapeRefC cookedShape = shapeResult.Get();
+
+        // Push to pending swaps
+        std::lock_guard lock(sys_->pendingSwapsMutex_);
+        sys_->pendingSwaps_.push_back({bodyId_, cookedShape});
+    }
+
+private:
+    PhysicsSystem* sys_;
+    JPH::BodyID bodyId_;
+    std::vector<glm::vec3> vertices_; // Copied by value
+    std::vector<uint32_t> indices_;
+};
+
+// [M2-EXT-01] Queue Async Collision Swap
+void PhysicsSystem::QueueAsyncCollisionSwap(JPH::BodyID bodyId, const std::vector<glm::vec3>& vertices, const std::vector<uint32_t>& indices, JPH::ShapeRefC proxyShape) {
+    if (!physicsSystem_ || vertices.empty()) return;
+
+    // Immediately swap in the proxy shape on the main thread
+    auto& bi = physicsSystem_->GetBodyInterface();
+    bi.SetShape(bodyId, proxyShape, true, JPH::EActivation::DontActivate);
+
+    // If enkiTS is available, dispatch the background bake
+    if (taskScheduler_) {
+        // We leak the task here for the sake of the M2 stub, in M4 we manage memory properly
+        auto* baker = new AsyncCollisionBaker(this, bodyId, vertices, indices);
+        taskScheduler_->AddTaskSetToPipe(baker);
+    } else {
+        LOG_WARN("PhysicsSystem: QueueAsyncCollisionSwap called but taskScheduler_ is null!");
+    }
 }
 
 void PhysicsSystem::mirrorTransforms(entt::registry& registry) {
@@ -112,6 +248,9 @@ JPH::BodyID PhysicsSystem::createBox(const glm::dvec3& position, const glm::vec3
         settings.mMassPropertiesOverride.mMass = mass;
         settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
         settings.mMotionQuality = JPH::EMotionQuality::LinearCast; // CCD per spec
+        // [M2-EXT-04] Fixed-Timestep Kinetic Energy Clamper (Safety Ceiling)
+        settings.mMaxLinearVelocity = 250.0f; 
+        settings.mMaxAngularVelocity = 0.25f * JPH::JPH_PI * 60.0f;
     }
     JPH::Body* body = bi.CreateBody(settings);
     if (!body) {
@@ -139,6 +278,9 @@ JPH::BodyID PhysicsSystem::createSphere(const glm::dvec3& position, float radius
         settings.mMassPropertiesOverride.mMass = mass;
         settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
         settings.mMotionQuality = JPH::EMotionQuality::LinearCast;
+        // [M2-EXT-04] Fixed-Timestep Kinetic Energy Clamper (Safety Ceiling)
+        settings.mMaxLinearVelocity = 250.0f; 
+        settings.mMaxAngularVelocity = 0.25f * JPH::JPH_PI * 60.0f;
     }
     JPH::Body* body = bi.CreateBody(settings);
     if (!body) {

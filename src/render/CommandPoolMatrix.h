@@ -37,7 +37,9 @@ public:
     
     // Flat linear index mapping each (in-flight frame, recording thread) to a dedicated pool
     uint32_t GetPoolIndex(uint32_t frameResourceIndex, uint32_t threadId) const {
-        assert(threadId < threadCount);
+        if (threadId >= threadCount) {
+            throw std::out_of_range("ThreadId out of bounds in CommandPoolMatrix");
+        }
         return (frameResourceIndex * threadCount) + threadId;
     }
     

@@ -20,6 +20,7 @@ enum class LimbId : uint8_t { Head, Torso, ArmLeft, ArmRight, LegLeft, LegRight,
 
 struct DamageEvent {
     float amount = 0.0f;                  // raw, pre-mitigation
+    entt::entity target = entt::null;     // The entity receiving the damage
     entt::entity source = entt::null;     // dealer; entt::null for environmental/scripted damage
     entt::entity instigator = entt::null; // credit-attribution owner when source is indirect
     LimbId hit_location = LimbId::Torso;

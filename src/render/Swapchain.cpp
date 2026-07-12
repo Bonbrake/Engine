@@ -1,6 +1,7 @@
 #include "Swapchain.h"
 #include "Device.h"
 #include "../core/Logger.h"
+#include "../core/JobSystem.h"
 #include "../debug/ImGuiOverlay.h"
 
 namespace render {
@@ -122,10 +123,15 @@ void Swapchain::create() {
         }
 
         triangleRenderer_.init(device_, vkbSwapchain_.image_format);
+
+        // Initialize CommandPoolMatrix
+        commandPoolMatrix_.Initialize(device_->getLogicalDevice(), device_->getGraphicsQueueIndex(), static_cast<uint32_t>(swapchainImages_.size()), core::JobSystem::get()->GetNumTaskThreads());
     }
 }
 
 void Swapchain::cleanup() {
+    commandPoolMatrix_.Destroy();
+    
     if (commandPool_) {
         vkDestroyCommandPool(device_->getLogicalDevice(), commandPool_, nullptr);
         commandPool_ = VK_NULL_HANDLE;
@@ -257,6 +263,7 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     
     render::PassAttachment colorAttachment{};
     colorAttachment.view = swapchainImageViews_[imageIndex];
+    colorAttachment.format = vkbSwapchain_.image_format;
     colorAttachment.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -265,6 +272,7 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
 
     render::PassAttachment depthAttachment{};
     depthAttachment.view = depthImageViews_[imageIndex];
+    depthAttachment.format = VK_FORMAT_D32_SFLOAT; // Or queried depth format
     depthAttachment.layout = VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
     depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -297,7 +305,7 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     };
 
     renderGraph_.AddPass(std::move(swapchainPass));
-    renderGraph_.CompileAndExecute(cmd, device_->getCapabilities().queryTimestamps ? device_->getQueryPool() : VK_NULL_HANDLE, imageIndex * render::RenderGraph::MAX_PASSES * 2, &passNamesPerFrame_[imageIndex]);
+    renderGraph_.CompileAndExecute(cmd, device_, &commandPoolMatrix_, imageIndex, device_->getCapabilities().queryTimestamps ? device_->getQueryPool() : VK_NULL_HANDLE, imageIndex * render::RenderGraph::MAX_PASSES * 2, &passNamesPerFrame_[imageIndex]);
 
     if (imguiOverlay) {
         imguiOverlay->SetPassTimings(lastFrameTimings_, device_->getCapabilities().queryTimestamps);

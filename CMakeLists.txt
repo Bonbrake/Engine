@@ -20,7 +20,11 @@ find_package(imgui CONFIG REQUIRED)
 find_package(msdfgen CONFIG REQUIRED)
 find_package(unofficial-spirv-reflect CONFIG REQUIRED)
 find_package(fastgltf CONFIG REQUIRED)
+find_package(Jolt CONFIG REQUIRED)
 find_path(STB_INCLUDE_DIR "stb_image.h")
+find_package(Tracy CONFIG REQUIRED)
+
+option(ENGINE_ENABLE_PROFILING "Enable Tracy Profiling" OFF)
 
 find_program(GLSLC glslc REQUIRED)
 
@@ -66,9 +70,58 @@ target_link_libraries(ZombieEngine PRIVATE
     msdfgen::msdfgen-ext
     unofficial::spirv-reflect
     fastgltf::fastgltf
+    Jolt::Jolt
 )
 
 target_include_directories(ZombieEngine PRIVATE ${STB_INCLUDE_DIR})
+
+if(ENGINE_ENABLE_PROFILING)
+    target_compile_definitions(ZombieEngine PRIVATE TRACY_ENABLE)
+    target_link_libraries(ZombieEngine PRIVATE Tracy::TracyClient)
+endif()
+
+# Tests
+enable_testing()
+file(GLOB_RECURSE TEST_SRC_FILES "src/tests/*.cpp")
+if(TEST_SRC_FILES)
+    add_executable(ZombieEngineTests ${TEST_SRC_FILES})
+    
+    # We must also link the game sources to the test executable, except main.cpp
+    # so we filter it out of SRC_FILES.
+    list(REMOVE_ITEM SRC_FILES "${CMAKE_SOURCE_DIR}/src/main.cpp")
+    
+    target_sources(ZombieEngineTests PRIVATE ${SRC_FILES})
+    target_include_directories(ZombieEngineTests PRIVATE src ${STB_INCLUDE_DIR})
+    
+    target_link_libraries(ZombieEngineTests PRIVATE
+        SDL3::SDL3
+        Vulkan::Headers
+        vk-bootstrap::vk-bootstrap
+        glm::glm
+        volk::volk
+        spdlog::spdlog
+        enkiTS::enkiTS
+        nlohmann_json::nlohmann_json
+        cxxopts::cxxopts
+        Catch2::Catch2WithMain
+        GPUOpen::VulkanMemoryAllocator
+        EnTT::EnTT
+        imgui::imgui
+        msdfgen::msdfgen-core
+        msdfgen::msdfgen-ext
+        unofficial::spirv-reflect
+        fastgltf::fastgltf
+        Jolt::Jolt
+    )
+    
+    target_compile_definitions(ZombieEngineTests PRIVATE
+        JPH_CROSS_PLATFORM_DETERMINISTIC
+        JPH_DOUBLE_PRECISION
+    )
+    
+    include(Catch)
+    catch_discover_tests(ZombieEngineTests)
+endif()
 
 # Vulkan validation layers ON in Debug and OFF in Release
 target_compile_definitions(ZombieEngine PRIVATE
@@ -78,4 +131,7 @@ target_compile_definitions(ZombieEngine PRIVATE
     $<$<CONFIG:Debug>:ENGINE_DEV_TOOLS=1>
     $<$<NOT:$<CONFIG:Debug>>:ENABLE_VULKAN_VALIDATION_LAYERS=0>
     SHADER_DIR=\"${CMAKE_BINARY_DIR}/shaders\"
+    # M2 spec: Jolt must be built with these defines for bit-identical physics across compiler/CPU
+    JPH_CROSS_PLATFORM_DETERMINISTIC
+    JPH_DOUBLE_PRECISION
 )

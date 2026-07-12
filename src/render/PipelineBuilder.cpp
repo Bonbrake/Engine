@@ -152,4 +152,27 @@ PipelineLayoutData PipelineBuilder::buildLayouts(const std::vector<std::vector<u
     return result;
 }
 
+std::vector<VkPipeline> PipelineBuilder::buildPipelines(std::vector<VkGraphicsPipelineCreateInfo>& pipelineInfos, Device* device) {
+    if (pipelineInfos.empty()) return {};
+    
+    // Set up derivative flags if there's more than one pipeline
+    if (pipelineInfos.size() > 1) {
+        pipelineInfos[0].flags |= VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+        for (size_t i = 1; i < pipelineInfos.size(); ++i) {
+            pipelineInfos[i].flags |= VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+            pipelineInfos[i].basePipelineIndex = 0;
+            pipelineInfos[i].basePipelineHandle = VK_NULL_HANDLE;
+        }
+    }
+    
+    std::vector<VkPipeline> pipelines(pipelineInfos.size());
+    if (vkCreateGraphicsPipelines(device->getLogicalDevice(), VK_NULL_HANDLE, 
+                                  static_cast<uint32_t>(pipelineInfos.size()), 
+                                  pipelineInfos.data(), nullptr, pipelines.data()) != VK_SUCCESS) {
+        LOG_ERROR("Failed to create graphics pipelines in batch");
+        return {};
+    }
+    return pipelines;
+}
+
 } // namespace render

@@ -4,8 +4,13 @@
 #include <atomic>
 #include <vector>
 #include <memory>
+#include "SpatialHash.h"
 
 #include <thread>
+
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif
 
 namespace ecs {
 
@@ -62,6 +67,15 @@ public:
             workerQueues[i].DrainToRegistry(registry, apply);
         }
     }
+
+    void Tick() {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
+        spatialHash.Rebucket(registry);
+    }
+
+    SpatialHash spatialHash;
 
 private:
     entt::registry registry;

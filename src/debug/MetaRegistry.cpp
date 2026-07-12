@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "../ecs/Components.h"
+#include "../ecs/Destructible.h"
 #include "core/Logger.h"
 
 namespace debug {
@@ -22,9 +23,15 @@ void MetaRegistry::Initialize() {
         .data<&ecs::Health::current>("current"_hs)
         .data<&ecs::Health::max>("max"_hs);
 
+    entt::meta_factory<ecs::DestructibleComponent>{}
+        .type("DestructibleComponent"_hs)
+        .data<&ecs::DestructibleComponent::isDestroyed>("isDestroyed"_hs)
+        .data<&ecs::DestructibleComponent::destroyedMeshHandle>("destroyedMeshHandle"_hs);
+
     entt::meta_factory<ecs::DamageEvent>{}
         .type("DamageEvent"_hs)
         .data<&ecs::DamageEvent::amount>("amount"_hs)
+        .data<&ecs::DamageEvent::target>("target"_hs)
         .data<&ecs::DamageEvent::source>("source"_hs)
         .data<&ecs::DamageEvent::instigator>("instigator"_hs)
         .data<&ecs::DamageEvent::hit_location>("hit_location"_hs)
@@ -124,9 +131,17 @@ bool MetaRegistry::EmplaceComponent(const std::string& name, entt::registry& reg
         registry.emplace<ecs::Health>(entity, h);
         return true;
     }
+    else if (name == "DestructibleComponent") {
+        ecs::DestructibleComponent d;
+        if (json.contains("isDestroyed")) d.isDestroyed = json["isDestroyed"].get<bool>();
+        if (json.contains("destroyedMeshHandle")) d.destroyedMeshHandle = json["destroyedMeshHandle"].get<uint32_t>();
+        registry.emplace<ecs::DestructibleComponent>(entity, d);
+        return true;
+    }
     else if (name == "DamageEvent") {
         ecs::DamageEvent d;
         if (json.contains("amount")) d.amount = json["amount"].get<float>();
+        if (json.contains("target")) d.target = static_cast<entt::entity>(json["target"].get<uint32_t>());
         if (json.contains("hit_location")) d.hit_location = ParseLimbId(json["hit_location"].get<std::string>());
         if (json.contains("penetration_depth")) d.penetration_depth = json["penetration_depth"].get<float>();
         if (json.contains("tag")) d.tag = ParseDamageTag(json["tag"].get<std::string>());

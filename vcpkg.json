@@ -32,6 +32,7 @@
     "volk",
     "vulkan-memory-allocator",
     "shaderc",
-    "spirv-reflect"
+    "spirv-reflect",
+    "tracy"
   ]
 }

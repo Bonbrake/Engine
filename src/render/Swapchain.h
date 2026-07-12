@@ -7,6 +7,7 @@
 #include "RenderGraph.h"
 #include "TriangleRenderer.h"
 #include "FramePacing.h"
+#include "CommandPoolMatrix.h"
 
 namespace debug { class ImGuiOverlay; }
 
@@ -48,6 +49,7 @@ private:
     uint32_t lastImageIndex_ = 0; // For readbackCount: index used by the previous frame
 
     RenderGraph renderGraph_;
+    CommandPoolMatrix commandPoolMatrix_;
 
     std::vector<std::vector<std::string>> passNamesPerFrame_;
     std::vector<std::pair<std::string, float>> lastFrameTimings_;

@@ -4,6 +4,9 @@
 #include <algorithm>
 #include <volk.h>
 #include "../core/Logger.h"
+#include "../core/JobSystem.h"
+#include "Device.h"
+#include "CommandPoolMatrix.h"
 
 namespace render {
 
@@ -172,7 +175,7 @@ void RenderGraph::InsertBarriersForPass(VkCommandBuffer cmd, const PassNode& pas
     }
 }
 
-void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, VkQueryPool pool, uint32_t baseQueryIndex, std::vector<std::string>* executedPassNames) {
+void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, Device* device, CommandPoolMatrix* poolMatrix, uint32_t frameIndex, VkQueryPool pool, uint32_t baseQueryIndex, std::vector<std::string>* executedPassNames) {
     bufferStates.clear();
     imageStates.clear();
     
@@ -180,6 +183,82 @@ void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, VkQueryPool pool, uint3
     
     uint32_t currentPassCount = 0;
     bool clamped = false;
+
+    // Allocate an array to store the secondary command buffers for each pass
+    std::vector<VkCommandBuffer> secondaryCmds(passes.size(), VK_NULL_HANDLE);
+    
+    struct PassTask : enki::ITaskSet {
+        const PassNode* pass;
+        Device* device;
+        CommandPoolMatrix* poolMatrix;
+        uint32_t frameIndex;
+        VkCommandBuffer* outCmd;
+
+        void ExecuteRange(enki::TaskSetPartition range, uint32_t threadnum) override {
+            if (!pass->executeCallback) return;
+
+            VkCommandPool threadPool = poolMatrix->GetPool(frameIndex, threadnum);
+
+            VkCommandBufferAllocateInfo allocInfo = { VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
+            allocInfo.commandPool = threadPool;
+            allocInfo.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+            allocInfo.commandBufferCount = 1;
+            
+            vkAllocateCommandBuffers(device->getLogicalDevice(), &allocInfo, outCmd);
+
+            VkCommandBufferInheritanceRenderingInfo inheritanceRenderingInfo = { VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO };
+            
+            std::vector<VkFormat> colorFormats;
+            for (const auto& att : pass->colorAttachments) {
+                colorFormats.push_back(att.format);
+            }
+            inheritanceRenderingInfo.colorAttachmentCount = static_cast<uint32_t>(colorFormats.size());
+            inheritanceRenderingInfo.pColorAttachmentFormats = colorFormats.data();
+            
+            if (pass->depthAttachment.view != VK_NULL_HANDLE) {
+                inheritanceRenderingInfo.depthAttachmentFormat = pass->depthAttachment.format;
+            }
+
+            VkCommandBufferInheritanceInfo inheritanceInfo = { VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO };
+            bool isDynamicRendering = !pass->isCompute && (!pass->colorAttachments.empty() || pass->depthAttachment.view != VK_NULL_HANDLE);
+            
+            if (isDynamicRendering) {
+                inheritanceInfo.pNext = &inheritanceRenderingInfo;
+            }
+
+            VkCommandBufferBeginInfo beginInfo = { VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+            beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+            if (isDynamicRendering) {
+                beginInfo.flags |= VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
+            }
+            beginInfo.pInheritanceInfo = &inheritanceInfo;
+
+            vkBeginCommandBuffer(*outCmd, &beginInfo);
+            pass->executeCallback(*outCmd);
+            vkEndCommandBuffer(*outCmd);
+        }
+    };
+
+    std::vector<std::unique_ptr<PassTask>> tasks;
+    auto* scheduler = core::JobSystem::get();
+
+    for (size_t idx : sortedIndices) {
+        if (passes[idx].executeCallback) {
+            auto task = std::make_unique<PassTask>();
+            task->pass = &passes[idx];
+            task->device = device;
+            task->poolMatrix = poolMatrix;
+            task->frameIndex = frameIndex;
+            task->outCmd = &secondaryCmds[idx];
+            
+            scheduler->AddTaskSetToPipe(task.get());
+            tasks.push_back(std::move(task));
+        }
+    }
+
+    for (auto& task : tasks) {
+        scheduler->WaitforTask(task.get());
+    }
 
     for (size_t idx : sortedIndices) {
         const auto& pass = passes[idx];
@@ -214,6 +293,7 @@ void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, VkQueryPool pool, uint3
             }
             
             VkRenderingInfo renderInfo = { VK_STRUCTURE_TYPE_RENDERING_INFO };
+            renderInfo.flags = VK_RENDERING_CONTENTS_SECONDARY_COMMAND_BUFFERS_BIT;
             renderInfo.renderArea = pass.renderArea;
             renderInfo.layerCount = 1;
             renderInfo.colorAttachmentCount = static_cast<uint32_t>(colorInfos.size());
@@ -232,8 +312,8 @@ void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, VkQueryPool pool, uint3
             vkCmdBeginRendering(cmd, &renderInfo);
         }
         
-        if (pass.executeCallback) {
-            pass.executeCallback(cmd);
+        if (secondaryCmds[idx] != VK_NULL_HANDLE) {
+            vkCmdExecuteCommands(cmd, 1, &secondaryCmds[idx]);
         }
         
         if (isDynamicRendering) {
