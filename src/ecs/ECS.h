@@ -46,15 +46,22 @@ struct alignas(64) SPSCMutationQueue {
     }
 };
 
+struct WorkerSnapshotBuffers {
+    std::vector<uint8_t*> rawData;
+    std::vector<uint32_t> sparseSet;
+};
+
 class ECSContext {
 public:
-    ECSContext(uint32_t numWorkerThreads) : numWorkers(numWorkerThreads) {
+        ECSContext(uint32_t numWorkerThreads) : numWorkers(numWorkerThreads) {
         if (numWorkers == 0) numWorkers = 1;
         workerQueues = std::make_unique<SPSCMutationQueue[]>(numWorkers);
+        workerSnapshotBuffers.resize(numWorkers);
     }
 
     entt::registry& GetRegistry() { return registry; }
     SPSCMutationQueue& GetWorkerQueue(uint32_t threadIndex) { return workerQueues[threadIndex % numWorkers]; }
+    WorkerSnapshotBuffers& GetWorkerSnapshotBuffers(uint32_t threadIndex) { return workerSnapshotBuffers[threadIndex % numWorkers]; }
 
     // Drains all queues safely on the main thread
     void DrainMutations(void (*apply)(entt::registry&, const DeferredMutation&)) {
@@ -67,6 +74,7 @@ private:
     entt::registry registry;
     // One SPSC queue per worker thread
     std::unique_ptr<SPSCMutationQueue[]> workerQueues;
+    std::vector<WorkerSnapshotBuffers> workerSnapshotBuffers;
     uint32_t numWorkers;
 };
 

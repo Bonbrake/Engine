@@ -220,7 +220,8 @@ void Engine::mainLoop() {
 
         if (frameCount == 6 && ecsContext_) {
             auto& reg = ecsContext_->GetRegistry();
-            auto cache = ecs::SnapshotComponentPool<ecs::Transform>(reg);
+            auto& buffs = ecsContext_->GetWorkerSnapshotBuffers(0);
+            auto cache = ecs::SnapshotComponentPool<ecs::Transform>(reg, buffs.rawData, buffs.sparseSet);
             
             auto view = reg.view<ecs::Transform>();
             bool matched = true;
@@ -381,7 +382,10 @@ static bool runEcsTests() {
         // Emplace Transform component only on e1
         reg.emplace<ecs::Transform>(e1);
 
-        ecs::LockedComponentPoolCache cache = ecs::SnapshotComponentPool<ecs::Transform>(reg);
+                // Note: For diagnostic tests, we just use local vectors since there is no ECSContext.
+        std::vector<uint8_t*> localRawData;
+        std::vector<uint32_t> localSparseSet;
+        ecs::LockedComponentPoolCache cache = ecs::SnapshotComponentPool<ecs::Transform>(reg, localRawData, localSparseSet);
 
         // Resolve component for e1 (should succeed)
         auto* t1 = cache.ResolveComponentPointerDirect<ecs::Transform>(static_cast<uint32_t>(e1));

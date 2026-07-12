@@ -10,9 +10,9 @@
 namespace ecs {
 
 // [M1-EXT-09] EnTT Concurrent Component Archetype View Iteration Cache
+// LIFETIME CONTRACT: The raw pointers in this cache are only valid until the next call to
+// SnapshotComponentPool<T> on the same worker slot. Do not yield a fiber while holding this cache.
 struct LockedComponentPoolCache {
-    std::shared_ptr<std::vector<uint8_t*>> rawDataBuffer;
-    std::shared_ptr<std::vector<uint32_t>> sparseSet;
     uint8_t* rawDataBufferMemoryHead = nullptr;
     const uint32_t* sparseSetDenseIndicesPtr = nullptr;
     size_t componentTypeAllocationStride = 0;
@@ -32,21 +32,22 @@ struct LockedComponentPoolCache {
     }
 };
 
+
+// Note: This must be called AFTER DrainMutations, as mutation drains can reallocate the backing pools.
 template<typename ComponentType>
-LockedComponentPoolCache SnapshotComponentPool(entt::registry& registry) {
+LockedComponentPoolCache SnapshotComponentPool(entt::registry& registry, std::vector<uint8_t*>& outRawData, std::vector<uint32_t>& outSparseSet) {
     LockedComponentPoolCache cache;
     auto* storage = &registry.storage<ComponentType>();
     if (storage && !storage->empty()) {
         const size_t entity_count = storage->size();
         const auto* entities = storage->data();
         
-        auto rawData = std::make_shared<std::vector<uint8_t*>>(entity_count);
+        outRawData.resize(entity_count);
         for (size_t i = 0; i < entity_count; ++i) {
-            (*rawData)[i] = reinterpret_cast<uint8_t*>(&storage->get(entities[i]));
+            outRawData[i] = reinterpret_cast<uint8_t*>(&storage->get(entities[i]));
         }
         
-        cache.rawDataBuffer = rawData;
-        cache.rawDataBufferMemoryHead = reinterpret_cast<uint8_t*>(rawData->data());
+        cache.rawDataBufferMemoryHead = reinterpret_cast<uint8_t*>(outRawData.data());
         cache.componentTypeAllocationStride = sizeof(ComponentType*);
         
         uint32_t max_ent = 0;
@@ -55,14 +56,13 @@ LockedComponentPoolCache SnapshotComponentPool(entt::registry& registry) {
             if (ent > max_ent) max_ent = ent;
         }
         
-        auto sparseSet = std::make_shared<std::vector<uint32_t>>(max_ent + 1, static_cast<uint32_t>(entt::null));
+        outSparseSet.assign(max_ent + 1, static_cast<uint32_t>(entt::null));
         for (size_t i = 0; i < entity_count; ++i) {
-            (*sparseSet)[static_cast<uint32_t>(entities[i])] = static_cast<uint32_t>(i);
+            outSparseSet[static_cast<uint32_t>(entities[i])] = static_cast<uint32_t>(i);
         }
         
-        cache.sparseSet = sparseSet;
-        cache.sparseSetDenseIndicesPtr = sparseSet->data();
-        cache.sparseSetSize = sparseSet->size();
+        cache.sparseSetDenseIndicesPtr = outSparseSet.data();
+        cache.sparseSetSize = outSparseSet.size();
     }
     return cache;
 }
