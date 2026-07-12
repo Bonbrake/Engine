@@ -1,0 +1,3 @@
+This exact task/report regarding nested loops in src/core/Engine.cpp:353 has now been investigated and closed as invalid 3+ times with identical findings. The reported code does not exist anywhere in the src/ tree.
+
+Recommend the task source (issue tracker, backlog generator, etc.) be checked for why this keeps re-queuing, rather than continuing to re-verify it.
