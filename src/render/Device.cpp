@@ -85,11 +85,14 @@ void Device::selectPhysicalDevice(VulkanContext* context) {
         core::Platform::triggerBreakpoint();
     }
     
-    // Optional extensions for M1 capabilities
+    // Optional extensions for M1 capabilities — conditionally enabled based on physical device support.
+    // Extensions listed here are requested only if present; absence is not fatal.
+    // forceTier0 callers will still build but checkCapabilities() will zero caps_ at runtime.
     physDevice.enable_extension_if_present(VK_EXT_GRAPHICS_PIPELINE_LIBRARY_EXTENSION_NAME);
     physDevice.enable_extension_if_present(VK_EXT_DESCRIPTOR_BUFFER_EXTENSION_NAME);
     physDevice.enable_extension_if_present(VK_EXT_MESH_SHADER_EXTENSION_NAME);
     physDevice.enable_extension_if_present(VK_EXT_SHADER_OBJECT_EXTENSION_NAME);
+    physDevice.enable_extension_if_present(VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME);
     
     LOG_INFO("Selected GPU: {}", physDevice.name);
     
@@ -123,9 +126,11 @@ void Device::createLogicalDevice() {
             break;
         }
     }
+    // Extensions were already conditionally enabled in selectPhysicalDevice via enable_extension_if_present.
+    // DeviceBuilder has no add_extension API — extensions flow through the PhysicalDevice selection.
+    // We only need to chain the feature structs here if the extension was actually enabled.
     VkPhysicalDeviceDescriptorBufferFeaturesEXT descBufferFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_BUFFER_FEATURES_EXT};
     if (supportsDescBuffer && !core::Config::get().forceTier0) {
-        deviceBuilder.add_extension(VK_EXT_DESCRIPTOR_BUFFER_EXTENSION_NAME);
         descBufferFeatures.descriptorBuffer = VK_TRUE;
         *pNextChain = &descBufferFeatures;
         pNextChain = &descBufferFeatures.pNext;
@@ -141,7 +146,6 @@ void Device::createLogicalDevice() {
     }
     VkPhysicalDeviceShaderObjectFeaturesEXT shaderObjectFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_OBJECT_FEATURES_EXT};
     if (supportsShaderObject && !core::Config::get().forceTier0) {
-        deviceBuilder.add_extension(VK_EXT_SHADER_OBJECT_EXTENSION_NAME);
         shaderObjectFeatures.shaderObject = VK_TRUE;
         *pNextChain = &shaderObjectFeatures;
         pNextChain = &shaderObjectFeatures.pNext;
@@ -157,7 +161,6 @@ void Device::createLogicalDevice() {
     }
     VkPhysicalDeviceUnifiedImageLayoutsFeaturesKHR unifiedLayoutFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFIED_IMAGE_LAYOUTS_FEATURES_KHR};
     if (supportsUnifiedLayouts && !core::Config::get().forceTier0) {
-        deviceBuilder.add_extension(VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME);
         unifiedLayoutFeatures.unifiedImageLayouts = VK_TRUE;
         *pNextChain = &unifiedLayoutFeatures;
         pNextChain = &unifiedLayoutFeatures.pNext;

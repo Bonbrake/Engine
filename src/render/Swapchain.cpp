@@ -162,8 +162,8 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     // Frame pacing wait on timeline semaphore (3 frames in flight max)
     framePacing_.EvaluateQueuePacingIntercept(device_->getLogicalDevice(), frameTimelineSemaphore_, frameTimelineValue_, 3);
     
-    // Readback the count from previous frame
-    triangleRenderer_.readbackCount(device_);
+    // Readback the count from the previous frame's slot (GPU has finished writing it by now)
+    triangleRenderer_.readbackCount(device_, lastImageIndex_);
 
     uint32_t imageIndex;
     VkResult result = vkAcquireNextImageKHR(device_->getLogicalDevice(), vkbSwapchain_.swapchain, UINT64_MAX, imageAvailableSemaphore_, VK_NULL_HANDLE, &imageIndex);
@@ -278,8 +278,8 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     depthWriteDep.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     swapchainPass.writes.push_back(depthWriteDep);
 
-    swapchainPass.executeCallback = [this, imguiOverlay, materialSystem](VkCommandBuffer cmd) {
-        triangleRenderer_.draw(cmd, materialSystem);
+    swapchainPass.executeCallback = [this, imageIndex, imguiOverlay, materialSystem](VkCommandBuffer cmd) {
+        triangleRenderer_.draw(cmd, imageIndex, materialSystem);
         // Draw calls go here
         if (imguiOverlay) {
             imguiOverlay->Render(cmd);
@@ -364,6 +364,8 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     } else if (result != VK_SUCCESS) {
         LOG_ERROR("Failed to present swapchain image!");
     }
+    
+    lastImageIndex_ = imageIndex;
 }
 
 } // namespace render

@@ -44,6 +44,7 @@ private:
     // Timeline semaphore for GPU-CPU synchronization (replacing fence)
     VkSemaphore frameTimelineSemaphore_ = VK_NULL_HANDLE;
     uint64_t frameTimelineValue_ = 0;
+    uint32_t lastImageIndex_ = 0; // For readbackCount: index used by the previous frame
 
     RenderGraph renderGraph_;
 

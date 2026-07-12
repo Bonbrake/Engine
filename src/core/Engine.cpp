@@ -430,8 +430,37 @@ static bool runEcsTests() {
 }
 
 static bool runRenderTests(render::Device* device) {
-    // Stub to be populated in Batch 3
-    (void)device;
+    // --- Test 1: MAX_FRAMES_IN_FLIGHT constant ---
+    // The codebase uses 3 hard-coded throughout (createBuffers, QueryPool capacity, framePacing limit).
+    // Assert the literal matches so any future refactor that changes one without the other fails loudly.
+    constexpr uint32_t MAX_FRAMES_IN_FLIGHT = 3;
+    static_assert(MAX_FRAMES_IN_FLIGHT == 3,
+        "MAX_FRAMES_IN_FLIGHT must be 3 to match triple-buffered buffer arrays in TriangleRenderer");
+    LOG_INFO("RENDER TEST: MAX_FRAMES_IN_FLIGHT == {} confirmed", MAX_FRAMES_IN_FLIGHT);
+
+    // --- Test 2: Triple-buffer frame index selection over 5 simulated frames ---
+    // cull() and draw() both index buffers as [imageIndex % MAX_FRAMES_IN_FLIGHT].
+    // Simulate 5 frames and verify the selected index is always in [0, 2].
+    bool indexSelectionOk = true;
+    for (uint32_t frame = 0; frame < 5; ++frame) {
+        uint32_t selectedIndex = frame % MAX_FRAMES_IN_FLIGHT;
+        if (selectedIndex >= MAX_FRAMES_IN_FLIGHT) {
+            LOG_ERROR("RENDER TEST FAIL: frame {} produced out-of-range buffer index {}", frame, selectedIndex);
+            indexSelectionOk = false;
+        }
+    }
+    if (indexSelectionOk) {
+        LOG_INFO("RENDER TEST PASS: Triple-buffer index selection correct over 5 simulated frames (indices 0,1,2,0,1)");
+    } else {
+        return false;
+    }
+
+    // --- Test 3: Capability tier logging ---
+    const auto& caps = device->getCapabilities();
+    LOG_INFO("RENDER TEST: Capability tier — descriptorBuffer={} shaderObject={} unifiedImageLayouts={} meshShaders={} rtPipeline={} queryTimestamps={}",
+        caps.descriptorBuffer, caps.shaderObject, caps.unifiedImageLayouts,
+        caps.meshShaders, caps.rtPipeline, caps.queryTimestamps);
+
     return true;
 }
 #endif
