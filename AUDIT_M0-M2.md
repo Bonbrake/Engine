@@ -35,22 +35,27 @@ Runs performed:
 
 ---
 
-## Finding #2 — Spurious "Descriptor set layout mismatch at index 0" warning  [NEEDS USER DECISION — intent unclear]
+## Finding #2 — Spurious "Descriptor set layout mismatch at index 0" warning  [RESOLVED — benign dead code]
 
 - **Where emitted:** `src/render/PipelineCompatibility.h:18` (LOG_WARN in `ValidateLayoutCompatibility`).
-- **Call site:** `src/render/TriangleRenderer.cpp:390` compares `graphicsSetLayouts` vs
+- **Call site:** `src/render/TriangleRenderer.cpp:390` compared `graphicsSetLayouts` vs
   `computeSetLayouts` (graphics pipeline layouts vs the compute *cull* pipeline layouts).
-- **Symptom:** every windowed run logs `Pipeline Compatibility Warning: Descriptor set layout
-  mismatch at index 0!` (twice) to console AND `logs/session.jsonl` at level "warning".
-- **Why suspect:** graphics and compute-cull are DIFFERENT pipelines that legitimately have
-  DIFFERENT descriptor set layouts, so the comparison is apples-to-oranges. Line 391 then logs
-  "VERIFICATION SUCCESS ... {COMPATIBLE|INCOMPATIBLE}" regardless of the boolean — so the warning
-  is noise and the "success" line is misleading either way.
-- **Exit-criteria impact:** M1 exit criterion is literally "No validation warnings." This
-  engine-origin warning fires every run, so M1 does not cleanly meet that criterion as worded.
-- **NOT diagnosed as a definite bug:** original intent of comparing graphics-vs-compute layouts is
-  unclear (could be leftover scaffolding, or a deliberate check pointed at the wrong operands).
-  Needs user input before any change.
+- **Symptom:** every windowed run logged `Pipeline Compatibility Warning: Descriptor set
+  mismatch at index 0!` (twice) and the misleadingly-worded "VERIFICATION SUCCESS" line.
+- **Root cause (verified against shader sources + downstream usage):**
+  Graphics set-0 (`simple.vert`+`simple.frag`: 1 binding — `InstanceBuffer`) and compute-cull
+  set-0 (`cull.comp`: 4 bindings — `InstanceBuffer`, `IndirectBuffer`, `CountBuffer`,
+  `depthPyramid` sampler) are DIFFERENT shader stages that **legitimately** have different
+  layouts. The `ValidateLayoutCompatibility` call compared set-0 of two *independently-built*
+  `VkDescriptorSetLayout` handles (`buildLayouts` called twice → always distinct handles), so it
+  ALWAYS returned "differs". Its result was used ONLY for the log line — `createDescriptorSets`
+  consumes `graphicsSetLayouts[0]`/`computeSetLayouts[0]` independently, never assuming equality.
+  The check had **zero functional effect**.
+- **Resolution (Option 1, user-approved):** removed the `ValidateLayoutCompatibility` call + the
+  PASS/WARN log block, deleted the now-unused `src/render/PipelineCompatibility.h` and its include.
+  Verified: incremental rebuild BUILD_EXIT 0; windowed run confirms the per-run WARN no longer fires.
+- **Conclusion:** NOT a defect — benign false-positive scaffolding (apples-to-oranges by design).
+  M1's "No validation warnings" criterion is satisfied once this dead code is gone.
 
 ---
 

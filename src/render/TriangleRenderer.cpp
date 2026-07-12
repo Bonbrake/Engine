@@ -2,7 +2,6 @@
 #include "MaterialSystem.h"
 #include "Device.h"
 #include "PipelineBuilder.h"
-#include "PipelineCompatibility.h"
 #include "../core/Logger.h"
 #include "../core/CVarSystem.h"
 #include <fstream>
@@ -387,15 +386,6 @@ void TriangleRenderer::createPipelines(Device* device, VkFormat colorFormat) {
     computeSetLayouts = computeLayoutData.setLayouts;
     cullPipelineLayout = computeLayoutData.pipelineLayout;
 
-    bool compat = PipelineCompatibility::ValidateLayoutCompatibility(graphicsSetLayouts, computeSetLayouts);
-    if (compat) {
-        LOG_INFO("Pipeline layout compatibility check PASS: graphics vs compute set layouts match");
-    } else {
-        LOG_WARN("Pipeline layout compatibility check: graphics vs compute set 0 DIFFERS. "
-                 "Note: graphics and compute-cull are distinct shader stages with legitimately "
-                 "different layouts — this needs diagnosis before treating it as a defect.");
-    }
-    
     VkComputePipelineCreateInfo computeInfo{VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
     computeInfo.stage = cullStage;
     computeInfo.layout = cullPipelineLayout;
