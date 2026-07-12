@@ -93,13 +93,15 @@ void VulkanContext::initVulkan(SDL_Window* window) {
     ENGINE_ASSERT(normCos > 0.99f, "Compressed normal error too large!");
     LOG_INFO("VERIFICATION SUCCESS: Dense Geometry compression verified. Position error: {}, Normal cosine: {}", posDiff, normCos);
 
-    // 1. Verify failure path for non-existent texture
+    // 1. Verify soft-failure path for non-existent texture (should use fallback)
     ecs::Handle nonexistentTex = assetManager_->LoadTexture("assets/textures/nonexistent.png");
     render::MaterialAsset invalidMat;
     invalidMat.albedoTexture = nonexistentTex;
-    ecs::Handle failedMat = materialSystem_->CreateMaterial(invalidMat, assetManager_.get());
-    if (failedMat.index == 0xFFFFFFFF) {
-        LOG_INFO("VERIFICATION SUCCESS: Material creation failure correctly propagated on nonexistent texture.");
+    ecs::Handle fallbackMat = materialSystem_->CreateMaterial(invalidMat, assetManager_.get());
+    if (fallbackMat.index != 0xFFFFFFFF) {
+        LOG_INFO("VERIFICATION SUCCESS: Soft asset mitigation working. Fallback material created successfully.");
+    } else {
+        LOG_ERROR("VERIFICATION FAILURE: Soft asset mitigation failed!");
     }
 
     // 2. Verify success path for valid texture

@@ -11,7 +11,85 @@ namespace render {
 
 void AssetManager::Initialize(Device* device) {
     device_ = device;
-    LOG_INFO("AssetManager initialized");
+    
+    // Create 1x1 magenta fallback texture
+    uint32_t magentaPixel = 0xFFFF00FF; // ABGR for full alpha magenta
+    
+    VkDeviceSize imageSize = 4;
+    VkFormat imageFormat = VK_FORMAT_R8G8B8A8_SRGB;
+    
+    TextureAsset tex{};
+    tex.width = 1;
+    tex.height = 1;
+    tex.format = imageFormat;
+    
+    VkImageCreateInfo imageInfo{VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO};
+    imageInfo.imageType = VK_IMAGE_TYPE_2D;
+    imageInfo.extent.width = 1;
+    imageInfo.extent.height = 1;
+    imageInfo.extent.depth = 1;
+    imageInfo.mipLevels = 1;
+    imageInfo.arrayLayers = 1;
+    imageInfo.format = imageFormat;
+    imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+    imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+    imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+    imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    
+    VmaAllocationCreateInfo allocInfo{};
+    allocInfo.usage = VMA_MEMORY_USAGE_AUTO;
+    allocInfo.flags = VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
+    
+    vmaCreateImage(device_->getAllocator(), &imageInfo, &allocInfo, &tex.image, &tex.allocation, nullptr);
+    
+    ExecuteOneShotStaging(imageSize, &magentaPixel, [&](VkCommandBuffer cmd, VkBuffer stagingBuffer) {
+        VkImageMemoryBarrier2 barrier1{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2};
+        barrier1.srcStageMask = VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT;
+        barrier1.srcAccessMask = 0;
+        barrier1.dstStageMask = VK_PIPELINE_STAGE_2_TRANSFER_BIT;
+        barrier1.dstAccessMask = VK_ACCESS_2_TRANSFER_WRITE_BIT;
+        barrier1.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        barrier1.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        barrier1.image = tex.image;
+        barrier1.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+        
+        VkDependencyInfo dep1{VK_STRUCTURE_TYPE_DEPENDENCY_INFO};
+        dep1.imageMemoryBarrierCount = 1;
+        dep1.pImageMemoryBarriers = &barrier1;
+        vkCmdPipelineBarrier2(cmd, &dep1);
+        
+        VkBufferImageCopy region{};
+        region.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
+        region.imageExtent = {1, 1, 1};
+        vkCmdCopyBufferToImage(cmd, stagingBuffer, tex.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+        
+        VkImageMemoryBarrier2 barrier2{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2};
+        barrier2.srcStageMask = VK_PIPELINE_STAGE_2_TRANSFER_BIT;
+        barrier2.srcAccessMask = VK_ACCESS_2_TRANSFER_WRITE_BIT;
+        barrier2.dstStageMask = VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_2_COMPUTE_SHADER_BIT;
+        barrier2.dstAccessMask = VK_ACCESS_2_SHADER_READ_BIT;
+        barrier2.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        barrier2.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        barrier2.image = tex.image;
+        barrier2.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+        
+        VkDependencyInfo dep2{VK_STRUCTURE_TYPE_DEPENDENCY_INFO};
+        dep2.imageMemoryBarrierCount = 1;
+        dep2.pImageMemoryBarriers = &barrier2;
+        vkCmdPipelineBarrier2(cmd, &dep2);
+    });
+    
+    VkImageViewCreateInfo viewInfo{VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
+    viewInfo.image = tex.image;
+    viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    viewInfo.format = imageFormat;
+    viewInfo.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+    vkCreateImageView(device_->getLogicalDevice(), &viewInfo, nullptr, &tex.view);
+    
+    fallbackTextureHandle_ = textures_.Insert(tex);
+
+    LOG_INFO("AssetManager initialized with fallback texture");
 }
 
 void AssetManager::Destroy() {
@@ -105,8 +183,8 @@ ecs::Handle AssetManager::LoadTexture(const std::filesystem::path& path) {
     stbi_uc* pixels = stbi_load(path.string().c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     
     if (!pixels) {
-        LOG_ERROR("Failed to load texture: {}", path.string());
-        return ecs::Handle{0xFFFFFFFF, 0};
+        LOG_WARN("Failed to load texture (soft failure, using fallback): {}", path.string());
+        return fallbackTextureHandle_;
     }
     
     VkDeviceSize imageSize = texWidth * texHeight * 4;

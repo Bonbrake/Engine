@@ -38,8 +38,9 @@ private:
     VkCommandPool commandPool_ = VK_NULL_HANDLE;
     std::vector<VkCommandBuffer> commandBuffers_;
 
-    VkSemaphore imageAvailableSemaphore_ = VK_NULL_HANDLE;
-    VkSemaphore renderFinishedSemaphore_ = VK_NULL_HANDLE;
+    std::vector<VkSemaphore> imageAvailableSemaphores_;
+    std::vector<VkSemaphore> renderFinishedSemaphores_;
+    uint32_t currentFrame_ = 0;
     
     // Timeline semaphore for GPU-CPU synchronization (replacing fence)
     VkSemaphore frameTimelineSemaphore_ = VK_NULL_HANDLE;

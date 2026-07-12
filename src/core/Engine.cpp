@@ -8,23 +8,32 @@
 #include "../render/VulkanContext.h"
 #include "../render/MSDFPipeline.h"
 #include "../render/Device.h"
+#include "../physics/PhysicsSystem.h"
+#include "../events/EventBus.h"
+#include "../ecs/Destructible.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
 #include <chrono>
 #include <fstream>
+#include <thread>
 
 #include "../debug/MetaRegistry.h"
 #include "../render/Device.h"
 #include "../ecs/ECS.h"
 #include "../ecs/Components.h"
 #include "../ecs/EnTTCache.h"
+
+#include <imgui.h>
+
+#ifdef JPH_DEBUG_RENDERER
+#include "../physics/PhysicsDebugRenderer.h"
+#endif
 #include "../ecs/EntityFactory.h"
 #include "../ecs/SpatialHash.h"
 #include "../ecs/GenerationalTable.h"
 #include "FileHandleRing.h"
 #include "ThreadAffinity.h"
-#include <thread>
 
 namespace core {
 
@@ -62,9 +71,22 @@ Engine::Engine() {
         }
 
         vulkanContext_ = std::make_unique<render::VulkanContext>(window_);
+        LOG_INFO("ENGINE: VulkanContext initialized");
         
         uint32_t numThreads = Config::get().replayInput ? 1 : std::thread::hardware_concurrency();
         ecsContext_ = std::make_unique<ecs::ECSContext>(numThreads);
+        LOG_INFO("ENGINE: ECSContext initialized");
+
+        // [M2] Physics and event bus — init after ECS, before rendering
+        eventBus_     = std::make_unique<events::EventBus>();
+        LOG_INFO("ENGINE: EventBus initialized");
+        
+        physics::PhysicsSystem::initializeGlobal();
+        physicsSystem_ = std::make_unique<physics::PhysicsSystem>();
+        LOG_INFO("ENGINE: PhysicsSystem initialized");
+        
+        ecs::DamageSystem::init(&ecsContext_->GetRegistry(), eventBus_.get());
+        LOG_INFO("ENGINE: DamageSystem initialized");
 
         if (!Config::get().headless) {
             imguiOverlay_.Initialize(
@@ -179,8 +201,10 @@ void Engine::mainLoop() {
                 });
             }
 
-            // Fixed update logic
-            // ...
+            // [M2] Fixed-step physics tick
+            physicsTick();
+
+            // Fixed update tick hash
             tickHash ^= std::hash<size_t>{}(Input::getState().events.size()) + 0x9e3779b9 + (tickHash << 6) + (tickHash >> 2);
             tickHash ^= std::hash<uint64_t>{}(frameCount) + 0x9e3779b9 + (tickHash << 6) + (tickHash >> 2);
 
@@ -289,6 +313,39 @@ void Engine::mainLoop() {
         if (canRender) {
             if (!Config::get().headless) {
                 imguiOverlay_.NewFrame();
+
+#ifdef JPH_DEBUG_RENDERER
+                if (physicsSystem_ && physicsSystem_->getDebugRenderer()) {
+                    physicsSystem_->drawBodies();
+                    const auto& lines = physicsSystem_->getDebugRenderer()->getLines();
+                    
+                    ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+                    int w = 800, h = 600;
+                    if (window_) {
+                        SDL_GetWindowSizeInPixels(window_, &w, &h);
+                    }
+                    
+                    glm::mat4 proj = glm::perspective(glm::radians(60.0f), (float)w / (float)h, 0.1f, 1000.0f);
+                    glm::mat4 view = glm::lookAt(glm::vec3(0, 5, 20), glm::vec3(0,0,0), glm::vec3(0,1,0));
+                    glm::mat4 vp = proj * view;
+                    
+                    for (const auto& line : lines) {
+                        glm::vec4 p1 = vp * glm::vec4(line.from, 1.0f);
+                        glm::vec4 p2 = vp * glm::vec4(line.to, 1.0f);
+                        
+                        if (p1.w > 0.0f && p2.w > 0.0f) {
+                            p1 /= p1.w;
+                            p2 /= p2.w;
+                            
+                            // Map NDC to screen coords. Y points down in ImGui.
+                            ImVec2 sp1((p1.x * 0.5f + 0.5f) * w, (p1.y * -0.5f + 0.5f) * h);
+                            ImVec2 sp2((p2.x * 0.5f + 0.5f) * w, (p2.y * -0.5f + 0.5f) * h);
+                            
+                            drawList->AddLine(sp1, sp2, line.color);
+                        }
+                    }
+                }
+#endif
             }
             vulkanContext_->renderFrame(&imguiOverlay_);
         }
@@ -310,6 +367,20 @@ void Engine::mainLoop() {
         }
 
         frameCount++;
+    }
+}
+
+void Engine::physicsTick() {
+    if (physicsSystem_) {
+        // [M2] Jolt simulation steps
+        physicsSystem_->step(ecsContext_->GetRegistry(), eventBus_->raw());
+    }
+
+    if (eventBus_) {
+        // [M2] Apply queued DamageEvents to Health/Destructible
+        ecs::DamageSystem::tick(ecsContext_->GetRegistry(), *eventBus_);
+        // Flush remaining events to subscribers
+        eventBus_->flush();
     }
 }
 
@@ -463,6 +534,65 @@ static bool runRenderTests(render::Device* device) {
 
     return true;
 }
+
+static bool runPhysicsTests(ecs::ECSContext* ecsCtx, physics::PhysicsSystem* physCtx, events::EventBus* bus) {
+    LOG_INFO("Running M2 Physics Tests...");
+    auto& reg = ecsCtx->GetRegistry();
+
+    // 1. Create a destructible test entity with Health and DestructibleComponent
+    entt::entity testEnt = reg.create();
+    reg.emplace<ecs::Transform>(testEnt);
+    reg.emplace<ecs::Health>(testEnt, 100.0f, 100.0f);
+    
+    auto& dest = reg.emplace<ecs::DestructibleComponent>(testEnt);
+    dest.intactMeshHandle = 1;
+    dest.destroyedMeshHandle = 2;
+
+    // 2. Create a Jolt body for the entity
+    JPH::BodyID bodyId = physCtx->createBox(glm::dvec3(0, 10, 0), glm::vec3(1, 1, 1), false, 50.0f);
+    if (bodyId.IsInvalid()) {
+        LOG_CRITICAL("PHYSICS TEST FAIL: Failed to create Jolt body!");
+        return false;
+    }
+    reg.emplace<physics::PhysicsBodyComponent>(testEnt, bodyId);
+
+    // 3. Step physics once to confirm it moves
+    physCtx->step(reg, bus->raw());
+    
+    auto& tf = reg.get<ecs::Transform>(testEnt);
+    if (tf.position.y >= 10.0f) {
+        LOG_CRITICAL("PHYSICS TEST FAIL: Body did not fall under gravity! Pos: {}", tf.position.y);
+        return false;
+    }
+
+    // 4. Send lethal damage event via EventBus
+    ecs::DamageEvent dmg;
+    dmg.amount = 150.0f;
+    dmg.source = testEnt; // For M2 test, we address by source
+    dmg.instigator = testEnt;
+    bus->enqueue(dmg);
+
+    // 5. Tick DamageSystem
+    ecs::DamageSystem::tick(reg, *bus);
+
+    // 6. Verify DestructibleComponent triggered
+    auto& destCheck = reg.get<ecs::DestructibleComponent>(testEnt);
+    if (!destCheck.isDestroyed) {
+        LOG_CRITICAL("PHYSICS TEST FAIL: Entity not marked destroyed after lethal damage!");
+        return false;
+    }
+    if (reg.all_of<physics::PhysicsBodyComponent>(testEnt)) {
+        LOG_CRITICAL("PHYSICS TEST FAIL: PhysicsBodyComponent not removed upon destruction!");
+        return false;
+    }
+
+    // Clean up
+    physCtx->destroyBody(bodyId);
+    reg.destroy(testEnt);
+
+    LOG_INFO("DIAGNOSTIC SUCCESS: M2 Physics and EventBus verified.");
+    return true;
+}
 #endif
 
 bool Engine::verifyHeadlessInit() const {
@@ -476,6 +606,7 @@ bool Engine::verifyHeadlessInit() const {
     if (!runCoreTests()) return false;
     if (!runEcsTests()) return false;
     if (!runRenderTests(device)) return false;
+    if (!runPhysicsTests(ecsContext_.get(), physicsSystem_.get(), eventBus_.get())) return false;
 #endif
 
     return true;

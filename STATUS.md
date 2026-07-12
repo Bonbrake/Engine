@@ -4,8 +4,8 @@
 `Main`
 
 ## Current Milestone
-**M0/M1 — COMPLETE** ✅  
-Ready to begin M2.
+**M2 — COMPLETE** ✅  
+Ready to begin M2.6.
 
 ---
 
@@ -30,6 +30,16 @@ Ready to begin M2.
 | ImGui panel updates cvar behaviors live; pass timings via query pools | ✅ ImGui NewFrame/Render cycling confirmed in windowed log; queryTimestamps=true |
 | No validation warnings | ✅ Zero VUID errors; only benign 3rd-party layer name warnings (not suppressible without removing those layers) |
 
+## M2 Exit Criteria — ALL PASS
+
+| Criterion | Status |
+|-----------|--------|
+| Jolt simulation loops reliably within fixed timestep ticks | ✅ Verified via `physicsTick()` loop and headless outputs |
+| EventBus routes damage cleanly | ✅ `DamageSystem::tick()` processes events from EventBus |
+| Destructible takes damage and visibly swaps meshes/removes colliders | ✅ Headless log verifies mesh swap to handle 2, removal of body 0x800000 |
+| Debug drawing maps Jolt collision hulls over visual draws | ✅ `PhysicsDebugRenderer` implemented and bridged to `ImGuiOverlay` |
+| Missing asset gracefully degrades to placeholder | ✅ `AssetManager` falls back to generated 1x1 magenta texture (Soft Asset Mitigation) |
+
 ---
 
 ## Last Verified Build
@@ -46,7 +56,8 @@ Ready to begin M2.
 - `1ee9145` — Update engine with latest changes (full codebase, Batch 1+2)
 - `eb19957` — Batch 3: extension gating, triple-buffer fix, render tests
 - `4e4684a` — Add STATUS.md
+- *(pending)* — M2 cleanup: physics debug renderer and soft asset mitigation
 
-## Next Session: M2
-Load `milestones_M0-M13_antigravity/02_M2.md`.  
+## Next Session: M2.6
+Load `milestones_M0-M13_antigravity/03_M2_6.md`.  
 Read STATUS.md first. Confirm branch. Check .gitignore covers build/ and vcpkg_installed/.

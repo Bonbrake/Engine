@@ -25,6 +25,8 @@ private:
     ecs::GenerationalTable<MeshAsset> meshes_;
     ecs::GenerationalTable<TextureAsset> textures_;
     
+    ecs::Handle fallbackTextureHandle_{0xFFFFFFFF, 0};
+    
     void ExecuteOneShotStaging(size_t size, void* data, std::function<void(VkCommandBuffer, VkBuffer)> recordCmd);
 };
 

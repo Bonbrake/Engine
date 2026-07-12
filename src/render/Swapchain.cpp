@@ -21,14 +21,10 @@ Swapchain::Swapchain(Device* device, SDL_Window* window)
     timelineInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     timelineInfo.pNext = &timelineCreateInfo;
 
-    vkCreateSemaphore(device_->getLogicalDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphore_);
-    vkCreateSemaphore(device_->getLogicalDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphore_);
     vkCreateSemaphore(device_->getLogicalDevice(), &timelineInfo, nullptr, &frameTimelineSemaphore_);
 }
 
 Swapchain::~Swapchain() {
-    vkDestroySemaphore(device_->getLogicalDevice(), imageAvailableSemaphore_, nullptr);
-    vkDestroySemaphore(device_->getLogicalDevice(), renderFinishedSemaphore_, nullptr);
     vkDestroySemaphore(device_->getLogicalDevice(), frameTimelineSemaphore_, nullptr);
     cleanup();
 }
@@ -114,6 +110,17 @@ void Swapchain::create() {
 
         vkAllocateCommandBuffers(device_->getLogicalDevice(), &allocInfo, commandBuffers_.data());
 
+        imageAvailableSemaphores_.resize(swapchainImages_.size());
+        renderFinishedSemaphores_.resize(swapchainImages_.size());
+        
+        VkSemaphoreCreateInfo semaphoreInfo{};
+        semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+        
+        for (size_t i = 0; i < swapchainImages_.size(); i++) {
+            vkCreateSemaphore(device_->getLogicalDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores_[i]);
+            vkCreateSemaphore(device_->getLogicalDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores_[i]);
+        }
+
         triangleRenderer_.init(device_, vkbSwapchain_.image_format);
     }
 }
@@ -131,6 +138,9 @@ void Swapchain::cleanup() {
         for (size_t i = 0; i < depthImages_.size(); i++) {
             vkDestroyImageView(device_->getLogicalDevice(), depthImageViews_[i], nullptr);
             vmaDestroyImage(device_->getAllocator(), depthImages_[i], depthAllocations_[i]);
+            
+            vkDestroySemaphore(device_->getLogicalDevice(), imageAvailableSemaphores_[i], nullptr);
+            vkDestroySemaphore(device_->getLogicalDevice(), renderFinishedSemaphores_[i], nullptr);
         }
         depthImages_.clear();
         depthImageViews_.clear();
@@ -166,7 +176,7 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     triangleRenderer_.readbackCount(device_, lastImageIndex_);
 
     uint32_t imageIndex;
-    VkResult result = vkAcquireNextImageKHR(device_->getLogicalDevice(), vkbSwapchain_.swapchain, UINT64_MAX, imageAvailableSemaphore_, VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(device_->getLogicalDevice(), vkbSwapchain_.swapchain, UINT64_MAX, imageAvailableSemaphores_[currentFrame_], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
         recreate();
@@ -322,7 +332,7 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-    VkSemaphore waitSemaphores[] = {imageAvailableSemaphore_};
+    VkSemaphore waitSemaphores[] = {imageAvailableSemaphores_[currentFrame_]};
     VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = waitSemaphores;
@@ -331,7 +341,7 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &cmd;
 
-    VkSemaphore signalSemaphores[] = {renderFinishedSemaphore_, frameTimelineSemaphore_};
+    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores_[currentFrame_], frameTimelineSemaphore_};
     uint64_t signalValues[] = {0, frameTimelineValue_}; // binary semaphore takes 0, timeline takes frameTimelineValue_
     
     VkTimelineSemaphoreSubmitInfo timelineInfo{};
@@ -366,6 +376,7 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     }
     
     lastImageIndex_ = imageIndex;
+    currentFrame_ = (currentFrame_ + 1) % swapchainImages_.size();
 }
 
 } // namespace render
