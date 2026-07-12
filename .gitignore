@@ -13,3 +13,6 @@ plan.md
 *.scratch.*
 .vs/
 .vscode/
+/build-asan/
+/custom-ports/vulkan-loader/
+/custom-triplets/
