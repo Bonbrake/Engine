@@ -25,6 +25,7 @@ find_path(STB_INCLUDE_DIR "stb_image.h")
 find_program(GLSLC glslc REQUIRED)
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
+list(REMOVE_ITEM SRC_FILES "${CMAKE_SOURCE_DIR}/src/main.cpp")
 file(GLOB_RECURSE INC_FILES "src/*.h")
 list(APPEND SRC_FILES "src/debug/imgui_impl_vulkan.cpp")
 
@@ -44,11 +45,10 @@ foreach(SHADER ${SHADERS})
     list(APPEND SPV_FILES ${OUTPUT})
 endforeach()
 
-add_executable(ZombieEngine ${SRC_FILES} ${INC_FILES} ${SPV_FILES})
-target_include_directories(ZombieEngine PRIVATE src)
-target_compile_definitions(ZombieEngine PRIVATE ENGINE_DEV_TOOLS)
-
-target_link_libraries(ZombieEngine PRIVATE
+add_library(ZombieEngineCore STATIC ${SRC_FILES} ${INC_FILES} ${SPV_FILES})
+target_include_directories(ZombieEngineCore PRIVATE src)
+target_compile_definitions(ZombieEngineCore PRIVATE ENGINE_DEV_TOOLS)
+target_link_libraries(ZombieEngineCore PUBLIC
     SDL3::SDL3
     Vulkan::Headers
     vk-bootstrap::vk-bootstrap
@@ -58,7 +58,6 @@ target_link_libraries(ZombieEngine PRIVATE
     enkiTS::enkiTS
     nlohmann_json::nlohmann_json
     cxxopts::cxxopts
-    Catch2::Catch2
     GPUOpen::VulkanMemoryAllocator
     EnTT::EnTT
     imgui::imgui
@@ -67,11 +66,8 @@ target_link_libraries(ZombieEngine PRIVATE
     unofficial::spirv-reflect
     fastgltf::fastgltf
 )
-
-target_include_directories(ZombieEngine PRIVATE ${STB_INCLUDE_DIR})
-
-# Vulkan validation layers ON in Debug and OFF in Release
-target_compile_definitions(ZombieEngine PRIVATE
+target_include_directories(ZombieEngineCore PRIVATE ${STB_INCLUDE_DIR})
+target_compile_definitions(ZombieEngineCore PRIVATE
     IMGUI_IMPL_VULKAN_HAS_DYNAMIC_RENDERING=1
     IMGUI_IMPL_VULKAN_USE_VOLK=1
     $<$<CONFIG:Debug>:ENABLE_VULKAN_VALIDATION_LAYERS=1>
@@ -79,3 +75,19 @@ target_compile_definitions(ZombieEngine PRIVATE
     $<$<NOT:$<CONFIG:Debug>>:ENABLE_VULKAN_VALIDATION_LAYERS=0>
     SHADER_DIR=\"${CMAKE_BINARY_DIR}/shaders\"
 )
+
+add_executable(ZombieEngine "src/main.cpp")
+
+target_link_libraries(ZombieEngine PRIVATE ZombieEngineCore)
+
+
+
+# Vulkan validation layers ON in Debug and OFF in Release
+
+# Testing
+enable_testing()
+file(GLOB_RECURSE TEST_FILES "tests/*.cpp")
+add_executable(ZombieEngineTests ${TEST_FILES})
+target_include_directories(ZombieEngineTests PRIVATE src)
+target_link_libraries(ZombieEngineTests PRIVATE ZombieEngineCore Catch2::Catch2)
+add_test(NAME AllTests COMMAND ZombieEngineTests)
