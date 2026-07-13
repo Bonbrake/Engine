@@ -77,6 +77,37 @@ Transform double-precision (dvec3/dquat/dvec3); B2 (silent double→float trunca
   Transform position into `float` — undetermined local-vs-world-space question, left flagged.
 - `Engine.cpp:558-562` also read `.position.x/.z` into float — audit-only, not fixed.
 
-## Next Session: M2.6 Phase 2 (fly-camera) or beat
-Load `milestones_M0-M13_antigravity/03_M2_6.md`.  
+## M2.6 Phase 2 — fly-camera + self-verify tooling ✅ (with open items)
+Debug fly-camera (`debug::FlyCamera`) injected into the dev cube render path via
+`VulkanContext::setDevView` → `TriangleRenderer::setDevView` (no `draw()` signature
+change; mirror of `setDevTestMesh`). Near cube at origin + far cube at dvec3(50000,0,0)
+(reuses `view`, `cullEnabled=0`, single dvec3→vec3 cast — NOT camera-relative
+subtraction; that technique remains unbuilt pending a real scene render path — see C-caveat).
+
+**Self-verify tooling added (no display needed):** `--script-input <file>` drives
+`Input::poll()` from a tiny text script (`K W 0 40` = hold W frames 0–40; `M +200 0 10 20`
+= mouse +200dx frames 10–20); `--dump-state <file>` emits per-frame `FlyCamera` pose
+JSON. Fly-camera update + state-dump run in headless AND windowed; only render
+injection + `SDL_SetWindowRelativeMouseMode` are windowed-gated.
+
+**Self-verify results (headless, real build, `selftest_flycam.txt`):**
+| Check | Result |
+|-------|--------|
+| Build (ZombieEngine Debug) | ✅ clean, 0 warn/err — caught SDL3 API rename (`SDL_SetRelativeMouseMode`/`SDL_TRUE` removed → `SDL_SetWindowRelativeMouseMode(window_,bool)`) |
+| Suite (ctest) | ✅ 9/9 |
+| Validation VUIDs fly vs no-fly | ✅ 16 vs 16, 0 introduced (baseline per AUDIT_DEV_MODE_VALIDATION_BASELINE.md) |
+| W held (frames 1–40): pos advances along forward | ✅ z:10.0→9.79, x drifts as yaw rotates — **not frozen** |
+| Mouse `M +200` (frames 10–20): yaw rotates | ✅ fwd [0,-0.196,-0.981] → [0.973,-0.196,-0.125] (~78°), relative-delta path feeds correctly |
+| Original report "just a cube, nothing happens" | ✅ Resolved + self-verified headless (mouse-look fix confirmed; keyboard was always per-frame-correct) |
+
+**OPEN ITEMS (carried, not silently closed):**
+1. **Yaw/pitch sign direction** — `FlyCamera.cpp:23-24` (`yaw_ -=`/`pitch_ -=`); self-verify
+   proves rotation *happens* but not whether mouse-right = screen-right. One-line flip if inverted. **Needs human GPU pass to confirm direction.**
+2. **Far-cube steadiness at ~50km** — self-verify proves the cube exists at dvec3(50000,0,0)
+   and the camera moves, but sub-pixel steadiness at range needs the human fly-there GPU pass.
+3. **Camera-relative subtraction (Spike B)** — NOT implemented; Phase 2 verifies single-cast
+   float precision only. Standing C-caveat; no scene render path to host it yet.
+
+## Next Session: close M2.6 Phase 2 open items (yaw-sign GPU confirm, far-cube steadiness) or beat
+Load `milestones_M0-M13_antigravity/03_M2_6.md`.  \n
 Read STATUS.md first. Confirm branch. Check .gitignore covers build/ and vcpkg_installed/.

@@ -8,6 +8,7 @@
 #include "../render/VulkanContext.h"
 #include "../render/MSDFPipeline.h"
 #include "../render/Device.h"
+#include "../debug/FlyCamera.h"
 #include "../physics/PhysicsSystem.h"
 #include "../events/EventBus.h"
 #include "../ecs/Destructible.h"
@@ -53,6 +54,13 @@ Engine::Engine() {
         JobSystem::init(numJobThreads);
         TeardownTracker::RegisterInit(TeardownTracker::Stage::JobSystem, "JobSystem");
         Input::init();
+
+        // [M2.6 Phase 2] Scripted-input mode (self-verify without a display).
+        if (!Config::get().scriptInput.empty()) {
+            if (!core::Input::loadScript(Config::get().scriptInput)) {
+                LOG_ERROR("Scripted-input failed to load; continuing without it.");
+            }
+        }
 
         debug::MetaRegistry::Initialize();
 
@@ -145,6 +153,9 @@ Engine::~Engine() {
         TeardownTracker::RegisterShutdown(TeardownTracker::Stage::SDL);
     }
 
+    if (Config::get().flyCamera) {
+        SDL_SetWindowRelativeMouseMode(window_, false); // [M2.6 Phase 2] restore cursor capture
+    }
     Input::shutdown();
     JobSystem::shutdown();
     TeardownTracker::RegisterShutdown(TeardownTracker::Stage::JobSystem);
@@ -253,6 +264,47 @@ void Engine::mainLoop() {
             }
 #endif
         }
+
+#if ENGINE_DEV_TOOLS
+            // [M2.6 Phase 2] Dev-only fly-camera. The *update* + state-dump run in
+            // both headless and windowed (so the input/mouse fix is self-verifiable
+            // with no display); only the render injection + mouse-capture need a
+            // window, so those are gated on !headless below.
+            if (Config::get().flyCamera) {
+                if (!flyCamera_) {
+                    flyCamera_ = std::make_unique<debug::FlyCamera>();
+                    // [M2.6 Phase 2] Default dev pose: back off +Z with slight +Y,
+                    // looking at the origin cube, so launch shows a clean 3D near
+                    // cube (not from inside it at (0,0,0)). Pitch ~ -11.3 deg aims
+                    // the (0,0,-1)-at-rest forward down toward the origin.
+                    flyCamera_->setPosition(glm::dvec3(0.0, 2.0, 10.0));
+                    flyCamera_->setYawPitch(0.0, -0.1974);
+                }
+                flyCamera_->update(static_cast<float>(dt));
+
+                // [M2.6 Phase 2] State-dump: emit FlyCamera pose per frame (headless
+                // self-verify of the mouse/keyboard fix without a display).
+                if (!Config::get().dumpState.empty()) {
+                    static std::ofstream stateOut(Config::get().dumpState, std::ios::trunc);
+                    if (stateOut.is_open()) {
+                        const glm::dvec3 p = flyCamera_->position();
+                        const auto fwd = flyCamera_->getForward();
+                        stateOut << "{\"frame\":" << frameCount
+                                 << ",\"pos\":[" << p.x << "," << p.y << "," << p.z << "]"
+                                 << ",\"fwd\":[" << fwd.x << "," << fwd.y << "," << fwd.z << "]"
+                                 << "}\n";
+                        stateOut.flush();
+                    }
+                }
+
+                if (!Config::get().headless) {
+                    // Capture the mouse so fly-look gets reliable relative deltas.
+                    // Fly-camera-only; restored on shutdown.
+                    SDL_SetWindowRelativeMouseMode(window_, true);
+                    vulkanContext_->setDevView(flyCamera_->getViewMatrix(), flyCamera_->position());
+                }
+            }
+#endif
 
         while (accumulator >= FIXED_DT) {
             // [M1-EXT-06] Drain SPSC queues before system ticks
@@ -411,7 +463,15 @@ void Engine::mainLoop() {
                     }
                     
                     glm::mat4 proj = glm::perspective(glm::radians(60.0f), (float)w / (float)h, 0.1f, 1000.0f);
+#if ENGINE_DEV_TOOLS
+                    // [M2.6 Phase 2] Track the fly-camera when active so physics
+                    // debug lines share the cube's view; else the fixed overlay cam.
+                    glm::mat4 view = (Config::get().flyCamera && flyCamera_)
+                        ? flyCamera_->getViewMatrix()
+                        : glm::lookAt(glm::vec3(0, 5, 20), glm::vec3(0,0,0), glm::vec3(0,1,0));
+#else
                     glm::mat4 view = glm::lookAt(glm::vec3(0, 5, 20), glm::vec3(0,0,0), glm::vec3(0,1,0));
+#endif
                     glm::mat4 vp = proj * view;
                     
                     for (const auto& line : lines) {

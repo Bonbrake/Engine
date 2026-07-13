@@ -603,7 +603,9 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
         // Real perspective MVP: camera at (0,0,4) looking at origin; near=0.1 far=10 to pass depth test.
         // Tilt the cube so 3 faces are visible (unambiguous 3D), centered at origin.
         glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10.0f);
-        glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 view = devViewSet_
+            ? devView_
+            : glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f)) *
                            glm::rotate(glm::mat4(1.0f), glm::radians(20.0f), glm::vec3(1.0f, 0.0f, 0.0f)) *
                            glm::scale(glm::mat4(1.0f), glm::vec3(0.7f));
@@ -618,6 +620,31 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
 
         VkDeviceSize offsets[] = {0};
         vkCmdBindVertexBuffers(cmd, 0, 1, &devTestMesh_->vertexBuffer, offsets);
+        vkCmdBindIndexBuffer(cmd, devTestMesh_->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+        vkCmdDrawIndexed(cmd, devTestMesh_->indexCount, 1, 0, 0, 0);
+
+        // [M2.6 Phase 2] Far cube at a FIXED world-space position (50000,0,0) — a
+        // large-magnitude static probe (no camPos term; identical every frame).
+        // Confirms a single dvec3->vec3 cast holds sub-visible precision at ~50km
+        // magnitude. NOTE: this does NOT implement camera-relative subtraction
+        // (renderPos = (vec3)(entityPos - cameraPos)); both cubes use the naive
+        // independently-cast-then-multiply path, since there is no scene render
+        // path to host camera-relative rendering yet (carried C-caveat).
+        // Reuses `view` (item 2) — no second copy of the devViewSet_ ternary.
+        static const glm::dvec3 kFarCubeWorldPos{50000.0, 0.0, 0.0};
+        glm::mat4 projFar = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 200000.0f);
+        glm::mat4 farModel = glm::translate(glm::mat4(1.0f), glm::vec3(kFarCubeWorldPos));
+        glm::mat4 farMvp   = projFar * view * farModel;
+
+        PC farPc;
+        memcpy(farPc.mvp, &farMvp[0][0], sizeof(farPc.mvp));
+        farPc.instanceCount = 1;
+        farPc.frameCounter   = frameCounter;
+        farPc.cullEnabled    = 0;
+        vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &farPc);
+
+        VkDeviceSize farOffsets[] = {0};
+        vkCmdBindVertexBuffers(cmd, 0, 1, &devTestMesh_->vertexBuffer, farOffsets);
         vkCmdBindIndexBuffer(cmd, devTestMesh_->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(cmd, devTestMesh_->indexCount, 1, 0, 0, 0);
         return; // cube done; skip demo-triangle path

@@ -9,6 +9,7 @@ namespace render { class VulkanContext; }
 namespace ecs { class ECSContext; }
 namespace physics { class PhysicsSystem; }
 namespace events { class EventBus; }
+namespace debug { class FlyCamera; }
 
 namespace core {
 
@@ -48,6 +49,9 @@ private:
     bool devTestBodySpawned_ = false;
     bool devTestDamageFired_ = false;
     entt::entity devTestEntity_ = entt::null;
+
+    // [M2.6 Phase 2] Debug fly-camera owner (dev-gated; only allocated when --fly-camera).
+    std::unique_ptr<debug::FlyCamera> flyCamera_;
 #endif
 };
 

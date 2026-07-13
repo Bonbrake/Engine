@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 #include <volk.h>
 #include <VkBootstrap.h>
+#include <glm/glm.hpp>
 #include <memory>
 #include "ecs/GenerationalTable.h"
 
@@ -21,6 +22,9 @@ public:
     ~VulkanContext();
 
     void renderFrame(debug::ImGuiOverlay* imguiOverlay);
+
+    // [M2.6 Phase 2] Forward the debug fly-camera view into the triangle renderer.
+    void setDevView(const glm::mat4& view, const glm::dvec3& cameraPos);
 
     vkb::Instance getInstance() const { return vkbInstance_; }
     VkSurfaceKHR getSurface() const { return surface_; }

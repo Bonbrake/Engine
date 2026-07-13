@@ -18,6 +18,12 @@ public:
     
     // Slice 0a: dev-test mesh (first LoadMesh) rendered as a gated cube in --dev.
     void setDevTestMesh(MeshAsset* mesh) { devTestMesh_ = mesh; }
+
+    // [M2.6 Phase 2] Inject the debug fly-camera view + camera position for the
+    // dev cube path. When set, draw() uses it instead of the hardcoded lookAt.
+    void setDevView(const glm::mat4& view, const glm::dvec3& cameraPos) {
+        devView_ = view; devCamPos_ = cameraPos; devViewSet_ = true;
+    }
     
     // For logging reduction
     void readbackCount(Device* device, uint32_t imageIndex);
@@ -34,6 +40,11 @@ private:
     
     // Slice 0a: dev-test mesh handle (first LoadMesh), gated to --dev rendering.
     MeshAsset* devTestMesh_ = nullptr;
+
+    // [M2.6 Phase 2] Injected dev fly-camera view (set via setDevView).
+    glm::mat4  devView_{1.0f};
+    glm::dvec3 devCamPos_{0.0};
+    bool       devViewSet_ = false;
     
     VkPipelineLayout cullPipelineLayout = VK_NULL_HANDLE;
     VkPipeline cullPipeline = VK_NULL_HANDLE;

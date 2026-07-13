@@ -20,11 +20,14 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         bool cl_devMode = false;
         bool cl_recordInput = false;
         bool cl_replayInput = false;
+        bool cl_flyCamera = false;
         int cl_crashFrame = -1;
         int cl_quitFrame = -1;
         std::string cl_settingsPath = "settings.json";
         std::string cl_dumpFramePath;
         int cl_dumpFrameAt = -1;
+        std::string cl_scriptInput;
+        std::string cl_dumpState;
 
         options.add_options()
             ("headless", "Run without display", cxxopts::value<bool>(cl_headless))
@@ -32,10 +35,13 @@ void Config::parseCommandLine(int argc, char* argv[]) {
             ("dev", "Developer mode (validation layers)", cxxopts::value<bool>(cl_devMode))
             ("record-input", "Record input for replay", cxxopts::value<bool>(cl_recordInput))
             ("replay-input", "Replay recorded input", cxxopts::value<bool>(cl_replayInput))
+            ("fly-camera", "Enable debug fly-camera (dev)", cxxopts::value<bool>(cl_flyCamera))
             ("crash-frame", "Crash at specific frame number", cxxopts::value<int>(cl_crashFrame)->default_value("-1"))
             ("quit-frame", "Quit at specific frame number", cxxopts::value<int>(cl_quitFrame)->default_value("-1"))
             ("dump-frame-png", "Dump a rendered frame to this PNG path (windowed --dev only)", cxxopts::value<std::string>(cl_dumpFramePath)->default_value(""))
             ("dump-frame-at", "Render-call index at which to dump the frame", cxxopts::value<int>(cl_dumpFrameAt)->default_value("-1"))
+            ("script-input", "Scripted-input text file (headless self-verify)", cxxopts::value<std::string>(cl_scriptInput)->default_value(""))
+            ("dump-state", "Per-frame FlyCamera pose JSON output path", cxxopts::value<std::string>(cl_dumpState)->default_value(""))
             ("settings", "Path to settings.json", cxxopts::value<std::string>(cl_settingsPath)->default_value("settings.json"))
             ("h,help", "Print usage");
 
@@ -56,10 +62,13 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         if (result.count("dev")) { devMode = cl_devMode; overriddenFields.insert("devMode"); }
         if (result.count("record-input")) { recordInput = cl_recordInput; overriddenFields.insert("recordInput"); }
         if (result.count("replay-input")) { replayInput = cl_replayInput; overriddenFields.insert("replayInput"); }
+        if (result.count("fly-camera")) { flyCamera = cl_flyCamera; overriddenFields.insert("flyCamera"); }
         if (result.count("crash-frame")) { crashFrame = cl_crashFrame; overriddenFields.insert("crashFrame"); }
         if (result.count("quit-frame")) { quitFrame = cl_quitFrame; overriddenFields.insert("quitFrame"); }
         if (result.count("dump-frame-png")) { dumpFramePath = cl_dumpFramePath; overriddenFields.insert("dumpFramePath"); }
         if (result.count("dump-frame-at")) { dumpFrameAt = cl_dumpFrameAt; overriddenFields.insert("dumpFrameAt"); }
+        if (result.count("script-input")) { scriptInput = cl_scriptInput; overriddenFields.insert("scriptInput"); }
+        if (result.count("dump-state")) { dumpState = cl_dumpState; overriddenFields.insert("dumpState"); }
 
     } catch (const cxxopts::exceptions::exception& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;
@@ -78,8 +87,11 @@ void Config::loadSettings() {
             if (j.contains("devMode") && !overriddenFields.count("devMode")) devMode = j["devMode"].get<bool>();
             if (j.contains("recordInput") && !overriddenFields.count("recordInput")) recordInput = j["recordInput"].get<bool>();
             if (j.contains("replayInput") && !overriddenFields.count("replayInput")) replayInput = j["replayInput"].get<bool>();
+            if (j.contains("flyCamera") && !overriddenFields.count("flyCamera")) flyCamera = j["flyCamera"].get<bool>();
             if (j.contains("crashFrame") && !overriddenFields.count("crashFrame")) crashFrame = j["crashFrame"].get<int>();
             if (j.contains("quitFrame") && !overriddenFields.count("quitFrame")) quitFrame = j["quitFrame"].get<int>();
+            if (j.contains("scriptInput") && !overriddenFields.count("scriptInput")) scriptInput = j["scriptInput"].get<std::string>();
+            if (j.contains("dumpState") && !overriddenFields.count("dumpState")) dumpState = j["dumpState"].get<std::string>();
             std::cout << "Loaded settings from " << settingsPath << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Failed to parse settings.json: " << e.what() << std::endl;

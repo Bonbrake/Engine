@@ -10,6 +10,7 @@
 #include "ShaderManager.h"
 #include "../core/TeardownTracker.h"
 #include <SDL3/SDL_vulkan.h>
+#include <glm/glm.hpp>
 
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
@@ -155,6 +156,12 @@ void VulkanContext::initVulkan(SDL_Window* window) {
                 materialSystem_->DestroyMaterial(h);
             }
         }
+    }
+}
+
+void VulkanContext::setDevView(const glm::mat4& view, const glm::dvec3& cameraPos) {
+    if (swapchain_ && swapchain_->triangleRenderer()) {
+        swapchain_->triangleRenderer()->setDevView(view, cameraPos);
     }
 }
 

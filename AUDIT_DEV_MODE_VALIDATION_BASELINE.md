@@ -13,8 +13,8 @@ self-test.
 | Launch config | `[ERROR: Validation]` count | distinct VUIDs |
 |---|---|---|
 | Windowed, **no `--dev`, no `--dump`** (production baseline) | **0** | 0 |
-| `--dev` (no `--dump`) | 124 | 18 |
-| `--dev --dump-frame-png … --dump-frame-at 50` (Slice 0a) | 124 | 18 |
+| `--dev` (no `--dump`) | 124 | 16 |
+| `--dev --dump-frame-png … --dump-frame-at 50` (Slice 0a) | 124 | 16 |
 
 Conclusion: a normal windowed launch is **clean (0 errors)**. The 124 appear only
 with `--dev`, which runs `performAssetVerification()` — the texture/material/mesh
@@ -47,6 +47,7 @@ vertex input, `simple_mesh.vert`, `meshPipeline`) returned **no matches**. None 
 | `VUID-VkDeviceCreateInfo-sType-unique` | 2 | device init | No |
 | `VUID-vkDestroyDevice-device-05137` | 2 | device teardown | No |
 | `VUID-vkCmdDispatch-None-08600` | 19 | compute cull pipeline (2nd site) | No |
+| `VUID-VkBufferDeviceAddressInfo-buffer-02601` | 20 | buffer device-address query | No |
 
 ## Next-triage priority
 
@@ -72,3 +73,35 @@ a single investigation rather than per-VUID fixes.
 Open as its own triage item (not folded into frame-dump or Slice 0a changelogs).
 Validation environment: Vulkan SDK 1.4.350.0, `VK_LAYER_PATH=C:\VulkanSDK\1.4.350.0\Bin`,
 layer `VK_LAYER_KHRONOS_validation`.
+
+---
+
+## Addendum — distinct-count correction (2026-07-12, M2.6 Phase 2 verification)
+
+**Summary-row correction (independent of this session's work):** the original
+"18 distinct VUIDs" figure in the table's summary rows was an **internal miscount**
+against this doc's own 15-row breakdown table. It was already wrong when written —
+*this session did not cause or alter it*; the discrepancy only surfaced while
+diffing Piece 3/4's validation output against the baseline. The summary rows now
+read **16 distinct**, and the missing VUID is added below.
+
+**Reproduction at the documented config (`--dev --dump-frame-at 50`):** 124
+`[ERROR: Validation]` lines — **byte-for-byte identical** to the original figure.
+(The earlier in-session "107" was measured at `--dump-frame-at 3`; fewer frames
+rendered → fewer per-frame error repeats. Not a regression — a frame-count method
+difference, same as the doc itself noted for the Slice 0a `--dump` run.)
+
+**Corrected distinct set (16):** the 15 enumerated above **+ one previously
+unlisted VUID**:
+- `VUID-VkBufferDeviceAddressInfo-buffer-02601` — 20 occurrences, buffer
+  device-address query. Independently confirmed present in the **no-fly-camera**
+  `--dev` baseline (not in any Piece 3/4 code path), so it is **genuinely
+  pre-existing**, not introduced by this phase.
+
+**Piece 3/4 (M2.6 Phase 2 debug fly-camera) introduced zero new VUIDs:** the
+distinct VUID set is identical with and without `--fly-camera` (`comm -13` empty).
+Conclusion of the original doc stands: Pieces 1–4 add **0** validation errors; the
+124 remain pre-existing M0/M1/M2 asset-verification self-test noise.
+
+Environment for this addendum's runs: same as above (Vulkan SDK 1.4.350.0,
+`VK_LAYER_KHRONOS_validation`), ZombieEngine.exe Debug build post-Piece 3/4.
