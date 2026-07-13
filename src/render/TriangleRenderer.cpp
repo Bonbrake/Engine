@@ -4,6 +4,8 @@
 #include "PipelineBuilder.h"
 #include "../core/Logger.h"
 #include "../core/CVarSystem.h"
+#include "../ecs/ECS.h"
+#include "../render/AssetManager.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <fstream>
@@ -82,6 +84,8 @@ void TriangleRenderer::createBuffers(Device* device) {
     vmaUnmapMemory(device->getAllocator(), indexAllocation);
 
     // Instance buffer (100 entities)
+    // SHADER_DEVICE_ADDRESS_BIT is required: init() calls vkGetBufferDeviceAddress on this
+    // buffer to write its storage-buffer descriptor into the descriptor buffer.
     std::vector<InstanceData> instances(100);
     for (int i = 0; i < 100; i++) {
         instances[i].pos_rad[0] = (i % 10) * 1.5f - 7.0f;
@@ -90,7 +94,7 @@ void TriangleRenderer::createBuffers(Device* device) {
         instances[i].pos_rad[3] = 0.5f; // radius
     }
     bufferInfo.size = instances.size() * sizeof(InstanceData);
-    bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+    bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
     vmaCreateBuffer(device->getAllocator(), &bufferInfo, &allocInfo, &instanceBuffer, &instanceAllocation, nullptr);
     vmaMapMemory(device->getAllocator(), instanceAllocation, &data);
     memcpy(data, instances.data(), bufferInfo.size);
@@ -99,13 +103,13 @@ void TriangleRenderer::createBuffers(Device* device) {
     // Indirect buffer (3 buffers for triple-buffering)
     for (int i = 0; i < 3; i++) {
         bufferInfo.size = 100 * sizeof(DrawIndexedIndirectCommand);
-        bufferInfo.usage = VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        bufferInfo.usage = VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
         allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY; // Compute writes to it
         vmaCreateBuffer(device->getAllocator(), &bufferInfo, &allocInfo, &indirectBuffer[i], &indirectAllocation[i], nullptr);
 
         // Count buffer (3 buffers for triple-buffering)
         bufferInfo.size = sizeof(uint32_t);
-        bufferInfo.usage = VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+        bufferInfo.usage = VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
         vmaCreateBuffer(device->getAllocator(), &bufferInfo, &allocInfo, &countBuffer[i], &countAllocation[i], nullptr);
 
         // Readback buffer (3 buffers for triple-buffering)
@@ -113,6 +117,37 @@ void TriangleRenderer::createBuffers(Device* device) {
         allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
         vmaCreateBuffer(device->getAllocator(), &bufferInfo, &allocInfo, &countReadbackBuffer[i], &countReadbackAllocation[i], nullptr);
     }
+}
+
+void TriangleRenderer::setScene(ecs::ECSContext* ecsCtx, AssetManager* assetManager) {
+    ecsCtx_ = ecsCtx;
+    sceneAssets_ = assetManager;
+    // [M1-EXT-07] One 64KB scratch page per frame for the visible-entity list.
+    // Reset-only, never reallocated across frames (pool semantics per EXT-05/EXT-03).
+    if (!frameArena_.memoryBufferPage) {
+        static std::vector<uint8_t> s_page(64 * 1024);
+        frameArena_.memoryBufferPage = s_page.data();
+        frameArena_.capacity = s_page.size();
+        frameArena_.Reset();
+    }
+}
+
+// [M1:EXIT-1] Single camera-relative cast: renderPos = (vec3)(entityPos - camPos).
+// Authoritative position is dvec3; the GPU only ever sees a vec3 relative to the
+// camera, so world magnitude (km-scale, M2.6) never enters single-precision math.
+glm::mat4 BuildEntityMVP(const ecs::Transform& t, const glm::dvec3& camPos,
+                         const glm::mat4& view, const glm::mat4& proj) {
+    const glm::vec3 renderPos = glm::vec3(t.position - camPos);
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), renderPos);
+    // dquat -> quat (rotation is float-precision by design). Build quat from the
+    // dquat's components to avoid the missing dquat->quat cast in glm.
+    const glm::quat rot = glm::quat(static_cast<float>(t.rotation.w),
+                                    static_cast<float>(t.rotation.x),
+                                    static_cast<float>(t.rotation.y),
+                                    static_cast<float>(t.rotation.z));
+    model = model * glm::mat4_cast(rot);
+    model = glm::scale(model, glm::vec3(t.scale));
+    return proj * view * model;
 }
 
 void TriangleRenderer::createDescriptorSets(Device* device) {
@@ -250,17 +285,24 @@ void TriangleRenderer::createDescriptorSets(Device* device) {
         vkGetDescriptorEXT(device->getLogicalDevice(), &getInfo, props.combinedImageSamplerDescriptorSize, dst);
     };
 
+    // Real buffer sizes (cannot use VK_WHOLE_SIZE: validation rejects it for these
+    // storage-buffer descriptors, and a whole-size range into a 1600B instance buffer
+    // faults the GPU). Must match the sizes allocated in createBuffers().
+    const VkDeviceSize instSize = 100 * sizeof(InstanceData);
+    const VkDeviceSize indSize  = 100 * sizeof(DrawIndexedIndirectCommand);
+    const VkDeviceSize cntSize  = sizeof(uint32_t);
+
     if (graphicsLayout != VK_NULL_HANDLE) {
         for (int i = 0; i < 3; i++) {
-            writeStorageBuffer(graphicsLayout, graphicsSetOffset[i], 0, addrInst, VK_WHOLE_SIZE);
+            writeStorageBuffer(graphicsLayout, graphicsSetOffset[i], 0, addrInst, instSize);
         }
     }
     
     if (computeLayout != VK_NULL_HANDLE) {
         for (int i = 0; i < 3; i++) {
-            writeStorageBuffer(computeLayout, computeSetOffset[i], 0, addrInst, VK_WHOLE_SIZE);
-            writeStorageBuffer(computeLayout, computeSetOffset[i], 1, addrInd[i], VK_WHOLE_SIZE);
-            writeStorageBuffer(computeLayout, computeSetOffset[i], 2, addrCount[i], VK_WHOLE_SIZE);
+            writeStorageBuffer(computeLayout, computeSetOffset[i], 0, addrInst, instSize);
+            writeStorageBuffer(computeLayout, computeSetOffset[i], 1, addrInd[i], indSize);
+            writeStorageBuffer(computeLayout, computeSetOffset[i], 2, addrCount[i], cntSize);
             writeSampler(computeLayout, computeSetOffset[i], 3, &imgInfo);
         }
     }
@@ -553,7 +595,7 @@ void TriangleRenderer::cull(VkCommandBuffer cmd, uint32_t imageIndex, VkImageVie
     if (!cullCvar) cullCvar = core::CVarSystem::Get().RegisterBool("r_EnableCulling", true);
     pc.cullEnabled = cullCvar->val.b ? 1 : 0;
     
-    vkCmdPushConstants(cmd, cullPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(PC), &pc);
+    vkCmdPushConstants(cmd, cullPipelineLayout, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(PC), &pc);
     
     vkCmdDispatch(cmd, (100 + 63) / 64, 1, 1);
     
@@ -611,11 +653,8 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
                            glm::scale(glm::mat4(1.0f), glm::vec3(0.7f));
         glm::mat4 mvp = proj * view * model;
 
-        struct PC { float mvp[16]; uint32_t instanceCount; uint32_t frameCounter; uint32_t cullEnabled; } pc;
+        struct PC { float mvp[16]; } pc;
         memcpy(pc.mvp, &mvp[0][0], sizeof(pc.mvp));
-        pc.instanceCount = 1;
-        pc.frameCounter = frameCounter;
-        pc.cullEnabled = 0;
         vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
 
         VkDeviceSize offsets[] = {0};
@@ -623,31 +662,40 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
         vkCmdBindIndexBuffer(cmd, devTestMesh_->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(cmd, devTestMesh_->indexCount, 1, 0, 0, 0);
 
-        // [M2.6 Phase 2] Far cube at a FIXED world-space position (50000,0,0) — a
-        // large-magnitude static probe (no camPos term; identical every frame).
-        // Confirms a single dvec3->vec3 cast holds sub-visible precision at ~50km
-        // magnitude. NOTE: this does NOT implement camera-relative subtraction
-        // (renderPos = (vec3)(entityPos - cameraPos)); both cubes use the naive
-        // independently-cast-then-multiply path, since there is no scene render
-        // path to host camera-relative rendering yet (carried C-caveat).
-        // Reuses `view` (item 2) — no second copy of the devViewSet_ ternary.
-        static const glm::dvec3 kFarCubeWorldPos{50000.0, 0.0, 0.0};
-        glm::mat4 projFar = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 200000.0f);
-        glm::mat4 farModel = glm::translate(glm::mat4(1.0f), glm::vec3(kFarCubeWorldPos));
-        glm::mat4 farMvp   = projFar * view * farModel;
+        // [M1:EXIT-1] ECS->render bridge: traverse view<Transform, MeshComponent> and draw
+        // each entity through the real camera-relative path (BuildEntityMVP). This also drives
+        // the M2.6 far-cube precision probe: a real entity at dvec3(50000,0,0) now renders via
+        // the same cast as everything else, closing the "no scene render path" caveat.
+        // The dev-test cube above is a separate gated proxy; the loop below is the actual bridge.
+        uint32_t renderedEntities = 0;
+        if (ecsCtx_ && sceneAssets_) {
+            auto viewEnts = ecsCtx_->GetRegistry().view<ecs::Transform, ecs::MeshComponent>();
+            frameArena_.Reset();
+            for (entt::entity e : viewEnts) {
+                const auto& mc = viewEnts.get<ecs::MeshComponent>(e);
+                MeshAsset* mesh = sceneAssets_->GetMesh(mc.meshHandle);
+                if (!mesh || mesh->vertexBuffer == VK_NULL_HANDLE || mesh->indexBuffer == VK_NULL_HANDLE) {
+                    LOG_WARN("Render: entity {} meshHandle {{index={}, gen={}}} invalid; skipped",
+                             static_cast<uint32_t>(e), mc.meshHandle.index, mc.meshHandle.generation);
+                    continue;
+                }
+                const glm::dvec3 camPos = devViewSet_ ? devCamPos_ : glm::dvec3(0.0, 0.0, 4.0);
+                glm::mat4 eMvp = BuildEntityMVP(viewEnts.get<ecs::Transform>(e), camPos, view, proj);
 
-        PC farPc;
-        memcpy(farPc.mvp, &farMvp[0][0], sizeof(farPc.mvp));
-        farPc.instanceCount = 1;
-        farPc.frameCounter   = frameCounter;
-        farPc.cullEnabled    = 0;
-        vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &farPc);
+                memcpy(pc.mvp, &eMvp[0][0], sizeof(pc.mvp));
+                vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
 
-        VkDeviceSize farOffsets[] = {0};
-        vkCmdBindVertexBuffers(cmd, 0, 1, &devTestMesh_->vertexBuffer, farOffsets);
-        vkCmdBindIndexBuffer(cmd, devTestMesh_->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-        vkCmdDrawIndexed(cmd, devTestMesh_->indexCount, 1, 0, 0, 0);
-        return; // cube done; skip demo-triangle path
+                VkDeviceSize eOffsets[] = {0};
+                vkCmdBindVertexBuffers(cmd, 0, 1, &mesh->vertexBuffer, eOffsets);
+                vkCmdBindIndexBuffer(cmd, mesh->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+                vkCmdDrawIndexed(cmd, mesh->indexCount, 1, 0, 0, 0);
+                ++renderedEntities;
+            }
+            if (frameCounter % 10 == 0 && renderedEntities > 0) {
+                LOG_INFO("Rendered {} ECS entities via view<Transform, MeshComponent>", renderedEntities);
+            }
+        }
+        return; // cube + ECS entities drawn; skip demo-triangle path
     }
 
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
@@ -695,17 +743,10 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
 
     struct PC {
         float mvp[16];
-        uint32_t instanceCount;
-        uint32_t frameCounter;
-        uint32_t cullEnabled;
     } pc;
     memset(pc.mvp, 0, sizeof(pc.mvp));
     pc.mvp[0] = 1.0f; pc.mvp[5] = 1.0f; pc.mvp[10] = 1.0f; pc.mvp[15] = 1.0f;
-    pc.instanceCount = 100;
-    pc.frameCounter = frameCounter;
-    core::CVar* cullCvar = core::CVarSystem::Get().GetCVar("r_EnableCulling");
-    pc.cullEnabled = (cullCvar && cullCvar->val.b) ? 1 : 0;
-    vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(PC), &pc);
+    vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
 
     // [M1-EXT-03] Occlusion Query Double-Buffering
     vkCmdResetQueryPool(cmd, occlusionPools[imageIndex], 0, 100);
