@@ -16,9 +16,12 @@ struct SpatialCellHeader {
     bool isCellSubdivided{false};
 };
 
-inline uint64_t SpatialHashKey(float x, float z) {
-    int64_t cx = static_cast<int64_t>(std::floor(x / 2.0f));
-    int64_t cz = static_cast<int64_t>(std::floor(z / 2.0f));
+// Position is carried as double so the authoritative dvec3 world position from
+// Transform is never truncated at world scale (>~1-2 km). CELL_SIZE is a float
+// literal for the cell math but the inputs/keys are double.
+inline uint64_t SpatialHashKey(double x, double z) {
+    int64_t cx = static_cast<int64_t>(std::floor(x / 2.0));
+    int64_t cz = static_cast<int64_t>(std::floor(z / 2.0));
     return (static_cast<uint64_t>(cx) << 32) | (static_cast<uint64_t>(cz) & 0xFFFFFFFFull);
 }
 
@@ -32,9 +35,9 @@ public:
     static constexpr float CELL_SIZE = 2.0f;
     static constexpr uint32_t SUBDIVISION_THRESHOLD = 64;
 
-    void Insert(entt::entity entity, float x, float z, entt::registry* registry = nullptr);
-    void Remove(entt::entity entity, float x, float z);
-    void Update(entt::entity entity, float oldX, float oldZ, float newX, float newZ, entt::registry* registry = nullptr);
+    void Insert(entt::entity entity, double x, double z, entt::registry* registry = nullptr);
+    void Remove(entt::entity entity, double x, double z);
+    void Update(entt::entity entity, double oldX, double oldZ, double newX, double newZ, entt::registry* registry = nullptr);
 
     void Clear();
 
@@ -42,16 +45,16 @@ public:
     void Rebucket(entt::registry& registry);
 
     // Query APIs
-    std::vector<entt::entity> QueryRadius(float x, float z, float radius) const;
+    std::vector<entt::entity> QueryRadius(double x, double z, double radius) const;
     std::vector<entt::entity> QueryCell(int32_t cx, int32_t cz) const;
 
 private:
     std::unordered_map<uint64_t, SpatialCellHeader> headers;
     std::unordered_map<uint64_t, std::vector<entt::entity>> buckets;
-    std::unordered_map<entt::entity, std::pair<float, float>> entityPositions;
+    std::unordered_map<entt::entity, std::pair<double, double>> entityPositions;
 
-    uint64_t GetEntityTargetKey(float x, float z, bool isSubdivided) const;
-    std::pair<int32_t, int32_t> GetSubquadrantCoords(float x, float z) const;
+    uint64_t GetEntityTargetKey(double x, double z, bool isSubdivided) const;
+    std::pair<int32_t, int32_t> GetSubquadrantCoords(double x, double z) const;
 };
 
 } // namespace ecs
