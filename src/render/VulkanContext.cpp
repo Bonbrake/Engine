@@ -145,7 +145,7 @@ void VulkanContext::initVulkan(SDL_Window* window) {
                 LOG_INFO("VERIFICATION SUCCESS: Loaded dev_test_cube.glb. Mesh handle index: {}", devTestMeshHandle_.index);
                 // [Slice 0a] Hand the loaded mesh to the renderer so draw() renders it as a gated cube.
                 if (swapchain_ && swapchain_->triangleRenderer()) {
-                    swapchain_->triangleRenderer()->setDevTestMesh(assetManager_->GetMesh(devTestMeshHandle_));
+                    swapchain_->triangleRenderer()->setDevTestMesh(devTestMeshHandle_);
                     LOG_INFO("[Slice 0a] Dev-test cube wired into TriangleRenderer.");
                 }
             } else {

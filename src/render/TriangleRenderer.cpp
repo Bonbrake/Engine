@@ -627,8 +627,9 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
     // [Slice 0a] Dev-test cube: when a dev mesh is set, draw it directly (bypassing the
     // demo-triangle indirect/compute-cull path). Gated to --dev via setDevTestMesh() only
     // being called from VulkanContext in dev mode. Keeps occlusion-query + count-readback intact.
-    if (devTestMesh_ && devTestMesh_->vertexBuffer != VK_NULL_HANDLE &&
-        devTestMesh_->indexBuffer != VK_NULL_HANDLE && meshPipeline != VK_NULL_HANDLE) {
+    MeshAsset* devTestMesh = sceneAssets_ ? sceneAssets_->GetMesh(devTestMeshHandle_) : nullptr;
+    if (devTestMesh && devTestMesh->vertexBuffer != VK_NULL_HANDLE &&
+        devTestMesh->indexBuffer != VK_NULL_HANDLE && meshPipeline != VK_NULL_HANDLE) {
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, meshPipeline);
 
@@ -658,9 +659,9 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
         vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
 
         VkDeviceSize offsets[] = {0};
-        vkCmdBindVertexBuffers(cmd, 0, 1, &devTestMesh_->vertexBuffer, offsets);
-        vkCmdBindIndexBuffer(cmd, devTestMesh_->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-        vkCmdDrawIndexed(cmd, devTestMesh_->indexCount, 1, 0, 0, 0);
+        vkCmdBindVertexBuffers(cmd, 0, 1, &devTestMesh->vertexBuffer, offsets);
+        vkCmdBindIndexBuffer(cmd, devTestMesh->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+        vkCmdDrawIndexed(cmd, devTestMesh->indexCount, 1, 0, 0, 0);
 
         // [M1:EXIT-1] ECS->render bridge: traverse view<Transform, MeshComponent> and draw
         // each entity through the real camera-relative path (BuildEntityMVP). This also drives

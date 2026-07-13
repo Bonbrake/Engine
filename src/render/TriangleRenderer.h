@@ -17,7 +17,7 @@ public:
     void draw(VkCommandBuffer cmd, uint32_t imageIndex, class MaterialSystem* materialSystem);
     
     // Slice 0a: dev-test mesh (first LoadMesh) rendered as a gated cube in --dev.
-    void setDevTestMesh(MeshAsset* mesh) { devTestMesh_ = mesh; }
+    void setDevTestMesh(ecs::Handle h) { devTestMeshHandle_ = h; }
 
     // [M2.6 Phase 2] Inject the debug fly-camera view + camera position for the
     // dev cube path. When set, draw() uses it instead of the hardcoded lookAt.
@@ -38,8 +38,11 @@ private:
     VkPipeline wireframePipeline = VK_NULL_HANDLE; // [M1-EXT-04] Derivative variant
     VkPipeline meshPipeline = VK_NULL_HANDLE;       // Slice 0a: dev-test cube (pos+normal, 32B stride)
     
-    // Slice 0a: dev-test mesh handle (first LoadMesh), gated to --dev rendering.
-    MeshAsset* devTestMesh_ = nullptr;
+    // Slice 0a: dev-test mesh HANDLE (first LoadMesh), gated to --dev rendering.
+    // Stored as a handle, resolved via GetMesh() at point of use — NOT a cached
+    // raw MeshAsset*, because GenerationalTable::Insert can reallocate the
+    // backing std::vector<MeshAsset>, invalidating any cached pointer (UAF).
+    ecs::Handle devTestMeshHandle_ = ecs::Handle{0xFFFFFFFF, 0xFFFFFFFF};
 
     // [M2.6 Phase 2] Injected dev fly-camera view (set via setDevView).
     glm::mat4  devView_{1.0f};
