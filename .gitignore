@@ -16,3 +16,12 @@ plan.md
 /build-asan/
 /custom-ports/vulkan-loader/
 /custom-triplets/
+# Runtime artifacts (crash handler / engine logs / replay / tick-debug)
+# These are generated every run and must NOT be committed or triaged
+# as feature changes. Added per review 2026-07-13 (were recursing
+# into every session's working-tree diff as noise).
+crash_dump.dmp
+crash_sidecar.txt
+replay.bin
+tick_hashes.txt
+logs/
