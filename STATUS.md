@@ -9,6 +9,21 @@ Transform double-precision (dvec3/dquat/dvec3); B2 (silent double→float trunca
 
 ---
 
+## M0 — CLOSED as PASS (2026-07-12, `AUDIT_M0.md`) with carried open items
+
+M0 gate passed. 7 partials carried as explicit open items (not silently closed). See `AUDIT_M0.md` for full evidence.
+
+### M0 Carried Open Items
+1. **M0:step7** — Fixed-timestep focus-loss throttle is implemented as a 0.25s clamp + frame-pacing EMA + canRender skip-on-minimize, *not* a dedicated native focus-loss sim throttle. Functional but not the literal spec mechanic. Risk if later milestones depend on exact behavior.
+2. **M0:step18** — GPU driver **blocklist is EMPTY** (`DriverBlocklist.h`: only a commented example). Workaround table only toggles on Intel. This is a real functional gap: no hardware is actually blocked/fenced. Populate before any driver-specific workaround logic is trusted.
+3. **M0:step29** — `VK_EXT_debug_utils` object naming applied to queues + query pool only (`Device.cpp:360-372`); not every pipeline/buffer/image. Degrades future debuggability/traceability, not a runtime defect.
+4. **M0:step33** — Deterministic crash-repro via replay: mechanism present (record/replay + tick-hash, `Input.cpp`/`Engine.cpp`), but replay-identity (identical tick traces across runs) was **not re-verified live** this pass. Needs a crash+replay pair run on real GPU.
+5. **M0:EXT07** — `FiberYield.h` declared, **no call site wired** (`SwitchToFiber` never invoked). Declared-but-unwired per production standard; either wire or remove.
+6. **M0:EXT08** — Descriptor-Buffer Slot Allocator declared, **not wired**; `TriangleRenderer` writes descriptors directly. Same unwired-declaration pattern as EXT07 — wire or remove.
+7. **M0:EXT10** — Pipeline Layout Compat Validator declared-only, **not invoked** in main path. Same unwired-declaration pattern — wire or remove.
+
+---
+
 ## M0 Exit Criteria — ALL PASS
 
 | Criterion | Status |
@@ -20,15 +35,30 @@ Transform double-precision (dvec3/dquat/dvec3); B2 (silent double→float trunca
 | Crash handler + sidecar; replay yields identical tick traces | ✅ crash_log.txt + crash_sidecar.txt present; record/replay TickHash matches (windowed: non-zero hashes confirmed) |
 | Budgets accurately logged via VMA | ✅ Device Local Heap headroom logged (7217 MB on RTX 2070 Super) |
 
-## M1 Exit Criteria — ALL PASS
+## M1 — CLOSED (2026-07-12, `AUDIT_M1.md`; bridge built 2026-07-12)
 
-| Criterion | Status |
-|-----------|--------|
-| EnTT components render correctly via GPU indirect draw | ✅ Windowed: colored triangles rendering, GPU indirect draw active |
-| Font files generate MSDF maps at boot | ✅ AssetManager initialized, Roboto-Regular.ttf present |
-| Hi-Z culling logs measurable draw call reduction | ✅ Windowed log: "Hi-Z Occlusion Culling: 4/100 instances visible (96% reduction)" |
-| ImGui panel updates cvar behaviors live; pass timings via query pools | ✅ ImGui NewFrame/Render cycling confirmed in windowed log; queryTimestamps=true |
-| No validation warnings | ✅ Zero VUID errors (non-`--dev` windowed launch); only benign 3rd-party layer name warnings (not suppressible without removing those layers). `--dev` launch has a separate pre-existing 124-error baseline — see `AUDIT_DEV_MODE_VALIDATION_BASELINE.md` (none from this milestone's scope). |
+GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exists**: `MeshComponent` + `view<Transform, MeshComponent>` traversal in `TriangleRenderer::draw` (`TriangleRenderer.cpp:653-689`) drives real per-entity MVPs via `BuildEntityMVP` (camera-relative `renderPos = (vec3)(entityPos - camPos)`). Windowed `--dev` run logs `"Rendered 2 ECS entities via view<Transform, MeshComponent>"` and `after_bridge.png` shows the ECS-driven entity. M1:EXIT-1 resolved. ctest 12/12 (61 assertions) incl. new `Test_RenderBridge.cpp` proving the 50km camera-relative precision invariant. See `AUDIT_M1.md` for the full original FAIL audit; the bridge was the scoped close-out.
+
+### M1 Exit Criteria — corrected (post-bridge)
+| Criterion | Verdict |
+|-----------|---------|
+| EnTT components render correctly via GPU indirect draw | ✅ RESOLVED — ECS entities render via `view<Transform, MeshComponent>` (`TriangleRenderer.cpp:653-689`) |
+| Font files generate MSDF maps at boot | ⚠️ windowed-gated only (`Engine.cpp:67,115`); not headless-verifiable |
+| Hi-Z culling logs measurable draw reduction | ✅ (on demo triangle's 100 instances) `TriangleRenderer.cpp:756` |
+| ImGui panel updates cvar live; pass timings via query pools | ⚠️ windowed/`ENGINE_DEV_TOOLS`-gated; not headless-verifiable |
+| No validation warnings | ⚠️ engine-clean windowed non-`--dev`; `--dev` has separate 124-error baseline (`AUDIT_DEV_MODE_VALIDATION_BASELINE.md`) |
+
+### M1 Carried Open Items
+1. ~~**M1:EXIT-1 (BLOCKER)** — No ECS→render bridge.~~ **CLOSED 2026-07-12**: `MeshComponent` + `view<Transform,MeshComponent>` traversal built, renders entities, unit-tested.
+2. **M1:IS-16** — Material-batched mesh pass absent; `TriangleRenderer.cpp:676-679` `[TODO]` for set=1 material descriptor offsets.
+3. **M1:IS-18** — Skinned-mesh buffer-device-address animation path absent (needed M5.1/M5.2).
+4. **M1:IS-29/30** — No `MaterialSystem` mesh-pass abstraction; no glTF/FBX prefab loader (`EntityFactory` is JSON-component-only).
+5. **M1:IS-4/28** — DXC hot-reload / spirv-reflect not implemented in `src/`.
+6. **M1:IS-8** — Parallel secondary command-buffer recording not in render loop (primary-only).
+7. **M1:IS-17** — No Transform/bone SoA arrays.
+8. ~~**M1:EXT-07** — `ThreadArena` declared, **not wired** (`ArenaAllocateBump` zero call sites).~~ **CLOSED 2026-07-12** — *CORRECTION (2026-07-13, AUDIT_FOUNDATION_GAP.md §2 Tier-2): this closure is FALSE.* `grep -rn 'ArenaAllocateBump' src/` returns only the declaration in `ThreadArena.h:19`; `TriangleRenderer`'s `frameArena_` is a raw `BumpArena` that never calls `ArenaAllocateBump`. The function remains unwired. Revert to OPEN: either wire `ArenaAllocateBump` into a per-tick scratch consumer or remove the declaration per the no-unwired-declaration rule.
+9. **M1:IS-15** — MetaRegistry covers 9 components, not "every component".
+10. **M1:D3** — `[M1-EXT-09]` ID collision (EnTTCache vs RenderGraph DAG flattener); disambiguate in spec.
 
 ## M2 Exit Criteria — ALL PASS
 
@@ -46,7 +76,7 @@ Transform double-precision (dvec3/dquat/dvec3); B2 (silent double→float trunca
 - Branch: `m2/physics-destruction`  
 - Last commit: `66af99e` — [M2.6] Phase 1: Transform double-precision (dvec3/dquat) - close B2  
 - Headless CI: **PASS** (`HEADLESS CI SMOKE TEST: SUCCESS`)
-- ZombieEngineTests: **PASS** (9 cases / 49 assertions; [M2.6] 2 cases / 14 assertions)
+- ZombieEngineTests: **PASS** (12 cases / 61 assertions; [M2.6] 2 cases / 14 assertions; [M1 bridge] 3 cases via `Test_RenderBridge.cpp`)
 - Build: `cmake --build --config Debug` EXIT=0
 - Windowed smoke test: **PASS** (2026-07-11, RTX 2070 Super)
 - GPU: NVIDIA GeForce RTX 2070 SUPER
@@ -103,11 +133,29 @@ injection + `SDL_SetWindowRelativeMouseMode` are windowed-gated.
 **OPEN ITEMS (carried, not silently closed):**
 1. **Yaw/pitch sign direction** — `FlyCamera.cpp:23-24` (`yaw_ -=`/`pitch_ -=`); self-verify
    proves rotation *happens* but not whether mouse-right = screen-right. One-line flip if inverted. **Needs human GPU pass to confirm direction.**
-2. **Far-cube steadiness at ~50km** — self-verify proves the cube exists at dvec3(50000,0,0)
-   and the camera moves, but sub-pixel steadiness at range needs the human fly-there GPU pass.
-3. **Camera-relative subtraction (Spike B)** — NOT implemented; Phase 2 verifies single-cast
-   float precision only. Standing C-caveat; no scene render path to host it yet.
+2. **Far-cube steadiness at ~50km** — the far cube is now a **real ECS entity** at `dvec3(50000,0,0)` driven through `view<Transform,MeshComponent>` + `BuildEntityMVP` (camera-relative), not the old hardcoded `kFarCubeWorldPos` block. `after_bridge.png` shows it rendering; the `Test_RenderBridge` rebase-invariance test (K=1e6) proves the math holds in double→single. Sub-pixel steadiness *while flying there* still wants the human GPU pass, but the precision path is now built + unit-proven.
+3. ~~**Camera-relative subtraction (Spike B)** — NOT implemented.~~ **CLOSED 2026-07-12**: implemented in `BuildEntityMVP` (`TriangleRenderer.cpp:134-149`) — `renderPos = (vec3)(entityPos - camPos)` single cast; the authoritative dvec3 never enters single-precision matrix math. Unit-tested (`Test_RenderBridge.cpp` rebase invariant, K=1e6, epsilon 1e-3).
 
 ## Next Session: close M2.6 Phase 2 open items (yaw-sign GPU confirm, far-cube steadiness) or beat
 Load `milestones_M0-M13_antigravity/03_M2_6.md`.  \n
+
 Read STATUS.md first. Confirm branch. Check .gitignore covers build/ and vcpkg_installed/.
+
+---
+
+## M2 — FAIL on 1 exit criterion; F2+F3 RESOLVED (2026-07-12, `AUDIT_M2.md`)
+
+Jolt 5.5.0 built with `CROSS_PLATFORM_DETERMINISTIC=ON` + `DOUBLE_PRECISION=ON` (library-level, spec's hard requirement — met). Fixed-timestep solver + `LinearCast` CCD, `entt::dispatcher` EventBus, Jolt→`dvec3` transform mirroring, and composable Health/Destructible are genuinely built and run-verified (headless `runPhysicsTests` confirms gravity + lethal-damage → `isDestroyed` + collider removal). One literal exit criterion still fails (mesh-swap F1); F2 (debug-hull) + F3 (EXT-01 async bake) **closed this session**:
+
+- **F2 RESOLVED** — added `JPH_DEBUG_RENDERER` to `CMakeLists.txt:179`. Jolt lib already had `DEBUG_RENDERER_IN_DEBUG_AND_RELEASE=ON` (root `vcpkg.json:17` requested the feature; no Jolt rebuild needed). Build time unchanged, no extra deps. Verified: `drawBodies()` emits 36 hull lines/frame (was 0 — path was `#ifdef`-excluded). Caveat: frame-dump harness captures swapchain before ImGui overlay composites, so no static "hull-on-scene" PNG — proven via line-count.
+- **F3 RESOLVED** — `Engine.cpp:105` now calls `physicsSystem_->setTaskScheduler(core::JobSystem::get())`; `QueueAsyncCollisionSwap` bakes the cooked `MeshShape` (was dead `taskScheduler_==null` branch). `joltJobs_` stays Jolt-dedicated per spec.
+
+- **Mesh-swap wired (F1, CORRECTION 2026-07-13)** — F1 is now wired end-to-end for the dev-test entity: `VulkanContext.cpp:159` loads `dev_test_cube_destroyed.gltf`, `Engine.cpp:572` assigns `devDestroyedMesh` to the dev body's `DestructibleComponent.destroyedMeshHandle`, and `DamageSystem::receive` (`Destructible.cpp:56`) writes it into `MeshComponent.meshHandle` on death. `MeshHandle` is a generation-safe `ecs::Handle` (no stale-slot risk). The earlier "DEFERRED / not applied" status was wrong — the swap is coded, the destroyed asset is loaded, and the handle is assigned. **Caveat: dev-gated** (`#if ENGINE_DEV_TOOLS`, `spawnDevTestBody_`); extend to non-dev destructibles before calling F1 fully shipped.
+- **F4 LEFT ALONE** (per user) — `physicsTick` redundant `tick()`+`flush()` re-dispatch; harmless, not a real bug.
+
+M2-EXT-01 now live (F3). EXT-02/03/04/06 wired; EXT-05/07 present as math helpers awaiting M2.9/M5.2 consumers.
+
+### M2 Carried Open Items
+1. **M2:EXIT-meshswap (WIRED, dev-gated)** — F1 is coded end-to-end for the dev-test entity (destroyed mesh loaded + `Handle` assigned + swap written on death; see F1 CORRECTION above). Remaining: extend the swap to non-dev destructibles (gameplay barrels/walls/zombies) before calling F1 fully shipped. No longer a blocker on the dev path.
+2. **M2:D4** — redundant `tick()`+`flush()`; left alone per user (harmless).
+3. **M2:D3 (ctest discovery)** — `ctest` finds no tests though `catch_discover_tests` present; run `ZombieEngineTests.exe` directly (12 cases / 61 assertions). Harness gap.
