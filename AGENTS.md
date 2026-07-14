@@ -82,7 +82,7 @@ One milestone file per Antigravity session/Task. Don't load two milestone files 
 Every session, every milestone, must load and enforce this. Durable version;
 do not drop the persistence step in any redraft.)
 
-Baseline content hash: 6f7c13c5b8c6d8313a60084edab65468f2469eed
+Baseline content hash: f967c50e17f482dd2e305090f43f3f465fc29a1b
 
 ═══════════════ STEP 0: BOOTSTRAP (sole exception to the gate) ═══════════════
 - The AGENTS.md edits in this bootstrap (BOTH the initial add AND the
@@ -93,6 +93,10 @@ Baseline content hash: 6f7c13c5b8c6d8313a60084edab65468f2469eed
   This baseline line is what makes the session-start check enforceable in a
   fresh session — it must live IN the file, not just in chat.
 - Commit + push the initial add explicitly:
+    git status --porcelain    # BEFORE the targeted add — confirm nothing else is already staged
+    # If anything other than AGENTS.md is already staged, STOP and report it
+    # before committing; do not let a pre-existing staged file get swept into
+    # this bootstrap commit (matched by the Step 2 stash-list empty-check).
     git add AGENTS.md
     git commit -m "docs: add Verify-Then-Push Gate to AGENTS.md"
     git push origin <current-branch>
@@ -195,6 +199,9 @@ STEP 6 — DIFF REVIEW + SECRET SCRUB + STATUS UPDATE
 
 STEP 7 — APPROVAL (split: commit, then push, separately)
   - Present commit message + exact `git add`/`git commit` command + target branch.
+    Before running `git add`, run `git status --porcelain` and confirm ONLY the
+    intended files are staged — same pre-stage guard as Step 0. If unrelated files
+    are already staged, STOP and report before committing; do not sweep them in.
   - WAIT for explicit "commit approved."
   - After commit lands, paste hash. Present exact `git push` command separately,
     WAIT for explicit "push approved" before running it.
