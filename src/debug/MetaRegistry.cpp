@@ -26,6 +26,7 @@ void MetaRegistry::Initialize() {
     entt::meta_factory<ecs::DestructibleComponent>{}
         .type("DestructibleComponent"_hs)
         .data<&ecs::DestructibleComponent::isDestroyed>("isDestroyed"_hs)
+        .data<&ecs::DestructibleComponent::intactMeshHandle>("intactMeshHandle"_hs)
         .data<&ecs::DestructibleComponent::destroyedMeshHandle>("destroyedMeshHandle"_hs);
 
     entt::meta_factory<ecs::DamageEvent>{}
@@ -137,7 +138,15 @@ bool MetaRegistry::EmplaceComponent(const std::string& name, entt::registry& reg
     else if (name == "DestructibleComponent") {
         ecs::DestructibleComponent d;
         if (json.contains("isDestroyed")) d.isDestroyed = json["isDestroyed"].get<bool>();
-        if (json.contains("destroyedMeshHandle")) d.destroyedMeshHandle = json["destroyedMeshHandle"].get<uint32_t>();
+        // destroyedMeshHandle is now a generation-safe ecs::Handle{index, generation}.
+        if (json.contains("destroyedMeshHandle_index"))
+            d.destroyedMeshHandle.index = json["destroyedMeshHandle_index"].get<uint32_t>();
+        if (json.contains("destroyedMeshHandle_generation"))
+            d.destroyedMeshHandle.generation = json["destroyedMeshHandle_generation"].get<uint32_t>();
+        if (json.contains("intactMeshHandle_index"))
+            d.intactMeshHandle.index = json["intactMeshHandle_index"].get<uint32_t>();
+        if (json.contains("intactMeshHandle_generation"))
+            d.intactMeshHandle.generation = json["intactMeshHandle_generation"].get<uint32_t>();
         registry.emplace<ecs::DestructibleComponent>(entity, d);
         return true;
     }
@@ -211,6 +220,19 @@ bool MetaRegistry::EmplaceComponent(const std::string& name, entt::registry& reg
         if (json.contains("bloodMuMultiplier")) s.bloodMuMultiplier = json["bloodMuMultiplier"].get<float>();
         if (json.contains("tireThermalMuMultiplier")) s.tireThermalMuMultiplier = json["tireThermalMuMultiplier"].get<float>();
         registry.emplace<ecs::SurfaceFrictionSample>(entity, s);
+        return true;
+    }
+    
+    else if (name == "MeshComponent") {
+        ecs::MeshComponent m;
+        if (json.contains("meshHandle")) {
+            auto h = json["meshHandle"];
+            if (h.is_object() && h.contains("index") && h.contains("generation")) {
+                m.meshHandle.index = h["index"].get<uint32_t>();
+                m.meshHandle.generation = h["generation"].get<uint32_t>();
+            }
+        }
+        registry.emplace<ecs::MeshComponent>(entity, m);
         return true;
     }
     

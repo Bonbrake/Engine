@@ -31,7 +31,8 @@ void FlyCamera::update(float dt) {
     glm::dvec3 right = glm::normalize(glm::cross(forward, worldUp));
 
     // --- Move (keyboard) ---
-    const double step = kMoveSpeed * (double)dt;
+    const double speed = kMoveSpeed * (s.keyboardState[SDL_SCANCODE_LSHIFT] ? kSprintMult : 1.0);
+    const double step = speed * (double)dt;
     if (s.keyboardState[SDL_SCANCODE_W])     position_ += forward * step;
     if (s.keyboardState[SDL_SCANCODE_S])     position_ -= forward * step;
     if (s.keyboardState[SDL_SCANCODE_D])     position_ += right   * step;

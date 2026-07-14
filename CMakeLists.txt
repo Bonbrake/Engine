@@ -177,6 +177,10 @@ target_compile_definitions(ZombieEngine PRIVATE
     # M2 spec: Jolt must be built with these defines for bit-identical physics across compiler/CPU
     JPH_CROSS_PLATFORM_DETERMINISTIC
     JPH_DOUBLE_PRECISION
+    # M2-EXIT debughull: enable Jolt collision-hull overlay. Jolt lib is already built with
+    # DEBUG_RENDERER_IN_DEBUG_AND_RELEASE (root vcpkg.json requests the "debugrenderer" feature),
+    # so this only flips the engine-side #ifdef blocks (drawBodies + ImGui projection).
+    JPH_DEBUG_RENDERER
 )
 
 # Static Analysis Target

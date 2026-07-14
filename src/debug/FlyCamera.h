@@ -34,9 +34,10 @@ private:
     double yaw_   = 0.0;   // radians, around +Y
     double pitch_ = 0.0;   // radians, clamped to (-kPitchLimit, kPitchLimit)
 
-    static constexpr double kMoveSpeed  = 100.0;   // units/sec
-    static constexpr double kMouseSens  = 0.0022;  // rad per pixel
-    static constexpr double kPitchLimit = 1.5533;  // ~89 deg, avoids gimbal flip
+    static constexpr double kMoveSpeed   = 12.0;    // units/sec (normal WASD)
+    static constexpr double kSprintMult  = 3.0;     // Shift sprint multiplier (fast far-cube traversal)
+    static constexpr double kMouseSens   = 0.0006;  // rad per pixel (tuned down ~3.7x)
+    static constexpr double kPitchLimit  = 1.5533;  // ~89 deg, avoids gimbal flip
 };
 
 } // namespace debug

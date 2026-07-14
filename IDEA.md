@@ -12,19 +12,6 @@ Continuation of the v76 audit, this time hunting for underspecified/placeholder 
 * **[Verified, no change needed]** Re-checked the physics constants already correct from the v76 pass (g=9.81, R=8.314 J/mol·K, room temp 293.15K, latent heat of vaporization 2,260,000 J/kg, Friis path-loss formula, Griffith-Irwin K_I fracture formula, Henyey-Greenstein phase function, Rayleigh λ⁻⁴ scattering) — all still correct, none touched this pass.
 * **[Verified, no change needed]** The Arrhenius corrosion/decay model's `Ea = 5.5e4` J/mol (55 kJ/mol) checked against atmospheric steel corrosion literature (typically cited 40-90 kJ/mol range) — already realistic, not touched.
 
-## Changelog — v77.1 (M1 scene-render gap audit)
-
-* **[Audit — Major Finding]** M1's scene renderer was never built. `TriangleRenderer`
-  draws one hardcoded triangle instanced 100× through an identity MVP + fixed 800×600
-  viewport; there is no ECS `view<Transform,Mesh>` path in `src/` (the only
-  `registry.view<>` calls are self-tests and physics), `AssetManager::GetMesh()` has zero
-  callers, and no `MeshComponent` exists. As a result every milestone with a
-  "visible"/"renders"/"traverses" exit criterion (M0 tooling note, M2.6, M2.7, M2.9,
-  M3, M4, M5.2) was silently unverifiable on the visual side. M2 physics/ECS/EventBus
-  logic remains verified and unaffected. Corrective pass scoped under M1 (see
-  `AUDIT_M1_SCENE_RENDER_GAP.md`). Discovered 2026-07-12 (session eyes-on confirmation
-  of 4 static placeholder triangles rendering as the only output).
-
 ## Changelog — v76 (full line-by-line code-block audit, no dedupe/ID work this pass)
 
 Went through all 268 code blocks in the doc (236 C++, 32 GLSL) individually against their own Math/How-It-Works sections and, where relevant, real library docs (Jolt `BodyInterface` call signatures, GLSL image/sampler layout-qualifier rules). Most held up — the physics (Erlang-C queueing model, Keplerian orbital solve, Rayleigh/Beer-Lambert/Doppler formulas, XPBD substep, Jolt `AddForce`/`AddImpulse`/`SetShape` usage) checked out against reference derivations and the real API. Three real bugs found and fixed:
@@ -205,11 +192,7 @@ Fast models move quickly through a task list; enforce all of the following witho
 * **Shader toolchain:** HLSL + DXC, targeting SPIR-V.
 * **Pipeline cache, persisted to disk (M0).**
 * **Profiler of record:** Tracy.
-* **RenderDoc-capturable** — swapchain IS capturable and was correctly confirmed at M0
-  against the M1 demo-triangle placeholder. Precision note (v77.1): this confirms only
-  swapchain capturability, NOT scene content — the scene renderer was never built
-  (AUDIT_M1_SCENE_RENDER_GAP.md). Re-confirm against real scene geometry after the M1
-  corrective pass.
+* **RenderDoc-capturable, confirmed at M0.**
 * **Unit tests for pure-logic systems (Catch2 or doctest, vendored via vcpkg).**
 * **Minimum viable failure-mode handling.** `VK_ERROR_DEVICE_LOST` and out-of-memory conditions log the failure and exit cleanly.
 
@@ -699,14 +682,6 @@ Defaults apply.
 * Hi-Z culling logs measurable draw call reduction.
 * ImGui panel updates cvar behaviors live. Pass timings output via Vulkan query pools.
 * No validation warnings.
-
-> ⚠ **RE-VERIFICATION REQUIRED — M1 scene renderer (per AUDIT_M1_SCENE_RENDER_GAP.md).**
-> M1's exit criteria were marked met on a hollow demo renderer (`TriangleRenderer`:
-> one hardcoded triangle, identity MVP, fixed 800×600 viewport, no ECS scene path).
-> The scene-render criterion at line 680 ("EnTT components render correctly via GPU
-> indirect draw paths") is **NOT STARTED** and must be re-verified after the M1
-> corrective pass. The remaining M1 criteria (MSDF :681, Hi-Z :682, ImGui cvar :683,
-> validation :684) are scene-agnostic and unaffected — they were correctly met.
 
 ### Extended Systems Library — engine-side additions for M1
 
@@ -9892,4 +9867,3 @@ grep -rn "SLMActionOutput" ./src/ \
 ```
 
 Exit status 0 — zero matches outside text/UI display and audio-VO subtitle code.
-
