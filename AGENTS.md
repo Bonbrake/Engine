@@ -82,7 +82,7 @@ One milestone file per Antigravity session/Task. Don't load two milestone files 
 Every session, every milestone, must load and enforce this. Durable version;
 do not drop the persistence step in any redraft.)
 
-Baseline content hash: <fill in after first hash-object below>
+Baseline content hash: 6f7c13c5b8c6d8313a60084edab65468f2469eed
 
 ═══════════════ STEP 0: BOOTSTRAP (sole exception to the gate) ═══════════════
 - The AGENTS.md edits in this bootstrap (BOTH the initial add AND the
