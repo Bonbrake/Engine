@@ -75,3 +75,154 @@ Every extended system is [Mx-EXT-nn] (e.g. [M1-EXT-06]) — stable, load-bearing
 
 Milestone file sequencing
 One milestone file per Antigravity session/Task. Don't load two milestone files into one session. Don't proceed past a milestone's Exit Criteria until every item passes by actually running the build — reading the code and reasoning that it should work is not verification. When Exit Criteria pass, start a fresh session and load the next file in sequence; update STATUS.md first.
+
+## Verify-Then-Push Gate
+
+(Permanent standing rule for ALL agents on this repo — Hermes, Jules, Antigravity.
+Every session, every milestone, must load and enforce this. Durable version;
+do not drop the persistence step in any redraft.)
+
+Baseline content hash: <fill in after first hash-object below>
+
+═══════════════ STEP 0: BOOTSTRAP (sole exception to the gate) ═══════════════
+- The AGENTS.md edits in this bootstrap (BOTH the initial add AND the
+  baseline-hash follow-up commit) are the ONLY commits exempt from the gate below.
+- Add this "Verify-Then-Push Gate" section to AGENTS.md verbatim, INCLUDING the
+  literal line:
+      Baseline content hash: <fill in after first hash-object below>
+  This baseline line is what makes the session-start check enforceable in a
+  fresh session — it must live IN the file, not just in chat.
+- Commit + push the initial add explicitly:
+    git add AGENTS.md
+    git commit -m "docs: add Verify-Then-Push Gate to AGENTS.md"
+    git push origin <current-branch>
+  Paste literal output of all three.
+- Capture the canonical content hash (everything EXCEPT the baseline line, so
+  the file can legitimately describe its own content without the quine problem):
+    grep -n "Verify-Then-Push Gate" AGENTS.md
+    git show HEAD:AGENTS.md | grep -v "^Baseline content hash:" | git hash-object --stdin
+  Paste both. Then fill the "Baseline content hash" line with that hash-object
+  output, commit as a follow-up ("docs: record gate baseline content hash"),
+  and re-run the grep + hash-object command to confirm it CONVERGES (the value
+  is identical before and after filling the line, because the line is excluded
+  from the hash). Paste the final, matching state.
+
+═══════════════ THE GATE ═══════════════
+
+STEP 1 — TARGET & PROOF FORM
+  - `git branch --show-current` — paste it.
+  - Target = origin/<current-branch> (feature/milestone branch), NOT main.
+  - Proof of landing (step 8) = `git log origin/<branch> -1`. If the task
+    involves opening a PR, also run `gh pr create` (or equivalent) and paste
+    the returned URL — do not claim a PR URL as proof unless a PR-open step
+    actually ran in this session.
+  - If a task ever legitimately targets main directly, that must be stated
+    and confirmed explicitly before step 1 is considered satisfied — never
+    assume main.
+
+STEP 2 — BUILD
+  - First: `git status --porcelain` and `git diff --name-only` — paste both.
+    This is the exact file set "changed files" refers to for the rest of
+    this step and Step 5's scope check. Resolve any pre-existing stash
+    (`git stash list` must be empty) before proceeding — if one exists,
+    stop and report it rather than stacking a new stash on top.
+  - Real verify build = build-asan/Release (MSVC, NOT LLVM; per repo setup the
+    ASan DLL lives in build-asan/Release/).
+  - Full rebuild of the Catch2/test target:
+      cmake --build build-asan --config Release --target ZombieEngineTests
+    Paste exit code. (ZombieEngineTests is the real Catch2 target linked against
+    ZombieEngineCore, established in-thread. If CMakeLists does NOT define that
+    target, fall back to ALL_BUILD and STATE you did so.)
+  - Attempt Debug too, classified as COMPILE-ONLY-OR-SKIP: the known
+    __imp__CrtDbgReport/__imp__calloc_dbg/__imp__free_dbg linker signature is
+    an ALLOWED, LOGGED exception — not a gate failure. Any OTHER Debug failure
+    signature IS a real gate failure.
+  - Re-confirm pre-existing status via scoped stash, using the ACTUAL changed
+    source files captured above (not milestone doc paths — the Debug link
+    failure lives in engine code, so stashing docs proves nothing):
+      git diff > /tmp/pre-stash.diff
+      git stash list                      # must be empty (resolved above)
+      git stash push -- <exact paths from `git diff --name-only` above, no globs>
+      cmake --build build-asan --config Debug --target ZombieEngineTests   # paste result
+      git stash pop
+      git diff > /tmp/post-stash.diff
+      diff /tmp/pre-stash.diff /tmp/post-stash.diff   # must be empty
+    Paste all output. Non-empty diff-of-diffs = STOP, round-trip corrupted
+    something, report exactly what changed before doing anything else.
+  - EMPTY-CHANGED-SET GUARD: if `git diff --name-only` (tracked) is empty — i.e.
+    only untracked/reserved files changed — the scoped stash re-confirm is N/A:
+    note "stash re-confirm: N/A (no tracked edits)" and SKIP the stash push/pop.
+    Do NOT run `git stash push --` with an empty path list (it errors: "No pathspec").
+
+STEP 3 — FULL TEST SUITE
+  - Run on build-asan/Release:
+      cd build-asan && ctest -C Release --output-on-failure
+    (or invoke the built ZombieEngineTests Catch2 executable directly from
+    build-asan/Release/).
+  - ALL GREEN: paste command + exit code + summary line only (no firehose).
+  - ANY failure/unexpected skip: paste FULL verbose output for just those
+    cases, with enough context to diagnose.
+
+STEP 4 — RUNTIME CHECK
+  - If gameplay-visible: launch interactively, exercise the actual changed
+    behavior, report what was observed. Skip with explicit reason if the
+    change is non-visual (refactor, config, test-only).
+
+STEP 5 — STATIC CHECKS (falsifiable)
+  - Grep SPECIFIC known telltales, not "no dead code" generally:
+      grep -rn "TODO\|FIXME\|XXX" <changed files>
+      grep -n "<known duplicate-block signature from this milestone's history>" <changed files>
+    Paste output, state pass/fail per pattern.
+  - Paste compiler warning count from the build log.
+  - ID/spec-collision check (standing rule): grep this change's milestone
+    ID/EXT tag against milestones_M0-M13_antigravity/ (confirm this path
+    exists before relying on it — if the directory has moved, find the
+    real one first; a grep against a nonexistent path is not a passed check).
+    Paste output, confirm uniqueness.
+  - `git status --porcelain` — paste it. Every listed file must be within the
+    milestone's named scope (repo-hygiene rule). Flag and justify anything
+    outside scope — don't silently include it. Reserved/scratch filenames
+    (nul, con, prn, aux, or similar) must never be staged — if one appears
+    in the status output, exclude it and flag it, don't commit it.
+
+STEP 6 — DIFF REVIEW + SECRET SCRUB + STATUS UPDATE
+  - `git diff` for every file being committed — paste full diff. For any
+    single file over ~500 lines of diff, paste the first/last ~100 lines
+    plus a summary of what's in between rather than the full firehose,
+    and say you're doing so.
+  - Scan for keys/tokens/passwords before pasting; redact and flag if found.
+  - Update STATUS.md/CHANGELOG.md for the milestone state change — paste that diff too.
+
+STEP 7 — APPROVAL (split: commit, then push, separately)
+  - Present commit message + exact `git add`/`git commit` command + target branch.
+  - WAIT for explicit "commit approved."
+  - After commit lands, paste hash. Present exact `git push` command separately,
+    WAIT for explicit "push approved" before running it.
+  - While waiting on either approval, do NOT idle — continue other in-scope
+    work within the SAME milestone (standalone spikes, docs, test-writing).
+    Do not load a second milestone file into this session (standing rule:
+    one milestone file per session). Report back on the parked task's
+    approval status whenever you resume it.
+
+STEP 8 — POST-PUSH VERIFICATION + REJECTION HANDLING
+  - On success: `git fetch origin && git log origin/<branch> -1` — paste,
+    confirm hash matches. If a PR was opened in Step 1, confirm its URL here.
+  - On REJECT (non-fast-forward): STOP. No force-push, no silent rebase/merge.
+    Report the rejection, show what changed upstream, re-run the ENTIRE gate
+    from Step 2 against the rebased/merged state before pushing again.
+
+═══════════════ FAILURE HANDLING ═══════════════
+Any Step 2–6 failure (excluding the logged pre-existing Debug-link exception)
+= STOP, report exactly what failed with literal output, no commit/push. Fix,
+re-run the full gate from Step 2 — don't patch around one failing check or
+resume mid-gate.
+
+═══════════════ SESSION-START PROOF (every future session, every agent) ═══════════════
+Before any push-related work:
+    grep -n "Verify-Then-Push Gate" AGENTS.md
+    git show HEAD:AGENTS.md | grep -v "^Baseline content hash:" | git hash-object --stdin
+Paste both. Confirm the hash-object output matches the "Baseline content hash"
+line recorded inside AGENTS.md itself. If it does NOT match, AGENTS.md changed
+since bootstrap — explain the delta, and if the change was legitimate, update
+the Baseline content hash line as part of that change (and re-run this proof).
+A mismatch is a REAL signal, not noise — do not normalize it.
