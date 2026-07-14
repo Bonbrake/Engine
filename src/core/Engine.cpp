@@ -90,12 +90,21 @@ Engine::Engine() {
         ecsContext_ = std::make_unique<ecs::ECSContext>(numThreads);
         LOG_INFO("ENGINE: ECSContext initialized");
 
+        // [M1:EXIT-1] Wire the registry into the renderer so draw() can traverse
+        // view<Transform, MeshComponent>. AssetManager is owned by VulkanContext.
+        vulkanContext_->setScene(ecsContext_.get());
+
         // [M2] Physics and event bus — init after ECS, before rendering
         eventBus_     = std::make_unique<events::EventBus>();
         LOG_INFO("ENGINE: EventBus initialized");
         
         physics::PhysicsSystem::initializeGlobal();
         physicsSystem_ = std::make_unique<physics::PhysicsSystem>();
+        // [M2-EXT-01] Wire the global enkiTS scheduler into the physics system so the
+        // async collision-shape bake (QueueAsyncCollisionSwap) can actually run instead
+        // of taking the taskScheduler_==null dead branch. enkiTS is NOT Jolt's job pool
+        // (joltJobs_ stays dedicated to Jolt) — this is the separate EXT-01 offload path.
+        physicsSystem_->setTaskScheduler(core::JobSystem::get());
         LOG_INFO("ENGINE: PhysicsSystem initialized");
         
         ecs::DamageSystem::init(&ecsContext_->GetRegistry(), eventBus_.get());
@@ -546,26 +555,42 @@ void Engine::spawnDevTestBody_() {
     if (!physicsSystem_) return;
 
     auto& registry = ecsContext_->GetRegistry();
+    const ecs::Handle devMesh = vulkanContext_->getDevTestMeshHandle();
+    const ecs::Handle devDestroyedMesh = vulkanContext_->getDevDestroyedMeshHandle();
+
+    // [M1:EXIT-1] ECS->render bridge self-check: the dev body gets a MeshComponent so
+    // TriangleRenderer's view<Transform, MeshComponent> traversal actually draws it.
     entt::entity ent = registry.create();
-    registry.emplace<ecs::Transform>(ent, glm::dvec3(0.0, 2.0, 0.0));
+    registry.emplace<ecs::Transform>(ent, glm::dvec3(0.0, 0.0, 0.0));
     registry.emplace<ecs::Health>(ent, 100.0f, 100.0f);
+    registry.emplace<ecs::MeshComponent>(ent, ecs::MeshComponent{devMesh});
     ecs::DestructibleComponent destr;
-    destr.intactMeshHandle    = 1;
-    destr.destroyedMeshHandle = 2;
+    // [M2:EXIT-meshswap] Real, generation-safe handles from the two loaded meshes
+    // (intact cube + shattered "destroyed" placeholder). On destruction, DamageSystem
+    // writes destroyedMesh into the entity's MeshComponent.
+    destr.intactMeshHandle    = devMesh;
+    destr.destroyedMeshHandle = devDestroyedMesh;
     registry.emplace<ecs::DestructibleComponent>(ent, destr);
 
     JPH::BodyID bodyId = physicsSystem_->createBox(
-        glm::dvec3(0.0, 2.0, 0.0),
+        glm::dvec3(0.0, 0.0, 0.0),
         glm::vec3(1.0f, 1.0f, 1.0f),
         false,   // not static
         50.0f    // mass
     );
     registry.emplace<physics::PhysicsBodyComponent>(ent, bodyId);
 
+    // [M1:EXIT-1 / M2.6] Far-cube precision probe: a real entity at dvec3(50000,0,0) driven
+    // through the camera-relative BuildEntityMVP path. If the single dvec3->vec3 cast holds
+    // sub-visible precision at ~50km, this renders where expected — no separate hardcoded cube.
+    entt::entity farEnt = registry.create();
+    registry.emplace<ecs::Transform>(farEnt, glm::dvec3(50000.0, 0.0, 0.0));
+    registry.emplace<ecs::MeshComponent>(farEnt, ecs::MeshComponent{devMesh});
+
     devTestEntity_ = ent;
     devTestBodySpawned_ = true;
-    LOG_INFO("[DEV-TEST-BODY] spawned Jolt box body 0x{:X} (ent {}) at (0,2,0); will take lethal damage at frame 120",
-        bodyId.GetIndexAndSequenceNumber(), static_cast<uint32_t>(ent));
+    LOG_INFO("[DEV-TEST-BODY] spawned Jolt box body 0x{:X} (ent {}) at (0,0,0) + far probe ent {} at (50000,0,0); will take lethal damage at frame 120",
+        bodyId.GetIndexAndSequenceNumber(), static_cast<uint32_t>(ent), static_cast<uint32_t>(farEnt));
 }
 #endif
 
@@ -747,8 +772,10 @@ static bool runPhysicsTests(ecs::ECSContext* ecsCtx, physics::PhysicsSystem* phy
     reg.emplace<ecs::Health>(testEnt, 100.0f, 100.0f);
     
     auto& dest = reg.emplace<ecs::DestructibleComponent>(testEnt);
-    dest.intactMeshHandle = 1;
-    dest.destroyedMeshHandle = 2;
+    // Headless physics diagnostic: no render mesh needed (entity has no MeshComponent);
+    // the test only asserts isDestroyed + collider removal. Leave handles invalid.
+    dest.intactMeshHandle = ecs::INVALID_MESH_HANDLE;
+    dest.destroyedMeshHandle = ecs::INVALID_MESH_HANDLE;
 
     // 2. Create a Jolt body for the entity
     JPH::BodyID bodyId = physCtx->createBox(glm::dvec3(0, 10, 0), glm::vec3(1, 1, 1), false, 50.0f);

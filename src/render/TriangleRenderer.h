@@ -3,7 +3,10 @@
 #include <vk_mem_alloc.h>
 #include <vector>
 #include "AssetTypes.h"
+#include "core/ThreadArena.h"   // BumpArena (frameArena_)
+#include "ecs/GenerationalTable.h"  // ecs::Handle
 
+namespace ecs { class ECSContext; }
 namespace render {
 class Device;
 class MeshAsset;
@@ -18,6 +21,10 @@ public:
     
     // Slice 0a: dev-test mesh (first LoadMesh) rendered as a gated cube in --dev.
     void setDevTestMesh(ecs::Handle h) { devTestMeshHandle_ = h; }
+
+    // [M1:EXIT-1] ECS->render bridge: bind the entity registry + asset manager so
+    // draw() can traverse view<Transform, MeshComponent>. Paired with Engine's setScene.
+    void setScene(ecs::ECSContext* ecsCtx, class AssetManager* assetManager);
 
     // [M2.6 Phase 2] Inject the debug fly-camera view + camera position for the
     // dev cube path. When set, draw() uses it instead of the hardcoded lookAt.
@@ -43,6 +50,11 @@ private:
     // raw MeshAsset*, because GenerationalTable::Insert can reallocate the
     // backing std::vector<MeshAsset>, invalidating any cached pointer (UAF).
     ecs::Handle devTestMeshHandle_ = ecs::Handle{0xFFFFFFFF, 0xFFFFFFFF};
+
+    // [M1:EXIT-1] ECS->render bridge bindings (set via setScene).
+    ecs::ECSContext* ecsCtx_ = nullptr;
+    AssetManager*   sceneAssets_ = nullptr;
+    core::BumpArena frameArena_{};   // per-frame scratch (64KB), Reset-only
 
     // [M2.6 Phase 2] Injected dev fly-camera view (set via setDevView).
     glm::mat4  devView_{1.0f};

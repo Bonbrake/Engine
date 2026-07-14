@@ -47,8 +47,21 @@ void DamageSystem::receive(const DamageEvent& ev) {
                     if (!destr->isDestroyed) {
                         destr->isDestroyed = true;
                         if (destr->destroyedMeshHandle != INVALID_MESH_HANDLE) {
-                            LOG_INFO("DamageSystem: entity {} DESTROYED — mesh swap to handle {}",
-                                static_cast<uint32_t>(target), destr->destroyedMeshHandle);
+                            // [M2:EXIT-meshswap] Actually apply the swap to the render
+                            // component. MeshComponent.meshHandle is a generation-safe
+                            // ecs::Handle, so this is valid by construction (no stale-slot
+                            // risk). TriangleRenderer's view<Transform,MeshComponent>
+                            // traversal then draws the destroyed mesh next frame.
+                            if (auto* mc = registry.try_get<MeshComponent>(target)) {
+                                mc->meshHandle = destr->destroyedMeshHandle;
+                                LOG_INFO("DamageSystem: entity {} DESTROYED — mesh swapped to handle {}/{}",
+                                    static_cast<uint32_t>(target),
+                                    destr->destroyedMeshHandle.index,
+                                    destr->destroyedMeshHandle.generation);
+                            } else {
+                                LOG_WARN("DamageSystem: entity {} DESTROYED but has no MeshComponent; swap skipped",
+                                    static_cast<uint32_t>(target));
+                            }
                         }
                         if (registry.all_of<physics::PhysicsBodyComponent>(target)) {
                             auto& phys = registry.get<physics::PhysicsBodyComponent>(target);

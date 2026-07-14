@@ -6,8 +6,10 @@
 #include "../core/CVarSystem.h"
 #include "../ecs/ECS.h"
 #include "../render/AssetManager.h"
+#include "../ecs/Components.h"          // ecs::Transform, ecs::MeshComponent
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>      // glm::qua, glm::mat4_cast
 #include <fstream>
 #include <vector>
 #include <string.h>
@@ -624,37 +626,49 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
 #endif
     if (pipeline == VK_NULL_HANDLE) return;
 
-    // [Slice 0a] Dev-test cube: when a dev mesh is set, draw it directly (bypassing the
-    // demo-triangle indirect/compute-cull path). Gated to --dev via setDevTestMesh() only
-    // being called from VulkanContext in dev mode. Keeps occlusion-query + count-readback intact.
+    // [M1:EXIT-1] ECS->render bridge is the real path. Path A (Slice 0a) is bootstrap
+    // scaffolding: draw the static intact cube ONLY when the bridge isn't wired yet
+    // (ecsCtx_/sceneAssets_ null). Once the bridge is active it draws every entity via
+    // mc.meshHandle — including the destructible swap — so Path A must yield, or the
+    // always-on intact cube masks the swap.
+    const bool bridgeActive = (ecsCtx_ != nullptr) && (sceneAssets_ != nullptr);
+
+    // proj/view/pc are shared by both Path A (bootstrap) and the ECS bridge, so they live
+    // in the outer scope before the two-way branch below.
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10.0f);
+    glm::mat4 view = devViewSet_
+        ? devView_
+        : glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    struct PC { float mvp[16]; } pc;
+
+    // [M1:EXIT-1] The mesh pipeline uses VK_DYNAMIC_STATE_VIEWPORT/SCISSOR, so the
+    // viewport+scissor MUST be set on the command buffer before any draw. Set it once,
+    // unconditionally, here — both Path A and the ECS bridge rely on it (gating Path A
+    // off would otherwise leave the bridge drawing into an unset viewport → blank frame).
+    VkViewport viewport{};
+    viewport.width = 800.0f;
+    viewport.height = 600.0f;
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    vkCmdSetViewport(cmd, 0, 1, &viewport);
+    VkRect2D scissor{};
+    scissor.extent = {800, 600};
+    vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+    // [Slice 0a] Dev-test cube (bootstrap fallback, only when bridge absent): draw the
+    // intact mesh directly, bypassing the ECS bridge. Gated to --dev via setDevTestMesh().
     MeshAsset* devTestMesh = sceneAssets_ ? sceneAssets_->GetMesh(devTestMeshHandle_) : nullptr;
-    if (devTestMesh && devTestMesh->vertexBuffer != VK_NULL_HANDLE &&
+    if (!bridgeActive && devTestMesh && devTestMesh->vertexBuffer != VK_NULL_HANDLE &&
         devTestMesh->indexBuffer != VK_NULL_HANDLE && meshPipeline != VK_NULL_HANDLE) {
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, meshPipeline);
 
-        VkViewport viewport{};
-        viewport.width = 800.0f;
-        viewport.height = 600.0f;
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
-        vkCmdSetViewport(cmd, 0, 1, &viewport);
-        VkRect2D scissor{};
-        scissor.extent = {800, 600};
-        vkCmdSetScissor(cmd, 0, 1, &scissor);
-
-        // Real perspective MVP: camera at (0,0,4) looking at origin; near=0.1 far=10 to pass depth test.
-        // Tilt the cube so 3 faces are visible (unambiguous 3D), centered at origin.
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 10.0f);
-        glm::mat4 view = devViewSet_
-            ? devView_
-            : glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        // Real perspective MVP for the Path A static cube (centered at origin).
         glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f)) *
                            glm::rotate(glm::mat4(1.0f), glm::radians(20.0f), glm::vec3(1.0f, 0.0f, 0.0f)) *
                            glm::scale(glm::mat4(1.0f), glm::vec3(0.7f));
         glm::mat4 mvp = proj * view * model;
 
-        struct PC { float mvp[16]; } pc;
         memcpy(pc.mvp, &mvp[0][0], sizeof(pc.mvp));
         vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
 
@@ -663,40 +677,46 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
         vkCmdBindIndexBuffer(cmd, devTestMesh->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(cmd, devTestMesh->indexCount, 1, 0, 0, 0);
 
-        // [M1:EXIT-1] ECS->render bridge: traverse view<Transform, MeshComponent> and draw
-        // each entity through the real camera-relative path (BuildEntityMVP). This also drives
-        // the M2.6 far-cube precision probe: a real entity at dvec3(50000,0,0) now renders via
-        // the same cast as everything else, closing the "no scene render path" caveat.
-        // The dev-test cube above is a separate gated proxy; the loop below is the actual bridge.
+        return; // bootstrap cube drawn; skip bridge + demo-triangle path
+    }
+
+    // [M1:EXIT-1] ECS->render bridge: traverse view<Transform, MeshComponent> and draw
+    // each entity through the real camera-relative path (BuildEntityMVP). This also drives
+    // the M2.6 far-cube precision probe: a real entity at dvec3(50000,0,0) now renders via
+    // the same cast as everything else, closing the "no scene render path" caveat.
+    // The dev-test cube above is a separate gated proxy; the loop below is the actual bridge.
+    if (bridgeActive) {
         uint32_t renderedEntities = 0;
-        if (ecsCtx_ && sceneAssets_) {
-            auto viewEnts = ecsCtx_->GetRegistry().view<ecs::Transform, ecs::MeshComponent>();
-            frameArena_.Reset();
-            for (entt::entity e : viewEnts) {
-                const auto& mc = viewEnts.get<ecs::MeshComponent>(e);
-                MeshAsset* mesh = sceneAssets_->GetMesh(mc.meshHandle);
-                if (!mesh || mesh->vertexBuffer == VK_NULL_HANDLE || mesh->indexBuffer == VK_NULL_HANDLE) {
-                    LOG_WARN("Render: entity {} meshHandle {{index={}, gen={}}} invalid; skipped",
-                             static_cast<uint32_t>(e), mc.meshHandle.index, mc.meshHandle.generation);
-                    continue;
-                }
-                const glm::dvec3 camPos = devViewSet_ ? devCamPos_ : glm::dvec3(0.0, 0.0, 4.0);
-                glm::mat4 eMvp = BuildEntityMVP(viewEnts.get<ecs::Transform>(e), camPos, view, proj);
-
-                memcpy(pc.mvp, &eMvp[0][0], sizeof(pc.mvp));
-                vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
-
-                VkDeviceSize eOffsets[] = {0};
-                vkCmdBindVertexBuffers(cmd, 0, 1, &mesh->vertexBuffer, eOffsets);
-                vkCmdBindIndexBuffer(cmd, mesh->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-                vkCmdDrawIndexed(cmd, mesh->indexCount, 1, 0, 0, 0);
-                ++renderedEntities;
+        auto viewEnts = ecsCtx_->GetRegistry().view<ecs::Transform, ecs::MeshComponent>();
+        frameArena_.Reset();
+        // Bridge draws real meshes through meshPipeline — must be bound (Path A did this at
+        // line 650). With Path A gated off under bridgeActive, nothing else binds it, so the
+        // draws would hit an unbound pipeline -> black frame.
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, meshPipeline);
+        for (entt::entity e : viewEnts) {
+            const auto& mc = viewEnts.get<ecs::MeshComponent>(e);
+            MeshAsset* mesh = sceneAssets_->GetMesh(mc.meshHandle);
+            if (!mesh || mesh->vertexBuffer == VK_NULL_HANDLE || mesh->indexBuffer == VK_NULL_HANDLE) {
+                LOG_WARN("Render: entity {} meshHandle {{index={}, gen={}}} invalid; skipped",
+                         static_cast<uint32_t>(e), mc.meshHandle.index, mc.meshHandle.generation);
+                continue;
             }
-            if (frameCounter % 10 == 0 && renderedEntities > 0) {
-                LOG_INFO("Rendered {} ECS entities via view<Transform, MeshComponent>", renderedEntities);
-            }
+            const glm::dvec3 camPos = devViewSet_ ? devCamPos_ : glm::dvec3(0.0, 0.0, 4.0);
+            glm::mat4 eMvp = BuildEntityMVP(viewEnts.get<ecs::Transform>(e), camPos, view, proj);
+
+            memcpy(pc.mvp, &eMvp[0][0], sizeof(pc.mvp));
+            vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
+
+            VkDeviceSize eOffsets[] = {0};
+            vkCmdBindVertexBuffers(cmd, 0, 1, &mesh->vertexBuffer, eOffsets);
+            vkCmdBindIndexBuffer(cmd, mesh->indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+            vkCmdDrawIndexed(cmd, mesh->indexCount, 1, 0, 0, 0);
+            ++renderedEntities;
         }
-        return; // cube + ECS entities drawn; skip demo-triangle path
+        if (frameCounter % 10 == 0 && renderedEntities > 0) {
+            LOG_INFO("Rendered {} ECS entities via view<Transform, MeshComponent>", renderedEntities);
+        }
+        return; // bridge entities drawn; skip demo-triangle path
     }
 
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
@@ -732,19 +752,7 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
     vkCmdBindVertexBuffers(cmd, 0, 1, &vertexBuffer, offsets);
     vkCmdBindIndexBuffer(cmd, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
-    VkViewport viewport{};
-    viewport.width = 800.0f;
-    viewport.height = 600.0f;
-    viewport.maxDepth = 1.0f;
-    vkCmdSetViewport(cmd, 0, 1, &viewport);
-
-    VkRect2D scissor{};
-    scissor.extent = {800, 600};
-    vkCmdSetScissor(cmd, 0, 1, &scissor);
-
-    struct PC {
-        float mvp[16];
-    } pc;
+    // [M1:EXIT-1] viewport+scissor already set unconditionally above (dynamic-state pipeline).
     memset(pc.mvp, 0, sizeof(pc.mvp));
     pc.mvp[0] = 1.0f; pc.mvp[5] = 1.0f; pc.mvp[10] = 1.0f; pc.mvp[15] = 1.0f;
     vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);

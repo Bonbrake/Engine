@@ -5,15 +5,22 @@
 #include <entt/entt.hpp>
 #include <string>
 #include <cstdint>
-#include "Components.h"
+#include "ecs/GenerationalTable.h"   // ecs::Handle (index + generation)
 
 namespace ecs {
 
-// Mesh handle index into AssetManager's mesh table (uint32 slot)
-using MeshHandle = uint32_t;
-static constexpr MeshHandle INVALID_MESH_HANDLE = UINT32_MAX;
+// Forward declarations (full defs live in Components.h / EventBus.h)
+struct DamageEvent;
+
+// Mesh handle into AssetManager's mesh table. Carries the full generation so the
+// handle stays valid across table remove/reinsert (a bare uint32_t index would
+// silently point at a stale slot after a generation bump).
+using MeshHandle = ecs::Handle;
+static constexpr MeshHandle INVALID_MESH_HANDLE = ecs::Handle{0xFFFFFFFF, 0xFFFFFFFF};
 
 struct DestructibleComponent {
+    // Intact + destroyed meshes, both generation-safe handles. A future destructible
+    // (barrel/wall/zombie) sets these from real loaded assets; the type is correct once.
     MeshHandle intactMeshHandle    = INVALID_MESH_HANDLE;
     MeshHandle destroyedMeshHandle = INVALID_MESH_HANDLE;
 

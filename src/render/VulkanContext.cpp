@@ -151,6 +151,14 @@ void VulkanContext::initVulkan(SDL_Window* window) {
             } else {
                 LOG_ERROR("VERIFICATION FAILURE: dev_test_cube.glb load failed!");
             }
+            // [F1] Destroyed mesh (shattered placeholder) for the destructible swap.
+            devDestroyedMeshHandle_ = assetManager_->LoadMesh("assets/models/dev_test_cube_destroyed.gltf");
+            if (devDestroyedMeshHandle_.generation != 0) {
+                LOG_INFO("VERIFICATION SUCCESS: Loaded dev_test_cube_destroyed.gltf. Mesh handle index: {}",
+                          devDestroyedMeshHandle_.index);
+            } else {
+                LOG_ERROR("VERIFICATION FAILURE: dev_test_cube_destroyed.gltf load failed!");
+            }
             // Clean up dummy test materials to avoid startup saturation
             for (auto h : testMaterials) {
                 materialSystem_->DestroyMaterial(h);
@@ -162,6 +170,17 @@ void VulkanContext::initVulkan(SDL_Window* window) {
 void VulkanContext::setDevView(const glm::mat4& view, const glm::dvec3& cameraPos) {
     if (swapchain_ && swapchain_->triangleRenderer()) {
         swapchain_->triangleRenderer()->setDevView(view, cameraPos);
+    }
+}
+
+// [F1] Accessors for the dev-test intact + destroyed meshes (used by Engine::spawnDevTestBody_).
+ecs::Handle VulkanContext::getDevTestMeshHandle() const     { return devTestMeshHandle_; }
+ecs::Handle VulkanContext::getDevDestroyedMeshHandle() const { return devDestroyedMeshHandle_; }
+
+// [M1:EXIT-1] Bind the ECS registry into the triangle renderer so it can draw entities.
+void VulkanContext::setScene(ecs::ECSContext* ecsCtx) {
+    if (swapchain_ && swapchain_->triangleRenderer()) {
+        swapchain_->triangleRenderer()->setScene(ecsCtx, assetManager_.get());
     }
 }
 

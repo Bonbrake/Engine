@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <entt/entt.hpp>
+#include "ecs/GenerationalTable.h"
 
 namespace ecs {
 
@@ -37,6 +38,14 @@ struct ResolvedDamageEvent {
 
 struct StableId {
     uint64_t uuid = 0;
+};
+
+// [M1:EXIT-1] ECS->render bridge: ties an entity to a loaded mesh so
+// TriangleRenderer can traverse `view<Transform, MeshComponent>` and draw it.
+// meshHandle defaults to the null Handle ({0xFFFFFFFF,0}); a valid Insert
+// yields generation >= 1, so the default is unmistakably "no mesh".
+struct MeshComponent {
+    ecs::Handle meshHandle{0xFFFFFFFF, 0};
 };
 
 struct PerkPoints {

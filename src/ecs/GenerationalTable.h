@@ -10,6 +10,9 @@ namespace ecs {
 struct Handle {
     uint32_t index;
     uint32_t generation;
+
+    bool operator==(const Handle& o) const { return index == o.index && generation == o.generation; }
+    bool operator!=(const Handle& o) const { return !(*this == o); }
 };
 
 inline bool IsHandleValid(const Handle& h, const std::vector<uint32_t>& generations) {
