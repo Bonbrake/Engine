@@ -2,290 +2,243 @@
   {
     "id": "M6-EXT-01",
     "title": "Acoustic Doppler-Shift Pitch Modulator",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 59,
-    "anchor": "MM6-EXT-01"
+    "line": 70,
+    "anchor": "M6-EXT-01"
   },
   {
     "id": "M6-EXT-02",
     "title": "Footstep Impact Acoustic Resonance",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 89,
-    "anchor": "MM6-EXT-02"
+    "line": 105,
+    "anchor": "M6-EXT-02"
   },
   {
     "id": "M6-EXT-03",
     "title": "Acoustic Echo-Location Decoy Sound Mirroring",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 117,
-    "anchor": "MM6-EXT-03"
+    "line": 138,
+    "anchor": "M6-EXT-03"
   },
   {
     "id": "M6-EXT-04",
     "title": "Voxelized Acoustic Propagation Portal Weaver",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 145,
-    "anchor": "MM6-EXT-04"
+    "line": 171,
+    "anchor": "M6-EXT-04"
   },
   {
     "id": "M6-EXT-05",
     "title": "Audio Voice Prioritization Matrix Allocation Weight Culler",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 174,
-    "anchor": "MM6-EXT-05"
+    "line": 205,
+    "anchor": "M6-EXT-05"
   },
   {
     "id": "M6-EXT-06",
     "title": "Variable-Rate Audio Emitter Execution Cadence Stagger Matrix",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-06]",
-      "[M6-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 202,
-    "anchor": "MM6-EXT-06"
+    "line": 238,
+    "anchor": "M6-EXT-06"
   },
   {
     "id": "M6-EXT-07",
     "title": "Material-Indexed Velvet-Noise Late Reverb",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-07]",
-      "[M6-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 236,
-    "anchor": "MM6-EXT-07"
+    "line": 277,
+    "anchor": "M6-EXT-07"
   },
   {
     "id": "M6-EXT-11",
     "title": "Voxel-Cone Acoustic Occlusion & Material Absorption",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 274,
-    "anchor": "MM6-EXT-11"
+    "line": 320,
+    "anchor": "M6-EXT-11"
   },
   {
     "id": "M6-EXT-08",
     "title": "Ray-Traced Acoustic Diffraction Node Topology Cache",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 275,
-    "anchor": "MM6-EXT-08"
+    "line": 326,
+    "anchor": "M6-EXT-08"
   },
   {
     "id": "M6-EXT-09",
     "title": "Velvet-Noise Late Reverb Interleaved Mixing Buffer",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 294,
-    "anchor": "MM6-EXT-09"
+    "line": 350,
+    "anchor": "M6-EXT-09"
   },
   {
     "id": "M6-EXT-10",
     "title": "Acoustic Convection Wave Refraction Filter",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 313,
-    "anchor": "MM6-EXT-10"
+    "line": 374,
+    "anchor": "M6-EXT-10"
   },
   {
     "id": "M6-EXT-12",
     "title": "Convolution-Reverb from Voxel Occlusion",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-12]",
-      "[M4-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 332,
-    "anchor": "MM6-EXT-12"
+    "line": 398,
+    "anchor": "M6-EXT-12"
   },
   {
     "id": "M6-EXT-13",
     "title": "Hardware-Accelerated Audio",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-13]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 403,
-    "anchor": "MM6-EXT-13"
+    "line": 474,
+    "anchor": "M6-EXT-13"
   },
   {
     "id": "M6-EXT-14",
     "title": "Audio Occlusion / Propagation",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 421,
-    "anchor": "MM6-EXT-14"
+    "line": 497,
+    "anchor": "M6-EXT-14"
   },
   {
     "id": "M6-EXT-15",
     "title": "Procedural Audio / VFX Params",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "VFX",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-15]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 442,
-    "anchor": "MM6-EXT-15"
+    "line": 523,
+    "anchor": "M6-EXT-15"
   },
   {
     "id": "M6-EXT-16",
     "title": "HRTF Spatial Audio",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "HRTF",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-16]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 463,
-    "anchor": "MM6-EXT-16"
+    "line": 549,
+    "anchor": "M6-EXT-16"
   },
   {
     "id": "M6-EXT-17",
     "title": "Occlusion/Obstruction Model",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 482,
-    "anchor": "MM6-EXT-17"
+    "line": 573,
+    "anchor": "M6-EXT-17"
   },
   {
     "id": "M6-EXT-18",
     "title": "Dynamic Music & Stinger System",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 501,
-    "anchor": "MM6-EXT-18"
+    "line": 597,
+    "anchor": "M6-EXT-18"
   },
   {
     "id": "M6-EXT-19",
     "title": "Blood & Gore Decals",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 520,
-    "anchor": "MM6-EXT-19"
+    "line": 621,
+    "anchor": "M6-EXT-19"
   },
   {
     "id": "M6-EXT-20",
     "title": "Impact & Sparks VFX",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "VFX",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-20]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 539,
-    "anchor": "MM6-EXT-20"
+    "line": 645,
+    "anchor": "M6-EXT-20"
   },
   {
     "id": "M6-EXT-21",
     "title": "Weather Particle VFX (rain/snow)",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "VFX",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 558,
-    "anchor": "MM6-EXT-21"
+    "line": 669,
+    "anchor": "M6-EXT-21"
   },
   {
     "id": "M6-EXT-22",
     "title": "Death/ Dissolve VFX",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "VFX",
     "tldr": null,
-    "depends_on": [
-      "[M6-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 577,
-    "anchor": "MM6-EXT-22"
+    "line": 693,
+    "anchor": "M6-EXT-22"
   }
 ]

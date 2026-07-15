@@ -2,95 +2,78 @@
   {
     "id": "M5.1-EXT-01",
     "title": "Aerodynamic Wake Slipstream Horde Slingshot",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.1-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 45,
-    "anchor": "MM5.1-EXT-01"
+    "line": 56,
+    "anchor": "M5.1-EXT-01"
   },
   {
     "id": "M5.1-EXT-02",
     "title": "Player Character Generation (Uninfected-Mode Phenotype Pipeline)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.1-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 77,
-    "anchor": "MM5.1-EXT-02"
+    "line": 93,
+    "anchor": "M5.1-EXT-02"
   },
   {
     "id": "M5.1-EXT-03",
     "title": "Topology-Invariant Master Rig with Deformation-Transfer Binding",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.1-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 104,
-    "anchor": "MM5.1-EXT-03"
+    "line": 125,
+    "anchor": "M5.1-EXT-03"
   },
   {
     "id": "M5.1-EXT-04",
     "title": "Anatomical Hit-Volume SDF Gradients",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "SDF",
     "tldr": null,
-    "depends_on": [
-      "[M5.1-EXT-04]",
-      "[M5.1-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 138,
-    "anchor": "MM5.1-EXT-04"
+    "line": 164,
+    "anchor": "M5.1-EXT-04"
   },
   {
     "id": "M5.1-EXT-05",
     "title": "Heat-Diffusion Automatic Rigging & PSOLA Phenotype Vocalization",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "PSOLA",
     "tldr": null,
-    "depends_on": [
-      "[M5.1-EXT-05]",
-      "[M5.1-EXT-03]",
-      "[M5.1-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 167,
-    "anchor": "MM5.1-EXT-05"
+    "line": 198,
+    "anchor": "M5.1-EXT-05"
   },
   {
     "id": "M5.1-EXT-06",
     "title": "Screamer Convergence & Holling Type II Cannibalism Feeding",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "II",
     "tldr": null,
-    "depends_on": [
-      "[M5.1-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 201,
-    "anchor": "MM5.1-EXT-06"
+    "line": 237,
+    "anchor": "M5.1-EXT-06"
   },
   {
     "id": "M5.1-EXT-07",
     "title": "Optimal Reciprocal Collision Avoidance (ORCA) Solver",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "ORCA",
     "tldr": null,
-    "depends_on": [
-      "[M5.1-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 202,
-    "anchor": "MM5.1-EXT-07"
+    "line": 243,
+    "anchor": "M5.1-EXT-07"
   }
 ]

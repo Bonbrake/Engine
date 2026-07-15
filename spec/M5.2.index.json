@@ -2,186 +2,155 @@
   {
     "id": "M5.2-EXT-01",
     "title": "Procedural Joint Compliance Degradation (Dynamic Muscle Crippling)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 50,
-    "anchor": "MM5.2-EXT-01"
+    "line": 61,
+    "anchor": "M5.2-EXT-01"
   },
   {
     "id": "M5.2-EXT-02",
     "title": "Zombie Tissue Rigor Mortis Lifecycle Decay",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 92,
-    "anchor": "MM5.2-EXT-02"
+    "line": 108,
+    "anchor": "M5.2-EXT-02"
   },
   {
     "id": "M5.2-EXT-03",
     "title": "Biomechanical Joint Luxation Limits",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 124,
-    "anchor": "MM5.2-EXT-03"
+    "line": 145,
+    "anchor": "M5.2-EXT-03"
   },
   {
     "id": "M5.2-EXT-04",
     "title": "Centrifugal Kinetic Limb Flail",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 154,
-    "anchor": "MM5.2-EXT-04"
+    "line": 180,
+    "anchor": "M5.2-EXT-04"
   },
   {
     "id": "M5.2-EXT-05",
     "title": "Control-Rig-Style Procedural Pose Override Layer",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 182,
-    "anchor": "MM5.2-EXT-05"
+    "line": 213,
+    "anchor": "M5.2-EXT-05"
   },
   {
     "id": "M5.2-EXT-06",
     "title": "Constraint-Weight Blending (Animated ↔ Procedural)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 209,
-    "anchor": "MM5.2-EXT-06"
+    "line": 245,
+    "anchor": "M5.2-EXT-06"
   },
   {
     "id": "M5.2-EXT-07",
     "title": "Ragdoll-to-Animation Recovery Blend",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 238,
-    "anchor": "MM5.2-EXT-07"
+    "line": 279,
+    "anchor": "M5.2-EXT-07"
   },
   {
     "id": "M5.2-EXT-08",
     "title": "IK Rig Asset (Per-Skeleton Bone-Chain / End-Effector Definition)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "IK",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 267,
-    "anchor": "MM5.2-EXT-08"
+    "line": 313,
+    "anchor": "M5.2-EXT-08"
   },
   {
     "id": "M5.2-EXT-09",
     "title": "Motion-Warping for Target Alignment",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 294,
-    "anchor": "MM5.2-EXT-09"
+    "line": 345,
+    "anchor": "M5.2-EXT-09"
   },
   {
     "id": "M5.2-EXT-10",
     "title": "Physics-Based Secondary Motion Post-Process (Spring-Damper Attachments)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 322,
-    "anchor": "MM5.2-EXT-10"
+    "line": 378,
+    "anchor": "M5.2-EXT-10"
   },
   {
     "id": "M5.2-EXT-11",
     "title": "Asynchronous Fixed-Block Humanoid Rig Matrix Pool Allocator",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-11]",
-      "[M0-EXT-01]",
-      "[M1-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 355,
-    "anchor": "MM5.2-EXT-11"
+    "line": 416,
+    "anchor": "M5.2-EXT-11"
   },
   {
     "id": "M5.2-EXT-12",
     "title": "Skeletal Joint Yield Torque Bone Fracturing Filter",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 391,
-    "anchor": "MM5.2-EXT-12"
+    "line": 457,
+    "anchor": "M5.2-EXT-12"
   },
   {
     "id": "M5.2-EXT-14",
     "title": "(provisional) IK Rig Metadata Serialization Loader *(SOURCED FROM PLAN FILE)",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "IK, SOURCED, FROM, PLAN, FILE",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 394,
-    "anchor": "MM5.2-EXT-14"
+    "line": 465,
+    "anchor": "M5.2-EXT-14"
   },
   {
     "id": "M5.2-EXT-15",
     "title": "XPBD Rope/Tether Constraint *(SOURCED FROM PLAN FILE)",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "XPBD, SOURCED, FROM, PLAN, FILE",
     "tldr": null,
-    "depends_on": [
-      "[M5.2-EXT-15]",
-      "[M5.2-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 413,
-    "anchor": "MM5.2-EXT-15"
+    "line": 489,
+    "anchor": "M5.2-EXT-15"
   }
 ]

@@ -2,444 +2,375 @@
   {
     "id": "M3-EXT-01",
     "title": "Structural Fatigue Cycle Creep (Palmgren-Miner Wear)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 74,
-    "anchor": "MM3-EXT-01"
+    "line": 85,
+    "anchor": "M3-EXT-01"
   },
   {
     "id": "M3-EXT-02",
     "title": "Piezoluminescent Strain Shaders for Impending Structural Collapse",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 111,
-    "anchor": "MM3-EXT-02"
+    "line": 127,
+    "anchor": "M3-EXT-02"
   },
   {
     "id": "M3-EXT-03",
     "title": "Structural Truss Resonance Audio Leak",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 152,
-    "anchor": "MM3-EXT-03"
+    "line": 173,
+    "anchor": "M3-EXT-03"
   },
   {
     "id": "M3-EXT-04",
     "title": "Hydrocarbon Slipstream Flame-Trail Splitting",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 186,
-    "anchor": "MM3-EXT-04"
+    "line": 212,
+    "anchor": "M3-EXT-04"
   },
   {
     "id": "M3-EXT-05",
     "title": "Rayleigh Surface Wave Ground-Slam Propagation",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 215,
-    "anchor": "MM3-EXT-05"
+    "line": 246,
+    "anchor": "M3-EXT-05"
   },
   {
     "id": "M3-EXT-06",
     "title": "Shared Fatigue-Life Wear (Weapons & Vehicle Panels)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 243,
-    "anchor": "MM3-EXT-06"
+    "line": 279,
+    "anchor": "M3-EXT-06"
   },
   {
     "id": "M3-EXT-07",
     "title": "Multi-Layer Structural Degradation & Stress-Tensor Cracking",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-07]",
-      "[M4.5-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 281,
-    "anchor": "MM3-EXT-07"
+    "line": 322,
+    "anchor": "M3-EXT-07"
   },
   {
     "id": "M3-EXT-08",
     "title": "Chemical Weathering & Particulate Deposition Tracker",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 322,
-    "anchor": "MM3-EXT-08"
+    "line": 368,
+    "anchor": "M3-EXT-08"
   },
   {
     "id": "M3-EXT-11",
     "title": "Fracture-Debris Broad-Phase Reuse",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 325,
-    "anchor": "MM3-EXT-11"
+    "line": 376,
+    "anchor": "M3-EXT-11"
   },
   {
     "id": "M3-EXT-10",
     "title": "Spherical-Harmonics Visibility Pre-Filter Grid",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 345,
-    "anchor": "MM3-EXT-10"
+    "line": 401,
+    "anchor": "M3-EXT-10"
   },
   {
     "id": "M3-EXT-12",
     "title": "Terrain / World Geometry",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 403,
-    "anchor": "MM3-EXT-12"
+    "line": 464,
+    "anchor": "M3-EXT-12"
   },
   {
     "id": "M3-EXT-13",
     "title": "Streaming / LOD / Mip-Streaming",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "LOD",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-13]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 419,
-    "anchor": "MM3-EXT-13"
+    "line": 485,
+    "anchor": "M3-EXT-13"
   },
   {
     "id": "M3-EXT-14",
     "title": "Cascaded Shadow Map Decision",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 437,
-    "anchor": "MM3-EXT-14"
+    "line": 508,
+    "anchor": "M3-EXT-14"
   },
   {
     "id": "M3-EXT-15",
     "title": "Mipmap Generation on Load",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-15]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 453,
-    "anchor": "MM3-EXT-15"
+    "line": 529,
+    "anchor": "M3-EXT-15"
   },
   {
     "id": "M3-EXT-16",
     "title": "Post-Generation Sanity Checker",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-16]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 469,
-    "anchor": "MM3-EXT-16"
+    "line": 550,
+    "anchor": "M3-EXT-16"
   },
   {
     "id": "M3-EXT-17",
     "title": "Collision/Occlusion Sanity",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 485,
-    "anchor": "MM3-EXT-17"
+    "line": 571,
+    "anchor": "M3-EXT-17"
   },
   {
     "id": "M3-EXT-18",
     "title": "Navmesh Feasibility Check",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 501,
-    "anchor": "MM3-EXT-18"
+    "line": 592,
+    "anchor": "M3-EXT-18"
   },
   {
     "id": "M3-EXT-19",
     "title": "Loot/Spawn Density Sanity",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 517,
-    "anchor": "MM3-EXT-19"
+    "line": 613,
+    "anchor": "M3-EXT-19"
   },
   {
     "id": "M3-EXT-20",
     "title": "POI Connectivity Check",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "POI",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-20]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 533,
-    "anchor": "MM3-EXT-20"
+    "line": 634,
+    "anchor": "M3-EXT-20"
   },
   {
     "id": "M3-EXT-21",
     "title": "Mod Content Validator (V-section entry)",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 549,
-    "anchor": "MM3-EXT-21"
+    "line": 655,
+    "anchor": "M3-EXT-21"
   },
   {
     "id": "M3-EXT-22",
     "title": "Soft-Fail on Invalid Gen",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 565,
-    "anchor": "MM3-EXT-22"
+    "line": 676,
+    "anchor": "M3-EXT-22"
   },
   {
     "id": "M3-EXT-23",
     "title": "Generation Regression Corpus",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-23]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 581,
-    "anchor": "MM3-EXT-23"
+    "line": 697,
+    "anchor": "M3-EXT-23"
   },
   {
     "id": "M3-EXT-24",
     "title": "Degenerate-Triangle Filter",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-24]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 597,
-    "anchor": "MM3-EXT-24"
+    "line": 718,
+    "anchor": "M3-EXT-24"
   },
   {
     "id": "M3-EXT-25",
     "title": "Asset Fallback Chain",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-25]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 613,
-    "anchor": "MM3-EXT-25"
+    "line": 739,
+    "anchor": "M3-EXT-25"
   },
   {
     "id": "M3-EXT-26",
     "title": "Bounds/Extent Validator",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 629,
-    "anchor": "MM3-EXT-26"
+    "line": 760,
+    "anchor": "M3-EXT-26"
   },
   {
     "id": "M3-EXT-27",
     "title": "Duplicate-Entity Detector",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-27]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 645,
-    "anchor": "MM3-EXT-27"
+    "line": 781,
+    "anchor": "M3-EXT-27"
   },
   {
     "id": "M3-EXT-28",
     "title": "Validation Severity Levels",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-28]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 661,
-    "anchor": "MM3-EXT-28"
+    "line": 802,
+    "anchor": "M3-EXT-28"
   },
   {
     "id": "M3-EXT-29",
     "title": "Generated-Content Hash",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-29]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 677,
-    "anchor": "MM3-EXT-29"
+    "line": 823,
+    "anchor": "M3-EXT-29"
   },
   {
     "id": "M3-EXT-30",
     "title": "Stress-Seed Suite",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-30]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 695,
-    "anchor": "MM3-EXT-30"
+    "line": 846,
+    "anchor": "M3-EXT-30"
   },
   {
     "id": "M3-EXT-31",
     "title": "Human-Readable Validation Report",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-31]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 711,
-    "anchor": "MM3-EXT-31"
+    "line": 867,
+    "anchor": "M3-EXT-31"
   },
   {
     "id": "M3-EXT-32",
     "title": "Macro-Destruction / Structural Graphs",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-32]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 727,
-    "anchor": "MM3-EXT-32"
+    "line": 888,
+    "anchor": "M3-EXT-32"
   },
   {
     "id": "M3-EXT-33",
     "title": "Foliage / Vegetation Scatter",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-33]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 748,
-    "anchor": "MM3-EXT-33"
+    "line": 914,
+    "anchor": "M3-EXT-33"
   },
   {
     "id": "M3-EXT-34",
     "title": "Texture Streaming Decision (VT vs mip)",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "VT",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-34]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 769,
-    "anchor": "MM3-EXT-34"
+    "line": 940,
+    "anchor": "M3-EXT-34"
   },
   {
     "id": "M3-EXT-35",
     "title": "Material Permutation System",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M3-EXT-35]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 790,
-    "anchor": "MM3-EXT-35"
+    "line": 966,
+    "anchor": "M3-EXT-35"
   }
 ]

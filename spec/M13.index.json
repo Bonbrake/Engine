@@ -2,353 +2,298 @@
   {
     "id": "M13-EXT-01",
     "title": "Procedural Mission & Bounty Director",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 154,
-    "anchor": "MM13-EXT-01"
+    "line": 165,
+    "anchor": "M13-EXT-01"
   },
   {
     "id": "M13-EXT-02",
     "title": "Infected Mutation Forensic Log",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 179,
-    "anchor": "MM13-EXT-02"
+    "line": 195,
+    "anchor": "M13-EXT-02"
   },
   {
     "id": "M13-EXT-03",
     "title": "Dynamic Graveyard & Memorial Wall Epitaphs",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 204,
-    "anchor": "MM13-EXT-03"
+    "line": 225,
+    "anchor": "M13-EXT-03"
   },
   {
     "id": "M13-EXT-04",
     "title": "Inter-Faction Extortion & Diplomacy Dispatch",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 229,
-    "anchor": "MM13-EXT-04"
+    "line": 255,
+    "anchor": "M13-EXT-04"
   },
   {
     "id": "M13-EXT-05",
     "title": "Procedural Vehicle Maintenance Diagnostics",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 264,
-    "anchor": "MM13-EXT-05"
+    "line": 295,
+    "anchor": "M13-EXT-05"
   },
   {
     "id": "M13-EXT-06",
     "title": "Dynamic Survivor Hearsay & Rumor Network",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 289,
-    "anchor": "MM13-EXT-06"
+    "line": 325,
+    "anchor": "M13-EXT-06"
   },
   {
     "id": "M13-EXT-07",
     "title": "Safehouse Logbook Auto-Journalizer",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 314,
-    "anchor": "MM13-EXT-07"
+    "line": 355,
+    "anchor": "M13-EXT-07"
   },
   {
     "id": "M13-EXT-08",
     "title": "Infiltration & Stealth Audio-Text Interpreter",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 339,
-    "anchor": "MM13-EXT-08"
+    "line": 385,
+    "anchor": "M13-EXT-08"
   },
   {
     "id": "M13-EXT-09",
     "title": "Dynamic Quarantine Zone Signage & Lore",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 364,
-    "anchor": "MM13-EXT-09"
+    "line": 415,
+    "anchor": "M13-EXT-09"
   },
   {
     "id": "M13-EXT-10",
     "title": "Jury-Rigged Weapon Mod Descriptors",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 398,
-    "anchor": "MM13-EXT-10"
+    "line": 454,
+    "anchor": "M13-EXT-10"
   },
   {
     "id": "M13-EXT-11",
     "title": "Hardware Backend Auto-Detection & Async Compute Queue Isolation",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 423,
-    "anchor": "MM13-EXT-11"
+    "line": 484,
+    "anchor": "M13-EXT-11"
   },
   {
     "id": "M13-EXT-12",
     "title": "Attenuated Narrative Radio Scrambler",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-12]",
-      "[M2.8-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 477,
-    "anchor": "MM13-EXT-12"
+    "line": 543,
+    "anchor": "M13-EXT-12"
   },
   {
     "id": "M13-EXT-13",
     "title": "Survivor Behavior-Tree Flavor Advisor",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-13]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 507,
-    "anchor": "MM13-EXT-13"
+    "line": 578,
+    "anchor": "M13-EXT-13"
   },
   {
     "id": "M13-EXT-15",
     "title": "SLM Broadcast Text Determinism Seeder",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-15]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 512,
-    "anchor": "MM13-EXT-15"
+    "line": 588,
+    "anchor": "M13-EXT-15"
   },
   {
     "id": "M13-EXT-16",
     "title": "Offline SLM Generation Harness",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-16]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 563,
-    "anchor": "MM13-EXT-16"
+    "line": 644,
+    "anchor": "M13-EXT-16"
   },
   {
     "id": "M13-EXT-17",
     "title": "SLM Prompt-Template Library",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 579,
-    "anchor": "MM13-EXT-17"
+    "line": 665,
+    "anchor": "M13-EXT-17"
   },
   {
     "id": "M13-EXT-18",
     "title": "SLM Output Schema Validator",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 595,
-    "anchor": "MM13-EXT-18"
+    "line": 686,
+    "anchor": "M13-EXT-18"
   },
   {
     "id": "M13-EXT-19",
     "title": "SLM Output → Validation Pipeline",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 611,
-    "anchor": "MM13-EXT-19"
+    "line": 707,
+    "anchor": "M13-EXT-19"
   },
   {
     "id": "M13-EXT-20",
     "title": "SLM Cache",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-20]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 627,
-    "anchor": "MM13-EXT-20"
+    "line": 728,
+    "anchor": "M13-EXT-20"
   },
   {
     "id": "M13-EXT-21",
     "title": "SLM Deterministic Seeding",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 643,
-    "anchor": "MM13-EXT-21"
+    "line": 749,
+    "anchor": "M13-EXT-21"
   },
   {
     "id": "M13-EXT-22",
     "title": "SLM Fallback on Failure",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 659,
-    "anchor": "MM13-EXT-22"
+    "line": 770,
+    "anchor": "M13-EXT-22"
   },
   {
     "id": "M13-EXT-23",
     "title": "SLM Provenance Tag",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-23]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 675,
-    "anchor": "MM13-EXT-23"
+    "line": 791,
+    "anchor": "M13-EXT-23"
   },
   {
     "id": "M13-EXT-24",
     "title": "SLM Quest & Objective Text",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-24]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 691,
-    "anchor": "MM13-EXT-24"
+    "line": 812,
+    "anchor": "M13-EXT-24"
   },
   {
     "id": "M13-EXT-25",
     "title": "SLM Dialogue & Branching",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-25]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 710,
-    "anchor": "MM13-EXT-25"
+    "line": 836,
+    "anchor": "M13-EXT-25"
   },
   {
     "id": "M13-EXT-26",
     "title": "SLM Lore & Worldbuilding",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 729,
-    "anchor": "MM13-EXT-26"
+    "line": 860,
+    "anchor": "M13-EXT-26"
   },
   {
     "id": "M13-EXT-27",
     "title": "SLM Loadout/Build Suggestions",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-27]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 748,
-    "anchor": "MM13-EXT-27"
+    "line": 884,
+    "anchor": "M13-EXT-27"
   },
   {
     "id": "M13-EXT-28",
     "title": "SLM Moderation/Filtering",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "SLM",
     "tldr": null,
-    "depends_on": [
-      "[M13-EXT-28]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 767,
-    "anchor": "MM13-EXT-28"
+    "line": 908,
+    "anchor": "M13-EXT-28"
   }
 ]

@@ -2,92 +2,78 @@
   {
     "id": "M5.4-EXT-01",
     "title": "Volumetric Boid Compression Stampede Crush",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.4-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 44,
-    "anchor": "MM5.4-EXT-01"
+    "line": 55,
+    "anchor": "M5.4-EXT-01"
   },
   {
     "id": "M5.4-EXT-02",
     "title": "Over-Mantle Tumbling Torque Vectoring",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.4-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 75,
-    "anchor": "MM5.4-EXT-02"
+    "line": 91,
+    "anchor": "M5.4-EXT-02"
   },
   {
     "id": "M5.4-EXT-03",
     "title": "Emergent Difficulty via Director Pacing & Outbreak Feedback (No Difficulty Setting)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.4-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 105,
-    "anchor": "MM5.4-EXT-03"
+    "line": 126,
+    "anchor": "M5.4-EXT-03"
   },
   {
     "id": "M5.4-EXT-05",
     "title": "Reaction-Diffusion Grid Sub-sampled Boundary Welder",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.4-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 106,
-    "anchor": "MM5.4-EXT-05"
+    "line": 132,
+    "anchor": "M5.4-EXT-05"
   },
   {
     "id": "M5.4-EXT-06",
     "title": "Hierarchical A* Macro-Cell Long-Range Road-Graph Router",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.4-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 125,
-    "anchor": "MM5.4-EXT-06"
+    "line": 156,
+    "anchor": "M5.4-EXT-06"
   },
   {
     "id": "M5.4-EXT-07",
     "title": "Holling Type II Cannibalism Feeding Satiator",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "II",
     "tldr": null,
-    "depends_on": [
-      "[M5.4-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 144,
-    "anchor": "MM5.4-EXT-07"
+    "line": 180,
+    "anchor": "M5.4-EXT-07"
   },
   {
     "id": "M5.4-EXT-09",
     "title": "Fear-Field Diffusion via Spatial Hash",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M5.4-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 164,
-    "anchor": "MM5.4-EXT-09"
+    "line": 205,
+    "anchor": "M5.4-EXT-09"
   }
 ]

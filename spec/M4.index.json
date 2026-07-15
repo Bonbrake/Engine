@@ -2,772 +2,639 @@
   {
     "id": "M4-EXT-01",
     "title": "Hierarchical Global Macro-Graph Constraint Pass",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 96,
-    "anchor": "MM4-EXT-01"
+    "line": 107,
+    "anchor": "M4-EXT-01"
   },
   {
     "id": "M4-EXT-02",
     "title": "Asynchronous Quadric Error Meshlet Decimation (Runtime Procedural LODs)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 130,
-    "anchor": "MM4-EXT-02"
+    "line": 146,
+    "anchor": "M4-EXT-02"
   },
   {
     "id": "M4-EXT-03",
     "title": "Hierarchical WFC Multi-Grid Graph Layering (Contradiction Guard)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "WFC",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-03]",
-      "[M4-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 159,
-    "anchor": "MM4-EXT-03"
+    "line": 180,
+    "anchor": "M4-EXT-03"
   },
   {
     "id": "M4-EXT-04",
     "title": "Voronoi Chunk Seam Vertex Normal-Welding Post-Process",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 188,
-    "anchor": "MM4-EXT-04"
+    "line": 214,
+    "anchor": "M4-EXT-04"
   },
   {
     "id": "M4-EXT-05",
     "title": "Geometric Edge Seam Welding for LOD Transitions",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "LOD",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-05]",
-      "[M4-EXT-02]",
-      "[M4-EXT-04]",
-      "[M1-EXT-09]",
-      "[M1-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 219,
-    "anchor": "MM4-EXT-05"
+    "line": 250,
+    "anchor": "M4-EXT-05"
   },
   {
     "id": "M4-EXT-12",
     "title": "Voronoi Crustal Tectonics & Macro-Geomorphology",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 297,
-    "anchor": "MM4-EXT-12"
+    "line": 333,
+    "anchor": "M4-EXT-12"
   },
   {
     "id": "M4-EXT-13",
     "title": "Dual-Contouring Volumetric Cave Carving",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-13]",
-      "[M4-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 337,
-    "anchor": "MM4-EXT-13"
+    "line": 378,
+    "anchor": "M4-EXT-13"
   },
   {
     "id": "M4-EXT-14",
     "title": "Stratigraphic Substrate Horizon Tracking",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-14]",
-      "[M4-EXT-13]",
-      "[M4-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 376,
-    "anchor": "MM4-EXT-14"
+    "line": 422,
+    "anchor": "M4-EXT-14"
   },
   {
     "id": "M4-EXT-15",
     "title": "Darcy's-Law Deep Aquifer Extension",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-15]",
-      "[M4-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 408,
-    "anchor": "MM4-EXT-15"
+    "line": 459,
+    "anchor": "M4-EXT-15"
   },
   {
     "id": "M4-EXT-16",
     "title": "Saint-Venant Generation-Time Hydraulic Erosion",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-16]",
-      "[M4-EXT-12]",
-      "[M10-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 438,
-    "anchor": "MM4-EXT-16"
+    "line": 494,
+    "anchor": "M4-EXT-16"
   },
   {
     "id": "M4-EXT-17",
     "title": "Edaphic Soil Chemistry & Nutrient Grid",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-17]",
-      "[M4-EXT-18]",
-      "[M4-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 474,
-    "anchor": "MM4-EXT-17"
+    "line": 535,
+    "anchor": "M4-EXT-17"
   },
   {
     "id": "M4-EXT-18",
     "title": "Space-Colonization Canopy Seeding & Shade Competition",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-18]",
-      "[M4-EXT-17]",
-      "[M6.5-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 504,
-    "anchor": "MM4-EXT-18"
+    "line": 570,
+    "anchor": "M4-EXT-18"
   },
   {
     "id": "M4-EXT-19",
     "title": "Anthropogenic Infrastructure Exclusion Splines",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 537,
-    "anchor": "MM4-EXT-19"
+    "line": 608,
+    "anchor": "M4-EXT-19"
   },
   {
     "id": "M4-EXT-08",
     "title": "3D WFC Vertical Structural Dependency Guard",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "WFC",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 538,
-    "anchor": "MM4-EXT-08"
+    "line": 614,
+    "anchor": "M4-EXT-08"
   },
   {
     "id": "M4-EXT-09",
     "title": "Deterministic Interior Furniture Spatial Constraint Solver",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 557,
-    "anchor": "MM4-EXT-09"
+    "line": 638,
+    "anchor": "M4-EXT-09"
   },
   {
     "id": "M4-EXT-10",
     "title": "Macro-Graph Vector Spline Corridor Welder",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 576,
-    "anchor": "MM4-EXT-10"
+    "line": 662,
+    "anchor": "M4-EXT-10"
   },
   {
     "id": "M4-EXT-11",
     "title": "WFC Contradiction Horizon Recovery",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "WFC",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 595,
-    "anchor": "MM4-EXT-11"
+    "line": 686,
+    "anchor": "M4-EXT-11"
   },
   {
     "id": "M4-EXT-21",
     "title": "Signage Grammar Transcoder",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 614,
-    "anchor": "MM4-EXT-21"
+    "line": 710,
+    "anchor": "M4-EXT-21"
   },
   {
     "id": "M4-EXT-28",
     "title": "Procedural Foliage L-System Mesh Generator",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-28]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 634,
-    "anchor": "MM4-EXT-28"
+    "line": 735,
+    "anchor": "M4-EXT-28"
   },
   {
     "id": "M4-EXT-27",
     "title": "Vegetation Impostor",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-27]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 654,
-    "anchor": "MM4-EXT-27"
+    "line": 760,
+    "anchor": "M4-EXT-27"
   },
   {
     "id": "M4-EXT-26",
     "title": "Procedural Decal Atlas Packing & Runtime Projection",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 674,
-    "anchor": "MM4-EXT-26"
+    "line": 785,
+    "anchor": "M4-EXT-26"
   },
   {
     "id": "M4-EXT-25",
     "title": "Procedural Material Node-Graph Compiler (Structure + Color + Normal)",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-25]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 694,
-    "anchor": "MM4-EXT-25"
+    "line": 810,
+    "anchor": "M4-EXT-25"
   },
   {
     "id": "M4-EXT-24",
     "title": "Cellular Automata Structural Collapse & Rubble Debris Fields",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-24]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 714,
-    "anchor": "MM4-EXT-24"
+    "line": 835,
+    "anchor": "M4-EXT-24"
   },
   {
     "id": "M4-EXT-23",
     "title": "Whittaker Temperature/Precipitation Biome Classification",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-23]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 734,
-    "anchor": "MM4-EXT-23"
+    "line": 860,
+    "anchor": "M4-EXT-23"
   },
   {
     "id": "M4-EXT-22",
     "title": "Meshoptimizer Vertex Cache / Fetch Optimization",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 754,
-    "anchor": "MM4-EXT-22"
+    "line": 885,
+    "anchor": "M4-EXT-22"
   },
   {
     "id": "M4-EXT-20",
     "title": "WFC Adjacency Propagator",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "WFC",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-20]",
-      "[M5.4-EXT-06]",
-      "[M4-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 774,
-    "anchor": "MM4-EXT-20"
+    "line": 910,
+    "anchor": "M4-EXT-20"
   },
   {
     "id": "M4-EXT-29",
     "title": "Layer-Based Contextual Generation",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-29]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 848,
-    "anchor": "MM4-EXT-29"
+    "line": 989,
+    "anchor": "M4-EXT-29"
   },
   {
     "id": "M4-EXT-30",
     "title": "Generation Pass DAG",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "DAG",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-30]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 866,
-    "anchor": "MM4-EXT-30"
+    "line": 1012,
+    "anchor": "M4-EXT-30"
   },
   {
     "id": "M4-EXT-31",
     "title": "Biome Blending at Borders",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-31]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 882,
-    "anchor": "MM4-EXT-31"
+    "line": 1033,
+    "anchor": "M4-EXT-31"
   },
   {
     "id": "M4-EXT-32",
     "title": "POI Placement Validator",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "POI",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-32]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 898,
-    "anchor": "MM4-EXT-32"
+    "line": 1054,
+    "anchor": "M4-EXT-32"
   },
   {
     "id": "M4-EXT-33",
     "title": "Loot/Encounter Table Compiler",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-33]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 914,
-    "anchor": "MM4-EXT-33"
+    "line": 1075,
+    "anchor": "M4-EXT-33"
   },
   {
     "id": "M4-EXT-34",
     "title": "Generation Seed Hierarchy",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-34]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 930,
-    "anchor": "MM4-EXT-34"
+    "line": 1096,
+    "anchor": "M4-EXT-34"
   },
   {
     "id": "M4-EXT-35",
     "title": "Stable Entity-ID per Chunk",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "ID",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-35]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 946,
-    "anchor": "MM4-EXT-35"
+    "line": 1117,
+    "anchor": "M4-EXT-35"
   },
   {
     "id": "M4-EXT-36",
     "title": "Archetype Seeded Variation Salt",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-36]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 962,
-    "anchor": "MM4-EXT-36"
+    "line": 1138,
+    "anchor": "M4-EXT-36"
   },
   {
     "id": "M4-EXT-37",
     "title": "Generation Budget Governor",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-37]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 978,
-    "anchor": "MM4-EXT-37"
+    "line": 1159,
+    "anchor": "M4-EXT-37"
   },
   {
     "id": "M4-EXT-38",
     "title": "Fractal Octave Cap",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-38]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 994,
-    "anchor": "MM4-EXT-38"
+    "line": 1180,
+    "anchor": "M4-EXT-38"
   },
   {
     "id": "M4-EXT-39",
     "title": "Biome→Asset Palette Binding",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-39]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1010,
-    "anchor": "MM4-EXT-39"
+    "line": 1201,
+    "anchor": "M4-EXT-39"
   },
   {
     "id": "M4-EXT-40",
     "title": "Clutter/Scatter Generator",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-40]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1026,
-    "anchor": "MM4-EXT-40"
+    "line": 1222,
+    "anchor": "M4-EXT-40"
   },
   {
     "id": "M4-EXT-41",
     "title": "Water/Liquid Volume Generator",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-41]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1042,
-    "anchor": "MM4-EXT-41"
+    "line": 1243,
+    "anchor": "M4-EXT-41"
   },
   {
     "id": "M4-EXT-42",
     "title": "Cave/Underground Generator",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-42]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1058,
-    "anchor": "MM4-EXT-42"
+    "line": 1264,
+    "anchor": "M4-EXT-42"
   },
   {
     "id": "M4-EXT-43",
     "title": "Generation Disk-Cache",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-43]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1074,
-    "anchor": "MM4-EXT-43"
+    "line": 1285,
+    "anchor": "M4-EXT-43"
   },
   {
     "id": "M4-EXT-44",
     "title": "Generation Debug Visualization",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-44]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1090,
-    "anchor": "MM4-EXT-44"
+    "line": 1306,
+    "anchor": "M4-EXT-44"
   },
   {
     "id": "M4-EXT-45",
     "title": "Multi-Resolution LOD Generation",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "LOD",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-45]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1106,
-    "anchor": "MM4-EXT-45"
+    "line": 1327,
+    "anchor": "M4-EXT-45"
   },
   {
     "id": "M4-EXT-46",
     "title": "Procedural Sky/Starfield/Cloud",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-46]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1122,
-    "anchor": "MM4-EXT-46"
+    "line": 1348,
+    "anchor": "M4-EXT-46"
   },
   {
     "id": "M4-EXT-47",
     "title": "Async Generation Off Main Thread",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-47]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1140,
-    "anchor": "MM4-EXT-47"
+    "line": 1371,
+    "anchor": "M4-EXT-47"
   },
   {
     "id": "M4-EXT-48",
     "title": "Per-Frame Generation Budget",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-48]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1156,
-    "anchor": "MM4-EXT-48"
+    "line": 1392,
+    "anchor": "M4-EXT-48"
   },
   {
     "id": "M4-EXT-49",
     "title": "Prioritized Chunk Queue",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-49]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1172,
-    "anchor": "MM4-EXT-49"
+    "line": 1413,
+    "anchor": "M4-EXT-49"
   },
   {
     "id": "M4-EXT-50",
     "title": "Pre-Generation Lookahead",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-50]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1188,
-    "anchor": "MM4-EXT-50"
+    "line": 1434,
+    "anchor": "M4-EXT-50"
   },
   {
     "id": "M4-EXT-51",
     "title": "Generation Cancellation",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-51]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1204,
-    "anchor": "MM4-EXT-51"
+    "line": 1455,
+    "anchor": "M4-EXT-51"
   },
   {
     "id": "M4-EXT-52",
     "title": "Chunk Generation State Machine",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-52]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1220,
-    "anchor": "MM4-EXT-52"
+    "line": 1476,
+    "anchor": "M4-EXT-52"
   },
   {
     "id": "M4-EXT-53",
     "title": "Parallel Mesh/Collider Build",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-53]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1236,
-    "anchor": "MM4-EXT-53"
+    "line": 1497,
+    "anchor": "M4-EXT-53"
   },
   {
     "id": "M4-EXT-54",
     "title": "Procedural Quest / Mission Generator",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-54]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1252,
-    "anchor": "MM4-EXT-54"
+    "line": 1518,
+    "anchor": "M4-EXT-54"
   },
   {
     "id": "M4-EXT-55",
     "title": "Procedural Narrative / Dialogue Generator",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-55]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1273,
-    "anchor": "MM4-EXT-55"
+    "line": 1544,
+    "anchor": "M4-EXT-55"
   },
   {
     "id": "M4-EXT-56",
     "title": "Difficulty / Tuning Curve Generator",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-56]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1294,
-    "anchor": "MM4-EXT-56"
+    "line": 1570,
+    "anchor": "M4-EXT-56"
   },
   {
     "id": "M4-EXT-57",
     "title": "Generation RNG Replay File",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "RNG",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-57]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1315,
-    "anchor": "MM4-EXT-57"
+    "line": 1596,
+    "anchor": "M4-EXT-57"
   },
   {
     "id": "M4-EXT-58",
     "title": "Generation Math Reduction Order",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-58]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1336,
-    "anchor": "MM4-EXT-58"
+    "line": 1622,
+    "anchor": "M4-EXT-58"
   },
   {
     "id": "M4-EXT-59",
     "title": "Procedural Road/Path Network",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-59]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1357,
-    "anchor": "MM4-EXT-59"
+    "line": 1648,
+    "anchor": "M4-EXT-59"
   },
   {
     "id": "M4-EXT-60",
     "title": "Procedural Encounter/Event Spawner",
-    "cluster": null,
+    "cluster": "D — release / platform / build / test / perf",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4-EXT-60]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1376,
-    "anchor": "MM4-EXT-60"
+    "line": 1672,
+    "anchor": "M4-EXT-60"
   }
 ]

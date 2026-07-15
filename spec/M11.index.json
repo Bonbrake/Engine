@@ -2,536 +2,452 @@
   {
     "id": "M11-EXT-01",
     "title": "Viewport-Isolated Haptic Waveform Summation",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 78,
-    "anchor": "MM11-EXT-01"
+    "line": 89,
+    "anchor": "M11-EXT-01"
   },
   {
     "id": "M11-EXT-02",
     "title": "Adaptive Skeletal Trigger Strain Profiles",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 115,
-    "anchor": "MM11-EXT-02"
+    "line": 131,
+    "anchor": "M11-EXT-02"
   },
   {
     "id": "M11-EXT-03",
     "title": "Raycast-Fan Fog-of-Reveal Navigation (Map/Minimap)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 144,
-    "anchor": "MM11-EXT-03"
+    "line": 165,
+    "anchor": "M11-EXT-03"
   },
   {
     "id": "M11-EXT-04",
     "title": "Diegetic Onboarding via Seeded Low-Severity Starter Outbreak",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 175,
-    "anchor": "MM11-EXT-04"
+    "line": 201,
+    "anchor": "M11-EXT-04"
   },
   {
     "id": "M11-EXT-05",
     "title": "OKLab-Driven Accessibility Suite (Colorblind, Captions, Remapping)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 202,
-    "anchor": "MM11-EXT-05"
+    "line": 233,
+    "anchor": "M11-EXT-05"
   },
   {
     "id": "M11-EXT-06",
     "title": "Runtime String-Template Localization Pipeline",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 229,
-    "anchor": "MM11-EXT-06"
+    "line": 265,
+    "anchor": "M11-EXT-06"
   },
   {
     "id": "M11-EXT-07",
     "title": "MSDF Shaded Drop-Shadow Vector Signed Distance Field Generator",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "MSDF",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 262,
-    "anchor": "MM11-EXT-07"
+    "line": 303,
+    "anchor": "M11-EXT-07"
   },
   {
     "id": "M11-EXT-09",
     "title": "UI Panel Atlasing & Nine-Slice Batching",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "UI",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 265,
-    "anchor": "MM11-EXT-09"
+    "line": 311,
+    "anchor": "M11-EXT-09"
   },
   {
     "id": "M11-EXT-08",
     "title": "MSDF Vector Text Layout Geometry Batching Pipeline",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "MSDF",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-08]",
-      "[M5.4-EXT-04]",
-      "[M5.4-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 285,
-    "anchor": "MM11-EXT-08"
+    "line": 336,
+    "anchor": "M11-EXT-08"
   },
   {
     "id": "M11-EXT-10",
     "title": "Three-Way Version Contract",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 376,
-    "anchor": "MM11-EXT-10"
+    "line": 432,
+    "anchor": "M11-EXT-10"
   },
   {
     "id": "M11-EXT-11",
     "title": "Config Schema Registry",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 392,
-    "anchor": "MM11-EXT-11"
+    "line": 453,
+    "anchor": "M11-EXT-11"
   },
   {
     "id": "M11-EXT-12",
     "title": "Typed Parameter Handles",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 408,
-    "anchor": "MM11-EXT-12"
+    "line": 474,
+    "anchor": "M11-EXT-12"
   },
   {
     "id": "M11-EXT-13",
     "title": "Parameter Range/Clamp Enforcement",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-13]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 424,
-    "anchor": "MM11-EXT-13"
+    "line": 495,
+    "anchor": "M11-EXT-13"
   },
   {
     "id": "M11-EXT-14",
     "title": "Enum/Flag Registry",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 442,
-    "anchor": "MM11-EXT-14"
+    "line": 518,
+    "anchor": "M11-EXT-14"
   },
   {
     "id": "M11-EXT-15",
     "title": "Deliberate Mod API Surface",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "API",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-15]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 458,
-    "anchor": "MM11-EXT-15"
+    "line": 539,
+    "anchor": "M11-EXT-15"
   },
   {
     "id": "M11-EXT-16",
     "title": "ModAPI Semantic Versioning",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-16]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 474,
-    "anchor": "MM11-EXT-16"
+    "line": 560,
+    "anchor": "M11-EXT-16"
   },
   {
     "id": "M11-EXT-17",
     "title": "Mod Dependency Resolver",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 490,
-    "anchor": "MM11-EXT-17"
+    "line": 581,
+    "anchor": "M11-EXT-17"
   },
   {
     "id": "M11-EXT-18",
     "title": "Mod Incompatibility Detector",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 506,
-    "anchor": "MM11-EXT-18"
+    "line": 602,
+    "anchor": "M11-EXT-18"
   },
   {
     "id": "M11-EXT-19",
     "title": "Mod Checksum + Signature",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 522,
-    "anchor": "MM11-EXT-19"
+    "line": 623,
+    "anchor": "M11-EXT-19"
   },
   {
     "id": "M11-EXT-20",
     "title": "Mod Write-Allowlist",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-20]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 538,
-    "anchor": "MM11-EXT-20"
+    "line": 644,
+    "anchor": "M11-EXT-20"
   },
   {
     "id": "M11-EXT-21",
     "title": "Runtime Mod Enable/Disable + Reload",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 554,
-    "anchor": "MM11-EXT-21"
+    "line": 665,
+    "anchor": "M11-EXT-21"
   },
   {
     "id": "M11-EXT-22",
     "title": "Mod Override Layering",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 570,
-    "anchor": "MM11-EXT-22"
+    "line": 686,
+    "anchor": "M11-EXT-22"
   },
   {
     "id": "M11-EXT-23",
     "title": "Mod Error Isolation",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-23]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 586,
-    "anchor": "MM11-EXT-23"
+    "line": 707,
+    "anchor": "M11-EXT-23"
   },
   {
     "id": "M11-EXT-24",
     "title": "Mod Console Commands",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-24]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 602,
-    "anchor": "MM11-EXT-24"
+    "line": 728,
+    "anchor": "M11-EXT-24"
   },
   {
     "id": "M11-EXT-25",
     "title": "Mod Validation Pipeline Hook",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-25]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 618,
-    "anchor": "MM11-EXT-25"
+    "line": 749,
+    "anchor": "M11-EXT-25"
   },
   {
     "id": "M11-EXT-26",
     "title": "Mod Localization Hooks",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 634,
-    "anchor": "MM11-EXT-26"
+    "line": 770,
+    "anchor": "M11-EXT-26"
   },
   {
     "id": "M11-EXT-27",
     "title": "Mod UI / Menu",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "UI",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-27]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 650,
-    "anchor": "MM11-EXT-27"
+    "line": 791,
+    "anchor": "M11-EXT-27"
   },
   {
     "id": "M11-EXT-28",
     "title": "Mod Save-Namespace Isolation",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-28]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 666,
-    "anchor": "MM11-EXT-28"
+    "line": 812,
+    "anchor": "M11-EXT-28"
   },
   {
     "id": "M11-EXT-29",
     "title": "Benchmark / Perf HUD / Graphics Options",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "HUD",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-29]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 682,
-    "anchor": "MM11-EXT-29"
+    "line": 833,
+    "anchor": "M11-EXT-29"
   },
   {
     "id": "M11-EXT-30",
     "title": "Screen Shake / Hit Marker / Kill Feed",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-30]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 700,
-    "anchor": "MM11-EXT-30"
+    "line": 856,
+    "anchor": "M11-EXT-30"
   },
   {
     "id": "M11-EXT-31",
     "title": "Runtime Mod Manager",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-31]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 716,
-    "anchor": "MM11-EXT-31"
+    "line": 877,
+    "anchor": "M11-EXT-31"
   },
   {
     "id": "M11-EXT-32",
     "title": "Mod Documentation Generator",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-32]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 732,
-    "anchor": "MM11-EXT-32"
+    "line": 898,
+    "anchor": "M11-EXT-32"
   },
   {
     "id": "M11-EXT-33",
     "title": "Workshop / Store Integration Stub",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-33]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 753,
-    "anchor": "MM11-EXT-33"
+    "line": 924,
+    "anchor": "M11-EXT-33"
   },
   {
     "id": "M11-EXT-34",
     "title": "Main Menu & Pause Menu",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-34]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 774,
-    "anchor": "MM11-EXT-34"
+    "line": 950,
+    "anchor": "M11-EXT-34"
   },
   {
     "id": "M11-EXT-35",
     "title": "Inventory & Loot UI",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "UI",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-35]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 793,
-    "anchor": "MM11-EXT-35"
+    "line": 974,
+    "anchor": "M11-EXT-35"
   },
   {
     "id": "M11-EXT-36",
     "title": "Map & Fast-Travel UI",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "UI",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-36]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 812,
-    "anchor": "MM11-EXT-36"
+    "line": 998,
+    "anchor": "M11-EXT-36"
   },
   {
     "id": "M11-EXT-37",
     "title": "Settings & Options Menu",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-37]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 831,
-    "anchor": "MM11-EXT-37"
+    "line": 1022,
+    "anchor": "M11-EXT-37"
   },
   {
     "id": "M11-EXT-38",
     "title": "Controller/Gamepad UI",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "UI",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-38]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 850,
-    "anchor": "MM11-EXT-38"
+    "line": 1046,
+    "anchor": "M11-EXT-38"
   },
   {
     "id": "M11-EXT-39",
     "title": "Haptics & Rumble",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-39]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 869,
-    "anchor": "MM11-EXT-39"
+    "line": 1070,
+    "anchor": "M11-EXT-39"
   },
   {
     "id": "M11-EXT-40",
     "title": "Damage Numbers & Floating Text",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-40]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 888,
-    "anchor": "MM11-EXT-40"
+    "line": 1094,
+    "anchor": "M11-EXT-40"
   },
   {
     "id": "M11-EXT-41",
     "title": "World Space UI (billboards)",
-    "cluster": null,
+    "cluster": "C — demo-path gap findings",
     "tags": "UI",
     "tldr": null,
-    "depends_on": [
-      "[M11-EXT-41]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 907,
-    "anchor": "MM11-EXT-41"
+    "line": 1118,
+    "anchor": "M11-EXT-41"
   }
 ]

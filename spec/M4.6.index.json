@@ -2,81 +2,67 @@
   {
     "id": "M4.6-EXT-01",
     "title": "Procedural Vertex Buffer Pooling & Dynamic GPU Compaction",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "GPU",
     "tldr": null,
-    "depends_on": [
-      "[M4.6-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 41,
-    "anchor": "MM4.6-EXT-01"
+    "line": 52,
+    "anchor": "M4.6-EXT-01"
   },
   {
     "id": "M4.6-EXT-02",
     "title": "Asynchronous OS Overlapped Direct-VRAM Disk Streaming Queue",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "OS, VRAM",
     "tldr": null,
-    "depends_on": [
-      "[M4.6-EXT-02]",
-      "[M0-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 73,
-    "anchor": "MM4.6-EXT-02"
+    "line": 89,
+    "anchor": "M4.6-EXT-02"
   },
   {
     "id": "M4.6-EXT-03",
     "title": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M4.6-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 104,
-    "anchor": "MM4.6-EXT-03"
+    "line": 125,
+    "anchor": "M4.6-EXT-03"
   },
   {
     "id": "M4.6-EXT-05",
     "title": "DirectStorage Decompression Buffer Ring Allocator Pool",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "DirectStorage",
     "tldr": null,
-    "depends_on": [
-      "[M4.6-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 105,
-    "anchor": "MM4.6-EXT-05"
+    "line": 131,
+    "anchor": "M4.6-EXT-05"
   },
   {
     "id": "M4.6-EXT-08",
     "title": "BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "BC7, SOURCED, FROM, PLAN, FILE",
     "tldr": null,
-    "depends_on": [
-      "[M4.6-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 124,
-    "anchor": "MM4.6-EXT-08"
+    "line": 155,
+    "anchor": "M4.6-EXT-08"
   },
   {
     "id": "M4.6-EXT-07",
     "title": "Basis Universal GPU Texture Transcoder",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "GPU",
     "tldr": null,
-    "depends_on": [
-      "[M4.6-EXT-07]",
-      "[M4.6-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 144,
-    "anchor": "MM4.6-EXT-07"
+    "line": 180,
+    "anchor": "M4.6-EXT-07"
   }
 ]

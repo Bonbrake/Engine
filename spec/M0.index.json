@@ -1,799 +1,574 @@
-{
- "milestone": "M0",
- "ext_blocks": 52,
- "blocks": [
+[
   {
-   "id": "01",
-   "title": "Hardware-Topology enkiTS Pinning Allocator",
-   "tags": [
-    "build",
-    "io",
-    "memory",
-    "render",
-    "thread"
-   ],
-   "tldr": "Underlies every sub-allocation this doc performs on top of enkiTS/VMA \u2014 formalizes the alignment math the \"Sub-allocated memory pages via VMA\" bullet above alre",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 135,
-   "anchor": "M0-EXT-01"
+    "id": "M0-EXT-01",
+    "title": "Hardware-Topology enkiTS Pinning Allocator",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, memory, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 135,
+    "anchor": "M0-EXT-01"
   },
   {
-   "id": "02",
-   "title": "Continuous Driver-Side Shader Object State Manager",
-   "tags": [
-    "build",
-    "io",
-    "render"
-   ],
-   "tldr": "Replaces standard Vulkan Pipeline State Objects (PSOs) for stages that change frequently; complements [M4.5-EXT-09]'s bindless material virtualization (that fea",
-   "cluster": null,
-   "depends_on": [
-    "M4.5-EXT-09"
-   ],
-   "depended_by": [],
-   "line": 168,
-   "anchor": "M0-EXT-02"
+    "id": "M0-EXT-02",
+    "title": "Continuous Driver-Side Shader Object State Manager",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 168,
+    "anchor": "M0-EXT-02"
   },
   {
-   "id": "03",
-   "title": "Disk-Persisted Pipeline Cache Header Validator",
-   "tags": [
-    "build",
-    "io",
-    "render"
-   ],
-   "tldr": "Formalizes the \"Pipeline cache header validation on load\" bullet already present in M0's Implementation Steps \u2014 this is that check's exact formula, not a second",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 210,
-   "anchor": "M0-EXT-03"
+    "id": "M0-EXT-03",
+    "title": "Disk-Persisted Pipeline Cache Header Validator",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 210,
+    "anchor": "M0-EXT-03"
   },
   {
-   "id": "04",
-   "title": "Asynchronous Native OS File Handle Ring Buffer",
-   "tags": [
-    "build",
-    "io",
-    "memory",
-    "net",
-    "render"
-   ],
-   "tldr": "Backs AssetPath's virtual file resolver and the DirectStorage streaming pipeline (M4.6) with a bounded pool of in-flight OS file handles.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 241,
-   "anchor": "M0-EXT-04"
+    "id": "M0-EXT-04",
+    "title": "Asynchronous Native OS File Handle Ring Buffer",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, memory, net, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 241,
+    "anchor": "M0-EXT-04"
   },
   {
-   "id": "05",
-   "title": "Discrete GPU Memory-Budget Tracker",
-   "tags": [
-    "build",
-    "input",
-    "memory"
-   ],
-   "tldr": "Formalizes the \"GPU Memory tracking via VK_EXT_memory_budget\" bullet already in M0's Implementation Steps; feeds the hard budget check in M4.6 (6.0GB/5.0GB VRAM",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 277,
-   "anchor": "M0-EXT-05"
+    "id": "M0-EXT-05",
+    "title": "Discrete GPU Memory-Budget Tracker",
+    "cluster": "A — bootstrap core",
+    "tags": "build, input, memory",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 277,
+    "anchor": "M0-EXT-05"
   },
   {
-   "id": "06",
-   "title": "Cross-Queue Vulkan Dependency Hazard Validation Layer",
-   "tags": [
-    "build",
-    "net",
-    "render"
-   ],
-   "tldr": "Dev-only diagnostic sitting alongside the --dev-gated validation layers already in M0's Implementation Steps; watches the timeline-semaphore cross-queue sync (G",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 310,
-   "anchor": "M0-EXT-06"
+    "id": "M0-EXT-06",
+    "title": "Cross-Queue Vulkan Dependency Hazard Validation Layer",
+    "cluster": "A — bootstrap core",
+    "tags": "build, net, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 310,
+    "anchor": "M0-EXT-06"
   },
   {
-   "id": "07",
-   "title": "Device-Agnostic Work-Stealing Job Scheduler Fiber Yield Hook",
-   "tags": [
-    "build",
-    "io",
-    "net",
-    "thread"
-   ],
-   "tldr": "Extends M0's enkiTS setup. Required by any background task that blocks on a fence mid-execution \u2014 the async Jolt BVH cook ([M2-EXT-01]) and WFC chunk generation",
-   "cluster": null,
-   "depends_on": [
-    "M2-EXT-01",
-    "M4-EXT-03"
-   ],
-   "depended_by": [],
-   "line": 342,
-   "anchor": "M0-EXT-07"
+    "id": "M0-EXT-07",
+    "title": "Device-Agnostic Work-Stealing Job Scheduler Fiber Yield Hook",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, net, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 342,
+    "anchor": "M0-EXT-07"
   },
   {
-   "id": "08",
-   "title": "Vulkan Descriptor Indexing Bindless Storage Handle Page Allocator",
-   "tags": [
-    "build",
-    "io",
-    "memory",
-    "render"
-   ],
-   "tldr": "M1's \"Bindless descriptor indexing for ECS materials\" bullet and [M4.5-EXT-09] Bindless Material Shader Virtualization both assume a slot-handle allocation syst",
-   "cluster": null,
-   "depends_on": [
-    "M4.5-EXT-09"
-   ],
-   "depended_by": [],
-   "line": 377,
-   "anchor": "M0-EXT-08"
+    "id": "M0-EXT-08",
+    "title": "Vulkan Descriptor Indexing Bindless Storage Handle Page Allocator",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, memory, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 377,
+    "anchor": "M0-EXT-08"
   },
   {
-   "id": "09",
-   "title": "Host-Side Command Queue Swapchain Frame-Pacing Interceptor",
-   "tags": [
-    "build",
-    "render",
-    "thread"
-   ],
-   "tldr": "Sits alongside M0's Fixed-Timestep loop bullet (\"clamp frameDelta at 0.25s. Intercept focus loss natively for low-overhead throttling\") \u2014 this is the concrete E",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 412,
-   "anchor": "M0-EXT-09"
+    "id": "M0-EXT-09",
+    "title": "Host-Side Command Queue Swapchain Frame-Pacing Interceptor",
+    "cluster": "A — bootstrap core",
+    "tags": "build, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 412,
+    "anchor": "M0-EXT-09"
   },
   {
-   "id": "10",
-   "title": "Vulkan 1.4 Pipeline Layout Structural Compatibility Validator",
-   "tags": [
-    "build",
-    "io",
-    "memory",
-    "render"
-   ],
-   "tldr": "Pipeline initialization, asset toolchain loading, shader runtime hot-reloading.",
-   "cluster": null,
-   "depends_on": [
-    "M0-EXT-08"
-   ],
-   "depended_by": [],
-   "line": 453,
-   "anchor": "M0-EXT-10"
+    "id": "M0-EXT-10",
+    "title": "Vulkan 1.4 Pipeline Layout Structural Compatibility Validator",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, memory, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 453,
+    "anchor": "M0-EXT-10"
   },
   {
-   "id": "11",
-   "title": "Asynchronous SPIR-V Shader Cache Garbage Collector",
-   "tags": [
-    "build",
-    "io",
-    "memory",
-    "net",
-    "render",
-    "thread"
-   ],
-   "tldr": "M0 shader cache. Async GC of stale SPIR-V cache entries so the cache never grows unbounded.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 511,
-   "anchor": "M0-EXT-11"
+    "id": "M0-EXT-11",
+    "title": "Asynchronous SPIR-V Shader Cache Garbage Collector",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, memory, net, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 511,
+    "anchor": "M0-EXT-11"
   },
   {
-   "id": "12",
-   "title": "Compute-Worker Thread-Affinity Bitmask Allocator",
-   "tags": [
-    "build",
-    "io",
-    "memory",
-    "render",
-    "thread"
-   ],
-   "tldr": "M0 + enkiTS. Pins compute workers to a CPU affinity bitmask for cache locality / NUMA.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 534,
-   "anchor": "M0-EXT-12"
+    "id": "M0-EXT-12",
+    "title": "Compute-Worker Thread-Affinity Bitmask Allocator",
+    "cluster": "A — bootstrap core",
+    "tags": "build, io, memory, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 534,
+    "anchor": "M0-EXT-12"
   },
   {
-   "id": "13",
-   "title": "Capability Probe & Feature-Tier Detection",
-   "tags": [
-    "build",
-    "input",
-    "io",
-    "render"
-   ],
-   "tldr": "Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 557,
-   "anchor": "M0-EXT-13"
+    "id": "M0-EXT-13",
+    "title": "Capability Probe & Feature-Tier Detection",
+    "cluster": "A — bootstrap core",
+    "tags": "build, input, io, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 557,
+    "anchor": "M0-EXT-13"
   },
   {
-   "id": "15",
-   "title": "Minimal Action-Map Input Resolution Layer",
-   "tags": [
-    "build",
-    "input"
-   ],
-   "tldr": "Every early input consumer, MOST URGENTLY the debug fly-camera currently",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 584,
-   "anchor": "M0-EXT-15"
+    "id": "M0-EXT-15",
+    "title": "Minimal Action-Map Input Resolution Layer",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, input",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 584,
+    "anchor": "M0-EXT-15"
   },
   {
-   "id": "16",
-   "title": "ENGINE_DETERMINISM_MODE Compile Guard & CI Assertion",
-   "tags": [
-    "build",
-    "io",
-    "net",
-    "thread"
-   ],
-   "tldr": "M2.8 (deterministic co-op) \u2014 establishes the constraint at the layer",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 637,
-   "anchor": "M0-EXT-16"
+    "id": "M0-EXT-16",
+    "title": "ENGINE_DETERMINISM_MODE Compile Guard & CI Assertion",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, io, net, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 637,
+    "anchor": "M0-EXT-16"
   },
   {
-   "id": "17",
-   "title": "Split Save-Schema / Network-Protocol Version Fields",
-   "tags": [
-    "build",
-    "io",
-    "net"
-   ],
-   "tldr": "M7 (persistence) and M12 (networked co-op) \u2014 declared independently now",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 676,
-   "anchor": "M0-EXT-17"
+    "id": "M0-EXT-17",
+    "title": "Split Save-Schema / Network-Protocol Version Fields",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, io, net",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 676,
+    "anchor": "M0-EXT-17"
   },
   {
-   "id": "18",
-   "title": "Atomic Write-Temp-Then-Rename Save I/O",
-   "tags": [
-    "build",
-    "io",
-    "net"
-   ],
-   "tldr": "M7 persistence \u2014 every save write, going forward.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 707,
-   "anchor": "M0-EXT-18"
+    "id": "M0-EXT-18",
+    "title": "Atomic Write-Temp-Then-Rename Save I/O",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, io, net",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 707,
+    "anchor": "M0-EXT-18"
   },
   {
-   "id": "19",
-   "title": "Platform User-Data Directory Resolution via AssetPath",
-   "tags": [
-    "build",
-    "io",
-    "sec"
-   ],
-   "tldr": "Extends the existing AssetPath resolver (M0) to also resolve a",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 740,
-   "anchor": "M0-EXT-19"
+    "id": "M0-EXT-19",
+    "title": "Platform User-Data Directory Resolution via AssetPath",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, io, sec",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 740,
+    "anchor": "M0-EXT-19"
   },
   {
-   "id": "20",
-   "title": "Cross-Machine Crash Correlation Tag",
-   "tags": [
-    "build",
-    "net",
-    "sec"
-   ],
-   "tldr": "M2.8/M12 co-op \u2014 extends the existing Aftermath/RGD crash-dump path",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 777,
-   "anchor": "M0-EXT-20"
+    "id": "M0-EXT-20",
+    "title": "Cross-Machine Crash Correlation Tag",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, net, sec",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 777,
+    "anchor": "M0-EXT-20"
   },
   {
-   "id": "21",
-   "title": "Persistent World-Epoch Clock with Deterministic Offline Fast-Forward",
-   "tags": [
-    "build",
-    "io"
-   ],
-   "tldr": "M7 (persistence) and every future decay/weather system \u2014 declared at",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 806,
-   "anchor": "M0-EXT-21"
+    "id": "M0-EXT-21",
+    "title": "Persistent World-Epoch Clock with Deterministic Offline Fast-Forward",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, io",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 806,
+    "anchor": "M0-EXT-21"
   },
   {
-   "id": "22",
-   "title": "Monotonic-vs-Wall-Clock Tamper Cross-Check",
-   "tags": [
-    "build",
-    "sec"
-   ],
-   "tldr": "Extends [M0-EXT-21] \u2014 prevents trivially defeating offline decay/weather",
-   "cluster": null,
-   "depends_on": [
-    "M0-EXT-21"
-   ],
-   "depended_by": [],
-   "line": 840,
-   "anchor": "M0-EXT-22"
+    "id": "M0-EXT-22",
+    "title": "Monotonic-vs-Wall-Clock Tamper Cross-Check",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, sec",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 840,
+    "anchor": "M0-EXT-22"
   },
   {
-   "id": "23",
-   "title": "Extended Adaptive-Quality Watchdog",
-   "tags": [
-    "build",
-    "memory"
-   ],
-   "tldr": "Builds directly on the existing frame-pacing EMA (M0-EXT-09) \u2014 adds a",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 873,
-   "anchor": "M0-EXT-23"
+    "id": "M0-EXT-23",
+    "title": "Extended Adaptive-Quality Watchdog",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, memory",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 873,
+    "anchor": "M0-EXT-23"
   },
   {
-   "id": "24",
-   "title": "Single-Instance Boot Lock",
-   "tags": [
-    "build",
-    "io"
-   ],
-   "tldr": "Boot sequence \u2014 prevents two copies of the game writing to the same",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 913,
-   "anchor": "M0-EXT-24"
+    "id": "M0-EXT-24",
+    "title": "Single-Instance Boot Lock",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, io",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 913,
+    "anchor": "M0-EXT-24"
   },
   {
-   "id": "25",
-   "title": "Per-Fiber Exception Containment for enkiTS Jobs",
-   "tags": [
-    "audio",
-    "build",
-    "thread"
-   ],
-   "tldr": "Every background job dispatched through enkiTS \u2014 a bad chunk-gen task",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 948,
-   "anchor": "M0-EXT-25"
+    "id": "M0-EXT-25",
+    "title": "Per-Fiber Exception Containment for enkiTS Jobs",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "audio, build, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 948,
+    "anchor": "M0-EXT-25"
   },
   {
-   "id": "26",
-   "title": "Shader-Compile Timeout & Safe-Mode Boot Fallback",
-   "tags": [
-    "audio",
-    "build",
-    "net",
-    "render",
-    "sec",
-    "thread"
-   ],
-   "tldr": "M1's async shader compilation path, and M0's pipeline-cache/mod",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 983,
-   "anchor": "M0-EXT-26"
+    "id": "M0-EXT-26",
+    "title": "Shader-Compile Timeout & Safe-Mode Boot Fallback",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "audio, build, net, render, sec, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 983,
+    "anchor": "M0-EXT-26"
   },
   {
-   "id": "27",
-   "title": "Foreground/Background I/O and Thread Priority Tiers",
-   "tags": [
-    "build",
-    "input",
-    "io",
-    "render",
-    "thread"
-   ],
-   "tldr": "Extends the existing file-handle ring buffer (M0-EXT-04) and enkiTS",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1021,
-   "anchor": "M0-EXT-27"
+    "id": "M0-EXT-27",
+    "title": "Foreground/Background I/O and Thread Priority Tiers",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, input, io, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1021,
+    "anchor": "M0-EXT-27"
   },
   {
-   "id": "28",
-   "title": "AssetPath Checksum Integrity Validation",
-   "tags": [
-    "build",
-    "io",
-    "sec"
-   ],
-   "tldr": "Extends the existing AssetPath resolver (M0) \u2014 every load, mod or",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1053,
-   "anchor": "M0-EXT-28"
+    "id": "M0-EXT-28",
+    "title": "AssetPath Checksum Integrity Validation",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, io, sec",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1053,
+    "anchor": "M0-EXT-28"
   },
   {
-   "id": "29",
-   "title": "HDR Color-Space & DPI-Scale Swapchain Setup",
-   "tags": [
-    "build",
-    "render",
-    "thread"
-   ],
-   "tldr": "Swapchain creation (M0) and UI layout math (M11, later) \u2014 declared now",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1083,
-   "anchor": "M0-EXT-29"
+    "id": "M0-EXT-29",
+    "title": "HDR Color-Space & DPI-Scale Swapchain Setup",
+    "cluster": "B — input / determinism / save / platform",
+    "tags": "build, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1083,
+    "anchor": "M0-EXT-29"
   },
   {
-   "id": "30",
-   "title": "Game Draw Path Bypasses Cull/Indirect (demo-only)",
-   "tags": [
-    "build",
-    "render"
-   ],
-   "tldr": "M0/M1 render. TriangleRenderer::draw (TriangleRenderer.cpp:688-719) returns early on bridgeActive and draws per-entity vkCmdDrawIndexed+vkCmdPushConstants (:713",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1120,
-   "anchor": "M0-EXT-30"
+    "id": "M0-EXT-30",
+    "title": "Game Draw Path Bypasses Cull/Indirect (demo-only)",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1120,
+    "anchor": "M0-EXT-30"
   },
   {
-   "id": "31",
-   "title": "Hardcoded 100-Entity Cap",
-   "tags": [
-    "build",
-    "render"
-   ],
-   "tldr": "M0/M1. InstanceData instances(100) (:91), indirect sized 100 (:107,293), occlusion pool 100 (:491), pc.instanceCount=100 (:592).",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1140,
-   "anchor": "M0-EXT-31"
+    "id": "M0-EXT-31",
+    "title": "Hardcoded 100-Entity Cap",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1140,
+    "anchor": "M0-EXT-31"
   },
   {
-   "id": "32",
-   "title": "Hi-Z Depth Pyramid Has No Producer",
-   "tags": [
-    "build"
-   ],
-   "tldr": "M0/M1. depth_pyramid.comp exists; grep DepthPyramid|hiz in src \u2192 0. cull.comp:35 samples unpopulated texture.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1160,
-   "anchor": "M0-EXT-32"
+    "id": "M0-EXT-32",
+    "title": "Hi-Z Depth Pyramid Has No Producer",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1160,
+    "anchor": "M0-EXT-32"
   },
   {
-   "id": "33",
-   "title": "Orphaned Staging / Frame-Deletion Systems",
-   "tags": [
-    "build",
-    "io",
-    "memory",
-    "render"
-   ],
-   "tldr": "M0. FrameDeletionQueue + StagingRingBuffer: zero non-test call sites. AssetManager::ExecuteOneShotStaging (:117-179) is correct but stalls every upload (alloc p",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1180,
-   "anchor": "M0-EXT-33"
+    "id": "M0-EXT-33",
+    "title": "Orphaned Staging / Frame-Deletion Systems",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, io, memory, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1180,
+    "anchor": "M0-EXT-33"
   },
   {
-   "id": "34",
-   "title": "No Async Shader Compile + Watchdog",
-   "tags": [
-    "build",
-    "net",
-    "render",
-    "thread"
-   ],
-   "tldr": "M0. grep graphics_pipeline_library|ShaderCompile \u2192 0. Synchronous pipeline build; no VK_EXT_graphics_pipeline_library; no timeout.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1200,
-   "anchor": "M0-EXT-34"
+    "id": "M0-EXT-34",
+    "title": "No Async Shader Compile + Watchdog",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, net, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1200,
+    "anchor": "M0-EXT-34"
   },
   {
-   "id": "35",
-   "title": "SoA Hot-Component Layout",
-   "tags": [
-    "build",
-    "io",
-    "memory"
-   ],
-   "tldr": "M1. grep SoA \u2192 0. Transform is AoS; GPU upload wants packed vec3[].",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1220,
-   "anchor": "M0-EXT-35"
+    "id": "M0-EXT-35",
+    "title": "SoA Hot-Component Layout",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, io, memory",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1220,
+    "anchor": "M0-EXT-35"
   },
   {
-   "id": "36",
-   "title": "Meshlet / Mesh-Shader Pipeline",
-   "tags": [
-    "build",
-    "render"
-   ],
-   "tldr": "M0/M3. grep meshlet|mesh_shader \u2192 0. M3 \"millions of tris\" needs it.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1240,
-   "anchor": "M0-EXT-36"
+    "id": "M0-EXT-36",
+    "title": "Meshlet / Mesh-Shader Pipeline",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1240,
+    "anchor": "M0-EXT-36"
   },
   {
-   "id": "37",
-   "title": "Parallel Secondary Command-Buffer Recording",
-   "tags": [
-    "build",
-    "render",
-    "thread"
-   ],
-   "tldr": "M0. RenderGraph.cpp:204-296 has the framework; no pass records secondaries yet.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1260,
-   "anchor": "M0-EXT-37"
+    "id": "M0-EXT-37",
+    "title": "Parallel Secondary Command-Buffer Recording",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1260,
+    "anchor": "M0-EXT-37"
   },
   {
-   "id": "38",
-   "title": "Occlusion Query Double-Buffering",
-   "tags": [
-    "build",
-    "render"
-   ],
-   "tldr": "M1-EXT-03. Code at TriangleRenderer.cpp:760-797 but demo-branch only.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1280,
-   "anchor": "M0-EXT-38"
+    "id": "M0-EXT-38",
+    "title": "Occlusion Query Double-Buffering",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1280,
+    "anchor": "M0-EXT-38"
   },
   {
-   "id": "39",
-   "title": "Parallel-Deterministic PRNG Core",
-   "tags": [
-    "build",
-    "thread"
-   ],
-   "tldr": "M0/M4/M2.8. SplitMix64 is thread-local only; no coord-addressed streams.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1300,
-   "anchor": "M0-EXT-39"
+    "id": "M0-EXT-39",
+    "title": "Parallel-Deterministic PRNG Core",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1300,
+    "anchor": "M0-EXT-39"
   },
   {
-   "id": "40",
-   "title": "Per-Fiber Exception Containment",
-   "tags": [
-    "build",
-    "thread"
-   ],
-   "tldr": "M0. grep SEH|__try \u2192 only imgui false-positive. No try/catch around enkiTS jobs.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1320,
-   "anchor": "M0-EXT-40"
+    "id": "M0-EXT-40",
+    "title": "Per-Fiber Exception Containment",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1320,
+    "anchor": "M0-EXT-40"
   },
   {
-   "id": "41",
-   "title": "Single-Instance Boot Lock",
-   "tags": [
-    "build",
-    "io"
-   ],
-   "tldr": "M0. grep SingleInstance|lockfile \u2192 0. Two copies corrupt the same save.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1340,
-   "anchor": "M0-EXT-41"
+    "id": "M0-EXT-41",
+    "title": "Single-Instance Boot Lock",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, io",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1340,
+    "anchor": "M0-EXT-41"
   },
   {
-   "id": "42",
-   "title": "Frame-Deletion Queue Wiring",
-   "tags": [
-    "build"
-   ],
-   "tldr": "M0. FrameDeletionQueue defined but zero non-test call sites.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1360,
-   "anchor": "M0-EXT-42"
+    "id": "M0-EXT-42",
+    "title": "Frame-Deletion Queue Wiring",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1360,
+    "anchor": "M0-EXT-42"
   },
   {
-   "id": "43",
-   "title": "GPU Validation in Release Builds",
-   "tags": [
-    "build",
-    "render"
-   ],
-   "tldr": "M0. Validation layers gated --dev; ship a light runtime check.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1385,
-   "anchor": "M0-EXT-43"
+    "id": "M0-EXT-43",
+    "title": "GPU Validation in Release Builds",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1385,
+    "anchor": "M0-EXT-43"
   },
   {
-   "id": "44",
-   "title": "Release Build Sanitizer Path",
-   "tags": [
-    "build",
-    "thread"
-   ],
-   "tldr": "M0. CMakeLists.txt:43-46 FATAL_ERROR on TSAN/UBSAN Windows.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1410,
-   "anchor": "M0-EXT-44"
+    "id": "M0-EXT-44",
+    "title": "Release Build Sanitizer Path",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1410,
+    "anchor": "M0-EXT-44"
   },
   {
-   "id": "45",
-   "title": "Descriptor-Set Fragmentation Guard",
-   "tags": [
-    "build",
-    "memory",
-    "render"
-   ],
-   "tldr": "M0/M4.5. Bindless page allocator needs defrag.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1433,
-   "anchor": "M0-EXT-45"
+    "id": "M0-EXT-45",
+    "title": "Descriptor-Set Fragmentation Guard",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, memory, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1433,
+    "anchor": "M0-EXT-45"
   },
   {
-   "id": "46",
-   "title": "Secondary CB on Game Path",
-   "tags": [
-    "build",
-    "render",
-    "thread"
-   ],
-   "tldr": "M0/M1. Secondary CBs framework-only (demo).",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1458,
-   "anchor": "M0-EXT-46"
+    "id": "M0-EXT-46",
+    "title": "Secondary CB on Game Path",
+    "cluster": "C — demo-path gap findings",
+    "tags": "build, render, thread",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1458,
+    "anchor": "M0-EXT-46"
   },
   {
-   "id": "47",
-   "title": "Platform Support (Linux/macOS/console)",
-   "tags": [
-    "build"
-   ],
-   "tldr": "M0. Windows-only assumption.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1487,
-   "anchor": "M0-EXT-47"
+    "id": "M0-EXT-47",
+    "title": "Platform Support (Linux/macOS/console)",
+    "cluster": "D — release / platform / build / test / perf",
+    "tags": "build",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1487,
+    "anchor": "M0-EXT-47"
   },
   {
-   "id": "48",
-   "title": "Build & Packaging Pipeline",
-   "tags": [
-    "build",
-    "render"
-   ],
-   "tldr": "M0. No installer/bundle.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1511,
-   "anchor": "M0-EXT-48"
+    "id": "M0-EXT-48",
+    "title": "Build & Packaging Pipeline",
+    "cluster": "D — release / platform / build / test / perf",
+    "tags": "build, render",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1511,
+    "anchor": "M0-EXT-48"
   },
   {
-   "id": "49",
-   "title": "Automated Test Matrix (unit/integration)",
-   "tags": [
-    "build"
-   ],
-   "tldr": "M0. Thin tests.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1535,
-   "anchor": "M0-EXT-49"
+    "id": "M0-EXT-49",
+    "title": "Automated Test Matrix (unit/integration)",
+    "cluster": "D — release / platform / build / test / perf",
+    "tags": "build",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1535,
+    "anchor": "M0-EXT-49"
   },
   {
-   "id": "50",
-   "title": "Performance Budget & Profiling Dashboard",
-   "tags": [
-    "build",
-    "memory"
-   ],
-   "tldr": "M0. Tracy only.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1559,
-   "anchor": "M0-EXT-50"
+    "id": "M0-EXT-50",
+    "title": "Performance Budget & Profiling Dashboard",
+    "cluster": "D — release / platform / build / test / perf",
+    "tags": "build, memory",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1559,
+    "anchor": "M0-EXT-50"
   },
   {
-   "id": "51",
-   "title": "Anti-Tamper & Memory Integrity",
-   "tags": [
-    "build",
-    "memory",
-    "sec"
-   ],
-   "tldr": "M0. No integrity check.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1583,
-   "anchor": "M0-EXT-51"
+    "id": "M0-EXT-51",
+    "title": "Anti-Tamper & Memory Integrity",
+    "cluster": "D — release / platform / build / test / perf",
+    "tags": "build, memory, sec",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1583,
+    "anchor": "M0-EXT-51"
   },
   {
-   "id": "52",
-   "title": "Crash Reporter & Minidump Upload",
-   "tags": [
-    "build",
-    "io",
-    "sec"
-   ],
-   "tldr": "M0. Minidump only.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1607,
-   "anchor": "M0-EXT-52"
+    "id": "M0-EXT-52",
+    "title": "Crash Reporter & Minidump Upload",
+    "cluster": "D — release / platform / build / test / perf",
+    "tags": "build, io, sec",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1607,
+    "anchor": "M0-EXT-52"
   },
   {
-   "id": "53",
-   "title": "Analytics & Privacy-Consent",
-   "tags": [
-    "build",
-    "input",
-    "io",
-    "memory",
-    "net",
-    "render",
-    "sec",
-    "thread"
-   ],
-   "tldr": "M0. No analytics.",
-   "cluster": null,
-   "depends_on": [],
-   "depended_by": [],
-   "line": 1631,
-   "anchor": "M0-EXT-53"
+    "id": "M0-EXT-53",
+    "title": "Analytics & Privacy-Consent",
+    "cluster": "D — release / platform / build / test / perf",
+    "tags": "build, sec",
+    "tldr": null,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1631,
+    "anchor": "M0-EXT-53"
   }
- ]
-}
+]

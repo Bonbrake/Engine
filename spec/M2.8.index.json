@@ -2,119 +2,100 @@
   {
     "id": "M2.8-EXT-01",
     "title": "High-Fidelity Radio-Frequency Signal Attenuation (Comms Static)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 50,
-    "anchor": "MM2.8-EXT-01"
+    "line": 61,
+    "anchor": "M2.8-EXT-01"
   },
   {
     "id": "M2.8-EXT-02",
     "title": "Cross-Platform Topology Token Replication (Determinism-Drift Isolation)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 81,
-    "anchor": "MM2.8-EXT-02"
+    "line": 97,
+    "anchor": "M2.8-EXT-02"
   },
   {
     "id": "M2.8-EXT-03",
     "title": "Split-Screen Multi-Viewport Instanced Render Pipeline (Local Co-op Guard)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 115,
-    "anchor": "MM2.8-EXT-03"
+    "line": 136,
+    "anchor": "M2.8-EXT-03"
   },
   {
     "id": "M2.8-EXT-04",
     "title": "Fixed-Point Deterministic Math Emulation Layer (Soft-Float Isolation)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 147,
-    "anchor": "MM2.8-EXT-04"
+    "line": 173,
+    "anchor": "M2.8-EXT-04"
   },
   {
     "id": "M2.8-EXT-05",
     "title": "Host-Authoritative Topography & Seeded Client Reconstruction",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 178,
-    "anchor": "MM2.8-EXT-05"
+    "line": 209,
+    "anchor": "M2.8-EXT-05"
   },
   {
     "id": "M2.8-EXT-06",
     "title": "XorShift128+ Seed Distribution Sandbox Synchronizer",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "XorShift128",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 179,
-    "anchor": "MM2.8-EXT-06"
+    "line": 215,
+    "anchor": "M2.8-EXT-06"
   },
   {
     "id": "M2.8-EXT-07",
     "title": "xxHash64 ECS State Checksum Aggregator",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "ECS",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 198,
-    "anchor": "MM2.8-EXT-07"
+    "line": 239,
+    "anchor": "M2.8-EXT-07"
   },
   {
     "id": "M2.8-EXT-08",
     "title": "Fixed-Point Mesh-Vector Quantization Factory",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 217,
-    "anchor": "MM2.8-EXT-08"
+    "line": 263,
+    "anchor": "M2.8-EXT-08"
   },
   {
     "id": "M2.8-EXT-09",
     "title": "(provisional) Co-op Deterministic Seeded Replay Verification *(SOURCED FROM PLAN FILE)",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "SOURCED, FROM, PLAN, FILE",
     "tldr": null,
-    "depends_on": [
-      "[M2.8-EXT-09]",
-      "[M2.8-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 235,
-    "anchor": "MM2.8-EXT-09"
+    "line": 286,
+    "anchor": "M2.8-EXT-09"
   }
 ]

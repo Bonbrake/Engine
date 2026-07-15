@@ -2,332 +2,276 @@
   {
     "id": "M10-EXT-01",
     "title": "Hydraulic-Head Flux Solver for Saint-Venant Flooding **[MATH DONE]",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "MATH, DONE",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 60,
-    "anchor": "MM10-EXT-01"
+    "line": 71,
+    "anchor": "M10-EXT-01"
   },
   {
     "id": "M10-EXT-02",
     "title": "Keplerian Cosmic Orbitals & Synchronized Shadow Vectors",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 116,
-    "anchor": "MM10-EXT-02"
+    "line": 132,
+    "anchor": "M10-EXT-02"
   },
   {
     "id": "M10-EXT-03",
     "title": "Bruneton-Nishita Atmospheric Scattering & SH Ambient Fill",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "SH",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-03]",
-      "[M10-EXT-02]",
-      "[M10-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 153,
-    "anchor": "MM10-EXT-03"
+    "line": 174,
+    "anchor": "M10-EXT-03"
   },
   {
     "id": "M10-EXT-04",
     "title": "Cryospheric Frost Nucleation & Snow Accumulation",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 188,
-    "anchor": "MM10-EXT-04"
+    "line": 214,
+    "anchor": "M10-EXT-04"
   },
   {
     "id": "M10-EXT-05",
     "title": "Navier-Stokes Meteorological Wind & Barometric Fronts",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-05]",
-      "[M6.5-EXT-11]",
-      "[M6-EXT-11]",
-      "[M10-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 218,
-    "anchor": "MM10-EXT-05"
+    "line": 249,
+    "anchor": "M10-EXT-05"
   },
   {
     "id": "M10-EXT-06",
     "title": "Phenological Chlorophyll Cycles & Seasonal Canopy Thinning",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 257,
-    "anchor": "MM10-EXT-06"
+    "line": 293,
+    "anchor": "M10-EXT-06"
   },
   {
     "id": "M10-EXT-11",
     "title": "Volumetric Cloud & Participating-Medium Scattering",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-11]",
-      "[M4-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 260,
-    "anchor": "MM10-EXT-11"
+    "line": 301,
+    "anchor": "M10-EXT-11"
   },
   {
     "id": "M10-EXT-12",
     "title": "HUD / UI Widgets",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "HUD, UI",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 316,
-    "anchor": "MM10-EXT-12"
+    "line": 362,
+    "anchor": "M10-EXT-12"
   },
   {
     "id": "M10-EXT-13",
     "title": "Console / Command System",
-    "cluster": null,
+    "cluster": "A — bootstrap core",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-13]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 332,
-    "anchor": "MM10-EXT-13"
+    "line": 383,
+    "anchor": "M10-EXT-13"
   },
   {
     "id": "M10-EXT-14",
     "title": "Screenshot / Photo Mode",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-14]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 350,
-    "anchor": "MM10-EXT-14"
+    "line": 406,
+    "anchor": "M10-EXT-14"
   },
   {
     "id": "M10-EXT-15",
     "title": "Build / Packaging / Installer",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-15]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 366,
-    "anchor": "MM10-EXT-15"
+    "line": 427,
+    "anchor": "M10-EXT-15"
   },
   {
     "id": "M10-EXT-16",
     "title": "Determinism CI Gate",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "CI",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-16]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 382,
-    "anchor": "MM10-EXT-16"
+    "line": 448,
+    "anchor": "M10-EXT-16"
   },
   {
     "id": "M10-EXT-17",
     "title": "Spec↔Code Drift Checker",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 398,
-    "anchor": "MM10-EXT-17"
+    "line": 469,
+    "anchor": "M10-EXT-17"
   },
   {
     "id": "M10-EXT-18",
     "title": "Generation Debug Tooling (preview + seed explorer)",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 414,
-    "anchor": "MM10-EXT-18"
+    "line": 490,
+    "anchor": "M10-EXT-18"
   },
   {
     "id": "M10-EXT-19",
     "title": "Mod-Package / Workshop Tooling",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 430,
-    "anchor": "MM10-EXT-19"
+    "line": 511,
+    "anchor": "M10-EXT-19"
   },
   {
     "id": "M10-EXT-20",
     "title": "Generation Benchmark Suite",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-20]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 446,
-    "anchor": "MM10-EXT-20"
+    "line": 532,
+    "anchor": "M10-EXT-20"
   },
   {
     "id": "M10-EXT-21",
     "title": "HDR Swapchain Output Encoding",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "HDR",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 462,
-    "anchor": "MM10-EXT-21"
+    "line": 553,
+    "anchor": "M10-EXT-21"
   },
   {
     "id": "M10-EXT-22",
     "title": "Tutorials / Contextual Hints",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 478,
-    "anchor": "MM10-EXT-22"
+    "line": 574,
+    "anchor": "M10-EXT-22"
   },
   {
     "id": "M10-EXT-23",
     "title": "Subtitles / Dialogue Display",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-23]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 499,
-    "anchor": "MM10-EXT-23"
+    "line": 600,
+    "anchor": "M10-EXT-23"
   },
   {
     "id": "M10-EXT-24",
     "title": "Minimap / Compass / Objective Tracker",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-24]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 520,
-    "anchor": "MM10-EXT-24"
+    "line": 626,
+    "anchor": "M10-EXT-24"
   },
   {
     "id": "M10-EXT-25",
     "title": "Achievements / Steam Integration",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-25]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 541,
-    "anchor": "MM10-EXT-25"
+    "line": 652,
+    "anchor": "M10-EXT-25"
   },
   {
     "id": "M10-EXT-26",
     "title": "Pause / Time-Scale System",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 562,
-    "anchor": "MM10-EXT-26"
+    "line": 678,
+    "anchor": "M10-EXT-26"
   },
   {
     "id": "M10-EXT-27",
     "title": "Lightning & Storm VFX",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "VFX",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-27]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 583,
-    "anchor": "MM10-EXT-27"
+    "line": 704,
+    "anchor": "M10-EXT-27"
   },
   {
     "id": "M10-EXT-28",
     "title": "Wind & Vegetation Sway",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-28]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 602,
-    "anchor": "MM10-EXT-28"
+    "line": 728,
+    "anchor": "M10-EXT-28"
   },
   {
     "id": "M10-EXT-29",
     "title": "Sky & Cloud Rendering",
-    "cluster": null,
+    "cluster": "B — input / determinism / save / platform",
     "tags": "general",
     "tldr": null,
-    "depends_on": [
-      "[M10-EXT-29]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 621,
-    "anchor": "MM10-EXT-29"
+    "line": 752,
+    "anchor": "M10-EXT-29"
   }
 ]
