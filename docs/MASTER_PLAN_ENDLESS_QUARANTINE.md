@@ -574,84 +574,6 @@ inline bool EvaluateQueuePacingIntercept(FramePacingState& state, uint64_t curre
 Invisible directly — this is what keeps a rapid window-focus shift or a minimize/restore cycle from causing a visible stutter cascade on resume, by smoothing the recovery instead of snapping straight back to full-rate simulation on the first good frame.
 
 #### [M0-EXT-10] Vulkan 1.4 Pipeline Layout Structural Compatibility Validator
-#### [M0-EXT-13] Capability Probe & Feature-Tier Detection *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
-
-##### Systems Touched
-Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.
-
-##### Math
-tier = argmax_t (caps >= req(t)); caps = {maxTexSize, compute, meshlet, RVT, ReSTIR, RT}. Probe once at init.
-
-##### How It Works
-At startup, query the adapter for a fixed capability set (max texture dims, compute support, mesh-shader, virtual-texture, ReSTIR, HW-RT). Map the result to a discrete tier enum the renderer reads to pick techniques (ReSTIR vs SSGI, RVT vs classic).
-
-##### Reference Implementation
-```cpp
-Tier g_tier = ProbeCapabilities(adapter); // sets g_tier used by M4.5 quality ladder
-```
-
-##### Player-Facing Impact
-The game auto-tunes to the player's GPU - 6GB floor runs Tier-0, beefier cards light up Tier-2 features.
-
-#### [M0-EXT-12] Compute-Worker Thread-Affinity Bitmask Allocator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
-
-##### Systems Touched
-M0 + enkiTS. Pins compute workers to a CPU affinity bitmask for cache locality / NUMA.
-
-##### Math
-mask = affinityBitmask(workerPool); SetThreadAffinityMask(h, mask);
-
-##### How It Works
-Compute workers are assigned a CPU affinity bitmask (e.g. excluding the render-thread cores) so heavy compute doesn't contend with the render thread and keeps L2/L3 locality. Set once at scheduler init.
-
-##### Reference Implementation
-```cpp
-SetThreadAffinityMask(workers, kComputeMask);
-```
-
-##### Player-Facing Impact
-Compute stays off the render core - smoother frame, less jitter under load.
-
-
----
-
-#### [M0-EXT-11] Asynchronous SPIR-V Shader Cache Garbage Collector *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
-
-##### Systems Touched
-M0 shader cache. Async GC of stale SPIR-V cache entries so the cache never grows unbounded.
-
-##### Math
-evict LRU when size>cap; GC on enkiTS worker, not render thread; refcount live pipelines.
-
-##### How It Works
-Stale compiled SPIR-V entries are evicted by an LRU policy run on a background worker; entries still referenced by live pipelines are skipped. Keeps disk/memory cache bounded without hitching the frame.
-
-##### Reference Implementation
-```cpp
-void GcCache(Worker& w){ for(e in lru) if(size>cap && !e.live) Evict(e); }
-```
-
-##### Player-Facing Impact
-Shader cache stays small and fast - no disk bloat or load hitches from stale entries.
-
-
-##### Systems Touched
-Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.
-
-##### Math
-tier = argmax_t (caps >= req(t)); caps = {maxTexSize, compute, meshlet, RVT, ReSTIR, RT}. Probe once at init.
-
-##### How It Works
-At startup, query the adapter for a fixed capability set (max texture dims, compute support, mesh-shader, virtual-texture, ReSTIR, HW-RT). Map the result to a discrete tier enum the renderer reads to pick techniques (ReSTIR vs SSGI, RVT vs classic).
-
-##### Reference Implementation
-```cpp
-Tier g_tier = ProbeCapabilities(adapter); // sets g_tier used by M4.5 quality ladder
-```
-
-##### Player-Facing Impact
-The game auto-tunes to the player's GPU - 6GB floor runs Tier-0, beefier cards light up Tier-2 features.
-
 ##### Systems Touched
 
 Pipeline initialization, asset toolchain loading, shader runtime hot-reloading.
@@ -704,8 +626,61 @@ inline bool ValidatePipelineCompatibility(const PipelineLayoutValidationSpec& la
 
 Prevents hard GPU device-lost hangs and structural texture flashing when loading game modifications or live asset updates during high-intensity open-world segments.
 
+#### [M0-EXT-11] Asynchronous SPIR-V Shader Cache Garbage Collector
+##### Systems Touched
+M0 shader cache. Async GC of stale SPIR-V cache entries so the cache never grows unbounded.
 
-## [M0-EXT-15] Minimal Action-Map Input Resolution Layer
+##### Math
+evict LRU when size>cap; GC on enkiTS worker, not render thread; refcount live pipelines.
+
+##### How It Works
+Stale compiled SPIR-V entries are evicted by an LRU policy run on a background worker; entries still referenced by live pipelines are skipped. Keeps disk/memory cache bounded without hitching the frame.
+
+##### Reference Implementation
+```cpp
+void GcCache(Worker& w){ for(e in lru) if(size>cap && !e.live) Evict(e); }
+```
+
+##### Player-Facing Impact
+Shader cache stays small and fast - no disk bloat or load hitches from stale entries.
+
+#### [M0-EXT-12] Compute-Worker Thread-Affinity Bitmask Allocator
+##### Systems Touched
+M0 + enkiTS. Pins compute workers to a CPU affinity bitmask for cache locality / NUMA.
+
+##### Math
+mask = affinityBitmask(workerPool); SetThreadAffinityMask(h, mask);
+
+##### How It Works
+Compute workers are assigned a CPU affinity bitmask (e.g. excluding the render-thread cores) so heavy compute doesn't contend with the render thread and keeps L2/L3 locality. Set once at scheduler init.
+
+##### Reference Implementation
+```cpp
+SetThreadAffinityMask(workers, kComputeMask);
+```
+
+##### Player-Facing Impact
+Compute stays off the render core - smoother frame, less jitter under load.
+
+#### [M0-EXT-13] Capability Probe & Feature-Tier Detection
+##### Systems Touched
+Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.
+
+##### Math
+tier = argmax_t (caps >= req(t)); caps = {maxTexSize, compute, meshlet, RVT, ReSTIR, RT}. Probe once at init.
+
+##### How It Works
+At startup, query the adapter for a fixed capability set (max texture dims, compute support, mesh-shader, virtual-texture, ReSTIR, HW-RT). Map the result to a discrete tier enum the renderer reads to pick techniques (ReSTIR vs SSGI, RVT vs classic).
+
+##### Reference Implementation
+```cpp
+Tier g_tier = ProbeCapabilities(adapter); // sets g_tier used by M4.5 quality ladder
+```
+
+##### Player-Facing Impact
+The game auto-tunes to the player's GPU - 6GB floor runs Tier-0, beefier cards light up Tier-2 features.
+
+#### [M0-EXT-15] Minimal Action-Map Input Resolution Layer
 
 ##### Systems Touched
 Every early input consumer, MOST URGENTLY the debug fly-camera currently
@@ -755,7 +730,7 @@ held input instead of only reacting to discrete key-transition events.
 
 ---
 
-## [M0-EXT-16] ENGINE_DETERMINISM_MODE Compile Guard & CI Assertion
+#### [M0-EXT-16] ENGINE_DETERMINISM_MODE Compile Guard & CI Assertion
 
 ##### Systems Touched
 M2.8 (deterministic co-op) — establishes the constraint at the layer
@@ -791,7 +766,7 @@ floating-point ordering difference that only shows up under load.
 
 ---
 
-## [M0-EXT-17] Split Save-Schema / Network-Protocol Version Fields
+#### [M0-EXT-17] Split Save-Schema / Network-Protocol Version Fields
 
 ##### Systems Touched
 M7 (persistence) and M12 (networked co-op) — declared independently now
@@ -819,7 +794,7 @@ matchmaking compatibility, and vice versa.
 
 ---
 
-## [M0-EXT-18] Atomic Write-Temp-Then-Rename Save I/O
+#### [M0-EXT-18] Atomic Write-Temp-Then-Rename Save I/O
 
 ##### Systems Touched
 M7 persistence — every save write, going forward.
@@ -849,7 +824,7 @@ survival game's core trust guarantee.
 
 ---
 
-## [M0-EXT-19] Platform User-Data Directory Resolution via AssetPath
+#### [M0-EXT-19] Platform User-Data Directory Resolution via AssetPath
 
 ##### Systems Touched
 Extends the existing `AssetPath` resolver (M0) to also resolve a
@@ -883,7 +858,7 @@ no migration script needed later.
 
 ---
 
-## [M0-EXT-20] Cross-Machine Crash Correlation Tag
+#### [M0-EXT-20] Cross-Machine Crash Correlation Tag
 
 ##### Systems Touched
 M2.8/M12 co-op — extends the existing Aftermath/RGD crash-dump path
@@ -907,7 +882,7 @@ struct CrashTag { uint64_t tick; uint64_t sessionId; };
 Co-op crash reports can actually be correlated across machines instead
 of being two disconnected local dumps.
 
-## [M0-EXT-21] Persistent World-Epoch Clock with Deterministic Offline Fast-Forward
+#### [M0-EXT-21] Persistent World-Epoch Clock with Deterministic Offline Fast-Forward
 
 ##### Systems Touched
 M7 (persistence) and every future decay/weather system — declared at
@@ -938,7 +913,7 @@ progresses, food decays — the Zomboid-style "it's a real place" feel.
 
 ---
 
-## [M0-EXT-22] Monotonic-vs-Wall-Clock Tamper Cross-Check
+#### [M0-EXT-22] Monotonic-vs-Wall-Clock Tamper Cross-Check
 
 ##### Systems Touched
 Extends [M0-EXT-21] — prevents trivially defeating offline decay/weather
@@ -968,7 +943,7 @@ Closes an easy exploit for dodging decay/weather consequences.
 
 ---
 
-## [M0-EXT-23] Extended Adaptive-Quality Watchdog
+#### [M0-EXT-23] Extended Adaptive-Quality Watchdog
 
 ##### Systems Touched
 Builds directly on the existing frame-pacing EMA (M0-EXT-09) — adds a
@@ -1005,7 +980,7 @@ instead of an unpredictable frame-rate collapse at the worst moment.
 
 ---
 
-## [M0-EXT-24] Single-Instance Boot Lock
+#### [M0-EXT-24] Single-Instance Boot Lock
 
 ##### Systems Touched
 Boot sequence — prevents two copies of the game writing to the same
@@ -1037,7 +1012,7 @@ Prevents a corrupted save from two instances writing at once.
 
 ---
 
-## [M0-EXT-25] Per-Fiber Exception Containment for enkiTS Jobs
+#### [M0-EXT-25] Per-Fiber Exception Containment for enkiTS Jobs
 
 ##### Systems Touched
 Every background job dispatched through enkiTS — a bad chunk-gen task
@@ -1069,7 +1044,7 @@ game mid-session.
 
 ---
 
-## [M0-EXT-26] Shader-Compile Timeout & Safe-Mode Boot Fallback
+#### [M0-EXT-26] Shader-Compile Timeout & Safe-Mode Boot Fallback
 
 ##### Systems Touched
 M1's async shader compilation path, and M0's pipeline-cache/mod
@@ -1104,7 +1079,7 @@ the game degrades to safe mode instead of not starting at all.
 
 ---
 
-## [M0-EXT-27] Foreground/Background I/O and Thread Priority Tiers
+#### [M0-EXT-27] Foreground/Background I/O and Thread Priority Tiers
 
 ##### Systems Touched
 Extends the existing file-handle ring buffer (M0-EXT-04) and enkiTS
@@ -1131,7 +1106,7 @@ enum class JobPriority { Foreground, Background };
 Autosaves and streaming bursts no longer cause a frame hitch during
 gameplay-critical moments.
 
-## [M0-EXT-28] AssetPath Checksum Integrity Validation
+#### [M0-EXT-28] AssetPath Checksum Integrity Validation
 
 ##### Systems Touched
 Extends the existing `AssetPath` resolver (M0) — every load, mod or
@@ -1159,7 +1134,7 @@ A corrupted texture, mesh, or mod file never silently loads as garbage.
 ---
 
 
-## [M0-EXT-29] HDR Color-Space & DPI-Scale Swapchain Setup
+#### [M0-EXT-29] HDR Color-Space & DPI-Scale Swapchain Setup
 
 ##### Systems Touched
 Swapchain creation (M0) and UI layout math (M11, later) — declared now
