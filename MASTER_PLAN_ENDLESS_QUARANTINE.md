@@ -574,6 +574,24 @@ inline bool EvaluateQueuePacingIntercept(FramePacingState& state, uint64_t curre
 Invisible directly — this is what keeps a rapid window-focus shift or a minimize/restore cycle from causing a visible stutter cascade on resume, by smoothing the recovery instead of snapping straight back to full-rate simulation on the first good frame.
 
 #### [M0-EXT-10] Vulkan 1.4 Pipeline Layout Structural Compatibility Validator
+#### [M0-EXT-13] Capability Probe & Feature-Tier Detection *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.
+
+##### Math
+tier = argmax_t (caps >= req(t)); caps = {maxTexSize, compute, meshlet, RVT, ReSTIR, RT}. Probe once at init.
+
+##### How It Works
+At startup, query the adapter for a fixed capability set (max texture dims, compute support, mesh-shader, virtual-texture, ReSTIR, HW-RT). Map the result to a discrete tier enum the renderer reads to pick techniques (ReSTIR vs SSGI, RVT vs classic).
+
+##### Reference Implementation
+```cpp
+Tier g_tier = ProbeCapabilities(adapter); // sets g_tier used by M4.5 quality ladder
+```
+
+##### Player-Facing Impact
+The game auto-tunes to the player's GPU - 6GB floor runs Tier-0, beefier cards light up Tier-2 features.
 
 ##### Systems Touched
 
@@ -1352,6 +1370,64 @@ inline void* ArenaAllocateBump(BumpArena& arena, size_t size, size_t alignment =
 Invisible — this is what keeps pathfinding and raycast-heavy systems (horde AI at scale) from stalling on heap allocator locks mid-tick.
 
 #### [M1-EXT-08] Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
+#### [M1-EXT-10] Render-Graph Pass Dependency DAG Flattener *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 render graph. Linearizes the pass DAG into a valid submit order respecting resource read/write edges.
+
+##### Math
+topo = Kahn(N, E); inDeg[v]-- on emit; stable order by priority when tied.
+
+##### How It Works
+The render graph is a DAG of passes with resource edges. A Kahn topological sort flattens it to a submission order; ties broken by priority so important passes stay early. Recomputed only when the graph changes.
+
+##### Reference Implementation
+```cpp
+vector<Pass*> order=TopoSort(graph); // Kahn, priority tiebreak
+```
+
+##### Player-Facing Impact
+Render passes always execute in a valid order - no read-before-write hazards, no manual ordering.
+
+---
+#### [M1-EXT-11] Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + M2.6 GPU culling. Memory/execution barrier between compute culling and the indirect draw that consumes its buffer.
+
+##### Math
+barrier(srcStage=COMPUTE, dstStage=DRAW, buf=visibleList, access=WRITE->READ).
+
+##### How It Works
+After the compute cull pass writes the visible-instance buffer, an explicit barrier (or split barrier) ensures the indirect-draw pass sees the writes before reading instance counts/offsets. Prevents reading stale or partial cull data.
+
+##### Reference Implementation
+```cpp
+vkCmdPipelineBarrier(cb, COMPUTE, DRAW, 0, 0,nullptr, 1,&bufBarrier, 0,nullptr);
+```
+
+##### Player-Facing Impact
+GPU culling + indirect draw stay correct across passes - no popped or duplicated instances.
+
+---
+#### [M1-EXT-16] SoA Cache-Line Padding *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 ECS storage. Pads SoA component arrays to 64-byte cache lines to avoid false sharing / straddle.
+
+##### Math
+stride = align(sizeof(T), 64); base = alloc(n*stride, 64).
+
+##### How It Works
+Hot component arrays are allocated with a stride rounded to a cache line and base-aligned to 64B, so concurrent jobs touching different entities don't thrash the same line. Applied to the components M0-EXT-12 identified as hot.
+
+##### Reference Implementation
+```cpp
+auto* a = (T*)aligned_alloc(64, n*align(sizeof(T),64));
+```
+
+##### Player-Facing Impact
+Multithreaded ECS updates avoid cache-line contention - smoother frame under load.
 
 ##### Systems Touched
 
@@ -1596,6 +1672,44 @@ inline void ClampVelocityImpulse(glm::vec3& vel, float maxLimit) {
 Ragdolls near a world-origin rebase boundary (`[M2.6]`, >500 units) never visibly explode or teleport — they stay physically bounded even at the exact moment the floating-origin shift happens.
 
 #### [M2-EXT-05] Mechanical Muscle Exhaustion Joint-Friction Damping Adder
+#### [M2-EXT-06] Jolt-to-EnTT Double-Precision Transform Remapper *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2 (Jolt) + M2.6 (EnTT Transform). Each tick maps Jolt's single-precision body transform back to the authoritative double-precision EnTT Transform.
+
+##### Math
+EnTT.pos = worldOrigin + (double)jolt.pos; EnTT.quat = (double)jolt.quat.
+
+##### How It Works
+Jolt simulates in single precision around a local origin for stability; the canonical world transform is double precision in EnTT. After each physics step, the body's local transform is re-based to the streaming origin and written back to the double-precision EnTT Transform so rendering/culling stay world-accurate at km scale.
+
+##### Reference Implementation
+```cpp
+auto& T = reg.get<Transform>(e); T.pos = origin + (dvec3)body.GetPosition(); T.rot=(dquat)body.GetRotation();
+```
+
+##### Player-Facing Impact
+Physics stays stable up close while the world stays precise at long range - no drift or snapping.
+
+---
+#### [M2-EXT-07] Kinematic Virtual Sweep Tunneling Safeguard *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2 character controller + M2.6 collision. Clamps fast kinematic steps to a swept result so the body can't pass through thin geometry.
+
+##### Math
+swept = Sweep(shape, from, to, world); if(hit.t < 1) to = from + dir*hit.t - skin.
+
+##### How It Works
+When a kinematic character moves more than its thickness in one step, a virtual sweep against the broadphase prevents tunneling through walls/thin floors. The move is shortened to the first hit minus a skin width; the remainder is queued for next step.
+
+##### Reference Implementation
+```cpp
+SweepHit h = Sweep(capsule, from, to, world); if(h.t<1) to = lerp(from,to,h.t)-normal*skin;
+```
+
+##### Player-Facing Impact
+Fast movement never clips through walls or floors - no fall-through bugs.
 
 ##### Systems Touched
 
@@ -2150,6 +2264,44 @@ glm::vec3 InertializeCameraOffset(const glm::vec3& offset0, float t) {
 Camera transitions between first- and third-person feel weighty and continuous instead of snapping — a sprint-to-slide into cover carries visible momentum through the perspective switch. Third-person camera glides around doorframes and cover geometry cleanly instead of clipping through walls or popping to a new position.
 
 #### [M2.7-EXT-15] Nested Weapon Component Rig with Two-Bone IK Arm Locking
+#### [M2.7-EXT-16] Procedural Recoil Low-Discrepancy Sequence Cache *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2.7 weapons. Caches a per-weapon Halton/low-discrepancy recoil sequence so kick is reproducible and desync-safe.
+
+##### Math
+kick_i = (Halton(2,i), Halton(3,i)) * spread; index advances per shot, reset on reload.
+
+##### How It Works
+Each weapon owns a seeded low-discrepancy sequence for recoil offset; the i-th shot uses the i-th sample, so recoil patterns are identical across clients (important for co-op determinism) and feel designed, not random. Index resets on reload.
+
+##### Reference Implementation
+```cpp
+vec2 kick = LowDisc(seq, shotIndex++); // Halton(2,3)
+```
+
+##### Player-Facing Impact
+Recoil is consistent and fair in co-op - same gun kicks the same way for every player.
+
+---
+#### [M2.7-EXT-17] Parametric Gait-Warping Stride Adjuster *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2.7 locomotion. Warps gait cycle to stride length under speed/slope so feet don't slide.
+
+##### Math
+phase = walkDist / strideLen; footLock when phase in plant window; blend warped clip.
+
+##### How It Works
+Rather than speed-scale a fixed gait (which slides feet at extremes), the gait phase is driven by distance traveled over the current stride length; on slopes the stride is lengthened/shortened parametrically. Feet lock to ground during the plant window, eliminating skate.
+
+##### Reference Implementation
+```cpp
+float phase = traveled / strideLen(speed, slope); Pose = SampleGait(clip, phase);
+```
+
+##### Player-Facing Impact
+Characters walk/run uphill and at all speeds without foot sliding - grounded, believable motion.
 
 ##### Systems Touched
 
@@ -2351,6 +2503,86 @@ int64_t FixedPointMultiply(int64_t a, int64_t b) {
 Extended multiplayer survival sessions stay perfectly synchronized. Long projectile trajectories and terrain navigation choices never drift or trigger network desync reconciliations, even when mixing different CPU families in the same session.
 
 #### [M2.8-EXT-05] Host-Authoritative Topography & Seeded Client Reconstruction
+#### [M2.8-EXT-06] XorShift128+ Seed Distribution Sandbox Synchronizer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2.8 co-op determinism. Derives per-peer deterministic sub-seeds from the session seed for lockstep.
+
+##### Math
+s_i = XorShift128+(s_session ^ peerId); each peer advances its own stream independently but reproducibly.
+
+##### How It Works
+The host session seed is split into per-peer sub-streams via XorShift128+ keyed by peer id, so every client generates the same per-peer randomness in the same order (spawns, loot) without sharing full RNG state. Essential for co-op lockstep (M12).
+
+##### Reference Implementation
+```cpp
+uint64_t s = XorShift128p(sessionSeed ^ peerId); // each peer's stream
+```
+
+##### Player-Facing Impact
+Co-op stays in lockstep - every player sees the same spawns/loot, no desync.
+
+---
+#### [M2.8-EXT-07] xxHash64 ECS State Checksum Aggregator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2.8 + M12 determinism. Rolling xxHash64 over ECS snapshot for desync detection.
+
+##### Math
+h = xxh64(state_i, h); compare h_A vs h_B every N ticks.
+
+##### How It Works
+Each tick (dev/verify gated), the full deterministic ECS snapshot is folded into a running xxHash64; peers exchange hashes every N ticks and flag divergence on mismatch, pinpointing the first differing entity. Complements M2.8-EXT-09 replay verification.
+
+##### Reference Implementation
+```cpp
+uint64_t h=XXH64(&snap, len, seed); if(h!=peerH) FlagDesync(tick);
+```
+
+##### Player-Facing Impact
+Desyncs are caught fast and located - co-op correctness is verifiable, not assumed.
+
+---
+#### [M2.8-EXT-08] Fixed-Point Mesh-Vector Quantization Factory *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2.8 + M2.6. Quantizes mesh/transform vectors to fixed-point for lossless wire transmission.
+
+##### Math
+q = round(v * 2^F) >> F; reconstruct v' = q / 2^F; F=16 gives sub-mm at km range.
+
+##### How It Works
+To send transforms/mesh deltas over the wire without float drift between clients, vectors are quantized to signed fixed-point (F fractional bits) before serialization and dequantized on receipt. Guarantees bit-identical reconstruction across platforms.
+
+##### Reference Implementation
+```cpp
+int32_t q = (int32_t)roundf(v * (1<<F)); float v2 = q / (float)(1<<F);
+```
+
+##### Player-Facing Impact
+Networked transforms reconstruct identically on all clients - no float-induced drift.
+#### [M2.8-EXT-09] (provisional) Co-op Deterministic Seeded Replay Verification *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Reads fixed-point layer M2.8-EXT-04 (verified) + topology-replication token M2.8-EXT-02. Writes 64-bit hash to debug telemetry (M13 / M5.4 bandit tracker channel). Observation-only, ship-disabled.
+
+##### Math
+Running 64-bit FNV-1a hash over serialized deterministic state each tick: H = H xor FNV1a(state_i); H = (H*1099511628211) mod 2^64. Two clients exchange H every N ticks; divergence if H_A != H_B.
+
+##### How It Works
+At fixed cadence (every 60 ticks, dev-gated), each client hashes full deterministic sim state via fixed-point serialization M2.8-EXT-04; host compares client hashes. Mismatch trips dev-only alarm identifying first diverging entity (Spike A verification wired into shipped co-op path). Ship-disabled by default.
+
+##### Reference Implementation
+```cpp
+uint64_t g_h = 14695981039346656037ULL;
+for(auto& e: serializedState) g_h = (g_h ^ FNV1a(e)) * 1099511628211ULL;
+if(hostH != peerH) LogDivergence(tick, firstDifferingHandle);
+```
+
+##### Player-Facing Impact
+Co-op drift is caught, not assumed away — desyncs debuggable without affecting players.
+
+---
 
 ##### Systems Touched
 
@@ -2637,6 +2869,44 @@ void ApplyMetabolicModifiers(float hydration, float satiety, float t_ambient, fl
 A hot day spent sprinting from a horde burns through hydration dramatically faster than resting in shade — the same heat that's already dangerous for insulation reasons now directly punishes exertion too. Going hungry doesn't kill you outright; it quietly caps how hard you can push before your legs give out, which reads as "I'm just tired" until you realize you haven't eaten in two days.
 
 #### [M2.9-EXT-08] Caloric Body Condition Scoring & Layered Thermal Insulation
+#### [M2.9-EXT-09] Pneumatic Tire Slip-Angle Deformation Loop *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2.9 vehicles. Models tire deformation under slip angle for handling + wear.
+
+##### Math
+F_lat = D*sin(C*atan(B*slip)); slip = atan(v_lat/v_long); deform = k*F_lat.
+
+##### How It Works
+A simplified Pacejka-style tire model computes lateral force from slip angle each step; the tire mesh deforms (sidewall bulge, contact patch) proportional to load. Slip beyond grip threshold triggers slide. Feeds handling + visual deformation + wear.
+
+##### Reference Implementation
+```cpp
+float Fy = D*sin(C*atan(B*slipAngle)); deform = clamp(Fy*kDeform, 0, maxBulge);
+```
+
+##### Player-Facing Impact
+Tires deform and lose grip realistically - handling feels physical, not arcade.
+
+---
+#### [M2.9-EXT-10] Kinematic Character Flood Buoyancy & Drag Bridge *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M2.9 + M2.7 character controller. Bridges the character controller to water buoyancy/drag so wading/swimming is stable.
+
+##### Math
+F_buoy = rho*g*Vsub; F_drag = 0.5*rho*C_d*A*v^2; a = (F_buoy - F_drag - g*m)/m.
+
+##### How It Works
+When the character enters a water volume, buoyancy (submerged volume) and drag are applied to the controller's vertical velocity; the kinematic step is clamped so it floats/sinks smoothly instead of jittering at the surface. Wading depth modulates speed (links M9-EXT-21).
+
+##### Reference Implementation
+```cpp
+vec3 a = (rho*g*Vsub - 0.5*rho*Cd*A*v*v - g*mass)*up/mass;
+```
+
+##### Player-Facing Impact
+Wading/swimming feels physically consistent - no bobbing jitter at the waterline.
 
 ##### Systems Touched
 
@@ -3455,6 +3725,106 @@ glm::vec3 ComputeGrowthDirection(glm::vec3 branchTip, const std::vector<glm::vec
 Forests grow with organic, resource-competitive canopy shapes — trees near cliffs visibly lean toward open sky, and undergrowth thins naturally under dense canopy — instead of uniformly-spaced identical tree stamps.
 
 #### [M4-EXT-19] Anthropogenic Infrastructure Exclusion Splines
+#### [M4-EXT-08] 3D WFC Vertical Structural Dependency Guard *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 WFC. Guarantees vertical structural dependencies (floor supports wall above) are satisfied.
+
+##### Math
+for cell c: require support(c.below) valid before placing c; backtrack if violated.
+
+##### How It Works
+During WFC propagation, a cell may only take a tile whose vertical structural preconditions are met by the tile below (e.g. a wall needs a floor/support beneath, not open air). Violations prune the possibility set; if a column deadlocks it backtracks.
+
+##### Reference Implementation
+```cpp
+if(!BelowSupports(tile, grid[below])) mask &= ~bit(tile);
+```
+
+##### Player-Facing Impact
+Generated structures stand up - no floating walls or unsupported floors.
+
+---
+#### [M4-EXT-09] Deterministic Interior Furniture Spatial Constraint Solver *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 + M2.6. Places furniture in rooms respecting clearances/reachability deterministically.
+
+##### Math
+for slot: if(Clearance(f, room) && Reachable(f)) place(f, seed); seeded RNG.
+
+##### How It Works
+Given a generated room, candidate furniture placements are tested against clearance (no overlap, walkable gap) and reachability (path from door). A seeded solver picks valid placements so interiors are navigable and varied but reproducible per seed.
+
+##### Reference Implementation
+```cpp
+if(Clearance(f,room) && Reachable(f,door)) Place(f, rng);
+```
+
+##### Player-Facing Impact
+Interiors are furnished but still walkable - loot rooms aren't blocked by a couch.
+
+---
+#### [M4-EXT-10] Macro-Graph Vector Spline Corridor Welder *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 + M5.4. Welds road corridor splines into one continuous drivable path graph.
+
+##### Math
+path = CatmullRom(join(spline_i, spline_{i+1})); tangent matched at joints; width field added.
+
+##### How It Works
+Adjacent road-vector splines are stitched into a single C1-continuous corridor (matched tangents at joints) and given a width field, producing the drivable macro-graph that M5.4-EXT-06 routes hordes/caravans over and M4 terrain-gen uses for road masks.
+
+##### Reference Implementation
+```cpp
+Curve c = CatmullRom(Concat(splines)); c.width = laneField;
+```
+
+##### Player-Facing Impact
+Roads are continuous and drivable end-to-end - pathing and driving share one graph.
+
+---
+#### [M4-EXT-11] WFC Contradiction Horizon Recovery *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 WFC. On contradiction, rolls back to a saved horizon and re-expands instead of stalling.
+
+##### Math
+on contradiction: restore grid to horizon H; re-expand from H with new tie-break; H saved every K cells.
+
+##### How It Works
+WFC can collapse to zero options. Rather than a 3x3 local reset, a saved horizon (every K cells of progress) is restored and expansion re-runs with a perturbed tie-break, escaping the dead end. Keeps background chunk gen progressing.
+
+##### Reference Implementation
+```cpp
+if(mask==0){ grid=horizon; ReExpand(horizon, newTieBreak); }
+```
+
+##### Player-Facing Impact
+Chunk generation never hard-stalls on a bad tile pick - maps keep streaming.
+
+---
+#### [M4-EXT-21] Signage Grammar Transcoder *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 PCG + M13 SLM + M11 UI. Generates contextual signage text via a grammar for world flavor.
+
+##### Math
+sign = Grammar(prod, seededRNG(locale)); terminals drawn deterministically per seed.
+
+##### How It Works
+A phrase grammar produces signage (shop names, warnings, graffiti) seeded by world-graph node + locale. Output feeds M13 SLM broadcasts and M11 signage so streets read as lived-in. Deterministic per seed.
+
+##### Reference Implementation
+```cpp
+string sign = SignageGrammar.Generate(nodeSeed, locale);
+```
+
+##### Player-Facing Impact
+Streets/ruins carry readable, varied signage - world feels inhabited, not prop-empty.
+
+---
 
 ##### Systems Touched
 
@@ -4111,6 +4481,204 @@ float ComputeHeiligenscheinBoost(glm::vec3 viewDir, glm::vec3 sunDir, float poro
 Dewy grass and porous dirt show a faint bright halo around the camera's own shadow (exactly like real dew-covered lawns do), and wet/crystalline surfaces sparkle with tiny shifting specular points as you move instead of a flat, static shine.
 
 #### [M4.5-EXT-20] Beer-Lambert Translucent Medium Light Extinction
+#### [M4.5-EXT-14] Compute Skinning Vertex Tangent-Space Recomputer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M5.1. Recomputes vertex tangent space after skinning on compute so normal mapping stays correct.
+
+##### Math
+T = Orthonormalize(T - dot(T,N)*N, N); B = cross(N,T); per vertex post-skin.
+
+##### How It Works
+After the skinning compute pass writes deformed positions/normals, a second pass recomputes the tangent basis per vertex (orthonormalized to the new normal) so normal/parallax maps light correctly on animated characters/creatures.
+
+##### Reference Implementation
+```cpp
+void RecomputeTangent(vec3& T, vec3 N){ T=normalize(T-dot(T,N)*N); vec3 B=cross(N,T); }
+```
+
+##### Player-Facing Impact
+Skinned characters keep correct lighting/skin detail through extreme joint deformation.
+
+---
+#### [M4.5-EXT-15] Hysteresis-Gated TAA Variance Clamper *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M0-EXT-40. Clamps TAA temporal variance with hysteresis to kill ghosting without losing detail.
+
+##### Math
+if(var>thr && stable) blend->current; else keep history; hysteresis band avoids threshold flicker.
+
+##### How It Works
+Tracks per-pixel temporal variance; when variance exceeds threshold AND pixel is stable, clamps history blend toward current (kills ghosting). Hysteresis band prevents flicker at the threshold. Works with M4.5-EXT-18 visibility buffer.
+
+##### Reference Implementation
+```cpp
+if(variance>thr && stable) out=mix(history,current,clampK);
+```
+
+##### Player-Facing Impact
+AA stays stable - no smearing on motion, no shimmer when still.
+
+---
+#### [M4.5-EXT-16] Software Micro-Polygon Voxel Rasterizer (compute) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M2.6. Computes micro-polygon voxelization for destruction/footprint detail without a hardware path.
+
+##### Math
+voxel = RasterMicro(poly, vol); coverage dilated by k for blend.
+
+##### How It Works
+A compute pass voxelizes small destroyed fragments/footprints into a low-res volume used for decals, debris masking, footstep material resolution. Software path keeps it off the critical render pass.
+
+##### Reference Implementation
+```cpp
+void VoxelizeMicro(Quad q, VoxelVol& vol, int k){ for(px in q.proj) vol.Set(px, cov); if(k) Dilate(vol,k); }
+```
+
+##### Player-Facing Impact
+Destruction leaves voxel-accurate debris/footprint detail, not just a hole.
+
+---
+#### [M4.5-EXT-17] Directional Ambient Visibility Field Cache *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M6. Caches a directional ambient visibility field so GI + audio occlusion query cheaply.
+
+##### Math
+vis(dir) = TraceOcclusion(dir, field); sampled per probe; reprojected on camera move.
+
+##### How It Works
+Bakes a low-res directional visibility field per probe (SH or octahedral). Lighting uses it for cheap AO/GI; M6 acoustic occlusion reuses the same field so sound and light agree on what's blocked.
+
+##### Reference Implementation
+```cpp
+float Visibility(vec3 dir, ProbeField& f){ return f.Sample(octEncode(dir)); }
+```
+
+##### Player-Facing Impact
+Lighting + sound occlusion are consistent and cheap - one field serves both.
+
+---
+#### [M4.5-EXT-18] Transient Skinned Vertex Cache for Visibility Buffer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M1 visibility buffer. Caches transient skinned vertices for the visibility buffer within a frame.
+
+##### Math
+ring cache of skinned verts keyed by (mesh,frame); hit on same-frame reuse.
+
+##### How It Works
+Skinned vertices needed by the visibility-buffer pass are cached in a small ring buffer for the frame so the same deformed vertex isn't recomputed by multiple consumers (shadow, main, velocity). Cleared each frame.
+
+##### Reference Implementation
+```cpp
+SkinnedCache c; if(!c.Get(key,out)){ out=Skin(pos,nrm); c.Put(key,out); }
+```
+
+##### Player-Facing Impact
+Visibility buffer stays coherent across passes without redundant skinning.
+#### [M4.5-EXT-27] Scalable Ambient Obscurance (SSAO) *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Tier-1 quality ladder. Reads G-Buffer depth+normal from M4.5 deferred pass. Outputs occlusion term multiplied into ambient/SH fill (complements M10-EXT-03 SH ambient).
+
+##### Math
+McGuire 2012 SSAO: per pixel sample N points in view-space sphere radius R, project to screen, compare depth; occlusion = sum(max(0,z_view-z_sample)/z_sample). 4x4 rotated poisson disk (24-sample spiral) + bilateral depth-weight to avoid haloing.
+
+##### How It Works
+Fullscreen pass after G-Buffer: reconstruct view-space pos from depth, sample AO kernel with per-pixel rotation (blue-noise dither, reuse K-EXT-22 STBN), blur with depth-aware edge-preserving filter, output single-channel AO texture. Tier-1 only; Tier-2 uses ReSTIR GI (subsumes contact shadows) as fallback for 6GB floor.
+
+##### Reference Implementation
+```cpp
+float SSAO(uint2 px, Texture2D depth, float radius, uint samples){ float occ=0; vec3 P=ViewPos(px,depth); for(uint i=0;i<samples;++i){ vec3 s=Kernel(i)*radius; occ+=max(0.0, P.z - ViewPos(px+s.xy,depth).z)/ViewPos(px+s.xy,depth).z; } return 1.0 - occ/samples; }
+```
+
+##### Player-Facing Impact
+Tier-1 contact shadows / ambient occlusion on the 6GB floor without ReSTIR.
+
+---
+#### [M4.5-EXT-28] Screen-Space Reflections (SSR) *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Absent as a system previously. Reads G-Buffer depth+normal+rough/metal; writes reflection sample for M4.5 lighting resolve. Tier-1/2 (Tier-0 uses baked env approximation).
+
+##### Math
+Ray-march in view space from R=reflect(V,N); at each step project to screen, compare ray depth vs scene depth, accept on crossing (binary-search refine). Fallback to env/SH on miss/over-distance. Roughness spreads ray origin/length (fewer steps for rough).
+
+##### How It Works
+Fullscreen pass after opaque G-Buffer. For each pixel above roughness threshold, march R; on hit sample HDR color buffer (RVT/atlas) at hit UV, mix by Fresnel. Cheap hierarchical-Z accelerated march (reuse existing HZB) for large steps. Denoised with short temporal/edge-aware blur.
+
+##### Reference Implementation
+```cpp
+bool TraceSSR(vec3 P, vec3 R, Texture2D depth, out vec2 hitUV){ vec3 pos=P; float step=kStep; for(int i=0;i<kMaxSteps;++i){ pos+=R*step; vec2 uv=Proj(pos); float d=Linearize(depth.Sample(uv)); if(pos.z>d){ hitUV=uv; return true; } } return false; }
+```
+
+##### Player-Facing Impact
+Wet/metal surfaces reflect the world — richer Tier-1 visuals without ReSTIR.
+
+---
+#### [M4.5-EXT-29] Screen-Space Global Illumination (SSGI) Fallback *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+ReSTIR GI is Tier-2 only. This is Tier-0/1 approximation: screen-space diffuse bounces reusing same G-Buffer+HZB+temporal denoiser M4.5-EXT-15. Not a ReSTIR replacement — cheap fallback.
+
+##### Math
+Per pixel trace short diffuse ray (cosine-weighted hemisphere around N), march like SSR, on hit sample lit color, apply Lambert albedo/pi*L*max(0,N.w). One bounce; multi-bounce approximated by reusing prior frame SSGI buffer (temporal, reprojected via M4.5-EXT-15 velocity buffer).
+
+##### How It Works
+Same fullscreen march infra as M4.5-EXT-28 but diffuse-weighted + lower precision, blended under direct lighting. Bounded sample count (8-16) for 6GB floor. Denoised by existing TAA variance-clamp path. Disabled on Tier-2 (ReSTIR instead).
+
+##### Reference Implementation
+```cpp
+vec3 SSGI(vec3 P, vec3 N, Texture2D litColor, int samples){ vec3 acc=vec3(0); for(int i=0;i<samples;++i){ vec3 w=CosineSample(N); if(TraceSSR(P,w,litColor,uv)) acc+=litColor.Sample(uv)*max(0.0,dot(N,w)); } return acc/samples; }
+```
+
+##### Player-Facing Impact
+Tier-0/1 gets cheap indirect light instead of flat ambient on the 6GB floor.
+
+---
+#### [M4.5-EXT-30] Impostor LOD (Octahedral) for Distant Meshes *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Distant static meshes (buildings, ruined vehicles) currently pop or draw full geometry. Generates octahedral-impostor atlases per mesh at bake time; sampled beyond view-distance threshold. Reuses M4.5 LOD/culling.
+
+##### Math
+Octahedral impostor: pre-render mesh from K directions on octahedron hemisphere into one atlas. Runtime compute view octahedral coord oct=octEncode(normalize(viewDir)), index atlas, sample impostor billboard. Cheaper than spherical/3D layouts (better texel packing).
+
+##### How It Works
+Offline: render K (e.g. 32) views into atlas. Runtime: billboard quad with UVs remapped by octahedral direction; depth preserved via depth-impostor write for correct occlusion. Cross-fade last real LOD to impostor over small distance band to hide swap. Feeds same culling as rest of M4.5.
+
+##### Reference Implementation
+```cpp
+vec2 OctUV(vec3 vd){ vec3 n=normalize(vd); n/=(abs(n.x)+abs(n.y)+abs(n.z)); return vec2(n.x/(1-abs(n.z)), n.y/(1-abs(n.z)))*0.5+0.5; }
+```
+
+##### Player-Facing Impact
+Distant cities/ruins stay detailed at range without drawing full geometry — perf win on 6GB floor.
+
+---
+#### [M4.5-EXT-31] Signed Distance Field (SDF) Shadow Cascade *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Only passing mention previously. Builds sparse clipmap SDF of nearby opaque geometry from depth buffer (or baked mesh SDFs) for cheap soft long-range shadows + contact shadows shadow-map cascade can't afford at distance.
+
+##### Math
+Per clipmap level, rasterize scene depth into SDF via 6-sweep or jump-flooding on depth buffer; d(p)=nearestSurfaceDistance(p) with sign from depth-vs-scene. Shadow test along light ray accumulates min over steps of d(ray(t))/t (cone soft shadow): vis=saturate(1-k*min_d/t).
+
+##### How It Works
+Compute pass converts depth (or downsampled depth) into SDF clipmap each time camera moves a cell. Lighting samples SDF along light dir for cheap soft shadow at range where shadow maps run out of resolution. Hybrid: near field shadow maps, far field SDF (fallforward, not double system).
+
+##### Reference Implementation
+```cpp
+float SdfShadow(vec3 P, vec3 L, Texture3D sdfClip, float coneK){ float t=0,vis=1; for(int i=0;i<kSteps;++i){ t+=kStep; float d=SdfSample(sdfClip, P+L*t); vis=min(vis, saturate(1.0-coneK*d/t)); } return vis; }
+```
+
+##### Player-Facing Impact
+Long-range soft shadows hold at distance on the 6GB floor without huge shadow-atlas cost.
+
+---
 
 ##### Systems Touched
 
@@ -4230,6 +4798,46 @@ void DispatchNativeIO(NativeIORequest& req, uint64_t storageOffset) {
 Asset/chunk streaming under heavy load (high-speed driving, fast traversal) never stalls waiting on a CPU-side memory copy — data lands straight in VRAM-mapped pools.
 
 #### [M4.6-EXT-03] Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler
+#### [M4.6-EXT-05] DirectStorage Decompression Buffer Ring Allocator Pool *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.6 + M0 streaming. Ring-allocates GPU buffers for DirectStorage asset decompression so streaming never stalls.
+
+##### Math
+buf = Ring.Alloc(size); Decompress(src, buf); free when consumed by consumer.
+
+##### How It Works
+A ring of GPU staging buffers is pre-allocated; DirectStorage writes decompressed asset chunks into the next free slot, the consumer reads it, then the slot recycles. No per-asset alloc churn, no stall.
+
+##### Reference Implementation
+```cpp
+GpuBuffer b=ring.Alloc(sz); Decompress(in,b); Consume(b); ring.Free(b);
+```
+
+##### Player-Facing Impact
+Assets stream in without hitches or allocator thrash.
+
+---
+#### [M4.6-EXT-08] BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Zero mention previously. GPU-friendly BC7 (desktop)/ASTC (mobile) compression for material/atlas textures M4-EXT-25 + M4.5-EXT-26 RVT produce, cutting VRAM on 6GB Tier-0 floor. Runs on enkiTS scheduler at bake/load (not render thread).
+
+##### Math
+BC7: each 4x4 texel block encoded into 128 bits across one of 8 partition modes with endpoint+index quantization + optional mode-1 alpha split; quality/speed via partition search. ASTC generalizes to 4x4..12x12 with similar endpoint+weight scheme. Offline or load-time encode; hardware decodes free.
+
+##### How It Works
+Material graph output + atlas pages encoded to BC7 once at content-bake (or first load, cached). Decompressor M0-EXT-13/ring allocator hands already-compressed data to GPU (no per-frame decode). 4K albedo ~4x VRAM drop (RGBA8->BC7). Tier-0 relief without visual loss at chosen quality.
+
+##### Reference Implementation
+```cpp
+void EncodeBC7(const RGBA* b, uint8_t out[16], int quality){ BC7Partition best=SearchPartitions(b,quality); /* 8 modes, endpoint quant */ CompressEndpoints(best); }
+```
+
+##### Player-Facing Impact
+Big VRAM savings on the 6GB floor — more textures, fewer hitches.
+
+---
 
 ##### Systems Touched
 
@@ -4638,6 +5246,24 @@ void SolveHeatDiffusionWeights(Mesh& mesh, std::span<const JointSeed> joints, in
 Every generated phenotype — however unusual its proportions — gets correctly weighted deformation and a vocalization that matches its size, without hand-rigging or recording a unique voice per body type.
 
 #### [M5.1-EXT-06] Screamer Convergence & Holling Type II Cannibalism Feeding
+#### [M5.1-EXT-07] Optimal Reciprocal Collision Avoidance (ORCA) Solver *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M5.1/M5.3 + M5.4. Local collision-avoidance velocity for agents (companions, animals, crowds).
+
+##### Math
+v = ORCA(agent, neighbors, goal); each agent picks velocity in its free half-plane, reciprocal.
+
+##### How It Works
+Each dynamic agent computes a velocity avoiding collision with neighbors while moving to its goal, using the ORCA reciprocal formulation (neighbors do the same, so avoidance is shared). Drives companion/animal/crowd navigation.
+
+##### Reference Implementation
+```cpp
+vec3 v = ORCA.Solve(pos, vel, goal, neighbors);
+```
+
+##### Player-Facing Impact
+Allies/animals/crowds navigate around each other smoothly - no overlap or jitter.
 
 ##### Systems Touched
 
@@ -5032,6 +5658,46 @@ struct RigFixedPoolArena {
 Invisible directly — this is what keeps horde spawn/despawn waves at chunk borders from causing allocator-driven frame hitches.
 
 #### [M5.2-EXT-12] Skeletal Joint Yield Torque Bone Fracturing Filter
+#### [M5.2-EXT-14] (provisional) IK Rig Metadata Serialization Loader *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Consumed by M5.2-EXT-08 (IK Rig Asset struct) + M5.2-EXT-09 (Motion-Warping target). Feeds every end-effector consumer in M5.2 (melee-hit align, vault landing, door interact). Distinct from M2.6 glTF/prefab loading (mesh/scene, not bone-chain+pole-vector metadata).
+
+##### Math
+Declarative asset: IKRigAsset{skeletonId, chains:[{boneIdx[], poleVectorHint}]}. Hashing for on-disk table reuses same FNV-1a keying idiom M2.6 uses for geometry cache (uint64_t key=FNV1a(path)).
+
+##### How It Works
+Small JSON/flat-binary asset per skeleton, authored once, loaded at skeleton-registration. Loader parses bone-name->index against skeleton's own joint list (renamed bone fails loudly at load, not silently at runtime), stores resolved IKRigAsset in same hash-keyed table as geometry cache (key space skeletonId string). Phenotype variants reuse one asset; extra chains via override asset.
+
+##### Reference Implementation
+```cpp
+struct IKChainDef { std::vector<uint16_t> boneIdx; glm::vec3 poleVectorHint; }; auto asset=LoadIKRig(skeletonId);
+```
+
+##### Player-Facing Impact
+Skeletons load bone-chain defs from data, not hardcoded bone-name lookups — robust to renamed bones.
+
+---
+#### [M5.2-EXT-15] XPBD Rope/Tether Constraint *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Long-range-attachment (tether) constraint used internally for cloth/vegetation but not exposed; promotes to reusable XPBD distance/rope constraint. Consumes M5.2 solver + M5.2-EXT-08 IK/joint infra. Used by zipline/grappling/winch + drag-ragdoll.
+
+##### Math
+Extended PBD (Macklin 2016): each distance constraint has compliance a and accumulates Lagrange multiplier lambda per substep, stiffness independent of iteration count/timestep: Dx=(w1w2/(w1+w2+a~)) * C * nC, with a~=a/Dt^2. Rope = chain of N distance constraints solved with substep XPBD (e.g. 4 substeps, 1 iter each).
+
+##### How It Works
+Build rope as small particle chain (positions+inverse masses), one XPBD distance constraint per segment. Each substep: predict, solve all constraints updating lambda, integrate. Two endpoints bind to entity handles (player hand, vehicle hitch). Persistent-corrected lambda: rope neither explodes nor sags through floors under load.
+
+##### Reference Implementation
+```cpp
+void SolveDistanceXPBD(Particle& a, Particle& b, float rest, float alpha, float dt, float& lambda){ vec3 d=b.x-a.x; float C=length(d)-rest; vec3 n=d/max(length(d),1e-5f); float k=1.0f/(a.w+b.w+alpha/(dt*dt)); vec3 corr=-k*C*n; a.x-=a.w*corr; b.x+=b.w*corr; lambda+=k*C; }
+```
+
+##### Player-Facing Impact
+Ziplines/ropes/winches are stable and non-stretchy — no PBD explosion or floor-sag failure.
+
+---
 
 ##### Systems Touched
 
@@ -5284,6 +5950,24 @@ inline float ComputeAerosolMaskedScent(float rawScentValue, float aerosolCellDen
 Setting a diversionary fire or driving through smoke genuinely masks your scent trail from tracking hordes, giving you a tactical option beyond `[M5.3-EXT-04]`/`[M5.3-EXT-05]`'s blast-displacement approach — smoke suppresses continuously rather than scattering a one-time cloud.
 
 #### [M5.3-EXT-07] Confidence-Gated Stealth Strikes
+#### [M5.3-EXT-08] Visual Occlusion Sector Ray-March Pre-Filter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M5.3 + M5.4. Ray-marches visibility sectors pre-frame to pre-cull AI that can't see the player.
+
+##### Math
+sector_i visible if March(origin, dir_i) < dist(player); cull AI in invisible sectors.
+
+##### How It Works
+Before AI update, the player's visibility is ray-marched into angular sectors; AI whose sectors are occluded are pre-culled from perception (they can't see the player), saving perception/behavior cost. Recomputed at a low rate, reprojected between.
+
+##### Reference Implementation
+```cpp
+bool sees = MarchSector(origin, dirToPlayer) < distPlayer; if(!sees) ai.PerceptionOff();
+```
+
+##### Player-Facing Impact
+Off-screen AI doesn't magically track you through walls - perception is honest and cheaper.
 
 ##### Systems Touched
 
@@ -5437,6 +6121,66 @@ bool CheckVaultTumble(const glm::vec3& f_push, float r_y, float inertia, float l
 When a dense horde chases you over a rooftop, the front zombies attempting to vault over the edge railings get physically pushed from behind by the mass of the crowd. Instead of landing cleanly on their feet, they over-rotate, tumbling head-over-heels over the edge and crashing into the street below, creating organic pile-ups beneath the structure.
 
 #### [M5.4-EXT-03] Emergent Difficulty via Director Pacing & Outbreak Feedback (No Difficulty Setting)
+#### [M5.4-EXT-05] Reaction-Diffusion Grid Sub-sampled Boundary Welder *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M5.4 fear field (RD). Welds RD grid boundaries across chunk seams so the field is continuous.
+
+##### Math
+ghost = avg(neighbors across seam); sub-sample boundary, copy to neighbor ghost cells each step.
+
+##### How It Works
+The reaction-diffusion fear field is computed per chunk; at chunk boundaries, a sub-sampled ghost exchange copies edge cells into neighbor ghost cells so diffusion crosses seams without discontinuity or double-counting.
+
+##### Reference Implementation
+```cpp
+ExchangeGhost(boundary[A], ghost[B]); // seam weld each RD step
+```
+
+##### Player-Facing Impact
+Fear/panic spreads continuously across the world - no visible grid seams in the fear field.
+
+---
+#### [M5.4-EXT-06] Hierarchical A* Macro-Cell Long-Range Road-Graph Router *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M5.4 horde + M8.5 caravan routing. Hierarchical A* over the macro road-graph for off-screen long-range routing.
+
+##### Math
+macro = Cluster(roadNodes, cell); path = HAStar(root,goal,macro,fine); determinism = SplitMix64(seed).
+
+##### How It Works
+A macro-graph of abstract street/highway nodes (built from M4-EXT-10 splines) is clustered into macro-cells; Hierarchical A* plans at the macro level then refines fine paths inside the goal cell. Seeded via SplitMix64 for deterministic hordes. Terrain-gen consumes it for road-exclusion masks (M4-EXT-17). Single system - M9-EXT-18 convoy router extends this graph with a lane-width field rather than duplicating it.
+
+##### Reference Implementation
+```cpp
+RoadGraph g = BuildMacroGraph(splines); Route r = HAStar(g, hordeOrigin, target, seed);
+```
+
+##### Player-Facing Impact
+Hordes flow along real streets and caravans traverse believably; roads reshape spawning - one shared graph, no duplicate systems.
+
+---
+#### [M5.4-EXT-07] Holling Type II Cannibalism Feeding Satiator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M5.4 cannibal factions. Models feeding satiation (Holling Type II) so factions stop at capacity.
+
+##### Math
+consumption = (a*N)/(1 + a*h*N); dN/dt = r*N*(1-N/K) - consumption; satiation caps intake.
+
+##### How It Works
+Cannibal factions 'consume' victim density with a Holling Type II functional response (intake saturates with abundance), so they don't infinitely devour - a satiation term caps per-capita consumption, producing stable predator-prey oscillation instead of wipeout.
+
+##### Reference Implementation
+```cpp
+float eat = (a*N)/(1+a*h*N); pop -= eat; satiation = clamp(satiation+eat,0,1);
+```
+
+##### Player-Facing Impact
+Cannibal factions thin herds then back off - the world's ecosystem stays balanced, not extinct.
+
+---
 
 ##### Systems Touched
 
@@ -5708,6 +6452,64 @@ std::vector<float> GenerateVelvetNoiseIR(float tAvg, float tau, float sampleRate
 A concrete parking garage rings with a long, metallic tail while a carpeted living room down the hall sounds dead and close — reverb character shifts believably room-to-room without needing hand-placed reverb zones.
 
 #### [M6-EXT-11] Voxel-Cone Acoustic Occlusion & Material Absorption
+#### [M6-EXT-08] Ray-Traced Acoustic Diffraction Node Topology Cache *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M6 audio + M4.5-EXT-17. Caches ray-traced acoustic diffraction nodes so sound bends around corners.
+
+##### Math
+diffraction = UTD(node); cache node topology per probe; reuse across frames.
+
+##### How It Works
+Sound propagation rays that bend around edges (diffraction) are pre-traced and cached as a node topology per acoustic probe; gameplay reuses the cache so occluded sources still audibly leak around corners without re-tracing each frame.
+
+##### Reference Implementation
+```cpp
+Node n = TraceDiffraction(src, edge); cache.Add(n);
+```
+
+##### Player-Facing Impact
+You hear zombies around a corner, not just in line of sight - audio occlusion matches the world.
+
+---
+#### [M6-EXT-09] Velvet-Noise Late Reverb Interleaved Mixing Buffer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M6 audio. Mixes velvet-noise late reverb into the bus for cheap, artifact-free tails.
+
+##### Math
+ir = velvetNoise(N, density); tail = Convolve(dry, ir); interleave into reverb bus.
+
+##### How It Works
+Late reverb is synthesized from a velvet-noise impulse response (uniformly distributed taps) rather than a recorded IR, interleaved into the reverb mixing buffer. Cheap, stateless, no metallic ringing artifacts.
+
+##### Reference Implementation
+```cpp
+float tail = MixVelvet(dry, taps); bus.Reverb += tail;
+```
+
+##### Player-Facing Impact
+Rooms/caves have natural-sounding reverb tails without sampled-IR cost or artifacts.
+
+---
+#### [M6-EXT-10] Acoustic Convection Wave Refraction Filter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M6 audio. Refracts sound waves by wind/convection so distant audio bends with weather.
+
+##### Math
+c_eff = c0 + wind·dir; delay/filter per path by c_eff; Snell bend at layers.
+
+##### How It Works
+Models how wind/temperature gradients refract sound: effective speed varies with wind along the path; the audio filter applies per-path delay/bend (Snell at layer boundaries) so upwind sources fade and downwind carry farther, matching weather.
+
+##### Reference Implementation
+```cpp
+float ceff = c0 + dot(wind, pathDir); ApplyRefraction(src, ceff);
+```
+
+##### Player-Facing Impact
+Wind direction changes what you hear at range - downwind gunfire carries, upwind dies.
 
 ##### Systems Touched
 
@@ -7265,6 +8067,24 @@ Overcrowded settlements visibly bottleneck at popular stations (survivors queued
 ---
 
 #### [M8.6-EXT-09] Genetic-Algorithm Settlement Macro-Layout Optimizer
+#### [M8.6-EXT-10] Settlement NavMesh from GA Layout *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Consumes M8.6-EXT-09 GA building-footprint layout, produces walkable NavMesh the AI director M5.4 + horde pathing need inside a settlement. Distinct from M4-EXT-08 WFC reachability (interiors vs settlement exterior/plaza).
+
+##### Math
+From GA footprint polygon set, compute free-space polygon (building set subtracted from zoning polygon), then standard NavMesh triangulation (improved funnel / Delaunay over walkable region) with portal edges between adjacent polygons for string-pulling path queries.
+
+##### How It Works
+Once M8.6-EXT-09 bakes footprints + gate positions, derives settlement walkable mesh in same one-time bake. Doorways become portals; perimeter chokepoints the GA optimized for defense become natural funnel points horde pathing uses. Cached with layout — never recomputed per-frame.
+
+##### Reference Implementation
+```cpp
+NavMesh BuildSettlementNavMesh(const SettlementLayoutGenome& g){ Polygon free=ZoningPolygon(); for(auto& b:g.buildings) free=Subtract(free,b.footprint); return TriangulateWalkable(free, GateEdges(g.buildings)); }
+```
+
+##### Player-Facing Impact
+Settlements are navigable for AI + hordes — defense chokepoints double as pathing funnels.
 
 ##### Systems Touched
 Runs once per settlement at world-seed bake time, not per-chunk-stream — same offline/one-time-budget tier `[M4-EXT-09]` above already reserves for simulated-annealing landmark interiors. Output layout (building footprints, defensive perimeter, gate positions) feeds `[M5.4-EXT-06]`'s road graph as endpoints and M8.6's power-grid conductance as node positions.
@@ -7921,6 +8741,64 @@ inline float CalculateChassisShearStress(const glm::vec3& rawCollisionForceVecto
 Repeated off-road abuse and side-impact collisions wear out a vehicle's frame with the same believable long-term fatigue curve already governing walls and weapons, rather than an arbitrary vehicle "health bar" — consistent with `[M9-EXT-16]`'s garage repair resetting this exact same `StructuralFatigue.value`.
 
 #### [M9-EXT-19] Parallax-Occlusion Topography Deformation & Persistent Ruts
+#### [M9-EXT-18] Vehicle Convoy Long-Range Router *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M9 + M5.4. Routes a vehicle convoy over long distance on the road graph, keeping spacing.
+
+##### Math
+route = HAStar(roadGraph, A, B); spacing_i = i*gap - speedLag; replan on threat.
+
+##### How It Works
+Drives a convoy of vehicles along M5.4-EXT-06's macro road-graph to a distant objective, maintaining inter-vehicle spacing and speed lag; reroutes around threats/failures. Reuses the single road graph - not a second system.
+
+##### Reference Implementation
+```cpp
+ConvoyRoute r = HAStar(roadGraph, start, goal); AssignVehicles(r, gap);
+```
+
+##### Player-Facing Impact
+Convoys travel coherently cross-map and reroute around danger - believable faction logistics.
+
+---
+#### [M9-EXT-21] Fluid Hydrodynamic Wading Resistance Modulator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M9 vehicles + M2.9 flood bridge. Modulates vehicle wading resistance by water depth/hydrodynamics.
+
+##### Math
+f = clamp(depth - axle, 0, bodyH)/bodyH; Fdrag = 0.5*rho*Cd*A_f*f*v^2 + rho*Cs*A_w*f*v; normalFrac = 1 - (rho*Vsub)/m; drive = normalFrac*(1 - clamp(Fdrag/Ftmax,0,1)).
+
+##### How It Works
+As a vehicle enters water, submergence fraction f scales frontal + skin-friction drag; buoyancy sheds normal force (less traction). Drive force is modulated by both (deep water = less grip AND more drag), so shallow fords are fine but deep water bogs the vehicle. Engine can stall if drag exceeds max traction.
+
+##### Reference Implementation
+```cpp
+float WadingModulator(float depth,float v,float mass){ float f=clamp((depth-axle)/bodyH,0,1); float Vsub=f*vol; float nf=max(0,1-(rho*Vsub)/mass); float Fd=0.5*rho*Cd*A_f*f*v*v + rho*Cs*A_w*f*v; float Ftmax=nf*mass*g*muMax; return nf*(1-clamp(Fd/max(Ftmax,1),0,1)); }
+```
+
+##### Player-Facing Impact
+Vehicles ford shallow streams fine but become sluggish and can stall in deep water - players must pick crossings, find bridges, or risk a bogged, vulnerable vehicle.
+#### [M9-EXT-22] RVT Skid-Mark / Tire-Track Injector *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+One of three features audit line 133 says blocked on missing RVT base. Writes tire tracks + drift scars into M4.5-EXT-26 RVT overlay from M9 wheel-contact + slip-state telemetry. Consumed by terrain material resolve as extra blend layer.
+
+##### Math
+Decal written into RVT clipmap page (see M4.5-EXT-26 base). Track = polyline of wheel-contact samples; width from slip; intensity fades with speed. Write-merge (newest-wins) into page tile so overlapping tracks resolve deterministically.
+
+##### How It Works
+On wheel slip above threshold, sample contact point -> RVT page coord, draw tracked quad with width from slip + alpha from intensity. Persists in chunk-anchored RVT so tracks survive across sessions/streaming. Feeds terrain material as blend layer.
+
+##### Reference Implementation
+```cpp
+void InjectSkid(VkCommandBuffer cb, RvtPageTable& rvt, vec3 contact, float slip, float intensity){ /* write-merge track quad into rvt page */ }
+```
+
+##### Player-Facing Impact
+Cars leave real skid marks / drift scars on the ground that persist — world shows your passage.
+
+---
 
 ##### Systems Touched
 
