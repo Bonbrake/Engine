@@ -1,6 +1,6 @@
 # The Endless Quarantine — Engine Status
 
-> **Canonical master plan:** `MASTER_PLAN_ENDLESS_QUARANTINE.md` (v79, Hermes Agent edition — rebrand of `USETHISITSV79.md`). This is the single source of truth for all milestones M0→M13 and every `[Mx-EXT-nn]` block. Per-milestone working files live in `milestones_M0-M13_antigravity/`.
+> **Canonical master plan:** `docs/MASTER_PLAN_ENDLESS_QUARANTINE.md` (v79, Hermes Agent edition — rebrand of `USETHISITSV79.md`). This is the single source of truth for all milestones M0→M13 and every `[Mx-EXT-nn]` block. Per-milestone working files live in `milestones_M0-M13_antigravity/`.
 
 ## Active Branch
 `m2/physics-destruction`
