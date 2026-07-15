@@ -67,6 +67,12 @@ PhysicsSystem::PhysicsSystem()
 }
 
 PhysicsSystem::~PhysicsSystem() {
+    // [M2-EXT-01] Reap any still-in-flight async bakers before teardown
+    if (taskScheduler_) {
+        std::lock_guard lock(inFlightBakersMutex_);
+        for (auto* baker : inFlightBakers_) delete baker;
+        inFlightBakers_.clear();
+    }
     delete physicsSystem_;
     physicsSystem_ = nullptr;
 }
@@ -89,6 +95,19 @@ void PhysicsSystem::step(entt::registry& registry, entt::dispatcher& dispatcher)
             bi.SetShape(swap.bodyId, swap.newShape, true, JPH::EActivation::Activate);
         }
         pendingSwaps_.clear();
+    }
+
+    // [M2-EXT-01] Reap completed async bakers (enkiTS does not own TaskSet lifetime)
+    {
+        std::lock_guard lock(inFlightBakersMutex_);
+        for (auto it = inFlightBakers_.begin(); it != inFlightBakers_.end(); ) {
+            if ((*it)->GetIsComplete()) {
+                delete *it;
+                it = inFlightBakers_.erase(it);
+            } else {
+                ++it;
+            }
+        }
     }
 
     // Pass dedicated Jolt job system (distinct from enkiTS)
@@ -215,10 +234,14 @@ void PhysicsSystem::QueueAsyncCollisionSwap(JPH::BodyID bodyId, const std::vecto
     auto& bi = physicsSystem_->GetBodyInterface();
     bi.SetShape(bodyId, proxyShape, true, JPH::EActivation::DontActivate);
 
-    // If enkiTS is available, dispatch the background bake
+    // If enkiTS is available, dispatch the background bake. enkiTS does NOT delete the
+    // TaskSet, so we track it and reap it in step() once GetIsComplete() is true.
     if (taskScheduler_) {
-        // We leak the task here for the sake of the M2 stub, in M4 we manage memory properly
         auto* baker = new AsyncCollisionBaker(this, bodyId, vertices, indices);
+        {
+            std::lock_guard lock(inFlightBakersMutex_);
+            inFlightBakers_.push_back(baker);
+        }
         taskScheduler_->AddTaskSetToPipe(baker);
     } else {
         LOG_WARN("PhysicsSystem: QueueAsyncCollisionSwap called but taskScheduler_ is null!");

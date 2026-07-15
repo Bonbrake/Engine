@@ -234,6 +234,11 @@ private:
     std::mutex pendingSwapsMutex_;
     friend class AsyncCollisionBaker;
 
+    // [M2-EXT-01] In-flight async bakers. enkiTS does NOT own the TaskSet lifetime,
+    // so we track them and delete once GetIsComplete() is true (reaped in step()).
+    std::vector<enki::ITaskSet*> inFlightBakers_;
+    std::mutex inFlightBakersMutex_;
+
     // [M2-EXT-02] Activation events
     class ActivationListener : public JPH::BodyActivationListener {
     public:
