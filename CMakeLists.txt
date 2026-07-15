@@ -116,6 +116,15 @@ target_link_libraries(ZombieEngine PRIVATE
     Jolt::Jolt
 )
 
+# [M0-EXT-15] Standalone focus-loss probe: windowed SDL3 only, no engine deps.
+# Exercises the production SDL_GetKeyboardState path across a minimize/restore
+# cycle — the alt-tab bug class unit tests can't cover.
+add_executable(focus_probe phase1_verify/focus_probe.cpp)
+target_include_directories(focus_probe PRIVATE src)
+target_link_libraries(focus_probe PRIVATE
+    SDL3::SDL3
+)
+
 target_include_directories(ZombieEngine PRIVATE ${STB_INCLUDE_DIR})
 
 if(ENGINE_ENABLE_PROFILING)
