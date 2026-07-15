@@ -2,6 +2,7 @@
 #include "Config.h"
 #include "Logger.h"
 #include <cstdio>
+#include <cstring>
 #include <sstream>
 #include <fstream>
 
@@ -135,7 +136,7 @@ void Input::poll() {
             if (ev.type == SDL_EVENT_KEY_DOWN)        state_.keyboardState[ev.key.scancode] = 1;
             else if (ev.type == SDL_EVENT_KEY_UP)     state_.keyboardState[ev.key.scancode] = 0;
         }
-        if (scriptFrame_ + 1 < script_.size() || !script_.empty()) scriptFrame_++;
+        scriptFrame_++;
         return;
     }
 
@@ -180,13 +181,21 @@ void Input::poll() {
         state_.events.push_back(event);
     }
 
-    // [M2.6 Phase 2] Derive fly-camera state from this frame's events.
+    // [M0-EXT-15] Continuous polled keyboard state. Sample SDL's authoritative
+    // held-key array every frame instead of deriving key-held only from discrete
+    // KEY_DOWN/KEY_UP events. Event delivery can be lost on focus change / window
+    // occlusion / coalescing, which left a key unresponsive or stuck — the
+    // "fly-camera controls have no effect" class. The OS state is the source of
+    // truth for "is this key currently down"; mouse-look delta stays event-based
+    // because relative motion has no polled equivalent.
     state_.mouseDX = 0;
     state_.mouseDY = 0;
+    if (const bool* kb = SDL_GetKeyboardState(nullptr)) {
+        for (int i = 0; i < SDL_SCANCODE_COUNT; ++i)
+            state_.keyboardState[i] = kb[i] ? 1 : 0;
+    }
     for (const auto& ev : state_.events) {
-        if (ev.type == SDL_EVENT_KEY_DOWN)        state_.keyboardState[ev.key.scancode] = 1;
-        else if (ev.type == SDL_EVENT_KEY_UP)     state_.keyboardState[ev.key.scancode] = 0;
-        else if (ev.type == SDL_EVENT_MOUSE_MOTION) {
+        if (ev.type == SDL_EVENT_MOUSE_MOTION) {
             state_.mouseDX += (int)ev.motion.xrel;
             state_.mouseDY += (int)ev.motion.yrel;
         }

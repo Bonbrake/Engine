@@ -32,12 +32,15 @@ public:
     static void shutdown();
     static const InputState& getState() { return state_; }
 
+    // Test-only hook: lets headless unit tests drive held-key state without an
+    // SDL window. Not used by gameplay code (which calls poll()).
+    static InputState& getMutableStateForTest() { return state_; }
+
     // [M2.6 Phase 2] Scripted-input mode (no display needed for self-verify).
     // Loads a tiny text script: "K <scancode|WASD> <f0> <f1>" = hold key frames
     // [f0,f1]; "M <dx> <dy> <f0> <f1>" = mouse delta over [f0,f1]. Returns false
     // on parse error. poll() then replays the per-frame events instead of SDL.
     static bool loadScript(const std::string& path);
-    static bool hasScript() { return !script_.empty(); }
 
 private:
     static InputState state_;
