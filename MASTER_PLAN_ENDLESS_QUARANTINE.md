@@ -576,6 +576,50 @@ Invisible directly — this is what keeps a rapid window-focus shift or a minimi
 #### [M0-EXT-10] Vulkan 1.4 Pipeline Layout Structural Compatibility Validator
 #### [M0-EXT-13] Capability Probe & Feature-Tier Detection *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
+---
+
+#### [M0-EXT-12] Compute-Worker Thread-Affinity Bitmask Allocator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M0 + enkiTS. Pins compute workers to a CPU affinity bitmask for cache locality / NUMA.
+
+##### Math
+mask = affinityBitmask(workerPool); SetThreadAffinityMask(h, mask);
+
+##### How It Works
+Compute workers are assigned a CPU affinity bitmask (e.g. excluding the render-thread cores) so heavy compute doesn't contend with the render thread and keeps L2/L3 locality. Set once at scheduler init.
+
+##### Reference Implementation
+```cpp
+SetThreadAffinityMask(workers, kComputeMask);
+```
+
+##### Player-Facing Impact
+Compute stays off the render core - smoother frame, less jitter under load.
+
+
+---
+
+#### [M0-EXT-11] Asynchronous SPIR-V Shader Cache Garbage Collector *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M0 shader cache. Async GC of stale SPIR-V cache entries so the cache never grows unbounded.
+
+##### Math
+evict LRU when size>cap; GC on enkiTS worker, not render thread; refcount live pipelines.
+
+##### How It Works
+Stale compiled SPIR-V entries are evicted by an LRU policy run on a background worker; entries still referenced by live pipelines are skipped. Keeps disk/memory cache bounded without hitching the frame.
+
+##### Reference Implementation
+```cpp
+void GcCache(Worker& w){ for(e in lru) if(size>cap && !e.live) Evict(e); }
+```
+
+##### Player-Facing Impact
+Shader cache stays small and fast - no disk bloat or load hitches from stale entries.
+
+
 ##### Systems Touched
 Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.
 
@@ -1411,6 +1455,182 @@ GPU culling + indirect draw stay correct across passes - no popped or duplicated
 
 ---
 #### [M1-EXT-16] SoA Cache-Line Padding *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+---
+
+#### [M1-EXT-22] CVar System (ImGui-Backed) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + UI. Central console-variable registry with ImGui debug panel.
+
+##### Math
+CVarRegistry::Get().Set(name, val); panel binds to registry;
+
+##### How It Works
+A typed CVar registry holds tunables (exposed to ImGui sliders/console); systems read live values. Dev/QA tuning without recompiles. Ship-disabled UI.
+
+##### Reference Implementation
+```cpp
+CVarF32 r(&reg,"render.ssao",1.0f);
+```
+
+##### Player-Facing Impact
+Tunables are live-editable in-dev - fast iteration on feel/perf.
+
+
+---
+
+#### [M1-EXT-21] Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + M5.1. Exposes skinning bone matrices via buffer device addresses for shader direct-read.
+
+##### Math
+matrices: device_address; shader reads *((mat4*)addr + boneIdx);
+
+##### How It Works
+Skinning bone-matrix buffers are bound by device address so the vertex shader reads bone data directly without descriptor indirection - fewer binds, faster skinning at scale.
+
+##### Reference Implementation
+```cpp
+mat4* bones = (mat4*)skbuffAddr;
+```
+
+##### Player-Facing Impact
+Skinning binds drop away - more animated characters for the same cost.
+
+
+---
+
+#### [M1-EXT-20] EnTT Group-Backed Hot-Component Storage *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + EnTT. Uses EnTT groups for O(1) hot-component view iteration.
+
+##### Math
+group = reg.group<Pos,Vel>(); for(auto e: group) ...;
+
+##### How It Works
+Hot component pairs are registered as an EnTT group so views over them are O(1) and cache-coherent (group backs them with a shared packed array). Faster than ad-hoc views for the per-frame hot set.
+
+##### Reference Implementation
+```cpp
+auto g = reg.group<Pos,Vel>(); for(auto e: g) Step(e);
+```
+
+##### Player-Facing Impact
+Hot-system iteration is near-free - big entity counts stay at 60fps.
+
+
+---
+
+#### [M1-EXT-19] SoA Layout for Hot Components *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 ECS. Hot components stored Structure-of-Arrays for cache-efficient iteration.
+
+##### Math
+array<T> pos; array<T> vel; iterate i linearly; no pointer chase.
+
+##### How It Works
+Hot component arrays are stored SoA (one contiguous array per field) so system loops stream linearly through cache. Pairs with M1-EXT-16 padding. Cold components stay AoS.
+
+##### Reference Implementation
+```cpp
+for(i) Integrate(pos[i], vel[i]);
+```
+
+##### Player-Facing Impact
+Hot systems iterate cache-friendly - less stall, more entities per ms.
+
+
+---
+
+#### [M1-EXT-18] Material-Batched Mesh-Pass Rendering *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + M4.5. Batches draw calls by material to cut state changes.
+
+##### Math
+batch = GroupBy(materialId, draws); one bind per batch;
+
+##### How It Works
+Draws are sorted/batched by material (pipeline + descriptor set) so each batch binds once; slashes pipeline-switch overhead on dense scenes. Complements M1-EXT-25 bindless.
+
+##### Reference Implementation
+```cpp
+for(b in batches) { Bind(b.mat); Draw(b.draws); }
+```
+
+##### Player-Facing Impact
+Far more draws per frame at the same cost - denser worlds run smooth.
+
+
+---
+
+#### [M1-EXT-17] Deterministic Secondary Command-Buffer Merger *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1. Merges per-thread secondary command buffers into the primary in deterministic order.
+
+##### Math
+merge(secondaries, order=M1-EXT-13) -> primary; stable sort by pass id.
+
+##### How It Works
+Worker threads record secondary command buffers; a merger stitches them into the primary in the topological order M1-EXT-13 produced, deterministically, so multi-threaded recording reproduces the same final command stream.
+
+##### Reference Implementation
+```cpp
+Merge(secondaries, topoOrder, primary);
+```
+
+##### Player-Facing Impact
+Multi-threaded command recording stays deterministic - co-op/save replays match.
+
+
+---
+
+#### [M1-EXT-15] GPU Query Pool Timestamp Profiler *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1. Timestamp queries via Vulkan query pool for GPU frame profiling.
+
+##### Math
+ts = QueryPool.GetTimestamp(pass); dt = ts_end - ts_start;
+
+##### How It Works
+A query pool records GPU timestamps at pass boundaries; the CPU reads them back (deferred) to build a per-pass GPU time breakdown. Off by default in shipping, dev-only.
+
+##### Reference Implementation
+```cpp
+float dt = (tsEnd - tsStart) * period;
+```
+
+##### Player-Facing Impact
+You can see where GPU time goes per pass - real profiling, not guesses.
+
+
+---
+
+#### [M1-EXT-13] Render-Graph Barrier Topological Sorter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 render graph. Topologically sorts pass barriers so dependent passes execute in valid order.
+
+##### Math
+order = TopoSort(passes, barrierEdges); Kahn with priority tiebreak.
+
+##### How It Works
+Builds a DAG of render passes joined by barrier edges (M1-EXT-11), then a Kahn topological sort emits a valid submission order; ties broken by priority. Ensures a pass's inputs are produced before it runs.
+
+##### Reference Implementation
+```cpp
+vector<Pass*> o=TopoSort(graph);
+```
+
+##### Player-Facing Impact
+Render passes always run in valid order - no read-before-write, no manual sequencing.
+
 
 ##### Systems Touched
 M1 ECS storage. Pads SoA component arrays to 64-byte cache lines to avoid false sharing / straddle.
