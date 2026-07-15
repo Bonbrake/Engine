@@ -22,7 +22,12 @@ struct SpatialCellHeader {
 inline uint64_t SpatialHashKey(double x, double z) {
     int64_t cx = static_cast<int64_t>(std::floor(x / 2.0));
     int64_t cz = static_cast<int64_t>(std::floor(z / 2.0));
-    return (static_cast<uint64_t>(cx) << 32) | (static_cast<uint64_t>(cz) & 0xFFFFFFFFull);
+    // Two's-complement cast: well-defined, preserves unique bit pattern for negative
+    // cells (world spans negative coords around origin). Left-shifting a signed NEGATIVE
+    // value is UB, so widen via uint32_t first.
+    uint32_t ix = static_cast<uint32_t>(cx);
+    uint32_t iz = static_cast<uint32_t>(cz);
+    return (static_cast<uint64_t>(ix) << 32) | static_cast<uint64_t>(iz);
 }
 
 inline uint64_t ComputeSubdividedCellKey(uint64_t parentSpatialKey, int32_t subX, int32_t subZ) {
