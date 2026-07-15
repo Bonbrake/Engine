@@ -1,0 +1,369 @@
+[
+  {
+    "id": "M2-EXT-01",
+    "title": "Asynchronous Collision Cooking & Proxy Primitive Swapping Queue",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 116,
+    "anchor": "MM2-EXT-01"
+  },
+  {
+    "id": "M2-EXT-02",
+    "title": "Jolt Physics Multi-Body Rigid Island Sleep Event Bus Bridge",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-02]",
+      "[M7-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 156,
+    "anchor": "MM2-EXT-02"
+  },
+  {
+    "id": "M2-EXT-03",
+    "title": "Continuous Narrow-Phase Contact Point Query Collector Cache",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-03]",
+      "[M2.7-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 183,
+    "anchor": "MM2-EXT-03"
+  },
+  {
+    "id": "M2-EXT-04",
+    "title": "Fixed-Timestep Mechanical Joint Constraint Kinetic Energy Clamper",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-04]",
+      "[M5.2-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 211,
+    "anchor": "MM2-EXT-04"
+  },
+  {
+    "id": "M2-EXT-05",
+    "title": "Mechanical Muscle Exhaustion Joint-Friction Damping Adder",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-05]"
+    ],
+    "depended_by": [],
+    "line": 240,
+    "anchor": "MM2-EXT-05"
+  },
+  {
+    "id": "M2-EXT-06",
+    "title": "Jolt-to-EnTT Double-Precision Transform Remapper",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 241,
+    "anchor": "MM2-EXT-06"
+  },
+  {
+    "id": "M2-EXT-07",
+    "title": "Kinematic Virtual Sweep Tunneling Safeguard",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 260,
+    "anchor": "MM2-EXT-07"
+  },
+  {
+    "id": "M2-EXT-08",
+    "title": "Character Controller / Player Movement",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-08]"
+    ],
+    "depended_by": [],
+    "line": 313,
+    "anchor": "MM2-EXT-08"
+  },
+  {
+    "id": "M2-EXT-09",
+    "title": "Animation / Skinning",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-09]"
+    ],
+    "depended_by": [],
+    "line": 329,
+    "anchor": "MM2-EXT-09"
+  },
+  {
+    "id": "M2-EXT-10",
+    "title": "Ballistics / Projectile Resolution",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-10]"
+    ],
+    "depended_by": [],
+    "line": 345,
+    "anchor": "MM2-EXT-10"
+  },
+  {
+    "id": "M2-EXT-11",
+    "title": "Destructible = Placeholder Swap Only",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-11]"
+    ],
+    "depended_by": [],
+    "line": 361,
+    "anchor": "MM2-EXT-11"
+  },
+  {
+    "id": "M2-EXT-12",
+    "title": "Vehicle System",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-12]"
+    ],
+    "depended_by": [],
+    "line": 377,
+    "anchor": "MM2-EXT-12"
+  },
+  {
+    "id": "M2-EXT-13",
+    "title": "Hit/Limb Resolution Pipeline",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-13]"
+    ],
+    "depended_by": [],
+    "line": 393,
+    "anchor": "MM2-EXT-13"
+  },
+  {
+    "id": "M2-EXT-14",
+    "title": "Physics Debug Draw (shipping toggle)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-14]"
+    ],
+    "depended_by": [],
+    "line": 411,
+    "anchor": "MM2-EXT-14"
+  },
+  {
+    "id": "M2-EXT-15",
+    "title": "No Real Content / Player / Zombie",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-15]"
+    ],
+    "depended_by": [],
+    "line": 427,
+    "anchor": "MM2-EXT-15"
+  },
+  {
+    "id": "M2-EXT-16",
+    "title": "Save/Load Layer",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 443,
+    "anchor": "MM2-EXT-16"
+  },
+  {
+    "id": "M2-EXT-17",
+    "title": "World-Epoch Clock",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-17]"
+    ],
+    "depended_by": [],
+    "line": 459,
+    "anchor": "MM2-EXT-17"
+  },
+  {
+    "id": "M2-EXT-18",
+    "title": "Survival Physiology (stamina/hunger)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-18]"
+    ],
+    "depended_by": [],
+    "line": 475,
+    "anchor": "MM2-EXT-18"
+  },
+  {
+    "id": "M2-EXT-19",
+    "title": "Crafting / Recipes / Workbench",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-19]"
+    ],
+    "depended_by": [],
+    "line": 496,
+    "anchor": "MM2-EXT-19"
+  },
+  {
+    "id": "M2-EXT-20",
+    "title": "Skills / Perks / Progression",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-20]"
+    ],
+    "depended_by": [],
+    "line": 517,
+    "anchor": "MM2-EXT-20"
+  },
+  {
+    "id": "M2-EXT-21",
+    "title": "Procedural Variation (bio-weight)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-21]"
+    ],
+    "depended_by": [],
+    "line": 538,
+    "anchor": "MM2-EXT-21"
+  },
+  {
+    "id": "M2-EXT-22",
+    "title": "Physics Determinism Test",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-22]"
+    ],
+    "depended_by": [],
+    "line": 559,
+    "anchor": "MM2-EXT-22"
+  },
+  {
+    "id": "M2-EXT-23",
+    "title": "Reload Mechanics & Cancel",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-23]"
+    ],
+    "depended_by": [],
+    "line": 580,
+    "anchor": "MM2-EXT-23"
+  },
+  {
+    "id": "M2-EXT-24",
+    "title": "Recoil & Spread Model",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-24]"
+    ],
+    "depended_by": [],
+    "line": 599,
+    "anchor": "MM2-EXT-24"
+  },
+  {
+    "id": "M2-EXT-25",
+    "title": "Aiming & ADS System",
+    "cluster": null,
+    "tags": "ADS",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-25]"
+    ],
+    "depended_by": [],
+    "line": 618,
+    "anchor": "MM2-EXT-25"
+  },
+  {
+    "id": "M2-EXT-26",
+    "title": "Damage Types & Materials",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-26]"
+    ],
+    "depended_by": [],
+    "line": 637,
+    "anchor": "MM2-EXT-26"
+  },
+  {
+    "id": "M2-EXT-27",
+    "title": "Body Temperature & Weather Exposure",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-27]"
+    ],
+    "depended_by": [],
+    "line": 656,
+    "anchor": "MM2-EXT-27"
+  },
+  {
+    "id": "M2-EXT-28",
+    "title": "Encumbrance & Stamina Drain",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2-EXT-28]"
+    ],
+    "depended_by": [],
+    "line": 675,
+    "anchor": "MM2-EXT-28"
+  }
+]

@@ -1,0 +1,187 @@
+[
+  {
+    "id": "M12-EXT-01",
+    "title": "Bitstream Delta-Encoded Network Serialization Packet Encoder",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-01]",
+      "[M2.8-EXT-02]",
+      "[M2.8-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 47,
+    "anchor": "MM12-EXT-01"
+  },
+  {
+    "id": "M12-EXT-02",
+    "title": "Bitmask Packet Loss Sliding Window Acknowledgement Register",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 75,
+    "anchor": "MM12-EXT-02"
+  },
+  {
+    "id": "M12-EXT-13",
+    "title": "Interest-Management Spatial Hash (Net Culling)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-13]"
+    ],
+    "depended_by": [],
+    "line": 78,
+    "anchor": "MM12-EXT-13"
+  },
+  {
+    "id": "M12-EXT-07",
+    "title": "Network Clock Sync & Tick-Drift Compensator",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 98,
+    "anchor": "MM12-EXT-07"
+  },
+  {
+    "id": "M12-EXT-04",
+    "title": "Local Network-Relevancy Grid Culling Filter",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-04]",
+      "[M12-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 118,
+    "anchor": "MM12-EXT-04"
+  },
+  {
+    "id": "M12-EXT-14",
+    "title": "Networking / Netcode Transport",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-14]"
+    ],
+    "depended_by": [],
+    "line": 182,
+    "anchor": "MM12-EXT-14"
+  },
+  {
+    "id": "M12-EXT-15",
+    "title": "Voice Chat / Push-To-Talk",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-15]"
+    ],
+    "depended_by": [],
+    "line": 198,
+    "anchor": "MM12-EXT-15"
+  },
+  {
+    "id": "M12-EXT-16",
+    "title": "Anti-Cheat / Server Authority",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 214,
+    "anchor": "MM12-EXT-16"
+  },
+  {
+    "id": "M12-EXT-17",
+    "title": "Co-op Determinism Guard",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-17]"
+    ],
+    "depended_by": [],
+    "line": 230,
+    "anchor": "MM12-EXT-17"
+  },
+  {
+    "id": "M12-EXT-18",
+    "title": "Matchmaking / Lobby / Session",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-18]"
+    ],
+    "depended_by": [],
+    "line": 246,
+    "anchor": "MM12-EXT-18"
+  },
+  {
+    "id": "M12-EXT-19",
+    "title": "Lobby / Session Integrity",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-19]"
+    ],
+    "depended_by": [],
+    "line": 267,
+    "anchor": "MM12-EXT-19"
+  },
+  {
+    "id": "M12-EXT-20",
+    "title": "Entity Interpolation",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-20]"
+    ],
+    "depended_by": [],
+    "line": 288,
+    "anchor": "MM12-EXT-20"
+  },
+  {
+    "id": "M12-EXT-21",
+    "title": "Lag Compensation",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-21]"
+    ],
+    "depended_by": [],
+    "line": 307,
+    "anchor": "MM12-EXT-21"
+  },
+  {
+    "id": "M12-EXT-22",
+    "title": "Dedicated Server Model",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M12-EXT-22]"
+    ],
+    "depended_by": [],
+    "line": 326,
+    "anchor": "MM12-EXT-22"
+  }
+]

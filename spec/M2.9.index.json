@@ -1,0 +1,133 @@
+[
+  {
+    "id": "M2.9-EXT-01",
+    "title": "Projectile Hydrodynamic Cavitation Tensors (Soft-Tissue Impact)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 48,
+    "anchor": "MM2.9-EXT-01"
+  },
+  {
+    "id": "M2.9-EXT-02",
+    "title": "Ballistic Kinetic Spalling & Secondary Fragment Shell Vectors",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 85,
+    "anchor": "MM2.9-EXT-02"
+  },
+  {
+    "id": "M2.9-EXT-03",
+    "title": "Diurnal Atmospheric Air-Density Ballistic Shift",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 116,
+    "anchor": "MM2.9-EXT-03"
+  },
+  {
+    "id": "M2.9-EXT-04",
+    "title": "Projectile Ricochet Tumbling Stability Matrix",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 149,
+    "anchor": "MM2.9-EXT-04"
+  },
+  {
+    "id": "M2.9-EXT-05",
+    "title": "Deflective Projectile Ricochet Shredder",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-05]"
+    ],
+    "depended_by": [],
+    "line": 181,
+    "anchor": "MM2.9-EXT-05"
+  },
+  {
+    "id": "M2.9-EXT-06",
+    "title": "Biomechanical Momentum-Gated Parkour",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 207,
+    "anchor": "MM2.9-EXT-06"
+  },
+  {
+    "id": "M2.9-EXT-07",
+    "title": "Coupled Hydration-Exertion Depletion (Hunger & Thirst)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 233,
+    "anchor": "MM2.9-EXT-07"
+  },
+  {
+    "id": "M2.9-EXT-08",
+    "title": "Caloric Body Condition Scoring & Layered Thermal Insulation",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-08]"
+    ],
+    "depended_by": [],
+    "line": 273,
+    "anchor": "MM2.9-EXT-08"
+  },
+  {
+    "id": "M2.9-EXT-09",
+    "title": "Pneumatic Tire Slip-Angle Deformation Loop",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-09]"
+    ],
+    "depended_by": [],
+    "line": 274,
+    "anchor": "MM2.9-EXT-09"
+  },
+  {
+    "id": "M2.9-EXT-10",
+    "title": "Kinematic Character Flood Buoyancy & Drag Bridge",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M2.9-EXT-10]",
+      "[M2.9-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 293,
+    "anchor": "MM2.9-EXT-10"
+  }
+]

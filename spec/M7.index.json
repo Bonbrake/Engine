@@ -1,0 +1,251 @@
+[
+  {
+    "id": "M7-EXT-01",
+    "title": "The Corpse-Pile Flattening Engine (Dynamic Static Hulls)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-01]",
+      "[M2-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 56,
+    "anchor": "MM7-EXT-01"
+  },
+  {
+    "id": "M7-EXT-02",
+    "title": "Electrochemical Oxidation Vector Blending (Structural Time-Lapse)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 91,
+    "anchor": "MM7-EXT-02"
+  },
+  {
+    "id": "M7-EXT-03",
+    "title": "Submerged Corpse Buoyancy Re-Activation",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 124,
+    "anchor": "MM7-EXT-03"
+  },
+  {
+    "id": "M7-EXT-04",
+    "title": "Soft-Body Cloth, Tethered Rot-Cloth & Cosserat-Rod Vegetation (Jolt 5.6.0 Soft-Body Unlock)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 159,
+    "anchor": "MM7-EXT-04"
+  },
+  {
+    "id": "M7-EXT-05",
+    "title": "Perishable Item Decay & Cook-Safety Integral (Food Spoilage & Cooking)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-05]",
+      "[M8-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 229,
+    "anchor": "MM7-EXT-05"
+  },
+  {
+    "id": "M7-EXT-06",
+    "title": "Player-Facing Save Slot & Autosave UI Layer",
+    "cluster": null,
+    "tags": "UI",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 268,
+    "anchor": "MM7-EXT-06"
+  },
+  {
+    "id": "M7-EXT-07",
+    "title": "Hierarchical Delta-State Persistence (Procedural Seed-Diff Engine)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 296,
+    "anchor": "MM7-EXT-07"
+  },
+  {
+    "id": "M7-EXT-11",
+    "title": "Zstd Save-Compression & Streaming Store",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-11]"
+    ],
+    "depended_by": [],
+    "line": 299,
+    "anchor": "MM7-EXT-11"
+  },
+  {
+    "id": "M7-EXT-10",
+    "title": "Binary Save Format Structural Schema Migrator",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-10]"
+    ],
+    "depended_by": [],
+    "line": 319,
+    "anchor": "MM7-EXT-10"
+  },
+  {
+    "id": "M7-EXT-09",
+    "title": "Atomic File-Swap Append-Only State Transaction Logger",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-09]"
+    ],
+    "depended_by": [],
+    "line": 339,
+    "anchor": "MM7-EXT-09"
+  },
+  {
+    "id": "M7-EXT-08",
+    "title": "Zstandard Custom Dictionary Static Compiler",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-08]"
+    ],
+    "depended_by": [],
+    "line": 359,
+    "anchor": "MM7-EXT-08"
+  },
+  {
+    "id": "M7-EXT-12",
+    "title": "Save Compression (zstd)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-12]"
+    ],
+    "depended_by": [],
+    "line": 412,
+    "anchor": "MM7-EXT-12"
+  },
+  {
+    "id": "M7-EXT-13",
+    "title": "Asset Checksum Integrity",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-13]"
+    ],
+    "depended_by": [],
+    "line": 428,
+    "anchor": "MM7-EXT-13"
+  },
+  {
+    "id": "M7-EXT-14",
+    "title": "Telemetry Tap + Consent Gate",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-14]"
+    ],
+    "depended_by": [],
+    "line": 446,
+    "anchor": "MM7-EXT-14"
+  },
+  {
+    "id": "M7-EXT-15",
+    "title": "Localization / Accessibility String-Table",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-15]"
+    ],
+    "depended_by": [],
+    "line": 462,
+    "anchor": "MM7-EXT-15"
+  },
+  {
+    "id": "M7-EXT-16",
+    "title": "Save Corruption Recovery",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 478,
+    "anchor": "MM7-EXT-16"
+  },
+  {
+    "id": "M7-EXT-17",
+    "title": "Replay / Demo Record",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-17]"
+    ],
+    "depended_by": [],
+    "line": 499,
+    "anchor": "MM7-EXT-17"
+  },
+  {
+    "id": "M7-EXT-18",
+    "title": "Save Encryption & Anti-Edit",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-18]"
+    ],
+    "depended_by": [],
+    "line": 520,
+    "anchor": "MM7-EXT-18"
+  },
+  {
+    "id": "M7-EXT-19",
+    "title": "Backward-Save Compatibility",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M7-EXT-19]"
+    ],
+    "depended_by": [],
+    "line": 539,
+    "anchor": "MM7-EXT-19"
+  }
+]

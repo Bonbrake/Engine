@@ -1,0 +1,247 @@
+[
+  {
+    "id": "M8-EXT-01",
+    "title": "Brand-Gated Thermal Ammo Cook-Off",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 68,
+    "anchor": "MM8-EXT-01"
+  },
+  {
+    "id": "M8-EXT-02",
+    "title": "Property-Matching Crafting & Derived Item Stats",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-02]",
+      "[M9-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 106,
+    "anchor": "MM8-EXT-02"
+  },
+  {
+    "id": "M8-EXT-03",
+    "title": "Secondary Illness via Reparameterized SEIR (Sepsis, Dysentery, Tetanus)",
+    "cluster": null,
+    "tags": "SEIR",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-03]",
+      "[M7-EXT-05]",
+      "[M8.5-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 143,
+    "anchor": "MM8-EXT-03"
+  },
+  {
+    "id": "M8-EXT-04",
+    "title": "Per-Save Pathogen Characterization & Cure Synthesis (Deliberately Near-Impossible)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-04]",
+      "[M7-EXT-05]",
+      "[M3-EXT-06]",
+      "[M8.5-EXT-03]",
+      "[M8.6-EXT-06]",
+      "[M8-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 176,
+    "anchor": "MM8-EXT-04"
+  },
+  {
+    "id": "M8-EXT-05",
+    "title": "Data-Table Modding/Workshop Exposure",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-05]",
+      "[M8-EXT-02]",
+      "[M8-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 225,
+    "anchor": "MM8-EXT-05"
+  },
+  {
+    "id": "M8-EXT-06",
+    "title": "Two-Tier Deterministic Archetype Synthesis (Identity vs. Session Variance)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 255,
+    "anchor": "MM8-EXT-06"
+  },
+  {
+    "id": "M8-EXT-07",
+    "title": "Memory-Mapped FlatBinary Archetype Schema Serializer",
+    "cluster": null,
+    "tags": "FlatBinary",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-07]",
+      "[M8-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 303,
+    "anchor": "MM8-EXT-07"
+  },
+  {
+    "id": "M8-EXT-08",
+    "title": "Log-Normal Camouflage Masking",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-08]"
+    ],
+    "depended_by": [],
+    "line": 336,
+    "anchor": "MM8-EXT-08"
+  },
+  {
+    "id": "M8-EXT-10",
+    "title": "Procedural Loot Icon Generation",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-10]"
+    ],
+    "depended_by": [],
+    "line": 339,
+    "anchor": "MM8-EXT-10"
+  },
+  {
+    "id": "M8-EXT-09",
+    "title": "Memory-Mapped FlatBinary Inventory Cache Dictionary",
+    "cluster": null,
+    "tags": "FlatBinary",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-09]"
+    ],
+    "depended_by": [],
+    "line": 359,
+    "anchor": "MM8-EXT-09"
+  },
+  {
+    "id": "M8-EXT-11",
+    "title": "Data-Driven Itemization",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-11]"
+    ],
+    "depended_by": [],
+    "line": 413,
+    "anchor": "MM8-EXT-11"
+  },
+  {
+    "id": "M8-EXT-12",
+    "title": "Stacking & Inventory Slots",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-12]"
+    ],
+    "depended_by": [],
+    "line": 429,
+    "anchor": "MM8-EXT-12"
+  },
+  {
+    "id": "M8-EXT-13",
+    "title": "Ammo Types & Crafting",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-13]"
+    ],
+    "depended_by": [],
+    "line": 448,
+    "anchor": "MM8-EXT-13"
+  },
+  {
+    "id": "M8-EXT-14",
+    "title": "Barter & Trade Economy",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-14]"
+    ],
+    "depended_by": [],
+    "line": 469,
+    "anchor": "MM8-EXT-14"
+  },
+  {
+    "id": "M8-EXT-15",
+    "title": "Currency & Scarcity Model",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-15]"
+    ],
+    "depended_by": [],
+    "line": 488,
+    "anchor": "MM8-EXT-15"
+  },
+  {
+    "id": "M8-EXT-16",
+    "title": "Settlement NPC Residents",
+    "cluster": null,
+    "tags": "NPC",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 507,
+    "anchor": "MM8-EXT-16"
+  },
+  {
+    "id": "M8-EXT-17",
+    "title": "Perk Tree & Prerequisites",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-17]"
+    ],
+    "depended_by": [],
+    "line": 526,
+    "anchor": "MM8-EXT-17"
+  },
+  {
+    "id": "M8-EXT-18",
+    "title": "Skill Progression & XP",
+    "cluster": null,
+    "tags": "XP",
+    "tldr": null,
+    "depends_on": [
+      "[M8-EXT-18]"
+    ],
+    "depended_by": [],
+    "line": 545,
+    "anchor": "MM8-EXT-18"
+  }
+]

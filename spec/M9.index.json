@@ -1,0 +1,306 @@
+[
+  {
+    "id": "M9-EXT-01",
+    "title": "Fluid Momentum Traction Shear (Blood-Slick Viscosity)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 83,
+    "anchor": "MM9-EXT-01"
+  },
+  {
+    "id": "M9-EXT-02",
+    "title": "Non-Linear Tire Slip Friction Heating (Thermal Traction Breakdown)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 113,
+    "anchor": "MM9-EXT-02"
+  },
+  {
+    "id": "M9-EXT-03",
+    "title": "High-Velocity Wet-Silt Aquaplaning",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 144,
+    "anchor": "MM9-EXT-03"
+  },
+  {
+    "id": "M9-EXT-04",
+    "title": "Non-Newtonian Mud Silt Advection (Soil Rut Tracking)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 181,
+    "anchor": "MM9-EXT-04"
+  },
+  {
+    "id": "M9-EXT-05",
+    "title": "Aerodynamic Wind Lift & Side-Slip Force Vectoring (Chassis Loft)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-05]"
+    ],
+    "depended_by": [],
+    "line": 227,
+    "anchor": "MM9-EXT-05"
+  },
+  {
+    "id": "M9-EXT-06",
+    "title": "Horde Continuum Fluid Drag (The Swarm Plow Solver)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 266,
+    "anchor": "MM9-EXT-06"
+  },
+  {
+    "id": "M9-EXT-07",
+    "title": "Dynamic Skid-Mark Injection via Runtime Virtual Textures (RVT)",
+    "cluster": null,
+    "tags": "RVT",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 293,
+    "anchor": "MM9-EXT-07"
+  },
+  {
+    "id": "M9-EXT-08",
+    "title": "Open/Locked Axle Torque Differential Splitter",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-08]"
+    ],
+    "depended_by": [],
+    "line": 324,
+    "anchor": "MM9-EXT-08"
+  },
+  {
+    "id": "M9-EXT-09",
+    "title": "Volatile Fuel Tank Puncture Bernoulli Drainage",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-09]"
+    ],
+    "depended_by": [],
+    "line": 357,
+    "anchor": "MM9-EXT-09"
+  },
+  {
+    "id": "M9-EXT-10",
+    "title": "Aero-Elastic Body Panel Drag Deformation Scaling",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-10]"
+    ],
+    "depended_by": [],
+    "line": 390,
+    "anchor": "MM9-EXT-10"
+  },
+  {
+    "id": "M9-EXT-11",
+    "title": "Wake-Slipstream Aerodynamic Drafting",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-11]"
+    ],
+    "depended_by": [],
+    "line": 418,
+    "anchor": "MM9-EXT-11"
+  },
+  {
+    "id": "M9-EXT-12",
+    "title": "Exhaust Backpressure Aquatic Stutter",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-12]"
+    ],
+    "depended_by": [],
+    "line": 446,
+    "anchor": "MM9-EXT-12"
+  },
+  {
+    "id": "M9-EXT-13",
+    "title": "Gyroscopic Wheel-Spin Precession Self-Righting",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-13]"
+    ],
+    "depended_by": [],
+    "line": 478,
+    "anchor": "MM9-EXT-13"
+  },
+  {
+    "id": "M9-EXT-14",
+    "title": "Non-Newtonian Mud-Slurry Catapult (Tire Rooster-Tails)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-14]"
+    ],
+    "depended_by": [],
+    "line": 508,
+    "anchor": "MM9-EXT-14"
+  },
+  {
+    "id": "M9-EXT-15",
+    "title": "Chassis Vortex Debris Drafting",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-15]"
+    ],
+    "depended_by": [],
+    "line": 536,
+    "anchor": "MM9-EXT-15"
+  },
+  {
+    "id": "M9-EXT-16",
+    "title": "Socio-Economic Fuel Scarcity & Shared-Station Garage Repair",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-16]",
+      "[M8-EXT-02]",
+      "[M3-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 569,
+    "anchor": "MM9-EXT-16"
+  },
+  {
+    "id": "M9-EXT-17",
+    "title": "Rigid-Body Lateral Frame Shear Stress Accumulator",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-17]",
+      "[M3-EXT-06]",
+      "[M9-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 596,
+    "anchor": "MM9-EXT-17"
+  },
+  {
+    "id": "M9-EXT-19",
+    "title": "Parallax-Occlusion Topography Deformation & Persistent Ruts",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-19]"
+    ],
+    "depended_by": [],
+    "line": 623,
+    "anchor": "MM9-EXT-19"
+  },
+  {
+    "id": "M9-EXT-18",
+    "title": "Vehicle Convoy Long-Range Router",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-18]"
+    ],
+    "depended_by": [],
+    "line": 624,
+    "anchor": "MM9-EXT-18"
+  },
+  {
+    "id": "M9-EXT-21",
+    "title": "Fluid Hydrodynamic Wading Resistance Modulator",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-21]"
+    ],
+    "depended_by": [],
+    "line": 643,
+    "anchor": "MM9-EXT-21"
+  },
+  {
+    "id": "M9-EXT-22",
+    "title": "RVT Skid-Mark / Tire-Track Injector *(SOURCED FROM PLAN FILE)",
+    "cluster": null,
+    "tags": "RVT, SOURCED, FROM, PLAN, FILE",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-22]"
+    ],
+    "depended_by": [],
+    "line": 661,
+    "anchor": "MM9-EXT-22"
+  },
+  {
+    "id": "M9-EXT-20",
+    "title": "Anti-Roll Torsional Suspension Stabilizer",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-20]",
+      "[M9-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 681,
+    "anchor": "MM9-EXT-20"
+  },
+  {
+    "id": "M9-EXT-23",
+    "title": "Day/Night, Weather & Atmosphere",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M9-EXT-23]"
+    ],
+    "depended_by": [],
+    "line": 756,
+    "anchor": "MM9-EXT-23"
+  }
+]

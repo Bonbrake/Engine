@@ -1,0 +1,55 @@
+[
+  {
+    "id": "M8.5-EXT-01",
+    "title": "Poisson-Disk Farm Plot Growth & Scent-Attractor Coupling",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8.5-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 37,
+    "anchor": "MM8.5-EXT-01"
+  },
+  {
+    "id": "M8.5-EXT-02",
+    "title": "Boid-Flock Fish Population & Hazard-Cell Contamination",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8.5-EXT-02]",
+      "[M8-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 73,
+    "anchor": "MM8.5-EXT-02"
+  },
+  {
+    "id": "M8.5-EXT-03",
+    "title": "Recruitable Survivor AI (Companion Command Layer over Existing Zombie AI)",
+    "cluster": null,
+    "tags": "AI",
+    "tldr": null,
+    "depends_on": [
+      "[M8.5-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 116,
+    "anchor": "MM8.5-EXT-03"
+  },
+  {
+    "id": "M8.5-EXT-04",
+    "title": "Live Economy-Sim Trade Pricing (Barter)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M8.5-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 151,
+    "anchor": "MM8.5-EXT-04"
+  }
+]

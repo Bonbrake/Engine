@@ -1,0 +1,96 @@
+[
+  {
+    "id": "M5.1-EXT-01",
+    "title": "Aerodynamic Wake Slipstream Horde Slingshot",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5.1-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 45,
+    "anchor": "MM5.1-EXT-01"
+  },
+  {
+    "id": "M5.1-EXT-02",
+    "title": "Player Character Generation (Uninfected-Mode Phenotype Pipeline)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5.1-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 77,
+    "anchor": "MM5.1-EXT-02"
+  },
+  {
+    "id": "M5.1-EXT-03",
+    "title": "Topology-Invariant Master Rig with Deformation-Transfer Binding",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5.1-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 104,
+    "anchor": "MM5.1-EXT-03"
+  },
+  {
+    "id": "M5.1-EXT-04",
+    "title": "Anatomical Hit-Volume SDF Gradients",
+    "cluster": null,
+    "tags": "SDF",
+    "tldr": null,
+    "depends_on": [
+      "[M5.1-EXT-04]",
+      "[M5.1-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 138,
+    "anchor": "MM5.1-EXT-04"
+  },
+  {
+    "id": "M5.1-EXT-05",
+    "title": "Heat-Diffusion Automatic Rigging & PSOLA Phenotype Vocalization",
+    "cluster": null,
+    "tags": "PSOLA",
+    "tldr": null,
+    "depends_on": [
+      "[M5.1-EXT-05]",
+      "[M5.1-EXT-03]",
+      "[M5.1-EXT-02]"
+    ],
+    "depended_by": [],
+    "line": 167,
+    "anchor": "MM5.1-EXT-05"
+  },
+  {
+    "id": "M5.1-EXT-06",
+    "title": "Screamer Convergence & Holling Type II Cannibalism Feeding",
+    "cluster": null,
+    "tags": "II",
+    "tldr": null,
+    "depends_on": [
+      "[M5.1-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 201,
+    "anchor": "MM5.1-EXT-06"
+  },
+  {
+    "id": "M5.1-EXT-07",
+    "title": "Optimal Reciprocal Collision Avoidance (ORCA) Solver",
+    "cluster": null,
+    "tags": "ORCA",
+    "tldr": null,
+    "depends_on": [
+      "[M5.1-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 202,
+    "anchor": "MM5.1-EXT-07"
+  }
+]

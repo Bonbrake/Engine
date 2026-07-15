@@ -1,0 +1,82 @@
+[
+  {
+    "id": "M4.6-EXT-01",
+    "title": "Procedural Vertex Buffer Pooling & Dynamic GPU Compaction",
+    "cluster": null,
+    "tags": "GPU",
+    "tldr": null,
+    "depends_on": [
+      "[M4.6-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 41,
+    "anchor": "MM4.6-EXT-01"
+  },
+  {
+    "id": "M4.6-EXT-02",
+    "title": "Asynchronous OS Overlapped Direct-VRAM Disk Streaming Queue",
+    "cluster": null,
+    "tags": "OS, VRAM",
+    "tldr": null,
+    "depends_on": [
+      "[M4.6-EXT-02]",
+      "[M0-EXT-04]"
+    ],
+    "depended_by": [],
+    "line": 73,
+    "anchor": "MM4.6-EXT-02"
+  },
+  {
+    "id": "M4.6-EXT-03",
+    "title": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M4.6-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 104,
+    "anchor": "MM4.6-EXT-03"
+  },
+  {
+    "id": "M4.6-EXT-05",
+    "title": "DirectStorage Decompression Buffer Ring Allocator Pool",
+    "cluster": null,
+    "tags": "DirectStorage",
+    "tldr": null,
+    "depends_on": [
+      "[M4.6-EXT-05]"
+    ],
+    "depended_by": [],
+    "line": 105,
+    "anchor": "MM4.6-EXT-05"
+  },
+  {
+    "id": "M4.6-EXT-08",
+    "title": "BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)",
+    "cluster": null,
+    "tags": "BC7, SOURCED, FROM, PLAN, FILE",
+    "tldr": null,
+    "depends_on": [
+      "[M4.6-EXT-08]"
+    ],
+    "depended_by": [],
+    "line": 124,
+    "anchor": "MM4.6-EXT-08"
+  },
+  {
+    "id": "M4.6-EXT-07",
+    "title": "Basis Universal GPU Texture Transcoder",
+    "cluster": null,
+    "tags": "GPU",
+    "tldr": null,
+    "depends_on": [
+      "[M4.6-EXT-07]",
+      "[M4.6-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 144,
+    "anchor": "MM4.6-EXT-07"
+  }
+]

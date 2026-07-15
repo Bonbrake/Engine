@@ -1,0 +1,213 @@
+[
+  {
+    "id": "M5-EXT-01",
+    "title": "Asynchronous Tile-Voxelized NavMesh Baker",
+    "cluster": null,
+    "tags": "NavMesh",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 49,
+    "anchor": "MM5-EXT-01"
+  },
+  {
+    "id": "M5-EXT-02",
+    "title": "Dual-Quaternion GPU Compute Skinning",
+    "cluster": null,
+    "tags": "GPU",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-02]",
+      "[M5.1-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 82,
+    "anchor": "MM5-EXT-02"
+  },
+  {
+    "id": "M5-EXT-03",
+    "title": "Dynamic Logistic Spawn Pacing",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-03]",
+      "[M5.4-EXT-03]"
+    ],
+    "depended_by": [],
+    "line": 122,
+    "anchor": "MM5-EXT-03"
+  },
+  {
+    "id": "M5-EXT-04",
+    "title": "Perimeter Illumination Repulsion",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-04]",
+      "[M5-EXT-01]"
+    ],
+    "depended_by": [],
+    "line": 151,
+    "anchor": "MM5-EXT-04"
+  },
+  {
+    "id": "M5-EXT-05",
+    "title": "Hydrostatic Velocity Penalties",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-05]"
+    ],
+    "depended_by": [],
+    "line": 182,
+    "anchor": "MM5-EXT-05"
+  },
+  {
+    "id": "M5-EXT-06",
+    "title": "AI Behavior / Utility System",
+    "cluster": null,
+    "tags": "AI",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-06]"
+    ],
+    "depended_by": [],
+    "line": 217,
+    "anchor": "MM5-EXT-06"
+  },
+  {
+    "id": "M5-EXT-07",
+    "title": "Navigation / Pathfinding",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-07]"
+    ],
+    "depended_by": [],
+    "line": 233,
+    "anchor": "MM5-EXT-07"
+  },
+  {
+    "id": "M5-EXT-08",
+    "title": "Procedural Animation (physics/IK)",
+    "cluster": null,
+    "tags": "IK",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-08]"
+    ],
+    "depended_by": [],
+    "line": 249,
+    "anchor": "MM5-EXT-08"
+  },
+  {
+    "id": "M5-EXT-09",
+    "title": "AI Perception System",
+    "cluster": null,
+    "tags": "AI",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-09]"
+    ],
+    "depended_by": [],
+    "line": 265,
+    "anchor": "MM5-EXT-09"
+  },
+  {
+    "id": "M5-EXT-10",
+    "title": "AI Director (horde pacing)",
+    "cluster": null,
+    "tags": "AI",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-10]"
+    ],
+    "depended_by": [],
+    "line": 281,
+    "anchor": "MM5-EXT-10"
+  },
+  {
+    "id": "M5-EXT-11",
+    "title": "Horde Emergence / Spawn Waves",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-11]"
+    ],
+    "depended_by": [],
+    "line": 297,
+    "anchor": "MM5-EXT-11"
+  },
+  {
+    "id": "M5-EXT-12",
+    "title": "Zombie Facing / Emerge Animation",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-12]"
+    ],
+    "depended_by": [],
+    "line": 318,
+    "anchor": "MM5-EXT-12"
+  },
+  {
+    "id": "M5-EXT-13",
+    "title": "Zombie FSM States",
+    "cluster": null,
+    "tags": "FSM",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-13]"
+    ],
+    "depended_by": [],
+    "line": 339,
+    "anchor": "MM5-EXT-13"
+  },
+  {
+    "id": "M5-EXT-14",
+    "title": "Hearing Perception (radius+freq)",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-14]"
+    ],
+    "depended_by": [],
+    "line": 360,
+    "anchor": "MM5-EXT-14"
+  },
+  {
+    "id": "M5-EXT-15",
+    "title": "Short-Term Memory & Investigation",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-15]"
+    ],
+    "depended_by": [],
+    "line": 379,
+    "anchor": "MM5-EXT-15"
+  },
+  {
+    "id": "M5-EXT-16",
+    "title": "Horde Merge & Split Behavior",
+    "cluster": null,
+    "tags": "general",
+    "tldr": null,
+    "depends_on": [
+      "[M5-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 398,
+    "anchor": "MM5-EXT-16"
+  }
+]
