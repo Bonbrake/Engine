@@ -855,6 +855,10 @@ survival game's core trust guarantee.
 Extends the existing `AssetPath` resolver (M0) to also resolve a
 writable per-user path, separate from the install directory.
 
+##### Math
+
+Resolve target: `userDataDir = base(OS) ∧ IsWritable(userDataDir) ∧ ¬SubpathOf(installDir)` — per-user path, never inside the install tree.
+
 ##### How It Works
 Saves/settings resolve through `AssetPath` to a platform-appropriate
 writable directory (`%APPDATA%` on Windows, `~/.local/share` on Linux)
@@ -885,6 +889,10 @@ no migration script needed later.
 M2.8/M12 co-op — extends the existing Aftermath/RGD crash-dump path
 (M0) with a shared identifier so a host-side crash can be matched
 against what a peer was doing at the same simulated tick.
+
+##### Math
+
+Correlation key `K = (sessionId, |tick_host − tick_peer| ≤ ε)`; `sessionId` exchanged at connect time, stamped onto every minidump.
 
 ##### How It Works
 Every crash/minidump is tagged with the current tick number and a
@@ -935,6 +943,10 @@ progresses, food decays — the Zomboid-style "it's a real place" feel.
 ##### Systems Touched
 Extends [M0-EXT-21] — prevents trivially defeating offline decay/weather
 by winding the system clock back.
+
+##### Math
+
+Wall clock trusted `⟺ |Δt_monotonic − Δt_wall| ≤ tolerance`; otherwise offline fast-forward for that session is suppressed (see `[M0-EXT-21]`).
 
 ##### How It Works
 At boot, compares the OS monotonic uptime delta against the wall-clock
@@ -999,6 +1011,10 @@ instead of an unpredictable frame-rate collapse at the worst moment.
 Boot sequence — prevents two copies of the game writing to the same
 save concurrently.
 
+##### Math
+
+Exactly one owner: `Acquire ⟺ mutex ∉ {held}`; a second instance sees `ERROR_ALREADY_EXISTS` / `EEXIST` and refuses to boot.
+
 ##### How It Works
 A named OS mutex (or lock file) is checked and held at boot; a second
 instance detects it and refuses to start (or warns and exits).
@@ -1027,6 +1043,10 @@ Prevents a corrupted save from two instances writing at once.
 Every background job dispatched through enkiTS — a bad chunk-gen task
 or corrupt-asset job shouldn't take the whole process down.
 
+##### Math
+
+Fault isolation invariant: `P(process_exit | job_throw) = 0` — a throwing enkiTS job is caught, logged, and dropped, never propagated to the scheduler.
+
 ##### How It Works
 Wraps the top of every enkiTS job dispatch in a try/catch (or SEH filter
 on Windows), logging and safely dropping the failed job instead of
@@ -1054,6 +1074,10 @@ game mid-session.
 ##### Systems Touched
 M1's async shader compilation path, and M0's pipeline-cache/mod
 integrity validation (M0-EXT-03).
+
+##### Math
+
+Compile success `⟺ future.wait_for(T) ≠ timeout`; on timeout the job falls back to a cached/default shader. Integrity/cache failure ⟺ boot safe-mode (mods off, cache rebuilt), never hard-hang.
 
 ##### How It Works
 The async shader-compile path gets a watchdog timer; a hung compile logs
@@ -1086,6 +1110,10 @@ the game degrades to safe mode instead of not starting at all.
 Extends the existing file-handle ring buffer (M0-EXT-04) and enkiTS
 worker pool with a simple priority split.
 
+##### Math
+
+Scheduling invariant: when both ready, service `JobPriority::Foreground` before `JobPriority::Background` (existing enkiTS priority/affinity hooks) so streaming never starves a frame-critical job.
+
 ##### How It Works
 Requests and jobs are tagged `Foreground` (render/input-critical) or
 `Background` (streaming/AI/autosave); foreground work is serviced first
@@ -1108,6 +1136,10 @@ gameplay-critical moments.
 ##### Systems Touched
 Extends the existing `AssetPath` resolver (M0) — every load, mod or
 otherwise.
+
+##### Math
+
+Load allowed `⟺ H(data) = H_manifest`; a mismatch fails loud-and-safe instead of silently loading corrupted/tampered bytes.
 
 ##### How It Works
 A hash (CRC32/xxHash) is checked against a manifest at load time; a
@@ -1132,6 +1164,10 @@ A corrupted texture, mesh, or mod file never silently loads as garbage.
 ##### Systems Touched
 Swapchain creation (M0) and UI layout math (M11, later) — declared now
 so color-space/DPI handling isn't retrofitted per-render-pass.
+
+##### Math
+
+`dpiScale = physicalPx / logicalPx` and `colorSpace` fixed once at boot, threaded through all UI/render math for the session (no per-pass reassumption of SDR).
 
 ##### How It Works
 Swapchain color space and a DPI-scale factor are read once at boot and
@@ -10739,6 +10775,10 @@ Ten narrow, single-purpose text-generation systems. Each is a plain component ho
 
 Structural town graph (M4), `FactionZone` control state (M8.5).
 
+##### Math
+
+Submission trigger: `submit ⟺ threat_i > kMissionThreatCeiling` (faction-contested `TownNode`), then one-shot prompt for order text.
+
 ##### How It Works
 
 When a `TownNode`'s threat level exceeds a configurable ceiling in a faction-contested zone, its road name, threat index, and rival-faction flag are submitted as a single-shot prompt, generating a short rescue/extraction/supply-run order text.
@@ -10759,6 +10799,10 @@ Mission text is grounded in the actual generated town layout instead of a fixed 
 ##### Systems Touched
 
 Corpse inspection (M2.9), infected phenotype generation (M5.1).
+
+##### Math
+
+Submission trigger: `submit ⟺ event = autopsy`; inputs `(phenotypeTag, ambientTempC, weatherType)` → biological readout.
 
 ##### How It Works
 
@@ -10781,6 +10825,10 @@ Autopsy flavor text reflects the specific mutation and conditions that produced 
 
 M7 persistence (death-cause history), safehouse zone registry (M8.6).
 
+##### Math
+
+Submission trigger: `submit ⟺ event = death`; record `(name, causeOfDeath, daysSurvived)` → memorial inscription in nearest safehouse slot.
+
 ##### How It Works
 
 On an NPC or prior-character death event, its `StableId` history record (cause of death, days survived) generates a short wall inscription placed in the nearest safehouse memorial slot.
@@ -10801,6 +10849,10 @@ Memorials reflect the player's actual run history instead of static flavor text.
 ##### Systems Touched
 
 `FactionZone` control percentage (M8.5), dead-drop container placement (M8.6).
+
+##### Math
+
+Submission trigger: `submit ⟺ controlPct > kControlThreshold`; tone weighted by `ammoReservesScalar`, `populationNutritionIndex`, `combatantRosterSize`.
 
 ##### How It Works
 
@@ -10833,6 +10885,10 @@ Faction pressure is legible without a dialogue system — reading a note tells y
 
 Jolt vehicle chassis stress state (M9), inventory/UI text fields.
 
+##### Math
+
+Pure text view: `text = f(axleStress, fuelLineDegradation)` over M9's existing chassis floats — no new stress model, only a human-readable status line.
+
 ##### How It Works
 
 Replaces a bare health percentage with a status line generated from the vehicle's live axle-stress and fuel-line-degradation floats (both already computed by M9's chassis simulation — this is a text view on existing values, not a new stress model).
@@ -10853,6 +10909,10 @@ struct VehicleDiagComponent { float axleStress; float fuelLineDegradation; std::
 ##### Systems Touched
 
 Procedural world anomaly tracker (M4), safehouse bulletin board props (M8.6).
+
+##### Math
+
+Submission trigger: `submit ⟺ ¬discovered` (undiscovered anomaly) → rumor posted to nearest bulletin board.
 
 ##### How It Works
 
@@ -10875,6 +10935,10 @@ Bulletin boards give soft, deniable direction toward points of interest instead 
 
 Day/night cycle rollover (M10), settlement defense/scavenging counters (M8.6).
 
+##### Math
+
+Submission trigger: `submit ⟺ dayCycleRollover ∨ sleepTransition`; `text = compress(wallsReinforced, hostilesEliminated, scrapRecovered)` into one diary line.
+
 ##### How It Works
 
 On a day-cycle rollover or sleep transition, accumulated daily counters (walls reinforced, hostiles eliminated, scrap recovered) are compressed into one diary-style log line.
@@ -10896,6 +10960,10 @@ A running, readable log of "what happened while I was surviving" without the pla
 
 Acoustic propagation system (M6), stealth HUD overlay (M11).
 
+##### Math
+
+Submission trigger: `submit ⟺ amplitude > kAudibleThreshold`; maps acoustic amplitude/frequency to a text sensory cue (accessibility aid).
+
 ##### How It Works
 
 Sound emission events above an amplitude threshold near the player are translated into a short sensory description line, primarily as an accessibility aid for sound-cue-heavy stealth moments.
@@ -10916,6 +10984,10 @@ Gives players who rely less on raw audio cues an equivalent text-based tension s
 ##### Systems Touched
 
 Procedural building generation (M4), interior enemy density tags (M5.4).
+
+##### Math
+
+Text = `f(dangerLevel, militaryCode, zoningClass, localMortalityRatio, martialLawEnforced)` → signage/graffiti tone reflects zoning, mortality, and martial-law state.
 
 ##### How It Works
 
@@ -10947,6 +11019,10 @@ Environmental storytelling telegraphs interior threat level without a UI danger 
 
 M8 crafting/attachment system, item tooltip UI.
 
+##### Math
+
+Text = `f(baseItemName, scrapItemName)` → one-line tooltip identity for the crafted combination; deterministic string concat, no inference beyond naming.
+
 ##### How It Works
 
 When a scrap component is attached to a weapon via the crafting screen, a one-line tooltip describing the combined item is generated from the two item names.
@@ -10967,6 +11043,10 @@ Jury-rigged combinations get a distinct identity in the inventory list instead o
 ##### Systems Touched
 
 Engine boot sequence (extends M0's device/queue enumeration), M13 SLM worker thread startup.
+
+##### Math
+
+Resolution precedence (deterministic): `backend = firstDefined(CUDA_env, Vulkan_env, console_prompt)`; compute queue = dedicated compute family, else shared graphics+compute family (never fail init).
 
 ##### How It Works
 
@@ -11017,6 +11097,10 @@ Invisible — this is what lets M13's text generation run without stealing frame
 ##### Systems Touched
 
 M2.8-EXT-01's radio-frequency signal attenuation (comms static physics), M6 acoustic propagation, faction/survivor radio chatter text.
+
+##### Math
+
+Submission trigger: `submit ⟺ pathLossDb > kScrambleThresholdDb`; degradation magnitude scales with `pathLossDb` / `transmitterDistanceM` so text and audio degrade together.
 
 ##### How It Works
 
@@ -13143,6 +13227,10 @@ M1's existing MSDF font pipeline (no rendering-path change needed) and
 M13's MiniCPM5-1B integration, pulled forward as an offline content-gen
 tool rather than waiting for M13's own milestone.
 
+##### Math
+
+Generation invariant: `string[key, locale] = SLM.gen(seed, locale)` runs ONLY at build/content-gen time, never per-tick — `Generate(key)` is constant across all runtime ticks for a given locale.
+
 ##### How It Works
 All player-facing strings (subtitles, UI, colorblind-mode labels) route
 through a string-table keyed by ID. The table's *content* is generated
@@ -13174,6 +13262,10 @@ The (future) EventBus (M2) — a lightweight tap added now so meaningful
 gameplay events (death, horde-encounter size, resource-scarcity moment)
 post to a ring buffer, gated by explicit player consent.
 
+##### Math
+
+Write gated: `write ⟺ g_telemetryConsentGranted`; ring buffer capacity `C`, oldest dropped on overflow. Nothing recorded without explicit opt-in.
+
 ##### How It Works
 A boot-time consent flag must be true before the tap writes anything.
 When enabled, events post to a bounded ring buffer for later
@@ -13201,6 +13293,10 @@ Nothing leaves the machine or gets recorded without an explicit opt-in.
 Consumes [M1-EXT-35]'s telemetry ring buffer; adjusts existing
 data-driven spawn-density/loot-scarcity curves. NEVER touches gameplay
 code directly — only the config values that already exist.
+
+##### Math
+
+Batch cadence `≥ N` in-game hours (not per-tick); output writes `spawn_density.json` / `loot_scarcity.json` config deltas only — never gameplay code.
 
 ##### How It Works
 Batched every few in-game hours (not per-tick), MiniCPM5-1B reasons over
@@ -13242,6 +13338,10 @@ Feeds M5.1's already-planned procedural zombie variation. Offline
 content-gen only — zero runtime inference cost, zero hand-authored
 scripts.
 
+##### Math
+
+`params[archetype] = SLM.gen(seed)` produced OFFLINE and consumed at runtime as plain JSON data; zero runtime inference cost, zero hand-authored behavior trees.
+
 ##### How It Works
 MiniCPM5-1B synthesizes behavior-tree parameter sets / utility-AI weight
 tables per zombie archetype at content-generation time, consumed as data
@@ -13267,6 +13367,10 @@ hand-authored behavior trees.
 ##### Systems Touched
 Closes the gap the existing doc already flags as deferred in the Dev
 Inspector section (MetaRegistry.cpp).
+
+##### Math
+
+Mod-editability predicate: `writable_by_mod(field) ⟺ prop("ModWritable") = true`; every registered field defaults to non-writable unless explicitly flagged.
 
 ##### How It Works
 Adds an explicit `ModWritable: bool` flag to each component's existing
@@ -13399,7 +13503,7 @@ Non-trivial techniques were verified against real published sources:
 - FABRIK IK: Aristidou & Lasenby, "FABRIK: A fast, iterative solver for the Inverse Kinematics problem," TCSVT 2011.
 - Cristian's algorithm: Cristian, "Probabilistic clock synchronization," Distributed Computing 1989.
 
-#### `[M5.2-EXT-14]` (provisional) IK Rig Metadata Serialization Loader
+#### `[M5.2-EXT-16]` (provisional) IK Rig Metadata Serialization Loader
 
 Fleshes the §5.8 one-liner **IK Rig Metadata Serialization Loader** (line 9104). The runtime `[M5.2-EXT-08]` IK Rig Asset is declared as an in-memory struct but has no disk format or loader; this entry supplies both so skeletons load their bone-chain definitions from data, not hardcoded bone-name lookups.
 
@@ -13436,7 +13540,7 @@ Modders and future skeleton authors add bone-chain definitions via data, not eng
 
 ---
 
-#### `[M11-EXT-09]` (provisional) Procedural Environmental Ambient Audio Baker
+#### `[M11-EXT-42]` (provisional) Procedural Environmental Ambient Audio Baker
 
 Fleshes the §5.8 one-liner **Procedural Environmental Ambient Audio Baker** (line 9106): synthesizes a live wind/rain/city-hum soundscape from chunk tags + wind vectors, instead of hand-placing loop assets per biome.
 
@@ -13463,7 +13567,7 @@ Every biome/weather combination has a distinct, reactive soundscape with zero ha
 
 ---
 
-#### `[M4.6-EXT-07]` (provisional) Asynchronous glTF Geometry Cache Purger
+#### `[M4.6-EXT-09]` (provisional) Asynchronous glTF Geometry Cache Purger
 
 Fleshes the §5.8 one-liner **Asynchronous glTF Geometry Cache Purger** (line 9109): distance-weighted LRU unload of static meshes under VRAM pressure, the eviction half that M2.6's glTF Geometry Caching (line 1188) only sketches ("decay candidate, not an immediate free").
 
@@ -13502,7 +13606,7 @@ Long sessions streaming across many biomes don't OOM the 6 GB Tier-0 VRAM floor;
 
 ---
 
-#### `[M12-EXT-07]` (provisional) Network Clock Sync & Tick-Drift Compensator
+#### `[M12-EXT-23]` (provisional) Network Clock Sync & Tick-Drift Compensator
 
 Fleshes the §5.8 one-liner **Network Clock Sync & Tick Drift Compensator** (line 9123): host-authoritative timeline correction for co-op input-replay alignment, so two clients' simulation clocks don't drift and desync replayed inputs.
 
@@ -13536,7 +13640,7 @@ Co-op sessions stay frame-aligned over imperfect networks; input replay (the det
 
 ---
 
-#### `[M1-EXT-26]` (provisional) Chunk Boundary Entity Transfer Queue
+#### `[M1-EXT-53]` (provisional) Chunk Boundary Entity Transfer Queue
 
 Fleshes the §5.8 one-liner **Chunk Boundary Entity Transfer Queue** (line 9108): atomic handoff of simulated-AI ownership across sector lines without double-ticking the same entity.
 
@@ -13568,7 +13672,7 @@ Hordes chasing the player across sector lines don't stutter, double-move, or van
 
 ---
 
-#### `[K-EXT-22]` (provisional) Spatiotemporal Blue-Noise Jitter Array Interleaver
+#### [K-EXT-22] (provisional) Spatiotemporal Blue-Noise Jitter Array Interleaver
 
 Fleshes the §5.8 one-liner **Spatiotemporal Blue-Noise Jitter Array Interleaver** (line 9110): deterministic low-discrepancy per-frame offsets for hybrid ray-tracing denoise, the jitter half that M4.5's denoiser consumes but never specifies how the per-frame sequence is generated/ordered.
 
@@ -13596,7 +13700,7 @@ RT shadows / GI denoise converge in fewer frames at the same cost, so the game h
 
 ---
 
-#### `[M13-EXT-15]` (provisional) Kinematic Full-Body IK Surface Locker
+#### `[M13-EXT-54]` (provisional) Kinematic Full-Body IK Surface Locker
 
 Fleshes the §5.8 one-liner **Kinematic Full-Body IK Surface Locker** (line 9115): pins hands/feet to moving vehicle surfaces (e.g. a player bracing on a rocking truck bed), the full-body counterpart to M5.2's upper-body override.
 
@@ -13634,7 +13738,7 @@ Mounting/moving-vehicle interactions look physically planted instead of the char
 
 ---
 
-#### `[M3-EXT-10]` (provisional) Spherical-Harmonics Visibility Pre-Filter Grid
+#### `[M3-EXT-36]` (provisional) Spherical-Harmonics Visibility Pre-Filter Grid
 
 Fleshes the §5.8 one-liner **Spherical Harmonics Visibility Pre-Filter Grid** (line 9119): a cheap coarse obstruction check before committing to an expensive LOS raycast — the classic SH visibility cone / PRT-style pre-filter, distinct from `[M6]`'s acoustic voxel occlusion (that tags voxels with material absorption; this stores directional visibility as SH coefficients).
 
@@ -13665,7 +13769,7 @@ AI perception stays cheap even with many agents querying LOS, holding the 5 ms A
 
 ---
 
-#### `[M0-EXT-13]` (provisional) GPU-Side Storage-Buffer Decompressor (compute GDeflate)
+#### `[M0-EXT-54]` (provisional) GPU-Side Storage-Buffer Decompressor (compute GDeflate)
 
 Fleshes the §5.8 one-liner **GPU-Side Storage Buffer Decompressor (GDeflate, compute)** (line 9107). Per the doc's own caveat (and `[M4.6-EXT-05]`), this is the Vulkan-compute-shader path — name it accordingly, not "DirectStorage" (a Windows/DX API). It is the decompression compute kernel that `[M4.6-EXT-05]`'s ring allocator feeds; this entry supplies the kernel itself.
 
@@ -13696,7 +13800,7 @@ Streaming a fast-moving vehicle across chunk boundaries stays smooth — decompr
 
 ---
 
-#### `[M2.8-EXT-09]` (provisional) Co-op Deterministic Seeded Replay Verification
+#### `[M2.8-EXT-10]` (provisional) Co-op Deterministic Seeded Replay Verification
 
 Fleshes an implementation-step gap in M2.8 (Deterministic co-op architecture, §5.2 line 1745): the milestone specifies snapshot-sync as the co-op strategy and fixed-point math (`[M2.8-EXT-04]`), but has no EXT block for the *verification* that two clients actually stay bit-identical — the "determinism check" the AGENTS.md Day-0 Spike A demanded (xor entity states into a running hash, run twice, alternate flags, confirm no divergence).
 
