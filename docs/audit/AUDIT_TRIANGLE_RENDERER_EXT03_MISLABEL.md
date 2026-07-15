@@ -3,7 +3,9 @@
 **Date:** 2026-07-13
 **Auditor:** Hermes (ZombieEngine spec/batch work)
 **Category:** source-comment defect — spec/code cross-reference mismatch (code's fault, not spec's)
-**Status:** OPEN, unverified by human (agent-found, file:line cited; needs engineer confirmation)
+**Status:** RESOLVED (verified 2026-07-15) — see note below.
+
+> **RESOLVED — fixed in tree.** Commit `b591acf` (author: Ltmonkeysmash) retagged the three occlusion-query comments from `[M1-EXT-03]` to `[M1-EXT-28]` (GPU Software Occlusion Rasterizer / HZB feeder). `git grep` confirms 0 `[M1-EXT-03]` and 3 `[M1-EXT-28]` in `src/render/TriangleRenderer.cpp`; `cmake --build Debug` exits 0. The original finding below is historically accurate but the defect is now closed in code.
 
 ## Summary
 
