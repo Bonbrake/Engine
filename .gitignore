@@ -82,3 +82,8 @@ scratch/
 # standalone audit markdown clutter -> moved to docs/audit/ (kept, see commit)
 # /AUDIT_*.md
 # /endless_quarantine_v77_cleaned.md
+
+# === added 2026-07-15: timestamped milestone backup snapshots ===
+# Redundant with git history (milestones_M0-M13_antigravity/ is tracked).
+# Kept on disk as a local safety net, but never tracked/triaged as changes.
+milestones_M0-M13_antigravity_bak-*/
