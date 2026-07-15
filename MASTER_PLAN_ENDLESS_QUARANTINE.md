@@ -1614,6 +1614,138 @@ You can see where GPU time goes per pass - real profiling, not guesses.
 
 #### [M1-EXT-13] Render-Graph Barrier Topological Sorter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
+---
+
+#### [M1-EXT-28] GPU Software Occlusion Rasterizer (HZB Feeder) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + M4.6-EXT-06. CPU-side rasterizes occluders into a HZB feeder for early occlusion.
+
+##### Math
+raster occ proxies -> HZB mip0; feeds M4.6-EXT-06 downsample.
+
+##### How It Works
+Small/cheap occluder proxies are rasterized on CPU into the HZB's base mip so the GPU HiZ downsample (M4.6-EXT-06) can reject hidden draws even before full depth exists. Cheap, low-count occluders only.
+
+##### Reference Implementation
+```cpp
+RasterOccluders(proxies, hzbMip0);
+```
+
+##### Player-Facing Impact
+Distant hidden geometry is culled early - fewer draws, more FPS.
+
+
+---
+
+#### [M1-EXT-27] Uniform-Grid Spatial Hash Broad-Phase *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + M2.6. Uniform-grid broadphase as a CPU counterpart to GPU culling.
+
+##### Math
+cell = floor(p/cell); bucket; pairs = cells overlapping both AABBs.
+
+##### How It Works
+A uniform-grid spatial hash accelerates CPU-side broadphase (physics, AI queries) complementary to GPU HiZ culling; used where GPU culling isn't applicable. Shares cell convention with M2.6-EXT-01.
+
+##### Reference Implementation
+```cpp
+uint32_t key=SpatialHash(p);
+```
+
+##### Player-Facing Impact
+CPU broadphase stays cheap - physics/AI neighbor queries scale.
+
+
+---
+
+#### [M1-EXT-26] Chunk-Boundary Spatial-Hash Transfer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + M2.6. Transfers spatial-hash ownership across streaming chunk boundaries.
+
+##### Math
+on chunk unload: move cells in border into neighbor hash; re-key by cell.
+
+##### How It Works
+When a world chunk unloads, its border spatial-hash cells are handed to the neighbor chunk's hash (re-keyed) so broadphase pairs spanning the seam stay valid. Pairs with M3-EXT-11.
+
+##### Reference Implementation
+```cpp
+TransferBorderCells(from, to);
+```
+
+##### Player-Facing Impact
+Streaming chunks don't drop collisions at seams - no pop-through at boundaries.
+
+
+---
+
+#### [M1-EXT-25] Descriptor Update Templates for Per-Frame Bindless Writes *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + M4.5 bindless. Writes descriptor sets via update templates for fast per-frame binds.
+
+##### Math
+vkUpdateDescriptorSetWithTemplate(ds, tpl, data);
+
+##### How It Works
+Per-frame bindless descriptor writes use update templates (one memcpy-shaped write) instead of N individual writes, slashing CPU cost of replenishing the bindless table each frame.
+
+##### Reference Implementation
+```cpp
+vkUpdateDescriptorSetWithTemplate(set, tpl, staging);
+```
+
+##### Player-Facing Impact
+Bindless replenishment is near-free - texture/resource churn stays cheap.
+
+
+---
+
+#### [M1-EXT-24] Multi-Threaded Secondary Command Buffer Recording *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1 + enkiTS. Records secondary command buffers across worker threads.
+
+##### Math
+for(w in workers) w.Record(secondaries[w]); merge after (M1-EXT-17).
+
+##### How It Works
+Each worker thread records its slice of secondaries in parallel; the merger (M1-EXT-17) stitches them deterministically. Cuts CPU record time on big scenes.
+
+##### Reference Implementation
+```cpp
+parallel_for(workers, RecordSecondary);
+```
+
+##### Player-Facing Impact
+Command recording parallelized - lower CPU frame cost on dense draws.
+
+
+---
+
+#### [M1-EXT-23] Timeline Semaphores for Multi-Queue Sync *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M1. Vulkan timeline semaphores sequence work across graphics/compute/transfer queues.
+
+##### Math
+wait(timeline, val); signal(timeline, val+1);
+
+##### How It Works
+A timeline semaphore carries a monotonic value so queues can wait on / signal fine-grained points without binary-semaphore ping-pong, simplifying multi-queue submission ordering.
+
+##### Reference Implementation
+```cpp
+vkWaitSemaphores(tl, val); vkSignalSemaphore(tl, val+1);
+```
+
+##### Player-Facing Impact
+Multi-queue work stays correctly ordered - async compute/transfer without stalls.
+
+
 ##### Systems Touched
 M1 render graph. Topologically sorts pass barriers so dependent passes execute in valid order.
 
@@ -3445,6 +3577,50 @@ Walls and structures crack and expose rebar/studs along the actual direction rep
 
 #### [M3-EXT-08] Chemical Weathering & Particulate Deposition Tracker
 
+---
+
+#### [M3-EXT-11] Fracture-Debris Broad-Phase Reuse *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M3 + M2.6. Reuses the broadphase for fracture-debris collision instead of a second pass.
+
+##### Math
+debris cells share M2.6/M1-EXT-27 hash; pairs resolved in same pass.
+
+##### How It Works
+Fracture debris reuses the existing spatial-hash broadphase (no separate collision world); debris pairs are resolved in the same pass as the parent structure's, saving a whole broadphase.
+
+##### Reference Implementation
+```cpp
+ResolveInPass(debris, broadphase);
+```
+
+##### Player-Facing Impact
+Debris collides correctly without a second broadphase - cheaper destruction.
+
+
+---
+
+#### [M3-EXT-10] Spherical-Harmonics Visibility Pre-Filter Grid *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M3 + M4.5-EXT-17. Pre-filters visibility into an SH grid for cheap indirect/occlusion queries.
+
+##### Math
+SH coeffs per probe from sampled visibility; convolve for cosine lobe.
+
+##### How It Works
+Per probe, visibility is sampled and projected to spherical harmonics; a cosine-lobe convolution gives a cheap ambient-occlusion / diffuse-indirect term reusable by lighting and audio. Pairs with M4.5-EXT-17.
+
+##### Reference Implementation
+```cpp
+Probe p; p.sh = ProjectVisibility(samples);
+```
+
+##### Player-Facing Impact
+Indirect light + occlusion resolve cheaply from one SH grid - consistent, fast.
+
+
 ##### Systems Touched
 
 `[M3]` destructible material tags, `[M6.5]` particle/VFX system (soot/spark sources), `[M7]`'s existing long-term structural weathering narrative (this gives it concrete math instead of prose-only).
@@ -4026,6 +4202,182 @@ Chunk generation never hard-stalls on a bad tile pick - maps keep streaming.
 
 ---
 #### [M4-EXT-21] Signage Grammar Transcoder *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+---
+
+#### [M4-EXT-28] Procedural Foliage L-System Mesh Generator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4. L-System generates foliage meshes (branches/leaves) procedurally.
+
+##### Math
+mesh = LSystem(axiom, rules, iters, seed);
+
+##### How It Works
+An L-System (axiom + production rules + iterations) generates branch/leaf geometry per species, seeded for determinism. Pairs with M4-EXT-23 biome for species selection. Output meshes feed M4-EXT-27 impostors.
+
+##### Reference Implementation
+```cpp
+Mesh m = GrowLSystem(species, seed);
+```
+
+##### Player-Facing Impact
+Trees/shrubs are generated, not placed - varied, biome-correct foliage.
+
+
+---
+
+#### [M4-EXT-27] Vegetation Impostor *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 + M4.5-EXT-30. Generates vegetation impostors (billboards) for distant foliage.
+
+##### Math
+impostor = BakeBillboard(mesh, K dirs); sample by view dir at range.
+
+##### How It Works
+Distant vegetation switches to baked impostor billboards (like M4.5-EXT-30 but for plants) so forests stay cheap at distance. Cross-fade hides the swap.
+
+##### Reference Implementation
+```cpp
+vec2 uv = OctUV(viewDir); sample impostor;
+```
+
+##### Player-Facing Impact
+Distant forests stay cheap - no full foliage drawn at range.
+
+
+---
+
+#### [M4-EXT-26] Procedural Decal Atlas Packing & Runtime Projection *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 + M4.5-EXT-26 RVT. Packs decals into an atlas and projects at runtime.
+
+##### Math
+uv = PackDecals(decalList); project(decals, surface) -> RVT overlay.
+
+##### How It Works
+Bullet holes, blood, scorch are packed into a decal atlas and projected onto surfaces at runtime, written into the RVT overlay (M4.5-EXT-26) so they persist and layer correctly. Atlas packing avoids bind spam.
+
+##### Reference Implementation
+```cpp
+Atlas a = Pack(decals); Project(a, surf);
+```
+
+##### Player-Facing Impact
+Damage/decals persist and layer on surfaces - world shows wear.
+
+
+---
+
+#### [M4-EXT-25] Procedural Material Node-Graph Compiler (Structure + Color + Normal) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 + M4.5. Compiles a procedural material node graph to a shader/texture set.
+
+##### Math
+shader = CompileGraph(graph); textures = BakeGraph(graph, res);
+
+##### How It Works
+A material node graph (noise, blends, params) is compiled to a shader for runtime and/or baked to albedo/normal/roughness textures at build. One authored graph drives both. Determinism via seeded params.
+
+##### Reference Implementation
+```cpp
+Material m = Compile(graph);
+```
+
+##### Player-Facing Impact
+Surfaces are authored once as a graph - infinite variation, consistent look.
+
+
+---
+
+#### [M4-EXT-24] Cellular Automata Structural Collapse & Rubble Debris Fields *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 + M3. Cellular-automata rule that turns damaged structures into rubble fields.
+
+##### Math
+cell.next = Rule(cell, neighbors, fatigue); debris spawns where cell collapses.
+
+##### How It Works
+A CA over the structure grid, seeded by M3-EXT-09 fatigue, propagates collapse: cells past threshold become rubble, spawning debris fields that feed M2.6 collision + M4-EXT-26 decals. Emergent, physics-flavored ruin.
+
+##### Reference Implementation
+```cpp
+grid = StepCA(grid, fatigue); SpawnRubble(collapsed);
+```
+
+##### Player-Facing Impact
+Buildings fall apart believably into rubble - ruins look earned, not placed.
+
+
+---
+
+#### [M4-EXT-23] Whittaker Temperature/Precipitation Biome Classification *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 PCG. Classifies biome from temp/precipitation via Whittaker curves.
+
+##### Math
+biome = Whittaker(temp, precip); blend at boundaries by noise.
+
+##### How It Works
+A Whittaker climate diagram maps (temperature, precipitation) to a biome class; boundary cells blend between classes via noise so transitions are gradual, not硬 seams. Drives M4-EXT-10 road + M4-EXT-23 foliage placement.
+
+##### Reference Implementation
+```cpp
+Biome b = Classify(temp, precip);
+```
+
+##### Player-Facing Impact
+Biomes transition naturally - deserts fade to forest instead of snapping.
+
+
+---
+
+#### [M4-EXT-22] Meshoptimizer Vertex Cache / Fetch Optimization *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 + M5.1. Reorders mesh indices for vertex-cache and fetch efficiency.
+
+##### Math
+order = Meshopt::OptimizeVertexCache(ib); then OptimizeFetch(vb, ib);
+
+##### How It Works
+Mesh indices are reordered (vertex-cache then fetch) so GPU vertex shading and memory access are coherent - fewer vertex shader invocations and cache misses per mesh.
+
+##### Reference Implementation
+```cpp
+meshopt::optimizeVertexCache(ib,ib,nv); meshopt::optimizeFetch(vb,ib,nv);
+```
+
+##### Player-Facing Impact
+Meshes shade/load faster - more geometry for the same vertex cost.
+
+
+---
+
+#### [M4-EXT-20] WFC Adjacency Propagator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4 WFC. Propagates adjacency constraints during WFC so connected tile types stay consistent.
+
+##### Math
+for neighbor n of cell c: mask[c] &= adjacency[tile][n.dir]; propagate to changed.
+
+##### How It Works
+Extends WFC with an explicit adjacency-edge table (road meets road, wall meets floor) that propagates constraint masks to neighbors on each placement, keeping the generated graph connected and sane. Consumes M4-EXT-11's contradiction recovery.
+
+##### Reference Implementation
+```cpp
+PropagateAdjacency(grid, placed);
+```
+
+##### Player-Facing Impact
+Generated layouts stay internally consistent - roads connect, walls align.
+
 
 ##### Systems Touched
 M4 PCG + M13 SLM + M11 UI. Generates contextual signage text via a grammar for world flavor.
