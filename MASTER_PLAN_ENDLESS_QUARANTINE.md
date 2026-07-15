@@ -4324,7 +4324,7 @@ M4 PCG. Classifies biome from temp/precipitation via Whittaker curves.
 biome = Whittaker(temp, precip); blend at boundaries by noise.
 
 ##### How It Works
-A Whittaker climate diagram maps (temperature, precipitation) to a biome class; boundary cells blend between classes via noise so transitions are gradual, not硬 seams. Drives M4-EXT-10 road + M4-EXT-23 foliage placement.
+A Whittaker climate diagram maps (temperature, precipitation) to a biome class; boundary cells blend between classes via noise so transitions are gradual, not hard seams. Drives M4-EXT-10 road + M4-EXT-23 foliage placement.
 
 ##### Reference Implementation
 ```cpp
