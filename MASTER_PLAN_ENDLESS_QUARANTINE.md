@@ -576,7 +576,22 @@ Invisible directly — this is what keeps a rapid window-focus shift or a minimi
 #### [M0-EXT-10] Vulkan 1.4 Pipeline Layout Structural Compatibility Validator
 #### [M0-EXT-13] Capability Probe & Feature-Tier Detection *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
----
+##### Systems Touched
+Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.
+
+##### Math
+tier = argmax_t (caps >= req(t)); caps = {maxTexSize, compute, meshlet, RVT, ReSTIR, RT}. Probe once at init.
+
+##### How It Works
+At startup, query the adapter for a fixed capability set (max texture dims, compute support, mesh-shader, virtual-texture, ReSTIR, HW-RT). Map the result to a discrete tier enum the renderer reads to pick techniques (ReSTIR vs SSGI, RVT vs classic).
+
+##### Reference Implementation
+```cpp
+Tier g_tier = ProbeCapabilities(adapter); // sets g_tier used by M4.5 quality ladder
+```
+
+##### Player-Facing Impact
+The game auto-tunes to the player's GPU - 6GB floor runs Tier-0, beefier cards light up Tier-2 features.
 
 #### [M0-EXT-12] Compute-Worker Thread-Affinity Bitmask Allocator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
@@ -1456,7 +1471,22 @@ GPU culling + indirect draw stay correct across passes - no popped or duplicated
 ---
 #### [M1-EXT-16] SoA Cache-Line Padding *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
----
+##### Systems Touched
+M1 ECS storage. Pads SoA component arrays to 64-byte cache lines to avoid false sharing / straddle.
+
+##### Math
+stride = align(sizeof(T), 64); base = alloc(n*stride, 64).
+
+##### How It Works
+Hot component arrays are allocated with a stride rounded to a cache line and base-aligned to 64B, so concurrent jobs touching different entities don't thrash the same line. Applied to the components M0-EXT-12 identified as hot.
+
+##### Reference Implementation
+```cpp
+auto* a = (T*)aligned_alloc(64, n*align(sizeof(T),64));
+```
+
+##### Player-Facing Impact
+Multithreaded ECS updates avoid cache-line contention - smoother frame under load.
 
 #### [M1-EXT-22] CVar System (ImGui-Backed) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
@@ -4203,6 +4233,23 @@ Chunk generation never hard-stalls on a bad tile pick - maps keep streaming.
 ---
 #### [M4-EXT-21] Signage Grammar Transcoder *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
+##### Systems Touched
+M4 PCG + M13 SLM + M11 UI. Generates contextual signage text via a grammar for world flavor.
+
+##### Math
+sign = Grammar(prod, seededRNG(locale)); terminals drawn deterministically per seed.
+
+##### How It Works
+A phrase grammar produces signage (shop names, warnings, graffiti) seeded by world-graph node + locale. Output feeds M13 SLM broadcasts and M11 signage so streets read as lived-in. Deterministic per seed.
+
+##### Reference Implementation
+```cpp
+string sign = SignageGrammar.Generate(nodeSeed, locale);
+```
+
+##### Player-Facing Impact
+Streets/ruins carry readable, varied signage - world feels inhabited, not prop-empty.
+
 ---
 
 #### [M4-EXT-28] Procedural Foliage L-System Mesh Generator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
@@ -5233,6 +5280,23 @@ Distant cities/ruins stay detailed at range without drawing full geometry — pe
 ---
 #### [M4.5-EXT-31] Signed Distance Field (SDF) Shadow Cascade *(SOURCED FROM PLAN FILE)*
 
+##### Systems Touched
+Only passing mention previously. Builds sparse clipmap SDF of nearby opaque geometry from depth buffer (or baked mesh SDFs) for cheap soft long-range shadows + contact shadows shadow-map cascade can't afford at distance.
+
+##### Math
+Per clipmap level, rasterize scene depth into SDF via 6-sweep or jump-flooding on depth buffer; d(p)=nearestSurfaceDistance(p) with sign from depth-vs-scene. Shadow test along light ray accumulates min over steps of d(ray(t))/t (cone soft shadow): vis=saturate(1-k*min_d/t).
+
+##### How It Works
+Compute pass converts depth (or downsampled depth) into SDF clipmap each time camera moves a cell. Lighting samples SDF along light dir for cheap soft shadow at range where shadow maps run out of resolution. Hybrid: near field shadow maps, far field SDF (fallforward, not double system).
+
+##### Reference Implementation
+```cpp
+float SdfShadow(vec3 P, vec3 L, Texture3D sdfClip, float coneK){ float t=0,vis=1; for(int i=0;i<kSteps;++i){ t+=kStep; float d=SdfSample(sdfClip, P+L*t); vis=min(vis, saturate(1.0-coneK*d/t)); } return vis; }
+```
+
+##### Player-Facing Impact
+Long-range soft shadows hold at distance on the 6GB floor without huge shadow-atlas cost.
+
 ---
 
 #### [M4.5-EXT-26] Runtime Virtual Texture (RVT) Base System *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
@@ -5479,6 +5543,23 @@ Assets stream in without hitches or allocator thrash.
 
 ---
 #### [M4.6-EXT-08] BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+Zero mention previously. GPU-friendly BC7 (desktop)/ASTC (mobile) compression for material/atlas textures M4-EXT-25 + M4.5-EXT-26 RVT produce, cutting VRAM on 6GB Tier-0 floor. Runs on enkiTS scheduler at bake/load (not render thread).
+
+##### Math
+BC7: each 4x4 texel block encoded into 128 bits across one of 8 partition modes with endpoint+index quantization + optional mode-1 alpha split; quality/speed via partition search. ASTC generalizes to 4x4..12x12 with similar endpoint+weight scheme. Offline or load-time encode; hardware decodes free.
+
+##### How It Works
+Material graph output + atlas pages encoded to BC7 once at content-bake (or first load, cached). Decompressor M0-EXT-13/ring allocator hands already-compressed data to GPU (no per-frame decode). 4K albedo ~4x VRAM drop (RGBA8->BC7). Tier-0 relief without visual loss at chosen quality.
+
+##### Reference Implementation
+```cpp
+void EncodeBC7(const RGBA* b, uint8_t out[16], int quality){ BC7Partition best=SearchPartitions(b,quality); /* 8 modes, endpoint quant */ CompressEndpoints(best); }
+```
+
+##### Player-Facing Impact
+Big VRAM savings on the 6GB floor — more textures, fewer hitches.
 
 ---
 
@@ -6845,6 +6926,23 @@ Hordes flow along real streets and caravans traverse believably; roads reshape s
 ---
 #### [M5.4-EXT-07] Holling Type II Cannibalism Feeding Satiator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
+##### Systems Touched
+M5.4 cannibal factions. Models feeding satiation (Holling Type II) so factions stop at capacity.
+
+##### Math
+consumption = (a*N)/(1 + a*h*N); dN/dt = r*N*(1-N/K) - consumption; satiation caps intake.
+
+##### How It Works
+Cannibal factions 'consume' victim density with a Holling Type II functional response (intake saturates with abundance), so they don't infinitely devour - a satiation term caps per-capita consumption, producing stable predator-prey oscillation instead of wipeout.
+
+##### Reference Implementation
+```cpp
+float eat = (a*N)/(1+a*h*N); pop -= eat; satiation = clamp(satiation+eat,0,1);
+```
+
+##### Player-Facing Impact
+Cannibal factions thin herds then back off - the world's ecosystem stays balanced, not extinct.
+
 ---
 
 #### [M5.4-EXT-09] Fear-Field Diffusion via Spatial Hash *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
@@ -7198,7 +7296,22 @@ Rooms/caves have natural-sounding reverb tails without sampled-IR cost or artifa
 ---
 #### [M6-EXT-10] Acoustic Convection Wave Refraction Filter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
----
+##### Systems Touched
+M6 audio. Refracts sound waves by wind/convection so distant audio bends with weather.
+
+##### Math
+c_eff = c0 + wind·dir; delay/filter per path by c_eff; Snell bend at layers.
+
+##### How It Works
+Models how wind/temperature gradients refract sound: effective speed varies with wind along the path; the audio filter applies per-path delay/bend (Snell at layer boundaries) so upwind sources fade and downwind carry farther, matching weather.
+
+##### Reference Implementation
+```cpp
+float ceff = c0 + dot(wind, pathDir); ApplyRefraction(src, ceff);
+```
+
+##### Player-Facing Impact
+Wind direction changes what you hear at range - downwind gunfire carries, upwind dies.
 
 #### [M6-EXT-12] Convolution-Reverb from Voxel Occlusion *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
@@ -9660,6 +9773,23 @@ float WadingModulator(float depth,float v,float mass){ float f=clamp((depth-axle
 ##### Player-Facing Impact
 Vehicles ford shallow streams fine but become sluggish and can stall in deep water - players must pick crossings, find bridges, or risk a bogged, vulnerable vehicle.
 #### [M9-EXT-22] RVT Skid-Mark / Tire-Track Injector *(SOURCED FROM PLAN FILE)*
+
+##### Systems Touched
+One of three features audit line 133 says blocked on missing RVT base. Writes tire tracks + drift scars into M4.5-EXT-26 RVT overlay from M9 wheel-contact + slip-state telemetry. Consumed by terrain material resolve as extra blend layer.
+
+##### Math
+Decal written into RVT clipmap page (see M4.5-EXT-26 base). Track = polyline of wheel-contact samples; width from slip; intensity fades with speed. Write-merge (newest-wins) into page tile so overlapping tracks resolve deterministically.
+
+##### How It Works
+On wheel slip above threshold, sample contact point -> RVT page coord, draw tracked quad with width from slip + alpha from intensity. Persists in chunk-anchored RVT so tracks survive across sessions/streaming. Feeds terrain material as blend layer.
+
+##### Reference Implementation
+```cpp
+void InjectSkid(VkCommandBuffer cb, RvtPageTable& rvt, vec3 contact, float slip, float intensity){ /* write-merge track quad into rvt page */ }
+```
+
+##### Player-Facing Impact
+Cars leave real skid marks / drift scars on the ground that persist — world shows your passage.
 
 ---
 
