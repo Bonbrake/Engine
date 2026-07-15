@@ -1,5 +1,7 @@
 # The Endless Quarantine — Engine Status
 
+> **Canonical master plan:** `MASTER_PLAN_ENDLESS_QUARANTINE.md` (v79, Hermes Agent edition — rebrand of `USETHISITSV79.md`). This is the single source of truth for all milestones M0→M13 and every `[Mx-EXT-nn]` block. Per-milestone working files live in `milestones_M0-M13_antigravity/`.
+
 ## Active Branch
 `m2/physics-destruction`
 
@@ -21,6 +23,8 @@ M0 gate passed. 7 partials carried as explicit open items (not silently closed).
 5. **M0:EXT07** — `FiberYield.h` declared, **no call site wired** (`SwitchToFiber` never invoked). Declared-but-unwired per production standard; either wire or remove.
 6. **M0:EXT08** — Descriptor-Buffer Slot Allocator declared, **not wired**; `TriangleRenderer` writes descriptors directly. Same unwired-declaration pattern as EXT07 — wire or remove.
 7. **M0:EXT10** — Pipeline Layout Compat Validator declared-only, **not invoked** in main path. Same unwired-declaration pattern — wire or remove.
+8. **M0:EXT15-runtime** — `focus_probe` (CMakeLists.txt:118, `[M0-EXT-15]`) **build verified**: links via CMake target, `build-asan/Release/focus_probe.exe` (42,496 B). **Headless runtime BLOCKED**: on this box the probe exits `2` at `SDL_Init FAIL: <err>` (no video subsystem) — this is *correct probe behavior* (it detects no display), **not** a defect. Runtime half still open; needs a human GPU pass with a live display. **PASS bar on real hardware (RTX 2070 Super + display):** run `build-asan/Release/focus_probe.exe`, expect `exit=0` and the full trace `FOCUS_PROBE_START → WINDOW_CREATED ok → GETKEYBOARDSTATE NONNULL → AFTER_MINIMIZE minimized=1 → KB_DURING_FOCUSLOSS NONNULL → AFTER_RESTORE minimized=0 → KB_AFTER_RESTORE NONNULL → FOCUS_PROBE_DONE`. **HARD (non-negotiable) criteria, grounded in `focus_probe.cpp` source not just trace format:** (a) `KB_DURING_FOCUSLOSS NONNULL` (source line 36: production `SDL_GetKeyboardState(nullptr)` survives minimize without returning null — the alt-tab bug class); (b) `AFTER_RESTORE minimized=0` (source line 41: input focus recovers). Any NULL kb state during focus-loss, or stuck-minimized flag, = FAIL — log to `AUDIT_*`. Headless `exit=2` must NEVER be silently upgraded to PASS; it lacks both hard criteria by construction.
+   - **Verification-tier guard (added 2026-07-14):** any future logic check for `focus_probe` run under a synthetic/virtual display (Xvfb, dummy driver + scripted `xdotool`/`wmctrl` focus events) is a **state-machine sanity check only** — it verifies printf sequencing and code paths beyond `SDL_Init`, nothing more. It does **NOT** satisfy the Step 4c hardware PASS bar (`KB_DURING_FOCUSLOSS NONNULL` + `AFTER_RESTORE minimized=0` under real OS/driver focus events on RTX 2070 + live display). The two verdicts must never be merged or substituted for one another. If a virtual-display logic check is ever run, its result should be logged as a separate `M0:EXT15-runtime-virtual` entry, not folded into this one. (Note: Xvfb/`xdotool` are unavailable in this sandbox — `uname`=MINGW64/Windows, no `apt`/`dpkg`; path was never exercised, this clause is preventive only.)
 
 ---
 
@@ -135,6 +139,7 @@ injection + `SDL_SetWindowRelativeMouseMode` are windowed-gated.
    proves rotation *happens* but not whether mouse-right = screen-right. One-line flip if inverted. **Needs human GPU pass to confirm direction.**
 2. **Far-cube steadiness at ~50km** — the far cube is now a **real ECS entity** at `dvec3(50000,0,0)` driven through `view<Transform,MeshComponent>` + `BuildEntityMVP` (camera-relative), not the old hardcoded `kFarCubeWorldPos` block. `after_bridge.png` shows it rendering; the `Test_RenderBridge` rebase-invariance test (K=1e6) proves the math holds in double→single. Sub-pixel steadiness *while flying there* still wants the human GPU pass, but the precision path is now built + unit-proven.
 3. ~~**Camera-relative subtraction (Spike B)** — NOT implemented.~~ **CLOSED 2026-07-12**: implemented in `BuildEntityMVP` (`TriangleRenderer.cpp:134-149`) — `renderPos = (vec3)(entityPos - camPos)` single cast; the authoritative dvec3 never enters single-precision matrix math. Unit-tested (`Test_RenderBridge.cpp` rebase invariant, K=1e6, epsilon 1e-3).
+- **Step 4c runtime verification is tracked under `[M0-EXT15-runtime]` in M0 Carried Open Items** (build verified; runtime blocked on live display, PASS bar defined there). Not a code defect — do not treat as a M2.6 fix item.
 
 ## Next Session: close M2.6 Phase 2 open items (yaw-sign GPU confirm, far-cube steadiness) or beat
 Load `milestones_M0-M13_antigravity/03_M2_6.md`.  \n
