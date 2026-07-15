@@ -5233,6 +5233,94 @@ Distant cities/ruins stay detailed at range without drawing full geometry — pe
 ---
 #### [M4.5-EXT-31] Signed Distance Field (SDF) Shadow Cascade *(SOURCED FROM PLAN FILE)*
 
+---
+
+#### [M4.5-EXT-26] Runtime Virtual Texture (RVT) Base System *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M4.6 streaming. Core RVT: page table, tile allocator, feedback (M4.5-EXT-21).
+
+##### Math
+page = Hash(worldPos>>pageShift); tile = Alloc(); phys = tile.addr;
+
+##### How It Works
+The base RVT holds a page table mapping world regions to physical tiles, a tile allocator (ring/LRU), and a feedback path (M4.5-EXT-21). All RVT consumers (terrain, decals M4-EXT-26, skidmarks M9-EXT-22, blood M6.5-EXT-13) share it. Streamed via M4.6-EXT-05.
+
+##### Reference Implementation
+```cpp
+PageTable pt; TileAlloc ta; Feedback fb;
+```
+
+##### Player-Facing Impact
+One virtual-texture system serves terrain/decals/tracks - coherent, streamed, low VRAM.
+
+
+---
+
+#### [M4.5-EXT-25] Specialization Constants for Bindless Material Uber-Shader *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M1-EXT-25 bindless. Drives the material uber-shader via specialization constants.
+
+##### Math
+const bool kSSR = spec; #if shader branches compile-time per permutation;
+
+##### How It Works
+Feature toggles (SSR, SSGI, decals) are specialization constants so the uber-shader compiles only the needed permutation per material at pipeline-creation, avoiding runtime branches while staying one source shader. Bindless feeds it all textures.
+
+##### Reference Implementation
+```cpp
+VkSpecializationInfo sci = {kSSR,kSSGI};
+```
+
+##### Player-Facing Impact
+Material variants compile lean - no runtime branch cost, one shader source.
+
+
+---
+
+#### [M4.5-EXT-24] Subpass-Less Explicit Load/Store Resolution Barriers *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5. Explicit load/store ops + barriers replace subpasses for flexible pass resolution.
+
+##### Math
+barrier(src=COLOR, dst=COLOR, load=LOAD, store=STORE) per attachment;
+
+##### How It Works
+Rather than Vulkan subpasses, each lighting resolve uses explicit attachment load/store + a barrier, giving finer control over what's kept between passes (and working on APIs without subpasses). Determinism via fixed order (M1-EXT-13).
+
+##### Reference Implementation
+```cpp
+RenderPass(attach, LOAD, STORE, barrier);
+```
+
+##### Player-Facing Impact
+Pass resolution is portable + explicit - no subpass assumptions, same result everywhere.
+
+
+---
+
+#### [M4.5-EXT-21] RVT Feedback Buffer & Cache Invalidation *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.5 + M4.5-EXT-26 RVT. Feedback buffer drives RVT page (un)loading + invalidation.
+
+##### Math
+feedback = RenderVisiblePages(); request load for missing, evict LRU;
+
+##### How It Works
+The RVT feedback pass renders requested page indices; pages not resident are streamed in (M4.6-EXT-05) and LRU-evicted, keeping the virtual texture covering what the camera sees. Invalidation on world edits (M9-EXT-22) reloads affected pages.
+
+##### Reference Implementation
+```cpp
+VkBuffer fb = RenderFeedback(cam); UpdateRvtPages(fb);
+```
+
+##### Player-Facing Impact
+Virtual textures cover the view without ballooning VRAM - streaming stays tight.
+
+
 ##### Systems Touched
 Only passing mention previously. Builds sparse clipmap SDF of nearby opaque geometry from depth buffer (or baked mesh SDFs) for cheap soft long-range shadows + contact shadows shadow-map cascade can't afford at distance.
 
@@ -5391,6 +5479,28 @@ Assets stream in without hitches or allocator thrash.
 
 ---
 #### [M4.6-EXT-08] BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)*
+
+---
+
+#### [M4.6-EXT-07] Basis Universal GPU Texture Transcoder *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M4.6. Transcodes Basis Universal supercompressed textures to GPU formats at load.
+
+##### Math
+VkImage img = BasisTranscode(data, targetFmt);
+
+##### How It Works
+Textures are stored as Basis Universal (one supercompressed blob) and transcoded to the GPU's optimal format (BC7/ASTC) at load on a worker - small on disk, native on GPU, no per-format authoring. Pairs with M4.6-EXT-08 BC7.
+
+##### Reference Implementation
+```cpp
+Image i = BasisTranscode(basis, fmt);
+```
+
+##### Player-Facing Impact
+Textures stay tiny on disk, native on GPU - fast loads, low VRAM.
+
 
 ##### Systems Touched
 Zero mention previously. GPU-friendly BC7 (desktop)/ASTC (mobile) compression for material/atlas textures M4-EXT-25 + M4.5-EXT-26 RVT produce, cutting VRAM on 6GB Tier-0 floor. Runs on enkiTS scheduler at bake/load (not render thread).
@@ -6735,6 +6845,28 @@ Hordes flow along real streets and caravans traverse believably; roads reshape s
 ---
 #### [M5.4-EXT-07] Holling Type II Cannibalism Feeding Satiator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
+---
+
+#### [M5.4-EXT-09] Fear-Field Diffusion via Spatial Hash *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M5.4 + M1-EXT-27. Diffuses the fear/reaction-diffusion field over a spatial hash.
+
+##### Math
+f_new = f + D*Laplacian(f) - decay; Laplacian from neighbor cells in hash;
+
+##### How It Works
+The reaction-diffusion fear field is stepped by sampling neighbor cells from the spatial hash (M1-EXT-27) to compute the Laplacian, diffusing panic smoothly across the world without a full grid. Cheap, sparse.
+
+##### Reference Implementation
+```cpp
+f = StepDiffuse(f, hash, D, decay);
+```
+
+##### Player-Facing Impact
+Fear/panic spreads organically - hordes react to player pressure at range.
+
+
 ##### Systems Touched
 M5.4 cannibal factions. Models feeding satiation (Holling Type II) so factions stop at capacity.
 
@@ -7065,6 +7197,28 @@ Rooms/caves have natural-sounding reverb tails without sampled-IR cost or artifa
 
 ---
 #### [M6-EXT-10] Acoustic Convection Wave Refraction Filter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+---
+
+#### [M6-EXT-12] Convolution-Reverb from Voxel Occlusion *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M6 + M3/M4.5. Builds convolution reverb IR from the voxel/occlusion field.
+
+##### Math
+ir = Convolve(diag, voxelOcclusion); tail = Conv(px, ir);
+
+##### How It Works
+A reverb impulse response is synthesized from the scene's voxelized occlusion (M3/M4.5-EXT-17) so indoor spaces sound enclosed and outdoor open - physically-derived tails, no sampled IRs. Pairs with M6-EXT-09 velvet tail.
+
+##### Reference Implementation
+```cpp
+IR ir = BuildIR(voxelField); bus += Conv(dry, ir);
+```
+
+##### Player-Facing Impact
+Reverb matches the space you're in - caves boom, streets are open.
+
 
 ##### Systems Touched
 M6 audio. Refracts sound waves by wind/convection so distant audio bends with weather.
@@ -7491,6 +7645,28 @@ Grass and brush ripple in visible traveling waves that match the actual wind dir
 
 #### [M6.5-EXT-12] Volumetric Micro-Atmospherics & Heat-Shimmer Fields
 
+---
+
+#### [M6.5-EXT-13] Capillary Blood-Spatter RVT Projection *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M6.5 + M4.5-EXT-26 RVT. Projects blood spatter into the RVT overlay.
+
+##### Math
+spatter -> RVT projection (M4.5-EXT-26); persists + layers;
+
+##### How It Works
+Wound blood-spatter is projected into the RVT overlay (shared with M4-EXT-26 decals, M9-EXT-22 skidmarks) so gore persists and layers on surfaces, aging over time. One projection path for all surface stains.
+
+##### Reference Implementation
+```cpp
+ProjectSpatter(rt, surf);
+```
+
+##### Player-Facing Impact
+Combat leaves persistent, layered blood - the world remembers firefights.
+
+
 ##### Systems Touched
 
 `[M10]`'s humidity/temperature grids (already tracked per front matter), `[M6.5]`'s particle system (evaporation particles).
@@ -7793,6 +7969,94 @@ SaveSlotDisplayInfo ReadSlotInfo(const SaveHeader& header) {
 Players get a normal save/load menu with slots and autosave feedback — the missing surface over a persistence engine that was already fully built.
 
 #### [M7-EXT-07] Hierarchical Delta-State Persistence (Procedural Seed-Diff Engine)
+
+---
+
+#### [M7-EXT-11] Zstd Save-Compression & Streaming Store *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M7 + M7-EXT-08. Compresses + streams save chunks via Zstd.
+
+##### Math
+chunk = ZstdCompress(buf, dict); stream to store;
+
+##### How It Works
+Save chunks are Zstd-compressed (with M7-EXT-08 dict) and streamed to the store incrementally so huge saves don't block; pairs with M7-EXT-09 atomic log for integrity.
+
+##### Reference Implementation
+```cpp
+StreamChunk(ZstdCompress(buf, dict));
+```
+
+##### Player-Facing Impact
+Big saves compress + stream - no hitch, small footprint.
+
+
+---
+
+#### [M7-EXT-10] Binary Save Format Structural Schema Migrator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M7. Versioned binary save schema with forward/back migrators.
+
+##### Math
+ver = ReadHeader(); while(ver<cur) Migrate(ver++, buf);
+
+##### How It Works
+Save blobs carry a schema version; on load, a chain of migrators upgrades old saves to the current struct layout field-by-field, so old saves still load after format changes. No blanket reject.
+
+##### Reference Implementation
+```cpp
+while(v<cur) buf=Migrate(v++, buf);
+```
+
+##### Player-Facing Impact
+Old saves keep loading after updates - no wipe on patch.
+
+
+---
+
+#### [M7-EXT-09] Atomic File-Swap Append-Only State Transaction Logger *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M7. Atomic, append-only log of state transactions for crash-safe saves.
+
+##### Math
+log.Append(tx); fsync; swap(active, shadow) on commit;
+
+##### How It Works
+State changes are appended to an atomic transaction log; on commit the active/shadow files swap (no partial write). Crash mid-save = replay shadow, never corrupt. Append-only means no in-place mutation.
+
+##### Reference Implementation
+```cpp
+log.Append(tx); SwapAtomic(active, shadow);
+```
+
+##### Player-Facing Impact
+Saves never corrupt mid-write - crash recovers cleanly.
+
+
+---
+
+#### [M7-EXT-08] Zstandard Custom Dictionary Static Compiler *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M7. Builds a Zstd custom dictionary from save-data corpus for better compression.
+
+##### Math
+dict = ZstdTrain(corpus); compress(data, dict);
+
+##### How It Works
+A Zstd dictionary is trained offline on representative save blobs so repeated save structures compress far better; the dictionary ships with the game. Used by M7-EXT-11 streaming store.
+
+##### Reference Implementation
+```cpp
+ZstdCDict d = Train(corpus);
+```
+
+##### Player-Facing Impact
+Saves compress much smaller - faster loads, less disk.
+
 
 ##### Systems Touched
 
@@ -8130,6 +8394,50 @@ inline const PackedWeaponBlueprint* ResolveBinaryArchetypeRecord(const uint8_t* 
 Invisible directly — this is what keeps item/weapon-stat lookups cheap enough to run every frame (brand-tier cook-off checks, jam-probability rolls) without the string-parsing cost item JSON would otherwise carry into the hot path.
 
 #### [M8-EXT-08] Log-Normal Camouflage Masking
+
+---
+
+#### [M8-EXT-10] Procedural Loot Icon Generation *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M8 + M8-EXT-09. Renders item icons procedurally from defs (not hand-authored art).
+
+##### Math
+icon = RenderIcon(def, rarity); cache by def hash;
+
+##### How It Works
+Loot icons are drawn from the item definition (shape/rarity tint) rather than shipped sprites, so modded/new items get icons automatically. Cached by def hash. Feeds M11 UI.
+
+##### Reference Implementation
+```cpp
+Texture icon = GenIcon(def);
+```
+
+##### Player-Facing Impact
+Every item (incl. modded) gets an icon - no missing-sprite holes.
+
+
+---
+
+#### [M8-EXT-09] Memory-Mapped FlatBinary Inventory Cache Dictionary *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M8. Memory-maps a flat-binary item-definition dictionary for instant lookup.
+
+##### Math
+ItemDef* def = mmap(dict)[id]; // no parse on access;
+
+##### How It Works
+Item definitions live in a flat binary mmap'd at load; lookup is a direct offset (no per-item parse), so inventory/loot resolution is O(1) and zero-alloc. Pairs with M8-EXT-10 icon gen.
+
+##### Reference Implementation
+```cpp
+ItemDef* d = (ItemDef*)mmapBase + id*sizeof(ItemDef);
+```
+
+##### Player-Facing Impact
+Item lookups are instant - no parse stall on big inventories.
+
 
 ##### Systems Touched
 
@@ -9353,6 +9661,28 @@ float WadingModulator(float depth,float v,float mass){ float f=clamp((depth-axle
 Vehicles ford shallow streams fine but become sluggish and can stall in deep water - players must pick crossings, find bridges, or risk a bogged, vulnerable vehicle.
 #### [M9-EXT-22] RVT Skid-Mark / Tire-Track Injector *(SOURCED FROM PLAN FILE)*
 
+---
+
+#### [M9-EXT-20] Anti-Roll Torsional Suspension Stabilizer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M9. Torsion bar linking wheel axes to curb rollover in hard cornering.
+
+##### Math
+tau = kTorsion * (rollAngle - rest); counter-torque to chassis;
+
+##### How It Works
+An anti-roll bar models torsional stiffness between left/right wheels; body roll in a corner winds the bar, generating counter-torque that flattens the chassis. Stabilizes the vehicle without stiffening ride.
+
+##### Reference Implementation
+```cpp
+float tau = kTorsion*(roll - rest); chassisTorque -= tau;
+```
+
+##### Player-Facing Impact
+Vehicles resist rollover in hard turns - stable, planted handling.
+
+
 ##### Systems Touched
 One of three features audit line 133 says blocked on missing RVT base. Writes tire tracks + drift scars into M4.5-EXT-26 RVT overlay from M9 wheel-contact + slip-state telemetry. Consumed by terrain material resolve as extra blend layer.
 
@@ -9628,6 +9958,28 @@ Weather fronts move across the map as coherent systems with a real leading edge,
 
 #### [M10-EXT-06] Phenological Chlorophyll Cycles & Seasonal Canopy Thinning
 
+---
+
+#### [M10-EXT-11] Volumetric Cloud & Participating-Medium Scattering *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M10. Ray-marched volumetric clouds with participating-medium scattering.
+
+##### Math
+L = Integrate(ray, sigma_s, sigma_a, phase, light); multi-scatter approx;
+
+##### How It Works
+Clouds are a participating medium ray-marched per pixel with single+multi-scatter approximation (Henyey-Greenstein phase), lit by sun/moon. Drives weather mood + godrays. Costs gated by tier (M4.5).
+
+##### Reference Implementation
+```cpp
+vec3 L = MarchClouds(ro, rd, sun);
+```
+
+##### Player-Facing Impact
+Sky has real volumetric clouds - weather reads alive, not a flat dome.
+
+
 ##### Systems Touched
 
 `[M4-EXT-18]`'s canopy system (albedo/alpha source), `[M10]`'s existing seasonal baseline temperature stepping (shares the same season index).
@@ -9872,6 +10224,50 @@ Adding a new supported language later is cheap and low-risk precisely because lo
 
 #### [M11-EXT-07] MSDF Shaded Drop-Shadow Vector Signed Distance Field Generator
 
+---
+
+#### [M11-EXT-09] UI Panel Atlasing & Nine-Slice Batching *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M11. Atlases UI panels + nine-slice borders into batched draws.
+
+##### Math
+panel -> atlas region; nine-slice borders; batch panels per frame;
+
+##### How It Works
+UI panel backgrounds are atlased and nine-sliced (corners fixed, edges stretched) then batched per frame so a busy UI is a handful of draws. Complements M11-EXT-08 text batching.
+
+##### Reference Implementation
+```cpp
+BatchPanels(atlas, nineSlice);
+```
+
+##### Player-Facing Impact
+UI panels batch into few draws - complex HUD doesn't cost frames.
+
+
+---
+
+#### [M11-EXT-08] MSDF Vector Text Layout Geometry Batching Pipeline *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M11 + M1-EXT-12. Batches MSDF text glyph geometry into one draw per text block.
+
+##### Math
+glyphQuads -> batched mesh; one draw per layout; sample MSDF (M1-EXT-12);
+
+##### How It Works
+UI text layouts assemble glyph quads into a single batched mesh (one draw per block) sampling the MSDF atlas (M1-EXT-12), so dense HUD/text stays cheap. Pairs with M11-EXT-09.
+
+##### Reference Implementation
+```cpp
+BatchText(layout, atlas);
+```
+
+##### Player-Facing Impact
+UI text is one draw per block - HUD stays cheap at high text density.
+
+
 ##### Systems Touched
 
 Extends M1's MSDF Font Pipeline (base implementation step) — adds sharp vector drop-shadows/borders for diegetic UI text without a duplicate vertex pass, particularly valuable across M2.8's split-screen multi-viewport rendering where doubling shader passes per player is expensive.
@@ -9988,6 +10384,72 @@ inline void PackIntegerBits(NetworkDeltaEncoder& encoder, uint32_t value, int co
 Co-op sessions with many relevant entities in view stay within bandwidth budget instead of saturating the connection with redundant full-precision state every tick.
 
 #### [M12-EXT-02] Bitmask Packet Loss Sliding Window Acknowledgement Register
+
+---
+
+#### [M12-EXT-13] Interest-Management Spatial Hash (Net Culling) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M12 + M1-EXT-27. Spatial-hash interest management for network scope.
+
+##### Math
+scope = Hash.Query(playerCell, R); subscribe only in-scope;
+
+##### How It Works
+A spatial hash defines each client's interest region; only entities entering scope are subscribed/unsubscribed, bounding both bandwidth and simulation broadcast. Builds on M12-EXT-04.
+
+##### Reference Implementation
+```cpp
+Scope s = Hash.Query(cell, R); Subscribe(s);
+```
+
+##### Player-Facing Impact
+Net scope tracks the player - only nearby state is simulated/sent.
+
+
+---
+
+#### [M12-EXT-07] Network Clock Sync & Tick-Drift Compensator *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M12. Syncs client/server clocks and compensates tick drift.
+
+##### Math
+offset = MeasureRTT(); drift = Kalman(offset); interp = Lerp(state, offset);
+
+##### How It Works
+Client measures server clock offset (RTT-based) and a Kalman filter tracks drift; entity state is interpolated at the corrected time so remote actors move smoothly despite latency. Core to co-op feel.
+
+##### Reference Implementation
+```cpp
+float off = Compensate(rtt, kalman); Interp(state, off);
+```
+
+##### Player-Facing Impact
+Co-op actors move smoothly under latency - no rubber-banding jank.
+
+
+---
+
+#### [M12-EXT-04] Local Network-Relevancy Grid Culling Filter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M12 + M1-EXT-27. Culls network updates by a relevancy grid around each player.
+
+##### Math
+updates = FilterByGrid(playerCell, radius); send only relevant;
+
+##### How It Works
+Per client, a spatial relevancy grid decides which entity updates to send (only those near/affecting the player), slashing bandwidth. Pairs with M12-EXT-13 interest management.
+
+##### Reference Implementation
+```cpp
+Send(FilterRelevant(updates, clientGrid));
+```
+
+##### Player-Facing Impact
+Network only sends what matters per player - bandwidth stays low in co-op.
+
 
 ##### Systems Touched
 
@@ -10447,6 +10909,28 @@ struct RadioScramblerComponent {
 Weak-signal radio chatter reads as genuinely degraded (dropped words, static-garbled phrasing) instead of a clean transcript playing under crackly audio — the text and the sound tell the same story.
 
 #### [M13-EXT-13] Survivor Behavior-Tree Flavor Advisor
+
+---
+
+#### [M13-EXT-15] SLM Broadcast Text Determinism Seeder *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+##### Systems Touched
+M13 + M8.5/M5.4. Seeds SLM broadcast text deterministically per world state.
+
+##### Math
+seed = Hash(worldState); text = SLM.Generate(prompt, seed);
+
+##### How It Works
+World/broadcast text from the SLM is seeded by a hash of current world state so the same situation yields the same broadcast across clients (co-op consistency) while still feeling dynamic. Guarded by M13-EXT-53 content-drought check.
+
+##### Reference Implementation
+```cpp
+string t = SLM.Generate(prompt, Hash(world));
+```
+
+##### Player-Facing Impact
+Broadcasts are consistent in co-op yet vary with the world - no desync in story.
+
 
 ##### Systems Touched
 
