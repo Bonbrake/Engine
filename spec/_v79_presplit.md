@@ -16816,7 +16816,7 @@ M5.4/M13. No auto-tuned difficulty curve.
 -
 
 ##### How It Works
-Telemetry-driven difficulty; SLM Director adjusts spawn/loot.
+Telemetry-driven difficulty; the **M5.4 Director** (deterministic, non-LLM) owns spawn/loot knobs. M13's SLM only writes the *broadcast flavor text* that explains a Director-driven change — it never writes spawn counts or loot tables itself. Single owner per system-state variable: M5.4 = pacing, M13 = words.
 
 ##### Reference Implementation
 ```cpp
