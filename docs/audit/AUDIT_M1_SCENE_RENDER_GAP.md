@@ -4,6 +4,8 @@
 **Status:** INVESTIGATION COMPLETE — deliverable for review. All downstream fixes deferred pending explicit go-ahead.
 **Convention:** permanent paper trail, same class as `AUDIT_M0-M2.md` / `AUDIT_FIX_STATUS.md`. Update in place; never delete; reference in future handoffs.
 
+> **RESOLVED — finding obsolete as of 2026-07-15.** At audit time the scene renderer was genuinely unbuilt. It has since been completed: commit `de97881` ("F1 mesh-swap: complete ECS bridge + render path and GPU-verify shattered geometry") added the ECS→render bridge. `git grep` confirms `TriangleRenderer::draw` now traverses `view<ecs::Transform, ecs::MeshComponent>()` (line 690) and issues `vkCmdDrawIndexed` per entity. The below "Header Finding" is historically accurate but no longer describes the current tree. The M1-EXT-03 occlusion mislabel described in `AUDIT_TRIANGLE_RENDERER_EXT03_MISLABEL.md` was a separate, genuine defect and has been fixed (retagged to `M1-EXT-28`).
+
 ---
 
 ## Header Finding (stated plainly)
