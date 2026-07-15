@@ -1,3 +1,0 @@
-# Self-verify script: hold W (forward) for frames 1..40, mouse-right over 10..20
-K W 1 40
-M +200 0 10 20
