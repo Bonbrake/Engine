@@ -485,7 +485,7 @@ void TriangleRenderer::init(Device* device, VkFormat colorFormat) {
     createPipelines(device, colorFormat);
     createDescriptorSets(device);
     
-    // [M1-EXT-03] Occlusion Query Pools
+    // [M1-EXT-28] Occlusion Query Pools (GPU Software Occlusion Rasterizer / HZB feeder)
     VkQueryPoolCreateInfo queryPoolInfo{VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO};
     queryPoolInfo.queryType = VK_QUERY_TYPE_OCCLUSION;
     queryPoolInfo.queryCount = 100;
@@ -757,7 +757,7 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
     pc.mvp[0] = 1.0f; pc.mvp[5] = 1.0f; pc.mvp[10] = 1.0f; pc.mvp[15] = 1.0f;
     vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
 
-    // [M1-EXT-03] Occlusion Query Double-Buffering
+    // [M1-EXT-28] Occlusion Query Double-Buffering (GPU Software Occlusion Rasterizer / HZB feeder)
     vkCmdResetQueryPool(cmd, occlusionPools[imageIndex], 0, 100);
     vkCmdBeginQuery(cmd, occlusionPools[imageIndex], 0, 0);
     
@@ -791,7 +791,7 @@ void TriangleRenderer::readbackCount(Device* device, uint32_t imageIndex) {
         uint32_t count = *(uint32_t*)mapped;
         vmaUnmapMemory(device->getAllocator(), countReadbackAllocation[imageIndex]);
         
-        // [M1-EXT-03] Occlusion Query Double-Buffering
+        // [M1-EXT-28] Occlusion Query Double-Buffering (GPU Software Occlusion Rasterizer / HZB feeder)
         // Read without VK_QUERY_RESULT_WAIT_BIT to avoid GPU/CPU sync stall
         if (occlusionPools[imageIndex] != VK_NULL_HANDLE) {
             VkResult res = vkGetQueryPoolResults(device->getLogicalDevice(), occlusionPools[imageIndex], 0, 1, sizeof(uint32_t), &occlusionResults[0], sizeof(uint32_t), 0);
