@@ -44,30 +44,33 @@ def via_ytdlp(v):
     return text
 
 done = 0
-for v in ids:
-    text = None
-    for attempt in range(6):
-        try:
-            text = via_api(v)
-            break
-        except Exception as e:
-            err = type(e).__name__
-            if err == "IpBlocked":
-                time.sleep(20 * (attempt + 1))  # backoff
-                continue
-            # try yt-dlp fallback once per attempt
+def main():
+    for v in ids:
+        text = None
+        for attempt in range(6):
             try:
-                text = via_ytdlp(v)
+                text = via_api(v)
                 break
-            except Exception:
-                time.sleep(10)
-                continue
-    if text:
-        open(os.path.join(OUT, f"{v}.txt"), "w", encoding="utf-8").write(text)
-        done += 1
-        print(f"  OK {v} ({len(text)} chars)")
-    else:
-        print(f"  FAIL {v} (ip-blocked/cooldown needed)")
-    time.sleep(3)
+            except Exception as e:
+                err = type(e).__name__
+                if err == "IpBlocked":
+                    time.sleep(20 * (attempt + 1))  # backoff
+                    continue
+                # try yt-dlp fallback once per attempt
+                try:
+                    text = via_ytdlp(v)
+                    break
+                except Exception:
+                    time.sleep(10)
+                    continue
+        if text:
+            open(os.path.join(OUT, f"{v}.txt"), "w", encoding="utf-8").write(text)
+            done += 1
+            print(f"  OK {v} ({len(text)} chars)")
+        else:
+            print(f"  FAIL {v} (ip-blocked/cooldown needed)")
+        time.sleep(3)
+    print(f"DONE this run: {done}/{len(ids)}")
 
-print(f"DONE this run: {done}/{len(ids)}")
+if __name__ == "__main__":
+    main()
