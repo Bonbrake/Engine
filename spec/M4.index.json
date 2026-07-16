@@ -2,639 +2,680 @@
   {
     "id": "M4-EXT-01",
     "title": "Hierarchical Global Macro-Graph Constraint Pass",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Foundational to M4 (Procedural world generation) and integrates with Appendix C (Loot/Zone socio-economic tagging).",
     "depends_on": [],
-    "depended_by": [],
-    "line": 107,
-    "anchor": "M4-EXT-01"
+    "depended_by": [
+      "M4-EXT-03"
+    ],
+    "line": 95,
+    "anchor": "MM4-EXT-01"
   },
   {
     "id": "M4-EXT-02",
     "title": "Asynchronous Quadric Error Meshlet Decimation (Runtime Procedural LODs)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Deepens M4 procedural world generation and pairs with M1 meshlet execution paths.",
     "depends_on": [],
-    "depended_by": [],
-    "line": 146,
-    "anchor": "M4-EXT-02"
+    "depended_by": [
+      "M4-EXT-05"
+    ],
+    "line": 129,
+    "anchor": "MM4-EXT-02"
   },
   {
     "id": "M4-EXT-03",
     "title": "Hierarchical WFC Multi-Grid Graph Layering (Contradiction Guard)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "WFC",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "Integrates with M4 chunk streaming topologies and guides local pathfinding grid structures (M5-EXT-01).",
+    "depends_on": [
+      "M4-EXT-01"
+    ],
     "depended_by": [],
-    "line": 180,
-    "anchor": "M4-EXT-03"
+    "line": 158,
+    "anchor": "MM4-EXT-03"
   },
   {
     "id": "M4-EXT-04",
     "title": "Voronoi Chunk Seam Vertex Normal-Welding Post-Process",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Cleans up geometry seams left by M4's Layered Chunk Streaming Topology (Voronoi + WFC), specifically where independent chunks generate their own localized WF...",
     "depends_on": [],
-    "depended_by": [],
-    "line": 214,
-    "anchor": "M4-EXT-04"
+    "depended_by": [
+      "M4-EXT-05"
+    ],
+    "line": 187,
+    "anchor": "MM4-EXT-04"
   },
   {
     "id": "M4-EXT-05",
     "title": "Geometric Edge Seam Welding for LOD Transitions",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "LOD",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "Declares the base \"Geometric Edge Seam Welding for LOD\" bullet. Runs downstream of [M4-EXT-02]'s meshlet decimation (welds the LOD boundary that decimation p...",
+    "depends_on": [
+      "M4-EXT-02",
+      "M4-EXT-04"
+    ],
     "depended_by": [],
-    "line": 250,
-    "anchor": "M4-EXT-05"
-  },
-  {
-    "id": "M4-EXT-12",
-    "title": "Voronoi Crustal Tectonics & Macro-Geomorphology",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 333,
-    "anchor": "M4-EXT-12"
-  },
-  {
-    "id": "M4-EXT-13",
-    "title": "Dual-Contouring Volumetric Cave Carving",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 378,
-    "anchor": "M4-EXT-13"
-  },
-  {
-    "id": "M4-EXT-14",
-    "title": "Stratigraphic Substrate Horizon Tracking",
-    "cluster": "B — input / determinism / save / platform",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 422,
-    "anchor": "M4-EXT-14"
-  },
-  {
-    "id": "M4-EXT-15",
-    "title": "Darcy's-Law Deep Aquifer Extension",
-    "cluster": "B — input / determinism / save / platform",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 459,
-    "anchor": "M4-EXT-15"
-  },
-  {
-    "id": "M4-EXT-16",
-    "title": "Saint-Venant Generation-Time Hydraulic Erosion",
-    "cluster": "B — input / determinism / save / platform",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 494,
-    "anchor": "M4-EXT-16"
-  },
-  {
-    "id": "M4-EXT-17",
-    "title": "Edaphic Soil Chemistry & Nutrient Grid",
-    "cluster": "B — input / determinism / save / platform",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 535,
-    "anchor": "M4-EXT-17"
-  },
-  {
-    "id": "M4-EXT-18",
-    "title": "Space-Colonization Canopy Seeding & Shade Competition",
-    "cluster": "B — input / determinism / save / platform",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 570,
-    "anchor": "M4-EXT-18"
-  },
-  {
-    "id": "M4-EXT-19",
-    "title": "Anthropogenic Infrastructure Exclusion Splines",
-    "cluster": "B — input / determinism / save / platform",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 608,
-    "anchor": "M4-EXT-19"
+    "line": 218,
+    "anchor": "MM4-EXT-05"
   },
   {
     "id": "M4-EXT-08",
     "title": "3D WFC Vertical Structural Dependency Guard",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": null,
     "tags": "WFC",
-    "tldr": null,
+    "tldr": "M4 WFC. Guarantees vertical structural dependencies (floor supports wall above) are satisfied.",
     "depends_on": [],
     "depended_by": [],
-    "line": 614,
-    "anchor": "M4-EXT-08"
+    "line": 296,
+    "anchor": "MM4-EXT-08"
   },
   {
     "id": "M4-EXT-09",
     "title": "Deterministic Interior Furniture Spatial Constraint Solver",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4 + M2.6. Places furniture in rooms respecting clearances/reachability deterministically.",
     "depends_on": [],
     "depended_by": [],
-    "line": 638,
-    "anchor": "M4-EXT-09"
+    "line": 315,
+    "anchor": "MM4-EXT-09"
   },
   {
     "id": "M4-EXT-10",
     "title": "Macro-Graph Vector Spline Corridor Welder",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4 + M5.4. Welds road corridor splines into one continuous drivable path graph.",
     "depends_on": [],
     "depended_by": [],
-    "line": 662,
-    "anchor": "M4-EXT-10"
+    "line": 334,
+    "anchor": "MM4-EXT-10"
   },
   {
     "id": "M4-EXT-11",
     "title": "WFC Contradiction Horizon Recovery",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": null,
     "tags": "WFC",
-    "tldr": null,
+    "tldr": "M4 WFC. On contradiction, rolls back to a saved horizon and re-expands instead of stalling.",
     "depends_on": [],
     "depended_by": [],
-    "line": 686,
-    "anchor": "M4-EXT-11"
+    "line": 353,
+    "anchor": "MM4-EXT-11"
   },
   {
-    "id": "M4-EXT-21",
-    "title": "Signage Grammar Transcoder",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-12",
+    "title": "Voronoi Crustal Tectonics & Macro-Geomorphology",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "[M4]'s base terrain generation pass (runs before it — establishes the macro heightfield skeleton that noise/erosion passes then refine).",
     "depends_on": [],
-    "depended_by": [],
-    "line": 710,
-    "anchor": "M4-EXT-21"
+    "depended_by": [
+      "M4-EXT-13",
+      "M4-EXT-14",
+      "M4-EXT-16"
+    ],
+    "line": 372,
+    "anchor": "MM4-EXT-12"
   },
   {
-    "id": "M4-EXT-28",
-    "title": "Procedural Foliage L-System Mesh Generator",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-13",
+    "title": "Dual-Contouring Volumetric Cave Carving",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 735,
-    "anchor": "M4-EXT-28"
+    "tldr": "[M4-EXT-12]'s heightfield (source surface to carve out of), [M2]'s Jolt collision generation (caves need real collision, not just visual holes).",
+    "depends_on": [
+      "M4-EXT-12"
+    ],
+    "depended_by": [
+      "M4-EXT-14"
+    ],
+    "line": 412,
+    "anchor": "MM4-EXT-13"
   },
   {
-    "id": "M4-EXT-27",
-    "title": "Vegetation Impostor",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-14",
+    "title": "Stratigraphic Substrate Horizon Tracking",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 760,
-    "anchor": "M4-EXT-27"
+    "tldr": "[M4-EXT-13]'s cave walls (exposes strata visually), [M3]'s explosion/fracture rules (routes cracks along real cleavage planes).",
+    "depends_on": [
+      "M4-EXT-13",
+      "M4-EXT-12"
+    ],
+    "depended_by": [
+      "M4-EXT-15",
+      "M4-EXT-17"
+    ],
+    "line": 451,
+    "anchor": "MM4-EXT-14"
   },
   {
-    "id": "M4-EXT-26",
-    "title": "Procedural Decal Atlas Packing & Runtime Projection",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-15",
+    "title": "Darcy's-Law Deep Aquifer Extension",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "Extends [M10]'s existing 2D groundwater heightmap (shared flooding grid) — this does not replace it, it adds the sub-surface porous-flow term that grid was a...",
+    "depends_on": [
+      "M4-EXT-14"
+    ],
     "depended_by": [],
-    "line": 785,
-    "anchor": "M4-EXT-26"
+    "line": 483,
+    "anchor": "MM4-EXT-15"
   },
   {
-    "id": "M4-EXT-25",
-    "title": "Procedural Material Node-Graph Compiler (Structure + Color + Normal)",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-16",
+    "title": "Saint-Venant Generation-Time Hydraulic Erosion",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "[M4-EXT-12]'s tectonic heightfield (input surface), [M10]'s runtime Saint-Venant flooding solver ([M10-EXT-01]) — this reuses that exact flux stencil at gene...",
+    "depends_on": [
+      "M4-EXT-12"
+    ],
     "depended_by": [],
-    "line": 810,
-    "anchor": "M4-EXT-25"
+    "line": 513,
+    "anchor": "MM4-EXT-16"
   },
   {
-    "id": "M4-EXT-24",
-    "title": "Cellular Automata Structural Collapse & Rubble Debris Fields",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-17",
+    "title": "Edaphic Soil Chemistry & Nutrient Grid",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 835,
-    "anchor": "M4-EXT-24"
+    "tldr": "[M4-EXT-18] canopy seeding (gates where trees can take root), [M8.5] survivor faction farming/food economy (soil quality gates crop yield).",
+    "depends_on": [
+      "M4-EXT-18",
+      "M4-EXT-14"
+    ],
+    "depended_by": [
+      "M4-EXT-18",
+      "M4-EXT-20"
+    ],
+    "line": 549,
+    "anchor": "MM4-EXT-17"
   },
   {
-    "id": "M4-EXT-23",
-    "title": "Whittaker Temperature/Precipitation Biome Classification",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-18",
+    "title": "Space-Colonization Canopy Seeding & Shade Competition",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 860,
-    "anchor": "M4-EXT-23"
+    "tldr": "[M4-EXT-17]'s nutrient grid (gate), existing foliage rendering ([M6.5-EXT-11] undergrowth kinematics reads canopy shade output from this).",
+    "depends_on": [
+      "M4-EXT-17"
+    ],
+    "depended_by": [
+      "M4-EXT-17"
+    ],
+    "line": 580,
+    "anchor": "MM4-EXT-18"
   },
   {
-    "id": "M4-EXT-22",
-    "title": "Meshoptimizer Vertex Cache / Fetch Optimization",
-    "cluster": "B — input / determinism / save / platform",
+    "id": "M4-EXT-19",
+    "title": "Anthropogenic Infrastructure Exclusion Splines",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Anthropogenic Infrastructure Exclusion Splines",
     "depends_on": [],
     "depended_by": [],
-    "line": 885,
-    "anchor": "M4-EXT-22"
+    "line": 613,
+    "anchor": "MM4-EXT-19"
   },
   {
     "id": "M4-EXT-20",
     "title": "WFC Adjacency Propagator",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "A",
     "tags": "WFC",
-    "tldr": null,
+    "tldr": "M4 WFC. Propagates adjacency constraints during WFC so connected tile types stay consistent.",
+    "depends_on": [
+      "M4-EXT-17"
+    ],
+    "depended_by": [],
+    "line": 614,
+    "anchor": "MM4-EXT-20"
+  },
+  {
+    "id": "M4-EXT-21",
+    "title": "Signage Grammar Transcoder",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4 PCG + M13 SLM + M11 UI. Generates contextual signage text via a grammar for world flavor.",
     "depends_on": [],
     "depended_by": [],
-    "line": 910,
-    "anchor": "M4-EXT-20"
+    "line": 683,
+    "anchor": "MM4-EXT-21"
+  },
+  {
+    "id": "M4-EXT-22",
+    "title": "Meshoptimizer Vertex Cache / Fetch Optimization",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4 + M5.1. Reorders mesh indices for vertex-cache and fetch efficiency.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 703,
+    "anchor": "MM4-EXT-22"
+  },
+  {
+    "id": "M4-EXT-23",
+    "title": "Whittaker Temperature/Precipitation Biome Classification",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4 PCG. Classifies biome from temp/precipitation via Whittaker curves.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 723,
+    "anchor": "MM4-EXT-23"
+  },
+  {
+    "id": "M4-EXT-24",
+    "title": "Cellular Automata Structural Collapse & Rubble Debris Fields",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4 + M3. Cellular-automata rule that turns damaged structures into rubble fields.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 743,
+    "anchor": "MM4-EXT-24"
+  },
+  {
+    "id": "M4-EXT-25",
+    "title": "Procedural Material Node-Graph Compiler (Structure + Color + Normal)",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4 + M4.5. Compiles a procedural material node graph to a shader/texture set.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 763,
+    "anchor": "MM4-EXT-25"
+  },
+  {
+    "id": "M4-EXT-26",
+    "title": "Procedural Decal Atlas Packing & Runtime Projection",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4 + M4.5-EXT-26 RVT. Packs decals into an atlas and projects at runtime.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 783,
+    "anchor": "MM4-EXT-26"
+  },
+  {
+    "id": "M4-EXT-27",
+    "title": "Vegetation Impostor",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4 + M4.5-EXT-30. Generates vegetation impostors (billboards) for distant foliage.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 803,
+    "anchor": "MM4-EXT-27"
+  },
+  {
+    "id": "M4-EXT-28",
+    "title": "Procedural Foliage L-System Mesh Generator",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M4. L-System generates foliage meshes (branches/leaves) procedurally.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 823,
+    "anchor": "MM4-EXT-28"
   },
   {
     "id": "M4-EXT-29",
     "title": "Layer-Based Contextual Generation",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Monolithic gen → layered passes consuming neighbor context (LayerProcGen/EPC2024).",
     "depends_on": [],
     "depended_by": [],
-    "line": 989,
-    "anchor": "M4-EXT-29"
+    "line": 843,
+    "anchor": "MM4-EXT-29"
   },
   {
     "id": "M4-EXT-30",
     "title": "Generation Pass DAG",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "DAG",
-    "tldr": null,
+    "tldr": "M4/M11. Declares passes; mods insert/reorder.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1012,
-    "anchor": "M4-EXT-30"
+    "line": 861,
+    "anchor": "MM4-EXT-30"
   },
   {
     "id": "M4-EXT-31",
     "title": "Biome Blending at Borders",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Hard biome cuts → smooth blend.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1033,
-    "anchor": "M4-EXT-31"
+    "line": 877,
+    "anchor": "MM4-EXT-31"
   },
   {
     "id": "M4-EXT-32",
     "title": "POI Placement Validator",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "POI",
-    "tldr": null,
+    "tldr": "M4/V. Rules before commit.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1054,
-    "anchor": "M4-EXT-32"
+    "line": 893,
+    "anchor": "MM4-EXT-32"
   },
   {
     "id": "M4-EXT-33",
     "title": "Loot/Encounter Table Compiler",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M8. Seed-stable tables → resolved drops.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1075,
-    "anchor": "M4-EXT-33"
+    "line": 910,
+    "anchor": "MM4-EXT-33"
   },
   {
     "id": "M4-EXT-34",
     "title": "Generation Seed Hierarchy",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/D. world→region→chunk→entity derivation.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1096,
-    "anchor": "M4-EXT-34"
+    "line": 926,
+    "anchor": "MM4-EXT-34"
   },
   {
     "id": "M4-EXT-35",
     "title": "Stable Entity-ID per Chunk",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "ID",
-    "tldr": null,
+    "tldr": "M4/ECS. IDs stable across regen.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1117,
-    "anchor": "M4-EXT-35"
+    "line": 942,
+    "anchor": "MM4-EXT-35"
   },
   {
     "id": "M4-EXT-36",
     "title": "Archetype Seeded Variation Salt",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M5.1. Per-archetype salt, not global seed.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1138,
-    "anchor": "M4-EXT-36"
+    "line": 958,
+    "anchor": "MM4-EXT-36"
   },
   {
     "id": "M4-EXT-37",
     "title": "Generation Budget Governor",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M0-EXT-23. Caps entities/triangles per chunk.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1159,
-    "anchor": "M4-EXT-37"
+    "line": 974,
+    "anchor": "MM4-EXT-37"
   },
   {
     "id": "M4-EXT-38",
     "title": "Fractal Octave Cap",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Bounds noise cost at zoom.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1180,
-    "anchor": "M4-EXT-38"
+    "line": 990,
+    "anchor": "MM4-EXT-38"
   },
   {
     "id": "M4-EXT-39",
     "title": "Biome→Asset Palette Binding",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/AssetManager. Biome → texture/mesh set.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1201,
-    "anchor": "M4-EXT-39"
+    "line": 1006,
+    "anchor": "MM4-EXT-39"
   },
   {
     "id": "M4-EXT-40",
     "title": "Clutter/Scatter Generator",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Non-gameplay dress-up.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1222,
-    "anchor": "M4-EXT-40"
+    "line": 1022,
+    "anchor": "MM4-EXT-40"
   },
   {
     "id": "M4-EXT-41",
     "title": "Water/Liquid Volume Generator",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Lakes/sewers with flow.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1243,
-    "anchor": "M4-EXT-41"
+    "line": 1038,
+    "anchor": "MM4-EXT-41"
   },
   {
     "id": "M4-EXT-42",
     "title": "Cave/Underground Generator",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Vertical chunks.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1264,
-    "anchor": "M4-EXT-42"
+    "line": 1054,
+    "anchor": "MM4-EXT-42"
   },
   {
     "id": "M4-EXT-43",
     "title": "Generation Disk-Cache",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M7. Revisits instant + deterministic.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1285,
-    "anchor": "M4-EXT-43"
+    "line": 1070,
+    "anchor": "MM4-EXT-43"
   },
   {
     "id": "M4-EXT-44",
     "title": "Generation Debug Visualization",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/T95. Which pass produced what + seed inspector.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1306,
-    "anchor": "M4-EXT-44"
+    "line": 1086,
+    "anchor": "MM4-EXT-44"
   },
   {
     "id": "M4-EXT-45",
     "title": "Multi-Resolution LOD Generation",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "LOD",
-    "tldr": null,
+    "tldr": "M4/M3. Gen at multiple detail levels.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1327,
-    "anchor": "M4-EXT-45"
+    "line": 1102,
+    "anchor": "MM4-EXT-45"
   },
   {
     "id": "M4-EXT-46",
     "title": "Procedural Sky/Starfield/Cloud",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M10. Night atmosphere, moddable.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1348,
-    "anchor": "M4-EXT-46"
+    "line": 1118,
+    "anchor": "MM4-EXT-46"
   },
   {
     "id": "M4-EXT-47",
     "title": "Async Generation Off Main Thread",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M0 jobs. Gen in worker jobs; main thread never stalls.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1371,
-    "anchor": "M4-EXT-47"
+    "line": 1136,
+    "anchor": "MM4-EXT-47"
   },
   {
     "id": "M4-EXT-48",
     "title": "Per-Frame Generation Budget",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M0-EXT-23. N ms cap; spill to next frame (Epic hitching guide).",
     "depends_on": [],
     "depended_by": [],
-    "line": 1392,
-    "anchor": "M4-EXT-48"
+    "line": 1153,
+    "anchor": "MM4-EXT-48"
   },
   {
     "id": "M4-EXT-49",
     "title": "Prioritized Chunk Queue",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Player-adjacent first.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1413,
-    "anchor": "M4-EXT-49"
+    "line": 1169,
+    "anchor": "MM4-EXT-49"
   },
   {
     "id": "M4-EXT-50",
     "title": "Pre-Generation Lookahead",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Gen 1 ring ahead during idle.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1434,
-    "anchor": "M4-EXT-50"
+    "line": 1185,
+    "anchor": "MM4-EXT-50"
   },
   {
     "id": "M4-EXT-51",
     "title": "Generation Cancellation",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Chunk unloaded mid-gen → cancel.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1455,
-    "anchor": "M4-EXT-51"
+    "line": 1201,
+    "anchor": "MM4-EXT-51"
   },
   {
     "id": "M4-EXT-52",
     "title": "Chunk Generation State Machine",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. queued→generating→ready→active→unloading.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1476,
-    "anchor": "M4-EXT-52"
+    "line": 1217,
+    "anchor": "MM4-EXT-52"
   },
   {
     "id": "M4-EXT-53",
     "title": "Parallel Mesh/Collider Build",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/physics. Build geometry + physics shape concurrently.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1497,
-    "anchor": "M4-EXT-53"
+    "line": 1233,
+    "anchor": "MM4-EXT-53"
   },
   {
     "id": "M4-EXT-54",
     "title": "Procedural Quest / Mission Generator",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M8 (quests). No runtime quest generator.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1518,
-    "anchor": "M4-EXT-54"
+    "line": 1249,
+    "anchor": "MM4-EXT-54"
   },
   {
     "id": "M4-EXT-55",
     "title": "Procedural Narrative / Dialogue Generator",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M13 (narrative). No dialogue generator wired.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1544,
-    "anchor": "M4-EXT-55"
+    "line": 1270,
+    "anchor": "MM4-EXT-55"
   },
   {
     "id": "M4-EXT-56",
     "title": "Difficulty / Tuning Curve Generator",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M5.4/M13. No auto-tuned difficulty curve.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1570,
-    "anchor": "M4-EXT-56"
+    "line": 1291,
+    "anchor": "MM4-EXT-56"
   },
   {
     "id": "M4-EXT-57",
     "title": "Generation RNG Replay File",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "RNG",
-    "tldr": null,
+    "tldr": "M4/M0. Record RNG draws per chunk.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1596,
-    "anchor": "M4-EXT-57"
+    "line": 1312,
+    "anchor": "MM4-EXT-57"
   },
   {
     "id": "M4-EXT-58",
     "title": "Generation Math Reduction Order",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M0. Fixed-order reductions.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1622,
-    "anchor": "M4-EXT-58"
+    "line": 1333,
+    "anchor": "MM4-EXT-58"
   },
   {
     "id": "M4-EXT-59",
     "title": "Procedural Road/Path Network",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4. Roads only as noise threshold.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1648,
-    "anchor": "M4-EXT-59"
+    "line": 1354,
+    "anchor": "MM4-EXT-59"
   },
   {
     "id": "M4-EXT-60",
     "title": "Procedural Encounter/Event Spawner",
-    "cluster": "D — release / platform / build / test / perf",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M4/M5.4. No event spawner.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1672,
-    "anchor": "M4-EXT-60"
+    "line": 1373,
+    "anchor": "MM4-EXT-60"
   }
 ]
