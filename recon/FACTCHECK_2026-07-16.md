@@ -54,3 +54,25 @@
   but NOT executed (my autonomous attempt failed on mid-line concatenation). Needs
   a proper parser that splits on `#### [` even mid-line, OR user go-ahead. This is the
   one true blocker to 100% reliable automated verification of M1.
+
+
+## Addendum: Deeper Threat Interactive research — BLOCKED this turn (rate-limit)
+- Attempted: DDG, Bing, Mojeek, YouTube channel parse, 3 Searx instances. ALL returned
+  HTTP 429 (Too Many Requests) on 2026-07-16 late session. Basic egress works
+  (example.com loaded) → it is a search-engine-specific rate-limit on our egress IP,
+  environmental, not a script bug. Per backup-tool rule: exhausted all egress paths.
+- Desktop scan for saved Threat Interactive videos/transcripts: NONE found.
+- What IS verified (earlier this session, from se7en.ws + Disney 2012 BRDF paper):
+  Lambert(1760) obsolete → Burley/Kalisto diffuse. Applied to M4.5-EXT-20. ✅
+- Threat Interactive KNOWN public thesis (from se7en.ws summary + NeoGAF thread title
+  "dynamic lightning was better nine years ago") — mapped to spec, to apply when
+  transcripts are fetchable:
+  1. "Slop" auto-LOD / lossy streaming pipelines destroy silhouette + material identity
+     → M4 (streaming) + M4.5 (LOD) should mandate silhouette-preserving LOD + material
+     identity-preserving streaming, NOT lossy auto-decimation.
+  2. Translucency/subsurface done cheap/wrong → addressed in M4.5-EXT-20 (Beer-Lambert
+     transmission + Burley diffuse).
+  3. "9th-gen neglect" (shipping 8th-gen techniques) → Tier-0 floor is a MINIMUM, not the
+     target; aim material quality above it.
+- ACTION: retry deeper Threat Interactive fetch after rate-limit cools (next session or
+  timed wait). Do NOT fabricate their claims — only apply what is fetch-verified.
