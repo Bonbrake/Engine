@@ -69,55 +69,79 @@ def parse_claims(plan):
     Handles BOTH orderings the old tools missed:
       'T7 **..** → [GAP] M4.5-EXT-32'   (status before EXT)
       'T7 **..** → M4.5-EXT-20. [COVERED]' (EXT before status)
-    and RULE SPEC: lines (R# tracked from a preceding '^R\\d ' line)."""
+    Technique claims may WRAP across lines (the '**...**' title on one line, the
+    '-> [STATUS] EXT' on the next) — we join continuation lines first so the regex
+    sees the whole claim. RULE SPEC: lines (R# tracked from a preceding '^R\\d ' line)."""
     out, last_rule = [], None
-    lines = plan.splitlines()
-    for i, line in enumerate(lines):
+    raw = plan.splitlines()
+    # Build logical lines: a line starting a T# technique claim absorbs following
+    # non-blank, non-new-claim lines until it reaches the '-> EXT' terminator or a blank.
+    lines = []
+    i = 0
+    while i < len(raw):
+        line = raw[i]
+        if re.match(r"^T\d+\s+\*\*", line) and "→" not in line:
+            # accumulate continuation
+            buf_lines = [line]
+            j = i + 1
+            while j < len(raw) and raw[j].strip() \
+                    and not re.match(r"^(R\d+|T\d+)\b", raw[j]):
+                buf_lines.append(raw[j])
+                if "→" in raw[j]:
+                    break
+                j += 1
+            lines.append((" ".join(buf_lines), i + 1))
+            i = j
+        else:
+            lines.append((line, i + 1))
+            i += 1
+
+    for i, (line, lno) in enumerate(lines):
         rm = re.search(r"^(R\d+)\s", line)
         if rm:
             last_rule = rm.group(1)
 
         # --- technique: T# **...** → [STATUS] EXT  (status-first) ---
-        m = re.search(rf"(T\d+)\s+\*\*.+?\*\*\s*(?:\([^)]*\)\s*)?→\s*\[?{STATUS}\]?\s*{EXT}", line)
+        m = re.search(rf"(T\d+)\s+\*\*.+?\*\*\s*.*?→\s*\[?{STATUS}\]?\s*{EXT}", line)
         if m:
-            out.append((m.group(1), m.group(2), m.group(3), i + 1)); continue
+            out.append((m.group(1), m.group(2), m.group(3), lno)); continue
 
         # --- technique: T# **...** → EXT ... [STATUS]  (ext-first, possibly on next line) ---
-        m = re.search(rf"(T\d+)\s+\*\*.+?\*\*\s*(?:\([^)]*\)\s*)?→\s*{EXT}", line)
+        m = re.search(rf"(T\d+)\s+\*\*.+?\*\*\s*.*?→\s*{EXT}", line)
         if m:
+            ext = m.group(2)  # EXT is group 2 here (no STATUS group in this pattern)
             # status may be same line (after EXT) or next line
-            cand = [m.group(3)]
             s = re.search(STATUS, line[m.end():]) if m.end() < len(line) else None
             if s:
-                out.append((m.group(1), s.group(1), m.group(3), i + 1)); continue
+                out.append((m.group(1), s.group(1), ext, lno)); continue
             if i + 1 < len(lines):
-                s2 = re.search(STATUS, lines[i + 1])
+                s2 = re.search(STATUS, lines[i + 1][0])
                 if s2:
-                    out.append((m.group(1), s2.group(1), m.group(3), i + 1)); continue
+                    out.append((m.group(1), s2.group(1), ext, lno)); continue
             # EXT referenced but NO status -> caller warns (unclassified)
-            out.append((m.group(1), None, m.group(3), i + 1)); continue
+            out.append((m.group(1), None, ext, lno)); continue
 
         # --- rule SPEC: same line ---
         m = re.search(rf"SPEC:\s*{STATUS}.*?{EXT}", line)
         if m:
             cands = [m.group(2)]
             if i + 1 < len(lines):
-                m3 = re.search(EXT, lines[i + 1])
+                m3 = re.search(EXT, lines[i + 1][0])
                 if m3: cands.append(m3.group(1))
             cid = re.search(r"(R\d+)", line)
             cid = cid.group(1) if cid else last_rule
             for ex in cands:
-                if cid: out.append((cid, m.group(1), ex, i + 1))
+                if cid: out.append((cid, m.group(1), ex, lno))
             continue
 
         # --- rule SPEC: status on this line, EXT on next ---
         m2 = re.search(rf"SPEC:\s*{STATUS}", line)
         if m2 and i + 1 < len(lines):
-            m3 = re.search(EXT, lines[i + 1])
+            m3 = re.search(EXT, lines[i + 1][0])
             if m3:
                 cid = re.search(r"(R\d+)", line)
                 cid = cid.group(1) if cid else last_rule
-                if cid: out.append((cid, m2.group(1), m3.group(1), i + 1))
+                if cid: out.append((cid, m2.group(1), m3.group(1), lno))
 
     # dedupe
     seen, res = set(), []
