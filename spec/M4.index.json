@@ -677,5 +677,82 @@
     "depended_by": [],
     "line": 1373,
     "anchor": "MM4-EXT-60"
+  },
+  {
+    "id": "M4-EXT-61",
+    "title": "Coastal Tidal Flooding & Storm-Surge Inundation",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Couples to M10 weather tides and M2.9 farming; tags shoreline cells with wet/dry state each tidal step.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1391,
+    "anchor": "MM4-EXT-61"
+  },
+  {
+    "id": "M4-EXT-62",
+    "title": "Planar Surface Map (Top-Down World Overview)",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Backs the world map UI (M11) and encounter placement; holds road + biome + water coverage as tiles.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1416,
+    "anchor": "MM4-EXT-62"
+  },
+  {
+    "id": "M4-EXT-63",
+    "title": "Macro-Zone Socio-Economic Utility Assignment",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Drives vendor stock (M8.6), quest targets, and faction footprint; folds into Appendix C loot/zone tagging.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1441,
+    "anchor": "MM4-EXT-63"
+  },
+  {
+    "id": "M4-EXT-64",
+    "title": "Stratigraphic Resource Vein Distribution",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Feeds M2.6 survival crafting node spawns and M4-EXT-14 substrate horizons; veins follow layer boundaries.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1465,
+    "anchor": "MM4-EXT-64"
+  },
+  {
+    "id": "M4-EXT-74",
+    "title": "World-Graph Root Node (Canonical Anchor)",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "All POIs/factions/encounters attach to this root via the road graph; prevents orphaned systems.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1489,
+    "anchor": "MM4-EXT-74"
+  },
+  {
+    "id": "M4-EXT-77",
+    "title": "Pharmacy / Med-Lab Procedural Detailing",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Supports M8 med-item spawns and M2.9 medical/farm loot; tags interior cells as pharmacy.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1513,
+    "anchor": "MM4-EXT-77"
+  },
+  {
+    "id": "M4-EXT-83",
+    "title": "Water-Treatment / Purification Plant Detailing",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Ties to M4-EXT-15 aquifer and M4-EXT-16 erosion watersheds; supplies clean-water loot nodes.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1537,
+    "anchor": "MM4-EXT-83"
   }
 ]

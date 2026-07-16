@@ -449,5 +449,82 @@
     "depended_by": [],
     "line": 904,
     "anchor": "MM11-EXT-41"
+  },
+  {
+    "id": "M11-EXT-52",
+    "title": "World-Space POI Compass Ribbon",
+    "cluster": "C",
+    "tags": "POI",
+    "tldr": "Renders off the planar surface map (M4-EXT-62) + hub POIs (M8.6-EXT-28); off-screen markers wrap to edges.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 922,
+    "anchor": "MM11-EXT-52"
+  },
+  {
+    "id": "M11-EXT-53",
+    "title": "Point-of-Interest (POI) Marker System",
+    "cluster": "C",
+    "tags": "POI",
+    "tldr": "Single POI registry consumed by M11-EXT-52 compass, M11 map, and M13 SLM story pins; M13-EXT-24 lore drops pins.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 947,
+    "anchor": "MM11-EXT-53"
+  },
+  {
+    "id": "M11-EXT-54",
+    "title": "Lore Pin / SLM Broadcast Drop",
+    "cluster": "C",
+    "tags": "SLM",
+    "tldr": "Consumes M13-EXT-24 lore and M13-EXT-36 broadcasts; drops a POI (M11-EXT-53) on notable objects.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 971,
+    "anchor": "MM11-EXT-54"
+  },
+  {
+    "id": "M11-EXT-55",
+    "title": "Encounter Condition HUD Trigger",
+    "cluster": "C",
+    "tags": "HUD",
+    "tldr": "Reads active encounter conditions (M5.4 events, M8.6 civil war) and shows a contextual alert.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 995,
+    "anchor": "MM11-EXT-55"
+  },
+  {
+    "id": "M11-EXT-57",
+    "title": "Surface-Map Mini-Overlay (M4-EXT-62 Backed)",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Renders the local slice of the planar surface map (M4-EXT-62) under the compass (M11-EXT-52).",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1019,
+    "anchor": "MM11-EXT-57"
+  },
+  {
+    "id": "M11-EXT-58",
+    "title": "Rest / Hub HUD Indicator",
+    "cluster": "C",
+    "tags": "HUD",
+    "tldr": "Mirrors M2.9 rest UI and M8.6-EXT-28 hub ownership; shows respec availability (M2-EXT-26).",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1043,
+    "anchor": "MM11-EXT-58"
+  },
+  {
+    "id": "M11-EXT-59",
+    "title": "Hub Fast-Travel Node",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Consumes M8.6-EXT-28 hub ownership and M2.9-EXT-24 rest UI; registers a travel POI (M11-EXT-53).",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1067,
+    "anchor": "MM11-EXT-59"
   }
 ]
