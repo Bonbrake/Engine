@@ -36,11 +36,17 @@ def strip_injected(rows):
         out.append(ln)
     return out
 
-def find_blocks(rows):
-    """Return list of block start indices (0-based) for each `#### [Mx-EXT-NN]`."""
+def find_blocks(rows, label=None):
+    """Return list of block start indices (0-based) for each `#### [Mx-EXT-NN]`.
+    If label is given, only matches that milestone's own blocks (ignores
+    embedded foreign-ref blocks, e.g. M7-EXT-04 appearing inside M4.md)."""
     blks = []
+    if label:
+        rx = re.compile(r'^####\s+`?\[' + re.escape(label) + r'-EXT-\d+\]')
+    else:
+        rx = re.compile(r'^####\s+`?\[M[xX0-9.]+-EXT-\d+\]')
     for i, ln in enumerate(rows):
-        if re.match(r'^####\s+`?\[M[xX0-9.]+-EXT-\d+\]', ln):
+        if rx.match(ln):
             blks.append(i)
     return blks
 
@@ -88,9 +94,12 @@ def extract_tags(rows, start, end, title):
         return ", ".join(list(dict.fromkeys(nouns))[:6])
     return "general"
 
-def extract_deps(rows, start, end):
+def extract_deps(rows, start, end, label):
+    """Return distinct unbracketed Mx-EXT-NN dep IDs found in the block body
+    (label-scoped so embedded foreign-ref blocks don't pollute). Unbracketed
+    form matches `bid`, enabling correct self-reference filtering."""
     body = "\n".join(rows[start:end])
-    deps = re.findall(r'\[M[xX0-9.]+-EXT-\d+\]', body)
+    deps = re.findall(r'\[(' + re.escape(label) + r'-EXT-\d+)\]', body)
     uniq = []
     for d in deps:
         if d not in uniq:
@@ -134,10 +143,19 @@ def main():
 
     rows = strip_injected(rows)
 
-    blocks = find_blocks(rows)
+    blocks = find_blocks(rows, label)
     n = len(blocks)
     # clusters: count ### Cluster lines
     n_clusters = sum(1 for ln in rows if re.match(r'^###\s+Cluster', ln))
+    # map block start index -> cluster letter (for sidecar)
+    block_cluster = {}
+    cur_cl = None
+    for i, ln in enumerate(rows):
+        mcl = re.match(r'^###\s+Cluster\s+([A-D])', ln)
+        if mcl:
+            cur_cl = mcl.group(1)
+        elif re.match(r'^####\s+`?\[' + re.escape(label) + r'-EXT', ln):
+            block_cluster[i] = cur_cl
 
     # first-header index (for frontmatter insertion)
     first_h = None
@@ -165,7 +183,7 @@ def main():
             if re.match(r'^##\s', rows[j]):
                 end = j
                 break
-        fwd[bid] = extract_deps(rows, b, end)
+        fwd[bid] = extract_deps(rows, b, end, label)
 
     depended_by = {}
     for bid, deps in fwd.items():
@@ -195,17 +213,27 @@ def main():
         title = title.rstrip('*').strip()
         st = first_systems_touched_line(rows, b, end)
         st_clean = strip_md(st)
-        # ctx = Title -- st_clean
-        ctx = (title + " -- " + st_clean) if st_clean else title
+        # first real body line (tl;dr fallback when block lacks Systems Touched)
+        first_body = ""
+        for i in range(b+1, min(end, b+12)):
+            s = rows[i].strip()
+            if s and not s.startswith("> **") and not s.startswith("<a id=") \
+               and not re.match(r'^#{1,5}\s', s) and not s.startswith("```"):
+                first_body = strip_md(s)
+                break
+        ctx = (title + " -- " + st_clean) if st_clean else (title + " -- " + first_body if first_body else title)
         # tl;dr = strip Title -- prefix, cap 160
         tldr = ctx
         if tldr.startswith(title + " -- "):
             tldr = tldr[len(title)+4:]
+        if not tldr or tldr == title:
+            tldr = first_body or title
         if len(tldr) > 160:
-            tldr = tldr[:160]
+            tldr = tldr[:157] + "..."
         tags = extract_tags(rows, b, end, title)
-        deps = fwd.get(bid, [])
-        dby = depended_by.get(bid, [])
+        deps = [d for d in fwd.get(bid, []) if d != bid]
+        dby = [d for d in depended_by.get(bid, []) if d != bid]
+        cl = block_cluster.get(b, None)
         dep_s = ", ".join(deps) if deps else "-"
         dby_s = ", ".join(dby) if dby else "-"
         anchor = '<a id="%s"></a>' % bid
@@ -218,12 +246,22 @@ def main():
         # replace [b] with chunk, preserving the rest
         new_rows[b:b+1] = chunk
 
-    # frontmatter
+    # cross_file_deps = distinct external ([Mx-EXT] not own-label) dep IDs across all blocks
+    ext_ids = set()
+    for b in blocks:
+        endb = len(rows)
+        for j in range(b+1, len(rows)):
+            if re.match(r'^####\s+`?\[' + re.escape(label) + r'-EXT', rows[j]) or re.match(r'^##\s', rows[j]):
+                endb = j; break
+        body = "\n".join(rows[b:endb])
+        for m in re.finditer(r'\[?(`?)M[xX0-9.]+-EXT-\d+\1?\]?', body):
+            ref = re.sub(r'[`\[\]]', '', m.group(0))
+            if not ref.startswith(label + "-EXT"):
+                ext_ids.add(ref)
+    n_cross = len(ext_ids)
+    # frontmatter (re-add, using real cross-file dep count)
     if first_h is not None:
-        fm = build_frontmatter(label, n, n_clusters, len(depended_by))
-        # find insertion point: right after first existing blank lines under first ##
-        ins = first_h
-        # ensure a blank line before frontmatter
+        fm = build_frontmatter(label, n, n_clusters, n_cross)
         new_rows = fm + [""] + new_rows
 
     out = "\n".join(new_rows)
@@ -238,20 +276,41 @@ def main():
             continue
         bid = hm.group(1)
         title = re.sub(r'^####\s+`?\[' + re.escape(label) + r'-EXT-\d+\]?\s*', '', hdr).strip().rstrip('*').strip()
-        deps = fwd.get(bid, [])
-        dby = depended_by.get(bid, [])
+        deps = [d for d in fwd.get(bid, []) if d != bid]
+        dby = [d for d in depended_by.get(bid, []) if d != bid]
+        cl = block_cluster.get(b, None)
+        # recompute tldr the same way as injection
+        endb = len(rows)
+        for j in range(b+1, len(rows)):
+            if re.match(r'^####\s+`?\[' + re.escape(label) + r'-EXT', rows[j]) or re.match(r'^##\s', rows[j]):
+                endb = j; break
+        st_clean = strip_md(first_systems_touched_line(rows, b, endb))
+        first_body = ""
+        for i in range(b+1, min(endb, b+12)):
+            s = rows[i].strip()
+            if s and not s.startswith("> **") and not s.startswith("<a id=") \
+               and not re.match(r'^#{1,5}\s', s) and not s.startswith("```"):
+                first_body = strip_md(s); break
+        ctx = (title + " -- " + st_clean) if st_clean else (title + " -- " + first_body if first_body else title)
+        tldr = ctx
+        if tldr.startswith(title + " -- "):
+            tldr = tldr[len(title)+4:]
+        if not tldr or tldr == title:
+            tldr = first_body or title
+        if len(tldr) > 160:
+            tldr = tldr[:157] + "..."
         jblocks.append({
             "id": bid, "title": title,
-            "cluster": None,
-            "tags": tags if False else extract_tags(rows, b, len(rows), title),
-            "tldr": (title + " -- " + strip_md(first_systems_touched_line(rows, b, len(rows)))) if False else None,
+            "cluster": cl,
+            "tags": extract_tags(rows, b, endb, title),
+            "tldr": tldr,
             "depends_on": deps, "depended_by": dby,
             "line": b+1, "anchor": "M%s-EXT-%s" % (label, bid.split('-')[-1])
         })
     json_path = path.replace(".md", ".index.json")
     json.dump(jblocks, open(json_path, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 
-    print("OK %s: %d blocks, %d clusters, %d cross-file deps; wrote %s" % (label, n, n_clusters, len(depended_by), os.path.basename(json_path)))
+    print("OK %s: %d blocks, %d clusters, %d cross-file deps; wrote %s" % (label, n, n_clusters, n_cross, os.path.basename(json_path)))
 
 if __name__ == "__main__":
     main()
