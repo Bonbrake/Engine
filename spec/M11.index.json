@@ -2,452 +2,452 @@
   {
     "id": "M11-EXT-01",
     "title": "Viewport-Isolated Haptic Waveform Summation",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Expands M11 (Haptic sub-band splitting) and interfaces with M2.8 (Local split-screen viewports).",
     "depends_on": [],
     "depended_by": [],
-    "line": 89,
-    "anchor": "M11-EXT-01"
+    "line": 77,
+    "anchor": "MM11-EXT-01"
   },
   {
     "id": "M11-EXT-02",
     "title": "Adaptive Skeletal Trigger Strain Profiles",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Connects M11 controller haptics with M2.7 player StressLevel metrics and weapon variables.",
     "depends_on": [],
     "depended_by": [],
-    "line": 131,
-    "anchor": "M11-EXT-02"
+    "line": 114,
+    "anchor": "MM11-EXT-02"
   },
   {
     "id": "M11-EXT-03",
     "title": "Raycast-Fan Fog-of-Reveal Navigation (Map/Minimap)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "M5.3's actual perception stack (SNR Detection Probability, Ray-Marched Foliage Concealment, Kalman-filtered Sensor Fusion) has no fan-cast sightline primitiv...",
     "depends_on": [],
     "depended_by": [],
-    "line": 165,
-    "anchor": "M11-EXT-03"
+    "line": 143,
+    "anchor": "MM11-EXT-03"
   },
   {
     "id": "M11-EXT-04",
     "title": "Diegetic Onboarding via Seeded Low-Severity Starter Outbreak",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Uses the existing M8 SEIR outbreak engine seeded at low severity in the player's starting settlement — teaching happens through the real systems at low stake...",
     "depends_on": [],
     "depended_by": [],
-    "line": 201,
-    "anchor": "M11-EXT-04"
+    "line": 174,
+    "anchor": "MM11-EXT-04"
   },
   {
     "id": "M11-EXT-05",
     "title": "OKLab-Driven Accessibility Suite (Colorblind, Captions, Remapping)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Colorblind-safe palette remapping reuses the same perceptually-uniform OKLab pipeline already computing structural-stress visualization (C_stress, M3-EXT-02)...",
     "depends_on": [],
     "depended_by": [],
-    "line": 233,
-    "anchor": "M11-EXT-05"
+    "line": 201,
+    "anchor": "MM11-EXT-05"
   },
   {
     "id": "M11-EXT-06",
     "title": "Runtime String-Template Localization Pipeline",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Wraps Appendix A's procedural narrative/diary-entry generation in resolvable string templates from the point of generation, rather than post-processing alrea...",
     "depends_on": [],
     "depended_by": [],
-    "line": 265,
-    "anchor": "M11-EXT-06"
+    "line": 228,
+    "anchor": "MM11-EXT-06"
   },
   {
     "id": "M11-EXT-07",
     "title": "MSDF Shaded Drop-Shadow Vector Signed Distance Field Generator",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "MSDF",
-    "tldr": null,
+    "tldr": "MSDF Shaded Drop-Shadow Vector Signed Distance Field Generator",
     "depends_on": [],
     "depended_by": [],
-    "line": 303,
-    "anchor": "M11-EXT-07"
-  },
-  {
-    "id": "M11-EXT-09",
-    "title": "UI Panel Atlasing & Nine-Slice Batching",
-    "cluster": "A — bootstrap core",
-    "tags": "UI",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 311,
-    "anchor": "M11-EXT-09"
+    "line": 261,
+    "anchor": "MM11-EXT-07"
   },
   {
     "id": "M11-EXT-08",
     "title": "MSDF Vector Text Layout Geometry Batching Pipeline",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "MSDF",
-    "tldr": null,
+    "tldr": "M11 + M1-EXT-12. Batches MSDF text glyph geometry into one draw per text block.",
     "depends_on": [],
     "depended_by": [],
-    "line": 336,
-    "anchor": "M11-EXT-08"
+    "line": 264,
+    "anchor": "MM11-EXT-08"
+  },
+  {
+    "id": "M11-EXT-09",
+    "title": "UI Panel Atlasing & Nine-Slice Batching",
+    "cluster": null,
+    "tags": "UI",
+    "tldr": "M11. Atlases UI panels + nine-slice borders into batched draws.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 350,
+    "anchor": "MM11-EXT-09"
   },
   {
     "id": "M11-EXT-10",
     "title": "Three-Way Version Contract",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7/M2.8/M11. Separate SaveSchemaVersion / NetworkProtocolVersion / ModAPIVersion.",
     "depends_on": [],
     "depended_by": [],
-    "line": 432,
-    "anchor": "M11-EXT-10"
+    "line": 370,
+    "anchor": "MM11-EXT-10"
   },
   {
     "id": "M11-EXT-11",
     "title": "Config Schema Registry",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Every tunable param declared + versioned + moddable.",
     "depends_on": [],
     "depended_by": [],
-    "line": 453,
-    "anchor": "M11-EXT-11"
+    "line": 386,
+    "anchor": "MM11-EXT-11"
   },
   {
     "id": "M11-EXT-12",
     "title": "Typed Parameter Handles",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Mods reference params by ID, not offsets.",
     "depends_on": [],
     "depended_by": [],
-    "line": 474,
-    "anchor": "M11-EXT-12"
+    "line": 403,
+    "anchor": "MM11-EXT-12"
   },
   {
     "id": "M11-EXT-13",
     "title": "Parameter Range/Clamp Enforcement",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Mods can't set hp=-9999 silently.",
     "depends_on": [],
     "depended_by": [],
-    "line": 495,
-    "anchor": "M11-EXT-13"
+    "line": 419,
+    "anchor": "MM11-EXT-13"
   },
   {
     "id": "M11-EXT-14",
     "title": "Enum/Flag Registry",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Named enums for mods, not raw ints.",
     "depends_on": [],
     "depended_by": [],
-    "line": 518,
-    "anchor": "M11-EXT-14"
+    "line": 437,
+    "anchor": "MM11-EXT-14"
   },
   {
     "id": "M11-EXT-15",
     "title": "Deliberate Mod API Surface",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "API",
-    "tldr": null,
+    "tldr": "M11. Expose only vetted functions; deny-by-default.",
     "depends_on": [],
     "depended_by": [],
-    "line": 539,
-    "anchor": "M11-EXT-15"
+    "line": 453,
+    "anchor": "MM11-EXT-15"
   },
   {
     "id": "M11-EXT-16",
     "title": "ModAPI Semantic Versioning",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Major=breaking (Fabric/Forge).",
     "depends_on": [],
     "depended_by": [],
-    "line": 560,
-    "anchor": "M11-EXT-16"
+    "line": 469,
+    "anchor": "MM11-EXT-16"
   },
   {
     "id": "M11-EXT-17",
     "title": "Mod Dependency Resolver",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Mod B needs mod A≥1.2; conflict detection.",
     "depends_on": [],
     "depended_by": [],
-    "line": 581,
-    "anchor": "M11-EXT-17"
+    "line": 485,
+    "anchor": "MM11-EXT-17"
   },
   {
     "id": "M11-EXT-18",
     "title": "Mod Incompatibility Detector",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Two mods override same param → warn/block.",
     "depends_on": [],
     "depended_by": [],
-    "line": 602,
-    "anchor": "M11-EXT-18"
+    "line": 501,
+    "anchor": "MM11-EXT-18"
   },
   {
     "id": "M11-EXT-19",
     "title": "Mod Checksum + Signature",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11/M0-EXT-28. Verify integrity; optional signed mods.",
     "depends_on": [],
     "depended_by": [],
-    "line": 623,
-    "anchor": "M11-EXT-19"
+    "line": 517,
+    "anchor": "MM11-EXT-19"
   },
   {
     "id": "M11-EXT-20",
     "title": "Mod Write-Allowlist",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11/MetaRegistry. bool ModWritable on entt::meta registration.",
     "depends_on": [],
     "depended_by": [],
-    "line": 644,
-    "anchor": "M11-EXT-20"
+    "line": 533,
+    "anchor": "MM11-EXT-20"
   },
   {
     "id": "M11-EXT-21",
     "title": "Runtime Mod Enable/Disable + Reload",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Without full restart.",
     "depends_on": [],
     "depended_by": [],
-    "line": 665,
-    "anchor": "M11-EXT-21"
+    "line": 549,
+    "anchor": "MM11-EXT-21"
   },
   {
     "id": "M11-EXT-22",
     "title": "Mod Override Layering",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. base < modA < modB, last wins, traceable.",
     "depends_on": [],
     "depended_by": [],
-    "line": 686,
-    "anchor": "M11-EXT-22"
+    "line": 565,
+    "anchor": "MM11-EXT-22"
   },
   {
     "id": "M11-EXT-23",
     "title": "Mod Error Isolation",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11/M0-EXT-25. One bad mod doesn't crash engine.",
     "depends_on": [],
     "depended_by": [],
-    "line": 707,
-    "anchor": "M11-EXT-23"
+    "line": 582,
+    "anchor": "MM11-EXT-23"
   },
   {
     "id": "M11-EXT-24",
     "title": "Mod Console Commands",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11/M12. Reload/query/list mods.",
     "depends_on": [],
     "depended_by": [],
-    "line": 728,
-    "anchor": "M11-EXT-24"
+    "line": 598,
+    "anchor": "MM11-EXT-24"
   },
   {
     "id": "M11-EXT-25",
     "title": "Mod Validation Pipeline Hook",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11/V. Mod content enters V-checks before activation.",
     "depends_on": [],
     "depended_by": [],
-    "line": 749,
-    "anchor": "M11-EXT-25"
+    "line": 614,
+    "anchor": "MM11-EXT-25"
   },
   {
     "id": "M11-EXT-26",
     "title": "Mod Localization Hooks",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11/F3. Mods add own string-table entries.",
     "depends_on": [],
     "depended_by": [],
-    "line": 770,
-    "anchor": "M11-EXT-26"
+    "line": 630,
+    "anchor": "MM11-EXT-26"
   },
   {
     "id": "M11-EXT-27",
     "title": "Mod UI / Menu",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "UI",
-    "tldr": null,
+    "tldr": "M11. Browse/configure mods in-game.",
     "depends_on": [],
     "depended_by": [],
-    "line": 791,
-    "anchor": "M11-EXT-27"
+    "line": 646,
+    "anchor": "MM11-EXT-27"
   },
   {
     "id": "M11-EXT-28",
     "title": "Mod Save-Namespace Isolation",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11/M7. Mod A's save data doesn't collide with mod B.",
     "depends_on": [],
     "depended_by": [],
-    "line": 812,
-    "anchor": "M11-EXT-28"
+    "line": 662,
+    "anchor": "MM11-EXT-28"
   },
   {
     "id": "M11-EXT-29",
     "title": "Benchmark / Perf HUD / Graphics Options",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "HUD",
-    "tldr": null,
+    "tldr": "M11. grep benchmark|perfHUD → 0. Reuse Tracy + Vulkan timestamp pools; preset ladder feeding M0-EXT-23.",
     "depends_on": [],
     "depended_by": [],
-    "line": 833,
-    "anchor": "M11-EXT-29"
+    "line": 678,
+    "anchor": "MM11-EXT-29"
   },
   {
     "id": "M11-EXT-30",
     "title": "Screen Shake / Hit Marker / Kill Feed",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11 (UI). grep screen.shake|hit.marker|kill.feed → 0; M11 doesn't mention them.",
     "depends_on": [],
     "depended_by": [],
-    "line": 856,
-    "anchor": "M11-EXT-30"
+    "line": 696,
+    "anchor": "MM11-EXT-30"
   },
   {
     "id": "M11-EXT-31",
     "title": "Runtime Mod Manager",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. grep ModManager|LoadMod → 0 (only static mods/ overlay).",
     "depends_on": [],
     "depended_by": [],
-    "line": 877,
-    "anchor": "M11-EXT-31"
+    "line": 712,
+    "anchor": "MM11-EXT-31"
   },
   {
     "id": "M11-EXT-32",
     "title": "Mod Documentation Generator",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Auto-doc exposed ModAPI from code.",
     "depends_on": [],
     "depended_by": [],
-    "line": 898,
-    "anchor": "M11-EXT-32"
+    "line": 728,
+    "anchor": "MM11-EXT-32"
   },
   {
     "id": "M11-EXT-33",
     "title": "Workshop / Store Integration Stub",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. Download→verify→install path.",
     "depends_on": [],
     "depended_by": [],
-    "line": 924,
-    "anchor": "M11-EXT-33"
+    "line": 749,
+    "anchor": "MM11-EXT-33"
   },
   {
     "id": "M11-EXT-34",
     "title": "Main Menu & Pause Menu",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. No menus.",
     "depends_on": [],
     "depended_by": [],
-    "line": 950,
-    "anchor": "M11-EXT-34"
+    "line": 771,
+    "anchor": "MM11-EXT-34"
   },
   {
     "id": "M11-EXT-35",
     "title": "Inventory & Loot UI",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "UI",
-    "tldr": null,
+    "tldr": "M11. No inventory screen.",
     "depends_on": [],
     "depended_by": [],
-    "line": 974,
-    "anchor": "M11-EXT-35"
+    "line": 790,
+    "anchor": "MM11-EXT-35"
   },
   {
     "id": "M11-EXT-36",
     "title": "Map & Fast-Travel UI",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "UI",
-    "tldr": null,
+    "tldr": "M11/M4. No map.",
     "depends_on": [],
     "depended_by": [],
-    "line": 998,
-    "anchor": "M11-EXT-36"
+    "line": 809,
+    "anchor": "MM11-EXT-36"
   },
   {
     "id": "M11-EXT-37",
     "title": "Settings & Options Menu",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. No options.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1022,
-    "anchor": "M11-EXT-37"
+    "line": 828,
+    "anchor": "MM11-EXT-37"
   },
   {
     "id": "M11-EXT-38",
     "title": "Controller/Gamepad UI",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "UI",
-    "tldr": null,
+    "tldr": "M11. No gamepad UI/cursor.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1046,
-    "anchor": "M11-EXT-38"
+    "line": 847,
+    "anchor": "MM11-EXT-38"
   },
   {
     "id": "M11-EXT-39",
     "title": "Haptics & Rumble",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. No rumble.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1070,
-    "anchor": "M11-EXT-39"
+    "line": 866,
+    "anchor": "MM11-EXT-39"
   },
   {
     "id": "M11-EXT-40",
     "title": "Damage Numbers & Floating Text",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M11. No combat text.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1094,
-    "anchor": "M11-EXT-40"
+    "line": 885,
+    "anchor": "MM11-EXT-40"
   },
   {
     "id": "M11-EXT-41",
     "title": "World Space UI (billboards)",
-    "cluster": "C — demo-path gap findings",
+    "cluster": "C",
     "tags": "UI",
-    "tldr": null,
+    "tldr": "M11. No world-space UI.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1118,
-    "anchor": "M11-EXT-41"
+    "line": 904,
+    "anchor": "MM11-EXT-41"
   }
 ]
