@@ -1,2 +1,9 @@
+# Python
 __pycache__/
 *.pyc
+
+# Recon scratch / generated artifacts (keep transcripts, archive the rest)
+transcripts_api/
+*.scratch.*
+
+# Local analysis dumps not cited by a plan (archive/ holds the kept ones)
