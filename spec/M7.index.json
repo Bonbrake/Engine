@@ -2,210 +2,210 @@
   {
     "id": "M7-EXT-01",
     "title": "The Corpse-Pile Flattening Engine (Dynamic Static Hulls)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Connects M7 total persistence body lifecycles directly to your M2.7 character virtual movement loops. Consumes [M2-EXT-02]'s HibernationEvent on the M2 Event...",
     "depends_on": [],
     "depended_by": [],
-    "line": 67,
-    "anchor": "M7-EXT-01"
+    "line": 55,
+    "anchor": "MM7-EXT-01"
   },
   {
     "id": "M7-EXT-02",
     "title": "Electrochemical Oxidation Vector Blending (Structural Time-Lapse)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Implements the rendering data layer for your M7 deterministic time-lapse shaders.",
     "depends_on": [],
     "depended_by": [],
-    "line": 107,
-    "anchor": "M7-EXT-02"
+    "line": 90,
+    "anchor": "MM7-EXT-02"
   },
   {
     "id": "M7-EXT-03",
     "title": "Submerged Corpse Buoyancy Re-Activation",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Intersects M7 corpse gas pressure logs with M10 shallow-water Saint-Venant flooding fields.",
     "depends_on": [],
     "depended_by": [],
-    "line": 145,
-    "anchor": "M7-EXT-03"
+    "line": 123,
+    "anchor": "MM7-EXT-03"
   },
   {
     "id": "M7-EXT-04",
     "title": "Soft-Body Cloth, Tethered Rot-Cloth & Cosserat-Rod Vegetation (Jolt 5.6.0 Soft-Body Unlock)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "New capability unlocked by the Jolt 5.6.0 bump (item 8) — Jolt's XPBD-based soft-body system. Sits adjacent to M7's corpse-pile system (shares the same stati...",
     "depends_on": [],
     "depended_by": [],
-    "line": 185,
-    "anchor": "M7-EXT-04"
+    "line": 158,
+    "anchor": "MM7-EXT-04"
   },
   {
     "id": "M7-EXT-05",
     "title": "Perishable Item Decay & Cook-Safety Integral (Food Spoilage & Cooking)",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "general",
-    "tldr": null,
+    "tldr": "Reuses M7-EXT-02's existing Arrhenius material-decay formula (K_decay = A_humidity · e^(−E_a/(R·T_sector)), currently driving structural oxidation during chu...",
     "depends_on": [],
     "depended_by": [],
-    "line": 260,
-    "anchor": "M7-EXT-05"
+    "line": 228,
+    "anchor": "MM7-EXT-05"
   },
   {
     "id": "M7-EXT-06",
     "title": "Player-Facing Save Slot & Autosave UI Layer",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "UI",
-    "tldr": null,
+    "tldr": "Thin UI layer directly over the existing M7 StableId/Zstandard persistence engine, atomic file-swap, and rolling backup — zero new backend, purely the missin...",
     "depends_on": [],
     "depended_by": [],
-    "line": 304,
-    "anchor": "M7-EXT-06"
+    "line": 268,
+    "anchor": "MM7-EXT-06"
   },
   {
     "id": "M7-EXT-07",
     "title": "Hierarchical Delta-State Persistence (Procedural Seed-Diff Engine)",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Hierarchical Delta-State Persistence (Procedural Seed-Diff Engine)",
     "depends_on": [],
     "depended_by": [],
-    "line": 337,
-    "anchor": "M7-EXT-07"
-  },
-  {
-    "id": "M7-EXT-11",
-    "title": "Zstd Save-Compression & Streaming Store",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 345,
-    "anchor": "M7-EXT-11"
-  },
-  {
-    "id": "M7-EXT-10",
-    "title": "Binary Save Format Structural Schema Migrator",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 370,
-    "anchor": "M7-EXT-10"
-  },
-  {
-    "id": "M7-EXT-09",
-    "title": "Atomic File-Swap Append-Only State Transaction Logger",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 395,
-    "anchor": "M7-EXT-09"
+    "line": 296,
+    "anchor": "MM7-EXT-07"
   },
   {
     "id": "M7-EXT-08",
     "title": "Zstandard Custom Dictionary Static Compiler",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7. Builds a Zstd custom dictionary from save-data corpus for better compression.",
     "depends_on": [],
     "depended_by": [],
-    "line": 420,
-    "anchor": "M7-EXT-08"
+    "line": 299,
+    "anchor": "MM7-EXT-08"
+  },
+  {
+    "id": "M7-EXT-09",
+    "title": "Atomic File-Swap Append-Only State Transaction Logger",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M7. Atomic, append-only log of state transactions for crash-safe saves.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 347,
+    "anchor": "MM7-EXT-09"
+  },
+  {
+    "id": "M7-EXT-10",
+    "title": "Binary Save Format Structural Schema Migrator",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "M7. Versioned binary save schema with forward/back migrators.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 367,
+    "anchor": "MM7-EXT-10"
+  },
+  {
+    "id": "M7-EXT-11",
+    "title": "Zstd Save-Compression & Streaming Store",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "M7 + M7-EXT-08. Compresses + streams save chunks via Zstd.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 388,
+    "anchor": "MM7-EXT-11"
   },
   {
     "id": "M7-EXT-12",
     "title": "Save Compression (zstd)",
-    "cluster": "A — bootstrap core",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7. grep zstd|lz4 → 0 (vertex quantization only). Tick-hash replay unbounded.",
     "depends_on": [],
     "depended_by": [],
-    "line": 478,
-    "anchor": "M7-EXT-12"
+    "line": 408,
+    "anchor": "MM7-EXT-12"
   },
   {
     "id": "M7-EXT-13",
     "title": "Asset Checksum Integrity",
-    "cluster": "A — bootstrap core",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7/M0-EXT-28. FileSystem.cpp:7-11 only resolves mods/; no checksum. Corrupt mod loads silently.",
     "depends_on": [],
     "depended_by": [],
-    "line": 499,
-    "anchor": "M7-EXT-13"
+    "line": 424,
+    "anchor": "MM7-EXT-13"
   },
   {
     "id": "M7-EXT-14",
     "title": "Telemetry Tap + Consent Gate",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7/M13. grep telemetry → 0. Prereq for SLM Director + \"single tuned experience\".",
     "depends_on": [],
     "depended_by": [],
-    "line": 522,
-    "anchor": "M7-EXT-14"
+    "line": 442,
+    "anchor": "MM7-EXT-14"
   },
   {
     "id": "M7-EXT-15",
     "title": "Localization / Accessibility String-Table",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7/M11. grep localiz|string.table → 0. Route text through offline-generated (SLM) table; MSDF already renders it.",
     "depends_on": [],
     "depended_by": [],
-    "line": 543,
-    "anchor": "M7-EXT-15"
+    "line": 458,
+    "anchor": "MM7-EXT-15"
   },
   {
     "id": "M7-EXT-16",
     "title": "Save Corruption Recovery",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7. Atomic write planned but no rollback on parse failure.",
     "depends_on": [],
     "depended_by": [],
-    "line": 564,
-    "anchor": "M7-EXT-16"
+    "line": 475,
+    "anchor": "MM7-EXT-16"
   },
   {
     "id": "M7-EXT-17",
     "title": "Replay / Demo Record",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M0 (tick-hash). Only hash, no full state replay.",
     "depends_on": [],
     "depended_by": [],
-    "line": 590,
-    "anchor": "M7-EXT-17"
+    "line": 496,
+    "anchor": "MM7-EXT-17"
   },
   {
     "id": "M7-EXT-18",
     "title": "Save Encryption & Anti-Edit",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7. No save encryption.",
     "depends_on": [],
     "depended_by": [],
-    "line": 616,
-    "anchor": "M7-EXT-18"
+    "line": 517,
+    "anchor": "MM7-EXT-18"
   },
   {
     "id": "M7-EXT-19",
     "title": "Backward-Save Compatibility",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M7. No migration path.",
     "depends_on": [],
     "depended_by": [],
-    "line": 640,
-    "anchor": "M7-EXT-19"
+    "line": 536,
+    "anchor": "MM7-EXT-19"
   }
 ]

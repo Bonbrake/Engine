@@ -2,67 +2,71 @@
   {
     "id": "M4.6-EXT-01",
     "title": "Procedural Vertex Buffer Pooling & Dynamic GPU Compaction",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "GPU",
-    "tldr": null,
+    "tldr": "Complements M4.6 memory management and streams mesh data into M1 storage allocations.",
     "depends_on": [],
-    "depended_by": [],
-    "line": 52,
-    "anchor": "M4.6-EXT-01"
+    "depended_by": [
+      "M4.6-EXT-07"
+    ],
+    "line": 40,
+    "anchor": "MM4.6-EXT-01"
   },
   {
     "id": "M4.6-EXT-02",
     "title": "Asynchronous OS Overlapped Direct-VRAM Disk Streaming Queue",
-    "cluster": "A — bootstrap core",
+    "cluster": null,
     "tags": "OS, VRAM",
-    "tldr": null,
+    "tldr": "Backs M4.6's \"DirectStorage Streaming Pipelines\" bullet with a concrete I/O mechanism. [OVERLAP FLAG] Checks out native file handles from [M0-EXT-04]'s exist...",
     "depends_on": [],
     "depended_by": [],
-    "line": 89,
-    "anchor": "M4.6-EXT-02"
+    "line": 72,
+    "anchor": "MM4.6-EXT-02"
   },
   {
     "id": "M4.6-EXT-03",
     "title": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
     "depends_on": [],
     "depended_by": [],
-    "line": 125,
-    "anchor": "M4.6-EXT-03"
+    "line": 104,
+    "anchor": "MM4.6-EXT-03"
   },
   {
     "id": "M4.6-EXT-05",
     "title": "DirectStorage Decompression Buffer Ring Allocator Pool",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "DirectStorage",
-    "tldr": null,
+    "tldr": "M4.6 + M0 streaming. Ring-allocates GPU buffers for DirectStorage asset decompression so streaming never stalls.",
     "depends_on": [],
     "depended_by": [],
-    "line": 131,
-    "anchor": "M4.6-EXT-05"
-  },
-  {
-    "id": "M4.6-EXT-08",
-    "title": "BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)",
-    "cluster": "A — bootstrap core",
-    "tags": "BC7, SOURCED, FROM, PLAN, FILE",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 155,
-    "anchor": "M4.6-EXT-08"
+    "line": 105,
+    "anchor": "MM4.6-EXT-05"
   },
   {
     "id": "M4.6-EXT-07",
     "title": "Basis Universal GPU Texture Transcoder",
-    "cluster": "A — bootstrap core",
+    "cluster": "B",
     "tags": "GPU",
-    "tldr": null,
+    "tldr": "M4.6. Transcodes Basis Universal supercompressed textures to GPU formats at load.",
+    "depends_on": [
+      "M4.6-EXT-01"
+    ],
+    "depended_by": [],
+    "line": 125,
+    "anchor": "MM4.6-EXT-07"
+  },
+  {
+    "id": "M4.6-EXT-08",
+    "title": "BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)",
+    "cluster": "B",
+    "tags": "BC7, SOURCED, PLAN, FILE",
+    "tldr": "Zero mention previously. GPU-friendly BC7 (desktop)/ASTC (mobile) compression for material/atlas textures M4-EXT-25 + M4.5-EXT-26 RVT produce, cutting VRAM o...",
     "depends_on": [],
     "depended_by": [],
-    "line": 180,
-    "anchor": "M4.6-EXT-07"
+    "line": 201,
+    "anchor": "MM4.6-EXT-08"
   }
 ]
