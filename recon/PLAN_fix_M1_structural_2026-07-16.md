@@ -1,23 +1,35 @@
-# PLAN — Repair M1.md Structural Corruption (2026-07-16)
+# PLAN — Repair M1.md Structural Corruption (2026-07-16, REVISED 2026-07-16 eve)
 
-## Status
-- **BLOCKING**: `spec/M1.md` is corrupted in **HEAD** (already committed). The debug tool (`recon/ti_debug.py`) does NOT parse M1 and is unaffected — verified: 0 references to M1 in `ti_debug.py`, `--selftest` is 7/7 PASS.
-- This plan requires editing a **milestone spec file** (read-only gate). Execute only after explicit GO.
-- **GO gate is double-stored**: this committed plan file AND agent memory both carry the "ask GO before any M1.md edit" directive. Either surviving prevents the gate being silently dropped.
-- **Structural repair is BUILT + DRY-RUN VERIFIED** (`recon/fix_m1.py` → `recon/_m1_fixed.md`): un-welds 277 headers + 2025 subsections, strips 3693 foreign lines, keeps 41 M1-EXT blocks, adds anchors + injected layers, regens TOC + `M1.index.json`. Spec untouched. Running it on the real file yields **36 FIX** because 35/41 M1-EXT blocks are **missing real subsections in source** (not weld artifacts — measured in `recon/_m1_content_needs.json`). A reformat cannot invent them.
-- **Companion plan (content pass):** `recon/PLAN_fix_M1_content_pass_2026-07-16.md` — authors the 35 missing-subsection blocks. Also GO-gated. Do NOT run `--apply` on `fix_m1.py` until the content pass plan is also GO'd (or the file will read 36 FIX).
+## Status — REVISED after deep audit
+- **ROOT CAUSE FOUND**: `spec/M1.md` at HEAD is corrupted. The block boundaries were
+  DESTROYED at commit **`43aae1e` "spec: fix M1 duplicate/misplaced anchors"** which
+  collapsed **42 → 7** real `#### [M1-EXT-NN]` headers. After that, M1-EXT-13..21 etc.
+  have NO headers — their bodies are welded inside M1-EXT-12 as `#####` subsections.
+- **INTACT SOURCE = commit `baaf5cb`** (parent of 43aae1e): 42 well-formed
+  `#### [M1-EXT-NN]` headers, IDs ascending, real bodies, correctly bounded.
+  `beta` branch HEAD also still has 42. **Rebuild the reformat from `baaf5cb`, NOT HEAD.**
+- **Pipeline is BUILT + VERIFIED on the correct base**:
+  `recon/fix_m1.py --in <clean base> --out recon/_m1_draft.md` then
+  `recon/author_m1.py --in recon/_m1_draft.md --out recon/_m1_authored.md`.
+  Result: **`M1 | 42 | OK`**, 0 title mismatches vs `baaf5cb`, 0 mega-blocks, 0 leakage.
+- **GO gate is double-stored**: this plan file + agent memory both say "ask GO before any
+  `spec/M1.md` edit". The committed `recon/_m1_authored.md` is the DRY-RUN artifact; it is
+  NOT applied to `spec/M1.md` without explicit GO.
+- **Content findings**: the clean base's 42 blocks are mostly complete; `author_m1.py`
+  authors the genuinely-missing `Systems Touched/Math/How It Works` per block from each
+  block's REAL code (no filler). A repeated-subheader bug (setdefault discarding repeated
+  `##### Player-Facing Impact`) was fixed.
 
-## What Is Broken (measured, not guessed)
-| Check | Result |
-|---|---|
-| `#### [M1-EXT-` headers in M1.md | 41 |
-| `#### [M4-EXT-` headers in M1.md (foreign — belong in M4.md) | 32 |
-| `#### [M4.5-EXT-` headers in M1.md (foreign — belong in M4.5.md) | 29 |
-| frontmatter `ext_blocks` | **7** (wrong — should be 41) |
-| Same M4/M4.5 blocks present in their OWN files? | YES (M4-EXT-12/13/14/15 each appear once in M4.md) → M1 copies are pollution |
-| `git show HEAD:spec/M1.md` grep `M4-EXT` | 32 → corruption is committed, not working-copy only |
-| Run-on lines (single line holds whole block, no newlines) | pervasive from ~line 107 onward |
-| `Player-Facing Impact` + next `#### [M1-EXT-` welded on one line | 7 lines |
+## What Was Actually Broken (measured)
+| Check | HEAD | Intact base `baaf5cb` |
+|---|---|---|
+| real `#### [M1-EXT-` headers | **7** (corrupted) | **42** (correct) |
+| IDs ascending / bounded | n/a (welded) | yes, 1..42 |
+| foreign Mx blocks at line-start | many welded | many welded (stripped by fix_m1) |
+| frontmatter `ext_blocks` | 7 (wrong) | 42 |
+
+The earlier plan's "41 M1-EXT blocks / 3693 foreign lines" numbers were computed on the
+CORRUPTED HEAD and are INVALID. The true block count is **42** (from the intact base).
 
 The verifier reports only 4 "missing subsection" errors on M1, but that is a **false positive** caused by the welded/run-on lines desyncing its parser. The real defect is the foreign-block pollution + frontmatter + run-on formatting.
 
