@@ -46,8 +46,8 @@ def via_ytdlp(v):
     os.remove(jf)
     return text
 
-done = 0
 def main():
+    done = 0
     for v in ids:
         text = None
         for attempt in range(6):
