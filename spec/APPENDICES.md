@@ -45,7 +45,7 @@ Diary/journal entry generator composed from template grammars filled from simula
 The following `master_feature_list.md` tables were deliberately excluded from this v43 pass (solo dev asked to sequence engine layer first):
 
 * **Procedural Generation — World/Systems** (Poisson disk sampling, domain-warped noise, WFC adjacency validator [already `[M4-EXT-03]`/`[M4-EXT-11]`], chunk-boundary determinism test [route to §5.10 verification suite], graph-based room connectivity [already `[K-EXT-18]` + `[M4-EXT-08]`], rejection sampling [shared gate, not a standalone system — see draft pass-2 note], seed-sharing [already `[M2-EXT-54]`], cellular automata [now `[M4-EXT-24]`], graph grammars [covered by Procedural Mission & Event Director, Dormans & Bakkes], genetic algorithms [now `[M8.6-EXT-09]`], Whittaker biome classification [now `[M4-EXT-23]`], thermal erosion, spline-based roads/rivers [roads fully covered by `[M4-EXT-01]`/`[M4-EXT-19]`/`[M4-EXT-10]`; rivers half-covered — bank/confluence hydrology detail only], hidden difficulty correction) — deferred, engine layer first.
-* **Procedural Asset Generation (Solo/No-Artist)** (histogram-preserving blending [now `[M4-EXT-25]`], PPTBF materials [now `[M4-EXT-25]`], node-graph procedural materials [now `[M4-EXT-25]`], noise→normal map derivation [now `[M4-EXT-25]`], procedural mesh via primitive+grammar [already `[K-EXT-17]`], procedural foliage L-system [now `[M4-EXT-28]`], procedural color palette [now `[M4-EXT-25]`], procedural UV unwrap [recommended `[M4-EXT-26]`-class, deliberately not merged this pass — decal atlas renumbered to `[M4-EXT-26]` instead], procedural skeletal rig generation [already `[M5.1-EXT-03]`], procedural decal atlasing [now `[M4-EXT-26]`], procedural loot icon generation [now `[M8-EXT-10]`]) — deferred, engine layer first. See teq-v78-procedural-gapfill-draft.md close-out notes (pass 1 + pass 2) and Part A Hermes gap-fill appendix for the ID citations above.
+* **Procedural Asset Generation (Solo/No-Artist)** (histogram-preserving blending [now `[M4-EXT-25]`], PPTBF materials [now `[M4-EXT-25]`], node-graph procedural materials [now `[M4-EXT-25]`], noise→normal map derivation [now `[M4-EXT-25]`], procedural mesh via primitive+grammar [already `[K-EXT-17]`], procedural foliage L-system [now `[M4-EXT-28]`], procedural color palette [now `[M4-EXT-25]`], procedural UV unwrap [recommended `[M4-EXT-26]`-class, deliberately not merged this pass — decal atlas renumbered to `[M4-EXT-26]` instead], procedural skeletal rig generation [already `[M5-EXT-19]`], procedural decal atlasing [now `[M4-EXT-26]`], procedural loot icon generation [now `[M8-EXT-10]`]) — deferred, engine layer first. See teq-v78-procedural-gapfill-draft.md close-out notes (pass 1 + pass 2) and Part A Hermes gap-fill appendix for the ID citations above.
 * **AI** (behavior tree/planning layer, line-of-sight result caching) — deferred, engine layer first.
 * **Audio** (dynamic/adaptive music, voice-line barking system) — deferred, engine layer first.
 * **Meta/UX/Tooling** (pseudo-localization QA mode, save versioning/migration, save backup rotation, cross-progression/cloud save, remote-config balance patching, terrain deformation persistence, weapon attachment/modification, NPC daily schedules, curated environmental storytelling props, frame-time variance display, predictive asset streaming, input buffering/coyote-time, session-level difficulty rubber-band, server-authoritative anti-cheat, death-cam/kill-cam replay) — deferred, engine layer first. (Mod load-order conflict detection removed from this deferred bucket — no longer deferred, see **Appendix L**.)
@@ -114,7 +114,7 @@ Consolidated, deduplicated list from the architecture gap-finding pass. IDs foll
 
 **Merge audit (v67) — `updateforv66.txt` fully integrated, nothing dropped.**
 
-**Merge audit (v68) — two gaps found in the v67 pass, now closed.** The v67 audit above covered the EXT-block items but silently missed two large non-EXT-formatted sections of `updateforv66.txt`: Section 3's 20-layer environmental simulation hierarchy (never mentioned as included *or* excluded — just dropped), and Section 6's standalone sandboxed verification test suite. Both are now in: the 20 layers are added as 20 full EXT blocks — `[M3-EXT-07/08]` (structural stress-tensor cracking, particulate deposition), `[M4-EXT-12..19]` (tectonics, cave carving, stratigraphy, Darcy aquifer extension to the existing M10 groundwater grid, generation-time Saint-Venant erosion reusing `[M10-EXT-01]`'s flux stencil, edaphic soil chemistry, space-colonization canopy, road-graph exclusion splines), `[M4.5-EXT-19/20]` (Heiligenschein/anisotropic micro-optics, Beer-Lambert underwater extinction), `[M6-EXT-11]` (acoustic voxel occlusion, pairs with EXT-20), `[M6.5-EXT-11/12]` (fBm foliage kinematics, volumetric micro-atmospherics/heat-shimmer), `[M9-EXT-19]` (POM topography deform + persistent ruts, fills the displacement-channel stub `[M9-EXT-04]` was already reading), `[M10-EXT-02..06]` (Keplerian sun/moon solver, Bruneton-Nishita scattering, cryospheric frost, Navier-Stokes wind field, phenological seasonal canopy). None of these duplicate an existing system — each explicitly wires into something already in the doc (stratum table, groundwater grid, road graph, wind field, season index) rather than adding a second version of it. The verification suite is added as new §5.10, using local mock structs so it never collides with canonical types. First pass flagged six items as "duplicates" and left them out; on a closer re-read most weren't true duplicates, just overlapping-sounding names — they're folded in below instead: `[M1-EXT-11]` compute→indirect-draw barrier, `[M4.5-EXT-18]` skinned Visibility-Buffer cache, `[M2-EXT-68]` player flood buoyancy, `[M4-EXT-11]` WFC contradiction recovery, `[M2-EXT-57]` fixed-point mesh-vector quantization (sibling to `[M2-EXT-53]`'s scalar version, not a dupe — that one's a 16.16 scalar for damage/pathfinding math, this one's a 24.8 `vec3` for procedural mesh-generation determinism, different data shape), `[M13-EXT-12]` radio scrambler, `[M13-EXT-13]` survivor behavior-tree flavor advisor, plus enriched fields on `[M13-EXT-04]` and `[M13-EXT-09]` pulled from the update's richer telemetry tokens, `[M9-EXT-18]` (routes vehicles onto the existing `[M5.4-EXT-06]` road graph instead of building a second one), and new §5.9 naming lexicon. Two things genuinely were exact duplicates and stayed out: `AlignToCacheLine` (byte-identical to `[M0-EXT-01]`, nothing to add), and a second `SurfaceFrictionSample` struct with different field names for the same six multiplier slots — the canonical one (defined under M9 below) is what everything else in this doc already writes to, so a second definition would just reintroduce the exact order-dependent bug the front-matter audit item #3 fixed; if you want the update's field names instead, rename in one place (the canonical struct), don't add a second struct. One more from the update, `DirectorTelemetryStateToken`, wasn't added as an `M13-EXT` item at all — horde-pacing telemetry (avg player health, shots fired, SEIR severity) already feeds M5.4's own `ThompsonBanditTracker`, and that's deterministic tuning logic, not narrative text, so it stays in M5.4 rather than being routed through the SLM.
+**Merge audit (v68) — two gaps found in the v67 pass, now closed.** The v67 audit above covered the EXT-block items but silently missed two large non-EXT-formatted sections of `updateforv66.txt`: Section 3's 20-layer environmental simulation hierarchy (never mentioned as included *or* excluded — just dropped), and Section 6's standalone sandboxed verification test suite. Both are now in: the 20 layers are added as 20 full EXT blocks — `[M3-EXT-07/08]` (structural stress-tensor cracking, particulate deposition), `[M4-EXT-12..19]` (tectonics, cave carving, stratigraphy, Darcy aquifer extension to the existing M10 groundwater grid, generation-time Saint-Venant erosion reusing `[M10-EXT-01]`'s flux stencil, edaphic soil chemistry, space-colonization canopy, road-graph exclusion splines), `[M4.5-EXT-19/20]` (Heiligenschein/anisotropic micro-optics, Beer-Lambert underwater extinction), `[M6-EXT-11]` (acoustic voxel occlusion, pairs with EXT-20), `[M6.5-EXT-11/12]` (fBm foliage kinematics, volumetric micro-atmospherics/heat-shimmer), `[M9-EXT-19]` (POM topography deform + persistent ruts, fills the displacement-channel stub `[M9-EXT-04]` was already reading), `[M10-EXT-02..06]` (Keplerian sun/moon solver, Bruneton-Nishita scattering, cryospheric frost, Navier-Stokes wind field, phenological seasonal canopy). None of these duplicate an existing system — each explicitly wires into something already in the doc (stratum table, groundwater grid, road graph, wind field, season index) rather than adding a second version of it. The verification suite is added as new §5.10, using local mock structs so it never collides with canonical types. First pass flagged six items as "duplicates" and left them out; on a closer re-read most weren't true duplicates, just overlapping-sounding names — they're folded in below instead: `[M1-EXT-11]` compute→indirect-draw barrier, `[M4.5-EXT-18]` skinned Visibility-Buffer cache, `[M2-EXT-68]` player flood buoyancy, `[M4-EXT-11]` WFC contradiction recovery, `[M2-EXT-57]` fixed-point mesh-vector quantization (sibling to `[M2-EXT-53]`'s scalar version, not a dupe — that one's a 16.16 scalar for damage/pathfinding math, this one's a 24.8 `vec3` for procedural mesh-generation determinism, different data shape), `[M13-EXT-12]` radio scrambler, `[M13-EXT-13]` survivor behavior-tree flavor advisor, plus enriched fields on `[M13-EXT-04]` and `[M13-EXT-09]` pulled from the update's richer telemetry tokens, `[M9-EXT-18]` (routes vehicles onto the existing `[M5-EXT-51]` road graph instead of building a second one), and new §5.9 naming lexicon. Two things genuinely were exact duplicates and stayed out: `AlignToCacheLine` (byte-identical to `[M0-EXT-01]`, nothing to add), and a second `SurfaceFrictionSample` struct with different field names for the same six multiplier slots — the canonical one (defined under M9 below) is what everything else in this doc already writes to, so a second definition would just reintroduce the exact order-dependent bug the front-matter audit item #3 fixed; if you want the update's field names instead, rename in one place (the canonical struct), don't add a second struct. One more from the update, `DirectorTelemetryStateToken`, wasn't added as an `M13-EXT` item at all — horde-pacing telemetry (avg player health, shots fired, SEIR severity) already feeds M5.4's own `ThompsonBanditTracker`, and that's deterministic tuning logic, not narrative text, so it stays in M5.4 rather than being routed through the SLM.
 
 
 ## 5.1 Architecture, Threading, Memory, Drivers (M0 / M1 / M1.9 / M4.6)
@@ -344,7 +344,7 @@ void ApplyFloodBuoyancy(CharacterPhysiologyComponent& phys, float waterDepthAtFe
 
 **[M9-EXT-18] Vehicle Convoy Long-Range Router** — dedup note, no new system
 
-Purpose: faction/AI vehicle convoys need a lightweight macro-graph for long-range routing distinct from the fine NavMesh — but `[M5.4-EXT-06]`'s abstract street/highway node graph already exists for exactly this (built for off-screen horde routing). Extend that graph with a vehicle-lane-width/speed-limit field and reuse it here; do not stand up a second road-graph system.
+Purpose: faction/AI vehicle convoys need a lightweight macro-graph for long-range routing distinct from the fine NavMesh — but `[M5-EXT-51]`'s abstract street/highway node graph already exists for exactly this (built for off-screen horde routing). Extend that graph with a vehicle-lane-width/speed-limit field and reuse it here; do not stand up a second road-graph system.
 
 
 ## 5.3 GPU Render Pipeline (M4.5)
@@ -570,25 +570,25 @@ Long shadows from tall ruins and smoke stacks stay soft and correct at distance 
 
 ## 5.4 AI, Director, Propagation (M5.1 / M5.3 / M5.4)
 
-**[M5.1-EXT-07] / [M5.3-EXT-XX] Optimal Reciprocal Collision Avoidance (ORCA) Solver**
+**[M5-EXT-23] / [M5.3-EXT-XX] Optimal Reciprocal Collision Avoidance (ORCA) Solver**
 
 Purpose: standard ORCA local avoidance so hordes don't clip/overlap at close range — pairs with your existing Reynolds flocking (subsystem #15 in Section 2) rather than replacing it; ORCA governs hard collision avoidance, boids govern soft group behavior.
 
-**[M5.3-EXT-08] Visual Occlusion Sector Ray-March Pre-Filter**
+**[M5-EXT-46] Visual Occlusion Sector Ray-March Pre-Filter**
 
 Purpose: coarse macro-voxel LOS approximation to cheaply reject most raycasts before falling back to full-res traces for AI perception.
 
 **[M5.4-EXT-04] Thompson-Sampling Actor Weights Snapshot Persistence Register** — canonical copy is under §5.1/M5.4 in the main body; see there. *(v75: was a byte-identical duplicate, no divergence found — collapsed to a stub for the same reason as `[M1-EXT-09]` above.)*
 
-**[M5.4-EXT-05] Reaction-Diffusion Grid Sub-sampled Boundary Welder**
+**[M5-EXT-50] Reaction-Diffusion Grid Sub-sampled Boundary Welder**
 
 Purpose: blends the panic/fear field (subsystem #26-equivalent reaction-diffusion grid) across sector boundaries so AI panic propagation doesn't stall or discontinuity-snap at chunk edges.
 
-*[M5.4-EXT-06] Hierarchical A Macro-Cell Long-Range Router**
+*[M5-EXT-51] Hierarchical A Macro-Cell Long-Range Router**
 
 Purpose: routes off-screen horde movement across unstreamed sectors on an abstract street/highway node graph, avoiding full pathfinding cost for entities the player can't see.
 
-**[M5.4-EXT-07] Holling Type II Cannibalism Feeding Satiator**
+**[M5-EXT-52] Holling Type II Cannibalism Feeding Satiator**
 
 Purpose: saturating consumption-rate curve binding idle zombies to corpse piles as a tactical distraction mechanic.
 
@@ -1160,10 +1160,10 @@ Non-trivial techniques were verified against real published sources:
 
 #### `[M5.2-EXT-16]` (provisional) IK Rig Metadata Serialization Loader
 
-Fleshes the §5.8 one-liner **IK Rig Metadata Serialization Loader** (line 9104). The runtime `[M5.2-EXT-08]` IK Rig Asset is declared as an in-memory struct but has no disk format or loader; this entry supplies both so skeletons load their bone-chain definitions from data, not hardcoded bone-name lookups.
+Fleshes the §5.8 one-liner **IK Rig Metadata Serialization Loader** (line 9104). The runtime `[M5-EXT-32]` IK Rig Asset is declared as an in-memory struct but has no disk format or loader; this entry supplies both so skeletons load their bone-chain definitions from data, not hardcoded bone-name lookups.
 
 ##### Systems Touched
-Consumed by `[M5.2-EXT-08]` (IK Rig Asset struct) and `[M5.2-EXT-09]` (Motion-Warping target resolution). Feeds every end-effector consumer in M5.2 (melee-hit alignment, vault landing, door interaction). Distinct from M2.6 glTF/prefab loading (`std::unordered_map` path cache, line 1188), which loads meshes/scenes — not bone-chain + pole-vector metadata.
+Consumed by `[M5-EXT-32]` (IK Rig Asset struct) and `[M5-EXT-33]` (Motion-Warping target resolution). Feeds every end-effector consumer in M5.2 (melee-hit alignment, vault landing, door interaction). Distinct from M2.6 glTF/prefab loading (`std::unordered_map` path cache, line 1188), which loads meshes/scenes — not bone-chain + pole-vector metadata.
 
 ##### Math
 No closed-form solve; a declarative asset: `IKRigAsset{skeletonId, chains:[{boneIdx[], poleVectorHint}]}`. Hashing for the on-disk table reuses the same FNV-1a keying idiom M2.6 already uses for the geometry cache (`uint64_t key = FNV1a(path)`), so the loader slots into that existing map type.
@@ -1354,13 +1354,13 @@ RT shadows / GI denoise converge in fewer frames at the same cost, so the game h
 Fleshes the §5.8 one-liner **Kinematic Full-Body IK Surface Locker** (line 9115): pins hands/feet to moving vehicle surfaces (e.g. a player bracing on a rocking truck bed), the full-body counterpart to M5.2's upper-body override.
 
 ##### Systems Touched
-Consumes `[M5.2-EXT-08]` (IK Rig Asset — bone chains) and `[M5.2-EXT-09]` (motion-warping target alignment). Targets are sampled from M9 vehicle rigid-body surfaces (via the existing kinematic virtual-controller surface-friction path, line 1364). Distinct from `[M5.2-EXT-05]` upper-body override (torso/arms only) — this drives the whole-body plant (both feet + support hand).
+Consumes `[M5-EXT-32]` (IK Rig Asset — bone chains) and `[M5-EXT-33]` (motion-warping target alignment). Targets are sampled from M9 vehicle rigid-body surfaces (via the existing kinematic virtual-controller surface-friction path, line 1364). Distinct from `[M5-EXT-29]` upper-body override (torso/arms only) — this drives the whole-body plant (both feet + support hand).
 
 ##### Math
 Two-bone (or FABRIK, verified: Aristidou & Lasenby 2011) chain solve per planted limb toward a moving target `T(t)` on the vehicle surface: `solved = FABRIK(chain, root, T(t))`, constrained so the planted point tracks `T(t)` with a max stretch `L_max`; if `|T(t) - root| > L_max` the character is peeled off (loss of grip) rather than accepting an impossible pose.
 
 ##### How It Works
-When the player initiates a brace (or the AI director decides a zombie clings), the relevant limb targets are bound to sampled surface points on the vehicle body. Each frame the targets are re-sampled from the moving rigid transform, the IK chain is re-solved (cheap two-bone for limbs, FABRIK for a full-body plant), and the result is blended into the final pose after `[M5.2-EXT-05]`. On separation beyond `L_max` the lock releases cleanly.
+When the player initiates a brace (or the AI director decides a zombie clings), the relevant limb targets are bound to sampled surface points on the vehicle body. Each frame the targets are re-sampled from the moving rigid transform, the IK chain is re-solved (cheap two-bone for limbs, FABRIK for a full-body plant), and the result is blended into the final pose after `[M5-EXT-29]`. On separation beyond `L_max` the lock releases cleanly.
 
 ##### Reference Implementation
 ```cpp
@@ -1490,7 +1490,7 @@ Net Part A output: **10 new full EXT blocks authored** (M5.2-EXT-14, M11-EXT-09,
 **[M1-EXT-27] Uniform-Grid Spatial Hash Broad-Phase**
 
 ##### Systems Touched
-Standalone broad-phase for ECS physics/proximity queries, distinct from M6.5's blood-spatter density SpatialHash (that is a render-side density accumulator, not a queryable broad-phase). Consumed by `[M1-EXT-06]`'s SPSC queues and `[M1-EXT-26]`'s chunk-boundary transfer, and by `[M3-EXT-11]` / `[M5.4-EXT-09]` below. Runs on the enkiTS scheduler (not Jolt's — two-scheduler rule).
+Standalone broad-phase for ECS physics/proximity queries, distinct from M6.5's blood-spatter density SpatialHash (that is a render-side density accumulator, not a queryable broad-phase). Consumed by `[M1-EXT-06]`'s SPSC queues and `[M1-EXT-26]`'s chunk-boundary transfer, and by `[M3-EXT-11]` / `[M5-EXT-53]` below. Runs on the enkiTS scheduler (not Jolt's — two-scheduler rule).
 
 ##### Math
 World partitioned into uniform cells of size `c`. Each entity inserts its handle into every cell its AABB overlaps: `cell = floor(pos / c)`. Query: gather candidates from the 3x3 (or 2x2x2) neighboring cells. Hash map `cellKey -> vector<handle>` (open-addressing or `std::unordered_map` keyed by `hash(x,y,z)`).
@@ -1535,10 +1535,10 @@ bool HzbOccluded(const AABB& b, Texture2D hzb, float proj[16]) {
 Distant ruined city blocks behind a closer wall stop consuming vertex/draw budget — the GPU-driven culling win that lets the streaming world draw far without choking the floor spec.
 
 
-**[M5.2-EXT-15] XPBD Rope/Tether Constraint**
+**[M5-EXT-38] XPBD Rope/Tether Constraint**
 
 ##### Systems Touched
-Line 5850 notes the long-range-attachment (tether) constraint is used internally for cloth/vegetation but not exposed; this promotes it to a reusable XPBD distance/rope constraint. Consumes `[M5.2]`'s existing constraint solver and `[M5.2-EXT-08]`'s IK/joint infra. Used by zipline/grappling/winch mechanics and drag-ragdoll.
+Line 5850 notes the long-range-attachment (tether) constraint is used internally for cloth/vegetation but not exposed; this promotes it to a reusable XPBD distance/rope constraint. Consumes `[M5.2]`'s existing constraint solver and `[M5-EXT-32]`'s IK/joint infra. Used by zipline/grappling/winch mechanics and drag-ragdoll.
 
 ##### Math
 Extended Position-Based Dynamics (Macklin et al. 2016): each distance constraint has a compliance `α` and accumulates a Lagrange multiplier `λ` per substep, making stiffness independent of iteration count / timestep: `Δx = (w₁w₂ / (w₁+w₂+α̃)) · C · ∇C`, with `α̃ = α / Δt²`. A rope = chain of N distance constraints solved with substep XPBD (e.g. 4 substeps, 1 iteration each) for stable, non-stretchy ropes.
@@ -1747,7 +1747,7 @@ void EncodeBC7(const RGBA* block4x4, uint8_t out128[16], int quality) {
 The floor-spec VRAM budget stretches to hold more unique materials/atlases at once — fewer streaming hitches when rounding a corner into a new biome.
 
 
-**[M5.4-EXT-09] Fear-Field Diffusion via Spatial Hash]
+**[M5-EXT-53] Fear-Field Diffusion via Spatial Hash]
 
 ##### Systems Touched
 `[M5.4]`'s Reaction-Diffusion Fear Field currently lacks its diffusion step's neighbor mechanism; this runs it over `[M1-EXT-27]`'s spatial hash so the field spreads to nearby agents/cells cheaply. Reads `[M5.4]`'s `TensionSignal`; feeds spawn-density the same director already uses.
