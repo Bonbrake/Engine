@@ -2,309 +2,846 @@
   {
     "id": "M2-EXT-01",
     "title": "Asynchronous Collision Cooking & Proxy Primitive Swapping Queue",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Extends M2 (Jolt Physics engine setup) and pairs with M4 chunk streaming topologies.",
     "depends_on": [],
     "depended_by": [],
-    "line": 127,
-    "anchor": "M2-EXT-01"
+    "line": 117,
+    "anchor": "MM2-EXT-01"
   },
   {
     "id": "M2-EXT-02",
     "title": "Jolt Physics Multi-Body Rigid Island Sleep Event Bus Bridge",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "[M7-EXT-01] The Corpse-Pile Flattening Engine already says \"When an EnTT ragdoll entity transitions to a sleep flag...\" but M2 never declared the mechanism t...",
     "depends_on": [],
     "depended_by": [],
-    "line": 172,
-    "anchor": "M2-EXT-02"
+    "line": 158,
+    "anchor": "MM2-EXT-02"
   },
   {
     "id": "M2-EXT-03",
     "title": "Continuous Narrow-Phase Contact Point Query Collector Cache",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "Sits in front of Jolt's narrow-phase query API, deduping redundant raycasts/sweeps fired by multiple systems in the same frame — melee parry ([M2-EXT-29]), A...",
+    "depends_on": [
+      "M2-EXT-29"
+    ],
     "depended_by": [],
-    "line": 204,
-    "anchor": "M2-EXT-03"
+    "line": 186,
+    "anchor": "MM2-EXT-03"
   },
   {
     "id": "M2-EXT-04",
     "title": "Fixed-Timestep Mechanical Joint Constraint Kinetic Energy Clamper",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Hardening pass alongside [M5.2-EXT-01]'s Stable-PD reformulation. That feature stabilizes ragdoll joint *torque generation*; this clamper is a last-resort ha...",
     "depends_on": [],
     "depended_by": [],
-    "line": 237,
-    "anchor": "M2-EXT-04"
+    "line": 215,
+    "anchor": "MM2-EXT-04"
   },
   {
     "id": "M2-EXT-05",
     "title": "Mechanical Muscle Exhaustion Joint-Friction Damping Adder",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Mechanical Muscle Exhaustion Joint-Friction Damping Adder",
     "depends_on": [],
     "depended_by": [],
-    "line": 271,
-    "anchor": "M2-EXT-05"
+    "line": 245,
+    "anchor": "MM2-EXT-05"
   },
   {
     "id": "M2-EXT-06",
     "title": "Jolt-to-EnTT Double-Precision Transform Remapper",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2 (Jolt) + M2.6 (EnTT Transform). Each tick maps Jolt's single-precision body transform back to the authoritative double-precision EnTT Transform.",
     "depends_on": [],
     "depended_by": [],
-    "line": 277,
-    "anchor": "M2-EXT-06"
+    "line": 247,
+    "anchor": "MM2-EXT-06"
   },
   {
     "id": "M2-EXT-07",
     "title": "Kinematic Virtual Sweep Tunneling Safeguard",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2 character controller + M2.6 collision. Clamps fast kinematic steps to a swept result so the body can't pass through thin geometry.",
     "depends_on": [],
     "depended_by": [],
-    "line": 301,
-    "anchor": "M2-EXT-07"
+    "line": 267,
+    "anchor": "MM2-EXT-07"
   },
   {
     "id": "M2-EXT-08",
     "title": "Character Controller / Player Movement",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2. grep CharacterController|CharacterBody → 0. Jolt has Character but nothing wires it to input.",
     "depends_on": [],
     "depended_by": [],
-    "line": 359,
-    "anchor": "M2-EXT-08"
+    "line": 316,
+    "anchor": "MM2-EXT-08"
   },
   {
     "id": "M2-EXT-09",
     "title": "Animation / Skinning",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2/M5. grep Animation|SkinnedMesh → 0. bufferDeviceAddress enabled (Device.cpp:61,116) but unused in shaders.",
     "depends_on": [],
     "depended_by": [],
-    "line": 380,
-    "anchor": "M2-EXT-09"
+    "line": 333,
+    "anchor": "MM2-EXT-09"
   },
   {
     "id": "M2-EXT-10",
     "title": "Ballistics / Projectile Resolution",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.9. BulletComponent exists but grep projectile|ricochet|penetration → only data fields, no solver.",
     "depends_on": [],
     "depended_by": [],
-    "line": 401,
-    "anchor": "M2-EXT-10"
+    "line": 350,
+    "anchor": "MM2-EXT-10"
   },
   {
     "id": "M2-EXT-11",
     "title": "Destructible = Placeholder Swap Only",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2/M3. Destructible.h has intact/destroyed handles; grep fracture|Fracture → 0.",
     "depends_on": [],
     "depended_by": [],
-    "line": 422,
-    "anchor": "M2-EXT-11"
+    "line": 367,
+    "anchor": "MM2-EXT-11"
   },
   {
     "id": "M2-EXT-12",
     "title": "Vehicle System",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2/M9. grep Vehicle|wheel|suspension → 0. M9 turrets have no base.",
     "depends_on": [],
     "depended_by": [],
-    "line": 443,
-    "anchor": "M2-EXT-12"
+    "line": 384,
+    "anchor": "MM2-EXT-12"
   },
   {
     "id": "M2-EXT-13",
     "title": "Hit/Limb Resolution Pipeline",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.9. DamageEvent.LimbId (Components.h:20-29) but no raycast-hit→limb mapping; no mitigation producing ResolvedDamageEvent.",
     "depends_on": [],
     "depended_by": [],
-    "line": 464,
-    "anchor": "M2-EXT-13"
+    "line": 401,
+    "anchor": "MM2-EXT-13"
   },
   {
     "id": "M2-EXT-14",
     "title": "Physics Debug Draw (shipping toggle)",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2. PhysicsDebugRenderer exists but JPH_DEBUG_RENDERER-gated; no shipping toggle.",
     "depends_on": [],
     "depended_by": [],
-    "line": 487,
-    "anchor": "M2-EXT-14"
+    "line": 420,
+    "anchor": "MM2-EXT-14"
   },
   {
     "id": "M2-EXT-15",
     "title": "No Real Content / Player / Zombie",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2/M5. Only prefab spawns 3 test entities (one UnregisteredComponent silently dropped). No player, zombie, weapon.",
     "depends_on": [],
     "depended_by": [],
-    "line": 508,
-    "anchor": "M2-EXT-15"
+    "line": 437,
+    "anchor": "MM2-EXT-15"
   },
   {
     "id": "M2-EXT-16",
     "title": "Save/Load Layer",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2/M7. grep serialize|SaveGame → 0. Plant SaveSchemaVersion+NetworkProtocolVersion (separate), atomic write (tmp→fsync→checksum→rename), user-data dir via As...",
     "depends_on": [],
     "depended_by": [],
-    "line": 529,
-    "anchor": "M2-EXT-16"
+    "line": 454,
+    "anchor": "MM2-EXT-16"
   },
   {
     "id": "M2-EXT-17",
     "title": "World-Epoch Clock",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2/M7. grep WorldEpoch|simulated-seconds → 0. Sim time = frameCount/accumulator.",
     "depends_on": [],
     "depended_by": [],
-    "line": 550,
-    "anchor": "M2-EXT-17"
+    "line": 471,
+    "anchor": "MM2-EXT-17"
   },
   {
     "id": "M2-EXT-18",
     "title": "Survival Physiology (stamina/hunger)",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.9. Components.h has PerkPoints but no survival loop.",
     "depends_on": [],
     "depended_by": [],
-    "line": 571,
-    "anchor": "M2-EXT-18"
+    "line": 488,
+    "anchor": "MM2-EXT-18"
   },
   {
     "id": "M2-EXT-19",
     "title": "Crafting / Recipes / Workbench",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M8. No crafting system.",
     "depends_on": [],
     "depended_by": [],
-    "line": 597,
-    "anchor": "M2-EXT-19"
+    "line": 510,
+    "anchor": "MM2-EXT-19"
   },
   {
     "id": "M2-EXT-20",
     "title": "Skills / Perks / Progression",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M8.7. PerkPoints exists, no system.",
     "depends_on": [],
     "depended_by": [],
-    "line": 623,
-    "anchor": "M2-EXT-20"
+    "line": 532,
+    "anchor": "MM2-EXT-20"
   },
   {
     "id": "M2-EXT-21",
     "title": "Procedural Variation (bio-weight)",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M5.1. No bio-weight/visual variation generator.",
     "depends_on": [],
     "depended_by": [],
-    "line": 649,
-    "anchor": "M2-EXT-21"
+    "line": 554,
+    "anchor": "MM2-EXT-21"
   },
   {
     "id": "M2-EXT-22",
     "title": "Physics Determinism Test",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2. No physics-determinism CI.",
     "depends_on": [],
     "depended_by": [],
-    "line": 675,
-    "anchor": "M2-EXT-22"
+    "line": 576,
+    "anchor": "MM2-EXT-22"
   },
   {
     "id": "M2-EXT-23",
     "title": "Reload Mechanics & Cancel",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.7. No reload-cancel or reload-state machine in code.",
     "depends_on": [],
     "depended_by": [],
-    "line": 701,
-    "anchor": "M2-EXT-23"
+    "line": 598,
+    "anchor": "MM2-EXT-23"
   },
   {
     "id": "M2-EXT-24",
     "title": "Recoil & Spread Model",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.7/M2.9. No recoil or spread solver.",
     "depends_on": [],
     "depended_by": [],
-    "line": 725,
-    "anchor": "M2-EXT-24"
+    "line": 618,
+    "anchor": "MM2-EXT-24"
   },
   {
     "id": "M2-EXT-25",
     "title": "Aiming & ADS System",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "ADS",
-    "tldr": null,
+    "tldr": "M2.7. No aim-down-sights or hip/ADS toggle.",
     "depends_on": [],
     "depended_by": [],
-    "line": 749,
-    "anchor": "M2-EXT-25"
+    "line": 638,
+    "anchor": "MM2-EXT-25"
   },
   {
     "id": "M2-EXT-26",
     "title": "Damage Types & Materials",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2/M8. No per-material damage response.",
     "depends_on": [],
     "depended_by": [],
-    "line": 773,
-    "anchor": "M2-EXT-26"
+    "line": 658,
+    "anchor": "MM2-EXT-26"
   },
   {
     "id": "M2-EXT-27",
     "title": "Body Temperature & Weather Exposure",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.9. No temperature system.",
     "depends_on": [],
     "depended_by": [],
-    "line": 797,
-    "anchor": "M2-EXT-27"
+    "line": 678,
+    "anchor": "MM2-EXT-27"
   },
   {
     "id": "M2-EXT-28",
     "title": "Encumbrance & Stamina Drain",
-    "cluster": "B — input / determinism / save / platform",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.9. No carry-weight system.",
     "depends_on": [],
     "depended_by": [],
-    "line": 821,
-    "anchor": "M2-EXT-28"
+    "line": 698,
+    "anchor": "MM2-EXT-28"
+  },
+  {
+    "id": "M2-EXT-29",
+    "title": "Kinetic Melee Edge Parrying & Character Stumble Impulses",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Extends M2.7 (Tactile Melee Projections) and intercepts incoming threats via the EventBus (M2).",
+    "depends_on": [],
+    "depended_by": [
+      "M2-EXT-03"
+    ],
+    "line": 717,
+    "anchor": "MM2-EXT-29"
+  },
+  {
+    "id": "M2-EXT-30",
+    "title": "Thermo-Elastic Barrel Distortion & Aim Bloom",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Deepens M2.7 core gunplay mechanics and utilizes your M8 data-driven JSON caliber variables.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 751,
+    "anchor": "MM2-EXT-30"
+  },
+  {
+    "id": "M2-EXT-31",
+    "title": "Rotational Weapon Inertia Tensors (Tactile Gunweight Lag)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Layers mechanical weight-lag metrics onto camera view calculations and weapon mesh rendering, reading mass/dimension fields from M8's data-driven JSON item b...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 793,
+    "anchor": "MM2-EXT-31"
+  },
+  {
+    "id": "M2-EXT-32",
+    "title": "Kinematic Vault-Slide Projection",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Extends M2.7 (JPH::CharacterVirtual controller updates) and pairs with M2.9 Ledge IK parameters.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 824,
+    "anchor": "MM2-EXT-32"
+  },
+  {
+    "id": "M2-EXT-33",
+    "title": "Grounded Surface Viscosity Weapon Stabilization",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Modifies M2.7 weapon cover stabilization variables using M9 surface friction queries.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 860,
+    "anchor": "MM2-EXT-33"
+  },
+  {
+    "id": "M2-EXT-34",
+    "title": "Stowed Weapon Swing Pendulum Inertia",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Enhances M2.7 kinematic player input parsing and updates weapon mesh rendering offsets.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 894,
+    "anchor": "MM2-EXT-34"
+  },
+  {
+    "id": "M2-EXT-35",
+    "title": "Atmospheric Powder-Fouling Friction Accumulation",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Complements M2.7 core weapon mechanics, writes the canonical BarrelHeat.fouling field (locked in M2.7's base Implementation Steps), and scales over M10 envir...",
+    "depends_on": [
+      "M2-EXT-40"
+    ],
+    "depended_by": [
+      "M2-EXT-40"
+    ],
+    "line": 923,
+    "anchor": "MM2-EXT-35"
+  },
+  {
+    "id": "M2-EXT-36",
+    "title": "Muzzle-Flash Overpressure Shockwave Overdrive",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Deepens M2.7 core weapon firing code, bypassing weapon-jam models completely.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 958,
+    "anchor": "MM2-EXT-36"
+  },
+  {
+    "id": "M2-EXT-37",
+    "title": "Elastic Canvas Trampoline Boundaries",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Extends M2.7 (JPH::CharacterVirtual) movement parsing via Jolt shape casts.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 989,
+    "anchor": "MM2-EXT-37"
+  },
+  {
+    "id": "M2-EXT-38",
+    "title": "Biomechanical Muscle Snapback Momentum",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Deepens M2.7 tactile melee projection arcs, modifying Jolt constraint boundaries.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1022,
+    "anchor": "MM2-EXT-38"
+  },
+  {
+    "id": "M2-EXT-39",
+    "title": "Kinematic Door-Kick Hydraulic Ram Splitting",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Integrates M2.7 (JPH::CharacterVirtual) vault frames with M3 door structural rigid hulls — reads the target door's EnTT DoorComponent (locked, shearThreshold...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1051,
+    "anchor": "MM2-EXT-39"
+  },
+  {
+    "id": "M2-EXT-40",
+    "title": "Tactical Clear-and-Vent Malfunctions (Rewarding Wear)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Complements M2.7 core weapon cycling loops, reads BarrelHeat.fouling as written by [M2-EXT-35] Atmospheric Powder-Fouling Friction Accumulation (build/wire b...",
+    "depends_on": [
+      "M2-EXT-35"
+    ],
+    "depended_by": [
+      "M2-EXT-35"
+    ],
+    "line": 1085,
+    "anchor": "MM2-EXT-40"
+  },
+  {
+    "id": "M2-EXT-41",
+    "title": "Latch-Shear Kinematic Door Piercing",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Links your M2.7 player controller acceleration values directly to the EnTT DoorComponent (locked, shearThreshold, material) added in M3's Implementation Steps.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1122,
+    "anchor": "MM2-EXT-41"
+  },
+  {
+    "id": "M2-EXT-42",
+    "title": "Decoupled View-Matrix Camera with Inertialized Perspective Blending",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Replaces the prior spring-arm-to-head-joint camera model referenced in M2.7's Implementation Steps; feeds look-at targets into the character rig and camera-s...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1156,
+    "anchor": "MM2-EXT-42"
+  },
+  {
+    "id": "M2-EXT-43",
+    "title": "Nested Weapon Component Rig with Two-Bone IK Arm Locking",
+    "cluster": "B",
+    "tags": "IK",
+    "tldr": "Nested Weapon Component Rig with Two-Bone IK Arm Locking",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1190,
+    "anchor": "MM2-EXT-43"
+  },
+  {
+    "id": "M2-EXT-44",
+    "title": "Procedural Recoil Low-Discrepancy Sequence Cache",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "M2.7 weapons. Caches a per-weapon Halton/low-discrepancy recoil sequence so kick is reproducible and desync-safe.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1192,
+    "anchor": "MM2-EXT-44"
+  },
+  {
+    "id": "M2-EXT-45",
+    "title": "Parametric Gait-Warping Stride Adjuster",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "M2.7 locomotion. Warps gait cycle to stride length under speed/slope so feet don't slide.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1212,
+    "anchor": "MM2-EXT-45"
+  },
+  {
+    "id": "M2-EXT-46",
+    "title": "Unified Build/Perk/Craft Menu Shell",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Tabbed shell wrapping M0-EXT-40 build, M2-EXT-21 perks, M8.7 crafting; M4.6 streaming unaware.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1272,
+    "anchor": "MM2-EXT-46"
+  },
+  {
+    "id": "M2-EXT-47",
+    "title": "No-Menu Mid-Combat Lockout",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Guards M2.7-EXT-19 shell; reads M5.4 encounter state to block open.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1297,
+    "anchor": "MM2-EXT-47"
+  },
+  {
+    "id": "M2-EXT-48",
+    "title": "Context-Sensitive Interaction Radial",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Surfaces M2-EXT-24/25 prompts and M3-EXT-09 inventory actions as a radial; lives inside the shell.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1322,
+    "anchor": "MM2-EXT-48"
+  },
+  {
+    "id": "M2-EXT-49",
+    "title": "Cross-System Menu Navigation Map",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Wires M2.7-EXT-19 shell, M2.7-EXT-30 radial, M8.7 craft, M0-EXT-40 build, M4.6 streaming.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1347,
+    "anchor": "MM2-EXT-49"
+  },
+  {
+    "id": "M2-EXT-50",
+    "title": "High-Fidelity Radio-Frequency Signal Attenuation (Comms Static)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Upgrades M2.8 deterministic co-op network loops and complements Appendix D dead camps tracker.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1372,
+    "anchor": "MM2-EXT-50"
+  },
+  {
+    "id": "M2-EXT-51",
+    "title": "Cross-Platform Topology Token Replication (Determinism-Drift Isolation)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Upgrades M2.8 deterministic co-op network loops and the automated desync interception check.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1404,
+    "anchor": "MM2-EXT-51"
+  },
+  {
+    "id": "M2-EXT-52",
+    "title": "Split-Screen Multi-Viewport Instanced Render Pipeline (Local Co-op Guard)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Expands M2.8 Local Viewport Division and interfaces directly with M1's centralized render graph.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1439,
+    "anchor": "MM2-EXT-52"
+  },
+  {
+    "id": "M2-EXT-53",
+    "title": "Fixed-Point Deterministic Math Emulation Layer (Soft-Float Isolation)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Upgrades M2.8 deterministic co-op network loops; safeguards the SplitMix64 thread-isolation pattern (Appendix note) from downstream float drift addressed con...",
+    "depends_on": [],
+    "depended_by": [
+      "M2-EXT-58"
+    ],
+    "line": 1472,
+    "anchor": "MM2-EXT-53"
+  },
+  {
+    "id": "M2-EXT-54",
+    "title": "Host-Authoritative Topography & Seeded Client Reconstruction",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Host-Authoritative Topography & Seeded Client Reconstruction",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1504,
+    "anchor": "MM2-EXT-54"
+  },
+  {
+    "id": "M2-EXT-55",
+    "title": "XorShift128+ Seed Distribution Sandbox Synchronizer",
+    "cluster": "B",
+    "tags": "XorShift128",
+    "tldr": "M2.8 co-op determinism. Derives per-peer deterministic sub-seeds from the session seed for lockstep.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1506,
+    "anchor": "MM2-EXT-55"
+  },
+  {
+    "id": "M2-EXT-56",
+    "title": "xxHash64 ECS State Checksum Aggregator",
+    "cluster": "B",
+    "tags": "ECS",
+    "tldr": "M2.8 + M12 determinism. Rolling xxHash64 over ECS snapshot for desync detection.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1526,
+    "anchor": "MM2-EXT-56"
+  },
+  {
+    "id": "M2-EXT-57",
+    "title": "Fixed-Point Mesh-Vector Quantization Factory",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "M2.8 + M2.6. Quantizes mesh/transform vectors to fixed-point for lossless wire transmission.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1546,
+    "anchor": "MM2-EXT-57"
+  },
+  {
+    "id": "M2-EXT-58",
+    "title": "(provisional) Co-op Deterministic Seeded Replay Verification *(SOURCED FROM PLAN FILE)",
+    "cluster": "B",
+    "tags": "SOURCED, PLAN, FILE",
+    "tldr": "Reads fixed-point layer M2.8-EXT-04 (verified) + topology-replication token M2.8-EXT-02. Writes 64-bit hash to debug telemetry (M13 / M5.4 bandit tracker cha...",
+    "depends_on": [
+      "M2-EXT-53"
+    ],
+    "depended_by": [],
+    "line": 1565,
+    "anchor": "MM2-EXT-58"
+  },
+  {
+    "id": "M2-EXT-59",
+    "title": "Projectile Hydrodynamic Cavitation Tensors (Soft-Tissue Impact)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Deepens M2.9 semi-implicit ballistic updates using M5.1 anatomical hit-volume SDF gradients.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1619,
+    "anchor": "MM2-EXT-59"
+  },
+  {
+    "id": "M2-EXT-60",
+    "title": "Ballistic Kinetic Spalling & Secondary Fragment Shell Vectors",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Integrates M2.9's ballistics pipeline with M3's macro-destruction material-yield data to gate fragmentation yields.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1657,
+    "anchor": "MM2-EXT-60"
+  },
+  {
+    "id": "M2-EXT-61",
+    "title": "Diurnal Atmospheric Air-Density Ballistic Shift",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Deepens M2.9 semi-implicit ballistic updates using M10 day/night temperature tracks.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1689,
+    "anchor": "MM2-EXT-61"
+  },
+  {
+    "id": "M2-EXT-62",
+    "title": "Projectile Ricochet Tumbling Stability Matrix",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Expands the M2.9 Semi-Implicit Ballistic Integration loops.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1723,
+    "anchor": "MM2-EXT-62"
+  },
+  {
+    "id": "M2-EXT-63",
+    "title": "Deflective Projectile Ricochet Shredder",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Integrates within the M2.9 semi-implicit ballistics pipeline, using surface hardness bits.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1756,
+    "anchor": "MM2-EXT-63"
+  },
+  {
+    "id": "M2-EXT-64",
+    "title": "Biomechanical Momentum-Gated Parkour",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Extends M2.7 (JPH::CharacterVirtual input loops) and scales over M2.9 metabolic stamina pools.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1783,
+    "anchor": "MM2-EXT-64"
+  },
+  {
+    "id": "M2-EXT-65",
+    "title": "Coupled Hydration-Exertion Depletion (Hunger & Thirst)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Extends M2.9's Two-Compartment Exertion Model directly — does not introduce parallel hunger/thirst meters. Reads M10 ambient temperature for sweat-rate scali...",
+    "depends_on": [],
+    "depended_by": [
+      "M2-EXT-68"
+    ],
+    "line": 1810,
+    "anchor": "MM2-EXT-65"
+  },
+  {
+    "id": "M2-EXT-66",
+    "title": "Caloric Body Condition Scoring & Layered Thermal Insulation",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Caloric Body Condition Scoring & Layered Thermal Insulation",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1851,
+    "anchor": "MM2-EXT-66"
+  },
+  {
+    "id": "M2-EXT-67",
+    "title": "Pneumatic Tire Slip-Angle Deformation Loop",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "M2.9 vehicles. Models tire deformation under slip angle for handling + wear.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1853,
+    "anchor": "MM2-EXT-67"
+  },
+  {
+    "id": "M2-EXT-68",
+    "title": "Kinematic Character Flood Buoyancy & Drag Bridge",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "M2.9 + M2.7 character controller. Bridges the character controller to water buoyancy/drag so wading/swimming is stable.",
+    "depends_on": [
+      "M2-EXT-65"
+    ],
+    "depended_by": [],
+    "line": 1873,
+    "anchor": "MM2-EXT-68"
+  },
+  {
+    "id": "M2-EXT-69",
+    "title": "Farm Tick Scheduler",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Driven by M6 lighting day/night and M5.4 aggro windows; plots grow on tick.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1930,
+    "anchor": "MM2-EXT-69"
+  },
+  {
+    "id": "M2-EXT-70",
+    "title": "Medical / Pharmacy Loot Hook",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Consumes M4-EXT-77 pharmacy tag and M8 med items; gates M2.9-EXT-19/20 meds loot.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1955,
+    "anchor": "MM2-EXT-70"
+  },
+  {
+    "id": "M2-EXT-71",
+    "title": "Medication / Stim Effect System",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Applies effects from M2.9-EXT-18 medical loot; interacts with M8 med items.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1980,
+    "anchor": "MM2-EXT-71"
+  },
+  {
+    "id": "M2-EXT-72",
+    "title": "Canning / Preservation Station",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Consumes M8.5 canning output; converts perishable food to shelf-stable with a timer.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 2005,
+    "anchor": "MM2-EXT-72"
+  },
+  {
+    "id": "M2-EXT-73",
+    "title": "Rest UI / Sleep State",
+    "cluster": "B",
+    "tags": "UI",
+    "tldr": "Drives M11-EXT-58 HUD; reads M8.6-EXT-28 hub and M2-EXT-26 respec; advances rest tick.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 2030,
+    "anchor": "MM2-EXT-73"
+  },
+  {
+    "id": "M2-EXT-74",
+    "title": "Shelter / Fire Weather Hook",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Reads M10 weather; M2.9-EXT-24 rest checks exposure; fire (M4) warms.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 2055,
+    "anchor": "MM2-EXT-74"
+  },
+  {
+    "id": "M2-EXT-75",
+    "title": "Realism/Fun Floor (Survival Ceiling)",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Clamps M2.9 survival debuffs and M5.4 event severity to a designer-set floor; M6 lighting unaffected.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 2080,
+    "anchor": "MM2-EXT-75"
   }
 ]

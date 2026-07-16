@@ -44,7 +44,7 @@ Diary/journal entry generator composed from template grammars filled from simula
 
 The following `master_feature_list.md` tables were deliberately excluded from this v43 pass (solo dev asked to sequence engine layer first):
 
-* **Procedural Generation — World/Systems** (Poisson disk sampling, domain-warped noise, WFC adjacency validator [already `[M4-EXT-03]`/`[M4-EXT-11]`], chunk-boundary determinism test [route to §5.10 verification suite], graph-based room connectivity [already `[K-EXT-18]` + `[M4-EXT-08]`], rejection sampling [shared gate, not a standalone system — see draft pass-2 note], seed-sharing [already `[M2.8-EXT-05]`], cellular automata [now `[M4-EXT-24]`], graph grammars [covered by Procedural Mission & Event Director, Dormans & Bakkes], genetic algorithms [now `[M8.6-EXT-09]`], Whittaker biome classification [now `[M4-EXT-23]`], thermal erosion, spline-based roads/rivers [roads fully covered by `[M4-EXT-01]`/`[M4-EXT-19]`/`[M4-EXT-10]`; rivers half-covered — bank/confluence hydrology detail only], hidden difficulty correction) — deferred, engine layer first.
+* **Procedural Generation — World/Systems** (Poisson disk sampling, domain-warped noise, WFC adjacency validator [already `[M4-EXT-03]`/`[M4-EXT-11]`], chunk-boundary determinism test [route to §5.10 verification suite], graph-based room connectivity [already `[K-EXT-18]` + `[M4-EXT-08]`], rejection sampling [shared gate, not a standalone system — see draft pass-2 note], seed-sharing [already `[M2-EXT-54]`], cellular automata [now `[M4-EXT-24]`], graph grammars [covered by Procedural Mission & Event Director, Dormans & Bakkes], genetic algorithms [now `[M8.6-EXT-09]`], Whittaker biome classification [now `[M4-EXT-23]`], thermal erosion, spline-based roads/rivers [roads fully covered by `[M4-EXT-01]`/`[M4-EXT-19]`/`[M4-EXT-10]`; rivers half-covered — bank/confluence hydrology detail only], hidden difficulty correction) — deferred, engine layer first.
 * **Procedural Asset Generation (Solo/No-Artist)** (histogram-preserving blending [now `[M4-EXT-25]`], PPTBF materials [now `[M4-EXT-25]`], node-graph procedural materials [now `[M4-EXT-25]`], noise→normal map derivation [now `[M4-EXT-25]`], procedural mesh via primitive+grammar [already `[K-EXT-17]`], procedural foliage L-system [now `[M4-EXT-28]`], procedural color palette [now `[M4-EXT-25]`], procedural UV unwrap [recommended `[M4-EXT-26]`-class, deliberately not merged this pass — decal atlas renumbered to `[M4-EXT-26]` instead], procedural skeletal rig generation [already `[M5.1-EXT-03]`], procedural decal atlasing [now `[M4-EXT-26]`], procedural loot icon generation [now `[M8-EXT-10]`]) — deferred, engine layer first. See teq-v78-procedural-gapfill-draft.md close-out notes (pass 1 + pass 2) and Part A Hermes gap-fill appendix for the ID citations above.
 * **AI** (behavior tree/planning layer, line-of-sight result caching) — deferred, engine layer first.
 * **Audio** (dynamic/adaptive music, voice-line barking system) — deferred, engine layer first.
@@ -114,7 +114,7 @@ Consolidated, deduplicated list from the architecture gap-finding pass. IDs foll
 
 **Merge audit (v67) — `updateforv66.txt` fully integrated, nothing dropped.**
 
-**Merge audit (v68) — two gaps found in the v67 pass, now closed.** The v67 audit above covered the EXT-block items but silently missed two large non-EXT-formatted sections of `updateforv66.txt`: Section 3's 20-layer environmental simulation hierarchy (never mentioned as included *or* excluded — just dropped), and Section 6's standalone sandboxed verification test suite. Both are now in: the 20 layers are added as 20 full EXT blocks — `[M3-EXT-07/08]` (structural stress-tensor cracking, particulate deposition), `[M4-EXT-12..19]` (tectonics, cave carving, stratigraphy, Darcy aquifer extension to the existing M10 groundwater grid, generation-time Saint-Venant erosion reusing `[M10-EXT-01]`'s flux stencil, edaphic soil chemistry, space-colonization canopy, road-graph exclusion splines), `[M4.5-EXT-19/20]` (Heiligenschein/anisotropic micro-optics, Beer-Lambert underwater extinction), `[M6-EXT-11]` (acoustic voxel occlusion, pairs with EXT-20), `[M6.5-EXT-11/12]` (fBm foliage kinematics, volumetric micro-atmospherics/heat-shimmer), `[M9-EXT-19]` (POM topography deform + persistent ruts, fills the displacement-channel stub `[M9-EXT-04]` was already reading), `[M10-EXT-02..06]` (Keplerian sun/moon solver, Bruneton-Nishita scattering, cryospheric frost, Navier-Stokes wind field, phenological seasonal canopy). None of these duplicate an existing system — each explicitly wires into something already in the doc (stratum table, groundwater grid, road graph, wind field, season index) rather than adding a second version of it. The verification suite is added as new §5.10, using local mock structs so it never collides with canonical types. First pass flagged six items as "duplicates" and left them out; on a closer re-read most weren't true duplicates, just overlapping-sounding names — they're folded in below instead: `[M1-EXT-11]` compute→indirect-draw barrier, `[M4.5-EXT-18]` skinned Visibility-Buffer cache, `[M2.9-EXT-10]` player flood buoyancy, `[M4-EXT-11]` WFC contradiction recovery, `[M2.8-EXT-08]` fixed-point mesh-vector quantization (sibling to `[M2.8-EXT-04]`'s scalar version, not a dupe — that one's a 16.16 scalar for damage/pathfinding math, this one's a 24.8 `vec3` for procedural mesh-generation determinism, different data shape), `[M13-EXT-12]` radio scrambler, `[M13-EXT-13]` survivor behavior-tree flavor advisor, plus enriched fields on `[M13-EXT-04]` and `[M13-EXT-09]` pulled from the update's richer telemetry tokens, `[M9-EXT-18]` (routes vehicles onto the existing `[M5.4-EXT-06]` road graph instead of building a second one), and new §5.9 naming lexicon. Two things genuinely were exact duplicates and stayed out: `AlignToCacheLine` (byte-identical to `[M0-EXT-01]`, nothing to add), and a second `SurfaceFrictionSample` struct with different field names for the same six multiplier slots — the canonical one (defined under M9 below) is what everything else in this doc already writes to, so a second definition would just reintroduce the exact order-dependent bug the front-matter audit item #3 fixed; if you want the update's field names instead, rename in one place (the canonical struct), don't add a second struct. One more from the update, `DirectorTelemetryStateToken`, wasn't added as an `M13-EXT` item at all — horde-pacing telemetry (avg player health, shots fired, SEIR severity) already feeds M5.4's own `ThompsonBanditTracker`, and that's deterministic tuning logic, not narrative text, so it stays in M5.4 rather than being routed through the SLM.
+**Merge audit (v68) — two gaps found in the v67 pass, now closed.** The v67 audit above covered the EXT-block items but silently missed two large non-EXT-formatted sections of `updateforv66.txt`: Section 3's 20-layer environmental simulation hierarchy (never mentioned as included *or* excluded — just dropped), and Section 6's standalone sandboxed verification test suite. Both are now in: the 20 layers are added as 20 full EXT blocks — `[M3-EXT-07/08]` (structural stress-tensor cracking, particulate deposition), `[M4-EXT-12..19]` (tectonics, cave carving, stratigraphy, Darcy aquifer extension to the existing M10 groundwater grid, generation-time Saint-Venant erosion reusing `[M10-EXT-01]`'s flux stencil, edaphic soil chemistry, space-colonization canopy, road-graph exclusion splines), `[M4.5-EXT-19/20]` (Heiligenschein/anisotropic micro-optics, Beer-Lambert underwater extinction), `[M6-EXT-11]` (acoustic voxel occlusion, pairs with EXT-20), `[M6.5-EXT-11/12]` (fBm foliage kinematics, volumetric micro-atmospherics/heat-shimmer), `[M9-EXT-19]` (POM topography deform + persistent ruts, fills the displacement-channel stub `[M9-EXT-04]` was already reading), `[M10-EXT-02..06]` (Keplerian sun/moon solver, Bruneton-Nishita scattering, cryospheric frost, Navier-Stokes wind field, phenological seasonal canopy). None of these duplicate an existing system — each explicitly wires into something already in the doc (stratum table, groundwater grid, road graph, wind field, season index) rather than adding a second version of it. The verification suite is added as new §5.10, using local mock structs so it never collides with canonical types. First pass flagged six items as "duplicates" and left them out; on a closer re-read most weren't true duplicates, just overlapping-sounding names — they're folded in below instead: `[M1-EXT-11]` compute→indirect-draw barrier, `[M4.5-EXT-18]` skinned Visibility-Buffer cache, `[M2-EXT-68]` player flood buoyancy, `[M4-EXT-11]` WFC contradiction recovery, `[M2-EXT-57]` fixed-point mesh-vector quantization (sibling to `[M2-EXT-53]`'s scalar version, not a dupe — that one's a 16.16 scalar for damage/pathfinding math, this one's a 24.8 `vec3` for procedural mesh-generation determinism, different data shape), `[M13-EXT-12]` radio scrambler, `[M13-EXT-13]` survivor behavior-tree flavor advisor, plus enriched fields on `[M13-EXT-04]` and `[M13-EXT-09]` pulled from the update's richer telemetry tokens, `[M9-EXT-18]` (routes vehicles onto the existing `[M5.4-EXT-06]` road graph instead of building a second one), and new §5.9 naming lexicon. Two things genuinely were exact duplicates and stayed out: `AlignToCacheLine` (byte-identical to `[M0-EXT-01]`, nothing to add), and a second `SurfaceFrictionSample` struct with different field names for the same six multiplier slots — the canonical one (defined under M9 below) is what everything else in this doc already writes to, so a second definition would just reintroduce the exact order-dependent bug the front-matter audit item #3 fixed; if you want the update's field names instead, rename in one place (the canonical struct), don't add a second struct. One more from the update, `DirectorTelemetryStateToken`, wasn't added as an `M13-EXT` item at all — horde-pacing telemetry (avg player health, shots fired, SEIR severity) already feeds M5.4's own `ThompsonBanditTracker`, and that's deterministic tuning logic, not narrative text, so it stays in M5.4 rather than being routed through the SLM.
 
 
 ## 5.1 Architecture, Threading, Memory, Drivers (M0 / M1 / M1.9 / M4.6)
@@ -286,23 +286,23 @@ Purpose: translates Jolt's single-precision contact manifolds into your authorit
 
 Purpose: projects speculative AABB sweeps ahead of kinematic ticks to catch velocity spikes before they tunnel through thin dynamic colliders.
 
-**[M2.7-EXT-16] Procedural Recoil Low-Discrepancy Sequence Cache**
+**[M2-EXT-44] Procedural Recoil Low-Discrepancy Sequence Cache**
 
 Purpose: pre-bakes a circular buffer of low-discrepancy (R2 sequence) offsets at boot instead of generating them at runtime inside the recoil oscillator — pure perf/consistency win, trivial to implement.
 
-**[M2.7-EXT-17] Parametric Gait-Warping Stride Adjuster**
+**[M2-EXT-45] Parametric Gait-Warping Stride Adjuster**
 
 Purpose: adjusts foot clearance arcs in Motion Matching against local surface slope for zero-slip foot placement on stairs/ramps.
 
-**[M2.8-EXT-06] XorShift128+ Seed Distribution Sandbox Synchronizer**
+**[M2-EXT-55] XorShift128+ Seed Distribution Sandbox Synchronizer**
 
 Purpose: syncs thread-local procgen RNG seed state across co-op peers at replication checkpoints so world generation doesn't diverge between clients. This is load-bearing for correctness in co-op — flag as high priority, not optional polish.
 
-**[M2.8-EXT-07] xxHash64 ECS State Checksum Aggregator**
+**[M2-EXT-56] xxHash64 ECS State Checksum Aggregator**
 
 Purpose: periodic (e.g. every 30 ticks) parallel hash of hot SoA component arrays across peers to detect and localize desync to a specific entity index, rather than a full-state diff.
 
-**[M2.8-EXT-08] Fixed-Point Mesh-Vector Quantization Factory** — [MATH DONE] — sibling to `[M2.8-EXT-04]`, not a duplicate: EXT-04 is a scalar 16.16 fixed-point multiply for damage rolls/pathfinding cost; this is a signed 24.8 fixed-point `vec3` specifically for procedural mesh generation (vertex positions, bone offsets) so chunk-boundary seams and physics divergence don't appear across CPU families under `-ffast-math`.
+**[M2-EXT-57] Fixed-Point Mesh-Vector Quantization Factory** — [MATH DONE] — sibling to `[M2-EXT-53]`, not a duplicate: EXT-04 is a scalar 16.16 fixed-point multiply for damage rolls/pathfinding cost; this is a signed 24.8 fixed-point `vec3` specifically for procedural mesh generation (vertex positions, bone offsets) so chunk-boundary seams and physics divergence don't appear across CPU families under `-ffast-math`.
 
 ```cpp
 struct FixedVec3 { // 24.8 fixed-point: 24 bits whole, 8 bits fractional
@@ -316,7 +316,7 @@ struct FixedVec3 { // 24.8 fixed-point: 24 bits whole, 8 bits fractional
 };
 ```
 
-**[M2.9-EXT-09] Pneumatic Tire Slip-Angle Deformation Loop**
+**[M2-EXT-67] Pneumatic Tire Slip-Angle Deformation Loop**
 
 Purpose: visually deforms tire mesh vertices from lateral suspension load to sell drift/sidewall flex — cosmetic, not simulation-critical.
 
@@ -328,7 +328,7 @@ Purpose: standard anti-roll bar constraint between linked wheel axes to prevent 
 
 Purpose: drag force on vehicle body from wheel submersion depth against the flood heightmap (M10 dependency).
 
-**[M2.9-EXT-10] Kinematic Character Flood Buoyancy & Drag Bridge** — [MATH DONE] — Depends on (not yet built at this point): M10 flood heightmap
+**[M2-EXT-68] Kinematic Character Flood Buoyancy & Drag Bridge** — [MATH DONE] — Depends on (not yet built at this point): M10 flood heightmap
 
 Purpose: `JPH::CharacterVirtual` resolves motion via kinematic sweeps, not rigid-body forces, so it's otherwise blind to flooding — zombies (M5) and vehicles (M9) already get flood physics, the player didn't. This adds the missing third leg: samples M10's Saint-Venant depth at the player's position each fixed tick and folds buoyancy + drag directly into the kinematic velocity input before `ExtendedUpdate()` runs.
 
@@ -1263,7 +1263,7 @@ Long sessions streaming across many biomes don't OOM the 6 GB Tier-0 VRAM floor;
 Fleshes the §5.8 one-liner **Network Clock Sync & Tick Drift Compensator** (line 9123): host-authoritative timeline correction for co-op input-replay alignment, so two clients' simulation clocks don't drift and desync replayed inputs.
 
 ##### Systems Touched
-Sits above `[M12-EXT-01]` (delta encoder) / `[M12-EXT-02]` (loss-detection) / `[M12-EXT-03]` (fragment reassembler). Reads the existing co-op determinism layer `[M2.8-EXT-04]` (fixed-point deterministic math) as the canonical time source. Distinct from `[M2.8-EXT-05]` (host-authoritative topography reconstruction) — that resyncs world state, this resyncs the *clock* the sim ticks on.
+Sits above `[M12-EXT-01]` (delta encoder) / `[M12-EXT-02]` (loss-detection) / `[M12-EXT-03]` (fragment reassembler). Reads the existing co-op determinism layer `[M2-EXT-53]` (fixed-point deterministic math) as the canonical time source. Distinct from `[M2-EXT-54]` (host-authoritative topography reconstruction) — that resyncs world state, this resyncs the *clock* the sim ticks on.
 
 ##### Math
 Cristian's algorithm over the existing reliable channel (verified: Cristian, Distributed Computing 1989). Client sends `T0`, server tags `T1`/`T2`, client receives at `T3`; estimate: `offset = ((T1 - T0) + (T2 - T3)) / 2`, `RTT = (T3 - T0) - (T2 - T1)`, accuracy plus/minus RTT/2. Per-tick drift `delta = measuredOffset - appliedOffset`; the sim applies `delta` as a smoothed correction factor `alpha * delta + (1 - alpha) * lastCorrection` (low-pass to avoid sawtooth jitter).
@@ -1448,16 +1448,16 @@ Streaming a fast-moving vehicle across chunk boundaries stays smooth — decompr
 
 #### `[M2.8-EXT-10]` (provisional) Co-op Deterministic Seeded Replay Verification
 
-Fleshes an implementation-step gap in M2.8 (Deterministic co-op architecture, §5.2 line 1745): the milestone specifies snapshot-sync as the co-op strategy and fixed-point math (`[M2.8-EXT-04]`), but has no EXT block for the *verification* that two clients actually stay bit-identical — the "determinism check" the AGENTS.md Day-0 Spike A demanded (xor entity states into a running hash, run twice, alternate flags, confirm no divergence).
+Fleshes an implementation-step gap in M2.8 (Deterministic co-op architecture, §5.2 line 1745): the milestone specifies snapshot-sync as the co-op strategy and fixed-point math (`[M2-EXT-53]`), but has no EXT block for the *verification* that two clients actually stay bit-identical — the "determinism check" the AGENTS.md Day-0 Spike A demanded (xor entity states into a running hash, run twice, alternate flags, confirm no divergence).
 
 ##### Systems Touched
-Reads the fixed-point layer `[M2.8-EXT-04]` (the thing being verified) and the topology-replication token `[M2.8-EXT-02]` (determinism-drift isolation). Writes a 64-bit hash to the existing debug telemetry path (M13 / `[M5.4]` bandit tracker telemetry channel is the natural sink). Does not modify simulation — observation-only, safe to ship disabled.
+Reads the fixed-point layer `[M2-EXT-53]` (the thing being verified) and the topology-replication token `[M2-EXT-51]` (determinism-drift isolation). Writes a 64-bit hash to the existing debug telemetry path (M13 / `[M5.4]` bandit tracker telemetry channel is the natural sink). Does not modify simulation — observation-only, safe to ship disabled.
 
 ##### Math
 Running 64-bit FNV-1a hash over the serialized deterministic state each tick: `H = H xor FNV1a(state_i); H = (H * 1099511628211) mod 2^64`. Two clients exchange `H` every N ticks; divergence if `H_A != H_B` -> log the tick + the differing entity handle(s).
 
 ##### How It Works
-At a fixed cadence (e.g. every 60 ticks, dev-gated), each client hashes its full deterministic sim state via the fixed-point serialization `[M2.8-EXT-04]` already produces, and the host compares client hashes. A mismatch trips a dev-only alarm identifying the first diverging entity — exactly Spike A's verification, wired into the shipped co-op path so drift is caught, not assumed away. Ship-disabled by default (per the doc's dev-gated debug-draw rule).
+At a fixed cadence (e.g. every 60 ticks, dev-gated), each client hashes its full deterministic sim state via the fixed-point serialization `[M2-EXT-53]` already produces, and the host compares client hashes. A mismatch trips a dev-only alarm identifying the first diverging entity — exactly Spike A's verification, wired into the shipped co-op path so drift is caught, not assumed away. Ship-disabled by default (per the doc's dev-gated debug-draw rule).
 
 ##### Reference Implementation
 ```cpp
