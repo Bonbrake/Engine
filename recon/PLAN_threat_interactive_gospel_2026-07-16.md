@@ -167,8 +167,8 @@ T14 **Nanite/cluster-mesh-shader rasterizer = 3x slower compute rasterizer** (TI
     use HARDWARE raster, NOT the compute voxel rasterizer (M4.5-EXT-16 is compute — restrict
     to voxels/volumetrics, not opaque geometry). VERIFIER: PASS (-16 is compute voxel).
 T15 **Clouds = temporal BUT separated from bad AA** (warning). "clouds utilize temporal
-    rendering, but separately from poor anti-aliasing methods." → M4.5-EXT-01 volumetrics:
-    temporal decoupled from AA smear. VERIFIER: PASS (-01 volumetric cone).
+    rendering, but separately from poor anti-aliasing methods." → [COVERED] M4.5-EXT-01
+    volumetrics: temporal decoupled from AA smear. VERIFIER: PASS (-01 volumetric cone).
 
 ## IMPLEMENTATION ORDER (proposal)
 1. R1 confirm (M4.5-EXT-20 already Burley — verify, no work) + R7/R8/R10/R12/R13 validate.
