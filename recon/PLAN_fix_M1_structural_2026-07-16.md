@@ -3,6 +3,7 @@
 ## Status
 - **BLOCKING**: `spec/M1.md` is corrupted in **HEAD** (already committed). The debug tool (`recon/ti_debug.py`) does NOT parse M1 and is unaffected — verified: 0 references to M1 in `ti_debug.py`, `--selftest` is 7/7 PASS.
 - This plan requires editing a **milestone spec file** (read-only gate). Execute only after explicit GO.
+- **GO gate is double-stored**: this committed plan file AND agent memory both carry the "ask GO before any M1.md edit" directive. Either surviving prevents the gate being silently dropped.
 
 ## What Is Broken (measured, not guessed)
 | Check | Result |
@@ -34,6 +35,7 @@ For every foreign header (`M4-EXT-*`, `M4.5-EXT-*`) found in M1.md:
 - Assert the same ID exists in `spec/M4.md` or `spec/M4.5.md`.
 - If ANY foreign block is NOT present in its home file → STOP. That block is real content, not pollution; escalate to user.
 - (Already confirmed for 12/13/14/15; script will check all 61.)
+- **Pre-GO verification (follow-up session 2026-07-16):** re-checked independently. All 64 M4-EXT + 29 M4.5-EXT ID occurrences in M1.md resolve to real definitions in `spec/M4.md` (73 blocks) / `spec/M4.5.md` (35 blocks). **Zero orphans.** Baseline counts still match HEAD exactly (41 / 32 / 29). → **Phase 1 gate PASS, no escalation needed.**
 
 ### Phase 2 — Extract & remove foreign blocks from M1
 - Python script (reversible, writes to a temp, diff-able): walk M1.md, split on `#### [` boundaries, drop any block whose ID starts with `M4-EXT-` or `M4.5-EXT-`.
