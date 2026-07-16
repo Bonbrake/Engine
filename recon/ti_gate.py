@@ -9,13 +9,15 @@ T7 stay falsely COVERED — its line put [COVERED] AFTER the EXT, which the old
 regex couldn't match, and verify_ti_plan.py had no T7 row either).
 
 WHAT IT ENFORCES (the CONTRACT — domain evidence spec, not plan duplication):
-  A COVERED/PARTIAL claim is BACKED iff AT LEAST ONE of its named EXT blocks contains
-  the capability keywords (CAP_REQUIREMENTS). If a claim asserts COVERED/PARTIAL but NO
-  named block carries the capability -> it's unbacked -> FAIL.
-  A claim in FORBIDDEN_COVERED must NOT have its block contain those keywords while
-  marked COVERED (else it's a false "covered") -> FAIL.
-  Every GAP claim must target an EXT that does NOT already contain the capability
-  (else it's wrongly a gap / duplicate).
+  A COVERED/PARTIAL claim is BACKED iff AT LEAST ONE of its named EXT blocks satisfies
+  ANY capability group in CAP_REQUIREMENTS (all keywords in a group present). If a claim
+  asserts COVERED/PARTIAL but NO named block carries the capability -> UNBACKED -> FAIL.
+  A COVERED claim whose body LACKS the FORBIDDEN_COVERED keywords (the capability the
+  claim says is needed but absent) -> FALSE COVER -> FAIL.
+  Every GAP claim must target an EXT that either (a) does not exist yet and is in
+  PROPOSED_NEW, or (b) is an existing block we've manually verified lacks the capability.
+  A GAP targeting a non-existent EXT that is ALSO not in PROPOSED_NEW is a BOGUS target
+  (typo / drift) -> FAIL.
   Proposed NEW EXT ids must NOT collide with an existing spec block.
 
 UNCLASSIFIED GUARD: any R#/T# line that references an EXT but yields no parseable
@@ -165,20 +167,32 @@ def _satisfies(body, req_groups):
     return any(all(k in low for k in grp) for grp in req_groups)
 
 
+_BLOCK_CACHE = {}
+
 def load_block(ext_id):
+    if ext_id in _BLOCK_CACHE:
+        return _BLOCK_CACHE[ext_id]
     m = re.match(r"(M\d+(?:\.\d+)?)-EXT-(\d+)", ext_id)
     if not m:
-        return f"__BADID__:{ext_id}"
+        res = f"__BADID__:{ext_id}"
+        _BLOCK_CACHE[ext_id] = res
+        return res
     path = os.path.join(SPEC, f"{m.group(1)}.md")
     if not os.path.exists(path):
-        return f"__NOFILE__:{path}"
+        res = f"__NOFILE__:{path}"
+        _BLOCK_CACHE[ext_id] = res
+        return res
     txt = open(path, encoding="utf-8").read()
     hdr = f"#### [{ext_id}]"
     i = txt.find(hdr)
     if i < 0:
-        return f"__NOBLOCK__:{ext_id}"
+        res = f"__NOBLOCK__:{ext_id}"
+        _BLOCK_CACHE[ext_id] = res
+        return res
     nxt = txt.find("\n#### [", i + len(hdr))
-    return txt[i: nxt if nxt > 0 else len(txt)]
+    res = txt[i: nxt if nxt > 0 else len(txt)]
+    _BLOCK_CACHE[ext_id] = res
+    return res
 
 
 def main():
@@ -208,7 +222,13 @@ def main():
                 continue
             saw_asserted = True
             if status == "GAP":
-                if not missing_file and req:
+                if missing_file:
+                    # GAP targets either a not-yet-written proposed-new EXT, or a typo.
+                    if ext not in PROPOSED_NEW:
+                        violations.append(
+                            f"{cid}(GAP) -> {ext}: target does NOT exist AND is not in "
+                            f"PROPOSED_NEW (bogus GAP target — typo or drift)")
+                elif req:
                     # GAP must NOT already be satisfied by an existing block
                     if _satisfies(body, req):
                         violations.append(
