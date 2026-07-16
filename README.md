@@ -18,9 +18,9 @@ where the project actually stands. **Read it first** on any fresh session.
 | `tests/`, `src/tests/` | Automated tests (ctest) |
 | `scripts/` | One-off build/spec/verify tooling |
 | `tools/` | Project tooling |
-| `docs/` | Design docs & audits — [`MASTER_PLAN_ENDLESS_QUARANTINE.md`](docs/MASTER_PLAN_ENDLESS_QUARANTINE.md) (canonical milestone spec), [`IDEA.md`](docs/IDEA.md), `docs/audit/` — binding agent rules live in [`.hermes.md`](.hermes.md) |
-| `spec/` | Per-milestone split spec working set + `llms.txt` index |
-| `milestones_M0-M13_antigravity/` | Per-milestone working files |
+| `docs/` | (archived) Design docs & audits now in [`archive/docs/`](archive/docs/) — binding agent rules live in [`.hermes.md`](.hermes.md) |
+| `spec/` | Per-milestone split spec working set + `llms.txt` index (this is the live source of truth) |
+| `archive/old_milestones/` | (archived) pre-split Antigravity working files — superseded by `spec/` |
 | `build/`, `build-asan/` | Out-of-source build trees (gitignored) |
 | `vcpkg_installed/` | vcpkg dependencies (gitignored) |
 

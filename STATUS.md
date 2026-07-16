@@ -1,6 +1,6 @@
 # The Endless Quarantine — Engine Status
 
-> **Canonical master plan:** `docs/MASTER_PLAN_ENDLESS_QUARANTINE.md` (v79, Hermes Agent edition — rebrand of `USETHISITSV79.md`). This is the single source of truth for all milestones M0→M13 and every `[Mx-EXT-nn]` block. Per-milestone working files live in `milestones_M0-M13_antigravity/`.
+> **Canonical spec:** `spec/` (per-milestone M0-parity working set, the live source of truth for every `[Mx-EXT-nn]` block). The v79 pre-split master plan and old Antigravity working files are archived under `archive/docs/` and `archive/old_milestones/`. Binding agent rules live in `.hermes.md`.
 
 ## Active Branch
 `m2/physics-destruction`
@@ -142,7 +142,7 @@ injection + `SDL_SetWindowRelativeMouseMode` are windowed-gated.
 - **Step 4c runtime verification is tracked under `[M0-EXT15-runtime]` in M0 Carried Open Items** (build verified; runtime blocked on live display, PASS bar defined there). Not a code defect — do not treat as a M2.6 fix item.
 
 ## Next Session: close M2.6 Phase 2 open items (yaw-sign GPU confirm, far-cube steadiness) or beat
-Load `milestones_M0-M13_antigravity/03_M2_6.md`.  \n
+Load `archive/old_milestones/milestones_M0-M13_antigravity/03_M2_6.md`.  \n
 
 Read STATUS.md first. Confirm branch. Check .gitignore covers build/ and vcpkg_installed/.
 

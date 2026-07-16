@@ -58,4 +58,4 @@ These 49 IDs appear only in the antigravity `_PLAN_INDEX` / `_RETIRED` / `_CROSS
 | M8.7-EXT-03 | antigravity index | planned/retired | none (per 7.5 math) |
 
 ## Retired (explicitly excluded, do NOT merge)
-- See `milestones_M0-M13_antigravity/_RETIRED.md` for the 3+ intentionally-retired records (e.g. M0-EXT-14 Async Hardware Compute Interleaver).
+- See `archive/old_milestones/milestones_M0-M13_antigravity/_RETIRED.md` for the 3+ intentionally-retired records (e.g. M0-EXT-14 Async Hardware Compute Interleaver).
