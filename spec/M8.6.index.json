@@ -2,111 +2,210 @@
   {
     "id": "M8.6-EXT-01",
     "title": "Kirchhoff Power Grid Overload Arcing",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Connects your M8.6 electrical network arrays directly into your M6.5 cellular-automata fire grids.",
     "depends_on": [],
-    "depended_by": [],
-    "line": 53,
-    "anchor": "M8.6-EXT-01"
+    "depended_by": [
+      "M8.6-EXT-03",
+      "M8.6-EXT-07"
+    ],
+    "line": 42,
+    "anchor": "MM8.6-EXT-01"
   },
   {
     "id": "M8.6-EXT-02",
     "title": "Surface-Saturation Capacitive Arc Tracking",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 89,
-    "anchor": "M8.6-EXT-02"
+    "tldr": "Extends M8.6 (Kirchhoff Power Networks) across M10 shallow-water flooding maps.",
+    "depends_on": [
+      "M8.6-EXT-04"
+    ],
+    "depended_by": [
+      "M8.6-EXT-03",
+      "M8.6-EXT-04"
+    ],
+    "line": 73,
+    "anchor": "MM8.6-EXT-02"
   },
   {
     "id": "M8.6-EXT-03",
     "title": "Catenary Cable Tension Snapping Solver",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 128,
-    "anchor": "M8.6-EXT-03"
+    "tldr": "Complements M8.6 electrical wiring layouts and handles Jolt distance constraints. Declares the canonical CableSpanComponent — the single shared component bac...",
+    "depends_on": [
+      "M8.6-EXT-05",
+      "M8.6-EXT-01",
+      "M8.6-EXT-02"
+    ],
+    "depended_by": [
+      "M8.6-EXT-05",
+      "M8.6-EXT-06",
+      "M8.6-EXT-07"
+    ],
+    "line": 107,
+    "anchor": "MM8.6-EXT-03"
   },
   {
     "id": "M8.6-EXT-04",
     "title": "Electro-Capacitive Water-Wading Chain Stun",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 178,
-    "anchor": "M8.6-EXT-04"
+    "tldr": "Merges your M8.6 Kirchhoff power networks directly into M10 Saint-Venant flooding tiles.",
+    "depends_on": [
+      "M8.6-EXT-02"
+    ],
+    "depended_by": [
+      "M8.6-EXT-02",
+      "M8.6-EXT-07"
+    ],
+    "line": 152,
+    "anchor": "MM8.6-EXT-04"
   },
   {
     "id": "M8.6-EXT-05",
     "title": "Catenary Wire Clothesline Decapitation Loop",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 217,
-    "anchor": "M8.6-EXT-05"
+    "tldr": "Extends M8.6 wiring anchor blocks, setting clean Jolt distance constraints. Reuses the canonical CableSpanComponent and CheckCableSnap() declared in [M8.6-EX...",
+    "depends_on": [
+      "M8.6-EXT-03"
+    ],
+    "depended_by": [
+      "M8.6-EXT-03",
+      "M8.6-EXT-07"
+    ],
+    "line": 186,
+    "anchor": "MM8.6-EXT-05"
   },
   {
     "id": "M8.6-EXT-06",
     "title": "Player-Placed Barricade Snap Constraints (Fortification)",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "Reuses the exact CableSpanComponent/CheckCableSnap() pattern declared in [M8.6-EXT-03], adding a third CableRole::Barricade value rather than new constraint ...",
+    "depends_on": [
+      "M8.6-EXT-03"
+    ],
     "depended_by": [],
-    "line": 252,
-    "anchor": "M8.6-EXT-06"
+    "line": 216,
+    "anchor": "MM8.6-EXT-06"
   },
   {
     "id": "M8.6-EXT-07",
     "title": "Kirchhoff Circuit Ohmic Dissipation Water Vaporization Solver",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "Links M8.6's Kirchhoff power grid to M10's Saint-Venant shallow-water flooding grid — when a snapped live line ([M8.6-EXT-03]/[M8.6-EXT-05], CableSpanCompone...",
+    "depends_on": [
+      "M8.6-EXT-03",
+      "M8.6-EXT-05",
+      "M8.6-EXT-01",
+      "M8.6-EXT-04"
+    ],
     "depended_by": [],
-    "line": 295,
-    "anchor": "M8.6-EXT-07"
+    "line": 254,
+    "anchor": "MM8.6-EXT-07"
   },
   {
     "id": "M8.6-EXT-08",
     "title": "M/M/c Queueing Labor Model for Workstation Assignment",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Declares the base \"M/M/c Queueing Labor Models for workstation assignment\" bullet. Reads survivor population and assigned-labor counts from M8.5's faction ec...",
     "depends_on": [],
     "depended_by": [],
-    "line": 330,
-    "anchor": "M8.6-EXT-08"
+    "line": 284,
+    "anchor": "MM8.6-EXT-08"
   },
   {
     "id": "M8.6-EXT-09",
     "title": "Genetic-Algorithm Settlement Macro-Layout Optimizer",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Genetic-Algorithm Settlement Macro-Layout Optimizer",
     "depends_on": [],
     "depended_by": [],
-    "line": 384,
-    "anchor": "M8.6-EXT-09"
+    "line": 333,
+    "anchor": "MM8.6-EXT-09"
   },
   {
     "id": "M8.6-EXT-10",
     "title": "Settlement NavMesh from GA Layout *(SOURCED FROM PLAN FILE)",
-    "cluster": "A — bootstrap core",
-    "tags": "NavMesh, GA, SOURCED, FROM, PLAN, FILE",
-    "tldr": null,
+    "cluster": "A",
+    "tags": "NavMesh, GA, SOURCED, PLAN, FILE",
+    "tldr": "Consumes M8.6-EXT-09 GA building-footprint layout, produces walkable NavMesh the AI director M5.4 + horde pathing need inside a settlement. Distinct from M4-...",
     "depends_on": [],
     "depended_by": [],
-    "line": 390,
-    "anchor": "M8.6-EXT-10"
+    "line": 334,
+    "anchor": "MM8.6-EXT-10"
+  },
+  {
+    "id": "M8.6-EXT-12",
+    "title": "Encounter+Loot+Story Bundle",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Assembles an event from M5.4 resolver, M8 loot, M13 lore; resolved under M8.6 faction context.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 381,
+    "anchor": "MM8.6-EXT-12"
+  },
+  {
+    "id": "M8.6-EXT-13",
+    "title": "Faction Reputation / Vendor Edge Graph",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Reputation edges consumed by vendors (price) and hub ownership (M8.6-EXT-28); fed by M5.4-EXT-17, M13-EXT-41.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 405,
+    "anchor": "MM8.6-EXT-13"
+  },
+  {
+    "id": "M8.6-EXT-18",
+    "title": "Civil-War Faction Event",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Driven by M8.6-EXT-13 reputation splits; emits M5.4 encounter events; M13-EXT-31 narrates.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 429,
+    "anchor": "MM8.6-EXT-18"
+  },
+  {
+    "id": "M8.6-EXT-22",
+    "title": "Smuggling ↔ Encounter Hook",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Smuggling routes raise M5.4 encounter pressure; reputation (M8.6-EXT-13) modulates heat.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 453,
+    "anchor": "MM8.6-EXT-22"
+  },
+  {
+    "id": "M8.6-EXT-24",
+    "title": "Forced-Labor / Exploitation Event",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "An encounter archetype consuming M5.4-EXT-11 moral framing; shifts M8.6-EXT-13 standing by response.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 477,
+    "anchor": "MM8.6-EXT-24"
+  },
+  {
+    "id": "M8.6-EXT-28",
+    "title": "Player-Owned Hub",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Hub ownership consumed by M11-EXT-59 travel, M2.9-EXT-24 rest, M7-EXT-16 stash; gates M8.6-EXT-13 perks.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 501,
+    "anchor": "MM8.6-EXT-28"
   }
 ]
