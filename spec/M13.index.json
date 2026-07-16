@@ -2,10 +2,10 @@
   {
     "id": "M13-EXT-01",
     "title": "Procedural Mission & Bounty Director",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Structural town graph (M4), FactionZone control state (M8.5).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-01]"
+    ],
     "depended_by": [],
     "line": 154,
     "anchor": "MM13-EXT-01"
@@ -13,10 +13,10 @@
   {
     "id": "M13-EXT-02",
     "title": "Infected Mutation Forensic Log",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Corpse inspection (M2.9), infected phenotype generation (M5.1).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-02]"
+    ],
     "depended_by": [],
     "line": 179,
     "anchor": "MM13-EXT-02"
@@ -24,10 +24,10 @@
   {
     "id": "M13-EXT-03",
     "title": "Dynamic Graveyard & Memorial Wall Epitaphs",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M7 persistence (death-cause history), safehouse zone registry (M8.6).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-03]"
+    ],
     "depended_by": [],
     "line": 204,
     "anchor": "MM13-EXT-03"
@@ -35,10 +35,10 @@
   {
     "id": "M13-EXT-04",
     "title": "Inter-Faction Extortion & Diplomacy Dispatch",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "FactionZone control percentage (M8.5), dead-drop container placement (M8.6).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-04]"
+    ],
     "depended_by": [],
     "line": 229,
     "anchor": "MM13-EXT-04"
@@ -46,10 +46,10 @@
   {
     "id": "M13-EXT-05",
     "title": "Procedural Vehicle Maintenance Diagnostics",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Jolt vehicle chassis stress state (M9), inventory/UI text fields.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-05]"
+    ],
     "depended_by": [],
     "line": 264,
     "anchor": "MM13-EXT-05"
@@ -57,10 +57,10 @@
   {
     "id": "M13-EXT-06",
     "title": "Dynamic Survivor Hearsay & Rumor Network",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Procedural world anomaly tracker (M4), safehouse bulletin board props (M8.6).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-06]"
+    ],
     "depended_by": [],
     "line": 289,
     "anchor": "MM13-EXT-06"
@@ -68,10 +68,10 @@
   {
     "id": "M13-EXT-07",
     "title": "Safehouse Logbook Auto-Journalizer",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Day/night cycle rollover (M10), settlement defense/scavenging counters (M8.6).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-07]"
+    ],
     "depended_by": [],
     "line": 314,
     "anchor": "MM13-EXT-07"
@@ -79,10 +79,10 @@
   {
     "id": "M13-EXT-08",
     "title": "Infiltration & Stealth Audio-Text Interpreter",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Acoustic propagation system (M6), stealth HUD overlay (M11).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-08]"
+    ],
     "depended_by": [],
     "line": 339,
     "anchor": "MM13-EXT-08"
@@ -90,10 +90,10 @@
   {
     "id": "M13-EXT-09",
     "title": "Dynamic Quarantine Zone Signage & Lore",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Procedural building generation (M4), interior enemy density tags (M5.4).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-09]"
+    ],
     "depended_by": [],
     "line": 364,
     "anchor": "MM13-EXT-09"
@@ -101,10 +101,10 @@
   {
     "id": "M13-EXT-10",
     "title": "Jury-Rigged Weapon Mod Descriptors",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M8 crafting/attachment system, item tooltip UI.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-10]"
+    ],
     "depended_by": [],
     "line": 398,
     "anchor": "MM13-EXT-10"
@@ -112,10 +112,10 @@
   {
     "id": "M13-EXT-11",
     "title": "Hardware Backend Auto-Detection & Async Compute Queue Isolation",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Engine boot sequence (extends M0's device/queue enumeration), M13 SLM worker thread startup.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-11]"
+    ],
     "depended_by": [],
     "line": 423,
     "anchor": "MM13-EXT-11"
@@ -123,10 +123,11 @@
   {
     "id": "M13-EXT-12",
     "title": "Attenuated Narrative Radio Scrambler",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M2.8-EXT-01's radio-frequency signal attenuation (comms static physics), M6 acoustic propagation, faction/survivor radio chatter text.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-12]",
+      "[M2-EXT-50]"
+    ],
     "depended_by": [],
     "line": 477,
     "anchor": "MM13-EXT-12"
@@ -134,10 +135,10 @@
   {
     "id": "M13-EXT-13",
     "title": "Survivor Behavior-Tree Flavor Advisor",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Survivor Behavior-Tree Flavor Advisor",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-13]"
+    ],
     "depended_by": [],
     "line": 507,
     "anchor": "MM13-EXT-13"
@@ -145,232 +146,232 @@
   {
     "id": "M13-EXT-15",
     "title": "SLM Broadcast Text Determinism Seeder",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13 + M8.5/M5.4. Seeds SLM broadcast text deterministically per world state.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-15]"
+    ],
     "depended_by": [],
-    "line": 512,
+    "line": 525,
     "anchor": "MM13-EXT-15"
   },
   {
     "id": "M13-EXT-16",
     "title": "Offline SLM Generation Harness",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13/M4/M5. MiniCPM5-1B at content-build time, never per-tick (arxiv 2601.23206).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-16]"
+    ],
     "depended_by": [],
-    "line": 563,
+    "line": 576,
     "anchor": "MM13-EXT-16"
   },
   {
     "id": "M13-EXT-17",
     "title": "SLM Prompt-Template Library",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. Seed templates → archetypes, loot flavor, weather, dialogue.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-17]"
+    ],
     "depended_by": [],
-    "line": 579,
+    "line": 592,
     "anchor": "MM13-EXT-17"
   },
   {
     "id": "M13-EXT-18",
     "title": "SLM Output Schema Validator",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13/V. SLM emits parseable JSON/config, not prose.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-18]"
+    ],
     "depended_by": [],
-    "line": 595,
+    "line": 608,
     "anchor": "MM13-EXT-18"
   },
   {
     "id": "M13-EXT-19",
     "title": "SLM Output → Validation Pipeline",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13/V. SLM content also passes V-checks.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-19]"
+    ],
     "depended_by": [],
-    "line": 611,
+    "line": 624,
     "anchor": "MM13-EXT-19"
   },
   {
     "id": "M13-EXT-20",
     "title": "SLM Cache",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. Same seed+template → cached output.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-20]"
+    ],
     "depended_by": [],
-    "line": 627,
+    "line": 640,
     "anchor": "MM13-EXT-20"
   },
   {
     "id": "M13-EXT-21",
     "title": "SLM Deterministic Seeding",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. Same input → same output; lock temp/top_p.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-21]"
+    ],
     "depended_by": [],
-    "line": 643,
+    "line": 656,
     "anchor": "MM13-EXT-21"
   },
   {
     "id": "M13-EXT-22",
     "title": "SLM Fallback on Failure",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. If model absent, use template defaults.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-22]"
+    ],
     "depended_by": [],
-    "line": 659,
+    "line": 672,
     "anchor": "MM13-EXT-22"
   },
   {
     "id": "M13-EXT-23",
     "title": "SLM Provenance Tag",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13/M11. Mark content as SLM-generated.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-23]"
+    ],
     "depended_by": [],
-    "line": 675,
+    "line": 688,
     "anchor": "MM13-EXT-23"
   },
   {
     "id": "M13-EXT-24",
     "title": "SLM Quest & Objective Text",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. No quest text gen.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-24]"
+    ],
     "depended_by": [],
-    "line": 691,
+    "line": 704,
     "anchor": "MM13-EXT-24"
   },
   {
     "id": "M13-EXT-25",
     "title": "SLM Dialogue & Branching",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. No dialogue gen.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-25]"
+    ],
     "depended_by": [],
-    "line": 710,
+    "line": 723,
     "anchor": "MM13-EXT-25"
   },
   {
     "id": "M13-EXT-26",
     "title": "SLM Lore & Worldbuilding",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. No lore gen.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-26]"
+    ],
     "depended_by": [],
-    "line": 729,
+    "line": 742,
     "anchor": "MM13-EXT-26"
   },
   {
     "id": "M13-EXT-27",
     "title": "SLM Loadout/Build Suggestions",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. No build advisor.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-27]"
+    ],
     "depended_by": [],
-    "line": 748,
+    "line": 761,
     "anchor": "MM13-EXT-27"
   },
   {
     "id": "M13-EXT-28",
     "title": "SLM Moderation/Filtering",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "M13. No content filter.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-28]"
+    ],
     "depended_by": [],
-    "line": 767,
+    "line": 780,
     "anchor": "MM13-EXT-28"
   },
   {
     "id": "M13-EXT-31",
     "title": "Moral Choice Consequence Broadcast",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Pushes to M13-EXT-36/37 broadcasts and M8.6-EXT-13 reputation; M5.4-EXT-11 cannibal act is a key source.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-31]"
+    ],
     "depended_by": [],
-    "line": 785,
+    "line": 798,
     "anchor": "MM13-EXT-31"
   },
   {
     "id": "M13-EXT-36",
     "title": "SLM Story Broadcast Bus",
-    "cluster": "B",
-    "tags": "SLM",
-    "tldr": "Single broadcast channel for M13-EXT-24 lore, M13-EXT-31 morals, M11-EXT-54 pins.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-36]"
+    ],
     "depended_by": [],
-    "line": 809,
+    "line": 822,
     "anchor": "MM13-EXT-36"
   },
   {
     "id": "M13-EXT-41",
     "title": "NPC Relationship / Diary Graph",
-    "cluster": "B",
-    "tags": "NPC",
-    "tldr": "Backs M13-EXT-50 memory and M13-EXT-42 diary; feeds M8.6-EXT-13 reputation per NPC.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-41]"
+    ],
     "depended_by": [],
-    "line": 833,
+    "line": 846,
     "anchor": "MM13-EXT-41"
   },
   {
     "id": "M13-EXT-42",
     "title": "NPC Diary / Recollection Surface",
-    "cluster": "B",
-    "tags": "NPC",
-    "tldr": "Projection of M13-EXT-41 graph + M13-EXT-50 memory into prose the player can open.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-42]"
+    ],
     "depended_by": [],
-    "line": 857,
+    "line": 870,
     "anchor": "MM13-EXT-42"
   },
   {
     "id": "M13-EXT-43",
     "title": "Motivated Combatant Spawn (Non-Target)",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Spawns driven by M8.6 faction stance and M13-EXT-41 relationships; combat has motive text.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-43]"
+    ],
     "depended_by": [],
-    "line": 881,
+    "line": 894,
     "anchor": "MM13-EXT-43"
   },
   {
     "id": "M13-EXT-48",
     "title": "Story-Pin World Anchoring",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Consumes M13-EXT-36 broadcasts + M11-EXT-54 pins; ties lore (M13-EXT-24) to coordinates.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-48]"
+    ],
     "depended_by": [],
-    "line": 905,
+    "line": 918,
     "anchor": "MM13-EXT-48"
   },
   {
     "id": "M13-EXT-50",
     "title": "NPC Long-Term Memory Store",
-    "cluster": "B",
-    "tags": "NPC",
-    "tldr": "Persistence behind M13-EXT-41 graph + M13-EXT-42 diary; survives save/load.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M13-EXT-50]"
+    ],
     "depended_by": [],
-    "line": 929,
+    "line": 942,
     "anchor": "MM13-EXT-50"
   }
 ]

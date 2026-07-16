@@ -3,9 +3,9 @@
     "id": "M6-EXT-01",
     "title": "Acoustic Doppler-Shift Pitch Modulator",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Combines M2.9 Ballistic projectile velocities with M6 audio engine streaming callbacks.",
-    "depends_on": [],
+    "depends_on": [
+      "[M6-EXT-01]"
+    ],
     "depended_by": [],
     "line": 58,
     "anchor": "MM6-EXT-01"
@@ -14,9 +14,9 @@
     "id": "M6-EXT-02",
     "title": "Footstep Impact Acoustic Resonance",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Pairs your M2.7 character controller speed parameters with M6 ray-traced acoustic portals.",
-    "depends_on": [],
+    "depends_on": [
+      "[M6-EXT-02]"
+    ],
     "depended_by": [],
     "line": 88,
     "anchor": "MM6-EXT-02"
@@ -25,9 +25,9 @@
     "id": "M6-EXT-03",
     "title": "Acoustic Echo-Location Decoy Sound Mirroring",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Upgrades M6 ray-traced audio propagation paths inside your background audio callbacks.",
-    "depends_on": [],
+    "depends_on": [
+      "[M6-EXT-03]"
+    ],
     "depended_by": [],
     "line": 116,
     "anchor": "MM6-EXT-03"
@@ -36,12 +36,10 @@
     "id": "M6-EXT-04",
     "title": "Voxelized Acoustic Propagation Portal Weaver",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Complements M6 hardware audio structures and reacts to breaks tracked by M3 destruction.",
-    "depends_on": [],
-    "depended_by": [
-      "M6-EXT-07"
+    "depends_on": [
+      "[M6-EXT-04]"
     ],
+    "depended_by": [],
     "line": 144,
     "anchor": "MM6-EXT-04"
   },
@@ -49,12 +47,10 @@
     "id": "M6-EXT-05",
     "title": "Audio Voice Prioritization Matrix Allocation Weight Culler",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Sits under M6's Miniaudio backend decision, gating channel budget at horde scale — distinct from the propagation/Doppler/echo EXT features above, which shape...",
-    "depends_on": [],
-    "depended_by": [
-      "M6-EXT-06"
+    "depends_on": [
+      "[M6-EXT-05]"
     ],
+    "depended_by": [],
     "line": 173,
     "anchor": "MM6-EXT-05"
   },
@@ -62,10 +58,9 @@
     "id": "M6-EXT-06",
     "title": "Variable-Rate Audio Emitter Execution Cadence Stagger Matrix",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Protects M6's 0.5ms audio execution budget alongside [M6-EXT-05]'s voice-priority culler — where that feature decides *whether* a voice mixes at all, this on...",
     "depends_on": [
-      "M6-EXT-05"
+      "[M6-EXT-06]",
+      "[M6-EXT-05]"
     ],
     "depended_by": [],
     "line": 201,
@@ -74,11 +69,10 @@
   {
     "id": "M6-EXT-07",
     "title": "Material-Indexed Velvet-Noise Late Reverb",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Declares the base \"Material-Indexed Reverb. Velvet-Noise Late Reverb Synthesis\" bullet. Reads room/surface material tags from [M6-EXT-04]'s voxelized propaga...",
+    "cluster": null,
     "depends_on": [
-      "M6-EXT-04"
+      "[M6-EXT-07]",
+      "[M6-EXT-04]"
     ],
     "depended_by": [],
     "line": 236,
@@ -87,10 +81,10 @@
   {
     "id": "M6-EXT-08",
     "title": "Ray-Traced Acoustic Diffraction Node Topology Cache",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M6 audio + M4.5-EXT-17. Caches ray-traced acoustic diffraction nodes so sound bends around corners.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-08]"
+    ],
     "depended_by": [],
     "line": 274,
     "anchor": "MM6-EXT-08"
@@ -98,10 +92,10 @@
   {
     "id": "M6-EXT-09",
     "title": "Velvet-Noise Late Reverb Interleaved Mixing Buffer",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M6 audio. Mixes velvet-noise late reverb into the bus for cheap, artifact-free tails.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-09]"
+    ],
     "depended_by": [],
     "line": 293,
     "anchor": "MM6-EXT-09"
@@ -109,10 +103,10 @@
   {
     "id": "M6-EXT-10",
     "title": "Acoustic Convection Wave Refraction Filter",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M6 audio. Refracts sound waves by wind/convection so distant audio bends with weather.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-10]"
+    ],
     "depended_by": [],
     "line": 312,
     "anchor": "MM6-EXT-10"
@@ -120,10 +114,10 @@
   {
     "id": "M6-EXT-11",
     "title": "Voxel-Cone Acoustic Occlusion & Material Absorption",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Voxel-Cone Acoustic Occlusion & Material Absorption",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-11]"
+    ],
     "depended_by": [],
     "line": 331,
     "anchor": "MM6-EXT-11"
@@ -131,122 +125,123 @@
   {
     "id": "M6-EXT-12",
     "title": "Convolution-Reverb from Voxel Occlusion",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M6 + M3/M4.5. Builds convolution reverb IR from the voxel/occlusion field.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-12]",
+      "[M4-EXT-14]"
+    ],
     "depended_by": [],
-    "line": 332,
+    "line": 345,
     "anchor": "MM6-EXT-12"
   },
   {
     "id": "M6-EXT-13",
     "title": "Hardware-Accelerated Audio",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M6. grep AudioEngine|soloud|OpenAL → 0. No sound at all.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-13]"
+    ],
     "depended_by": [],
-    "line": 399,
+    "line": 412,
     "anchor": "MM6-EXT-13"
   },
   {
     "id": "M6-EXT-14",
     "title": "Audio Occlusion / Propagation",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M6. No occlusion despite RayBatchQuery (M1-002).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-14]"
+    ],
     "depended_by": [],
-    "line": 417,
+    "line": 430,
     "anchor": "MM6-EXT-14"
   },
   {
     "id": "M6-EXT-15",
     "title": "Procedural Audio / VFX Params",
-    "cluster": "B",
-    "tags": "VFX",
-    "tldr": "M6.5/M13. No SLM-generated VFX/audio param tables.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-15]"
+    ],
     "depended_by": [],
-    "line": 438,
+    "line": 451,
     "anchor": "MM6-EXT-15"
   },
   {
     "id": "M6-EXT-16",
     "title": "HRTF Spatial Audio",
-    "cluster": "B",
-    "tags": "HRTF",
-    "tldr": "M6. Binaural HRTF for positional accuracy.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-16]"
+    ],
     "depended_by": [],
-    "line": 459,
+    "line": 472,
     "anchor": "MM6-EXT-16"
   },
   {
     "id": "M6-EXT-17",
     "title": "Occlusion/Obstruction Model",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M6. Audio occlusion beyond RayBatchQuery stub.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-17]"
+    ],
     "depended_by": [],
-    "line": 478,
+    "line": 491,
     "anchor": "MM6-EXT-17"
   },
   {
     "id": "M6-EXT-18",
     "title": "Dynamic Music & Stinger System",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M6. No adaptive music.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-18]"
+    ],
     "depended_by": [],
-    "line": 497,
+    "line": 510,
     "anchor": "MM6-EXT-18"
   },
   {
     "id": "M6-EXT-19",
     "title": "Blood & Gore Decals",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M6.5. No blood/decal system.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-19]"
+    ],
     "depended_by": [],
-    "line": 517,
+    "line": 530,
     "anchor": "MM6-EXT-19"
   },
   {
     "id": "M6-EXT-20",
     "title": "Impact & Sparks VFX",
-    "cluster": "C",
-    "tags": "VFX",
-    "tldr": "M6.5. No impact effects.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-20]"
+    ],
     "depended_by": [],
-    "line": 536,
+    "line": 549,
     "anchor": "MM6-EXT-20"
   },
   {
     "id": "M6-EXT-21",
     "title": "Weather Particle VFX (rain/snow)",
-    "cluster": "C",
-    "tags": "VFX",
-    "tldr": "M6.5/M10. No weather particles.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-21]"
+    ],
     "depended_by": [],
-    "line": 555,
+    "line": 568,
     "anchor": "MM6-EXT-21"
   },
   {
     "id": "M6-EXT-22",
     "title": "Death/ Dissolve VFX",
-    "cluster": "C",
-    "tags": "VFX",
-    "tldr": "M6.5. No death effect.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6-EXT-22]"
+    ],
     "depended_by": [],
-    "line": 574,
+    "line": 587,
     "anchor": "MM6-EXT-22"
   }
 ]

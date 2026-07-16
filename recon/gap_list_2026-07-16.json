@@ -1,0 +1,299 @@
+{
+  "M1": [
+    {
+      "id": "M1-EXT-01",
+      "title": "SpatialHash Uniform Grid Cell Bucketing Engine",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation"
+      ]
+    },
+    {
+      "id": "M1-EXT-11",
+      "title": "Compute-to-Indirect-Draw Execution Barrier",
+      "missing": [
+        "Systems Touched",
+        "Math"
+      ]
+    }
+  ],
+  "M10": [
+    {
+      "id": "M10-EXT-06",
+      "title": "Phenological Chlorophyll Cycles & Seasonal Canopy Thinning",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M11": [
+    {
+      "id": "M11-EXT-07",
+      "title": "MSDF Shaded Drop-Shadow Vector Signed Distance Field Generator",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M12": [
+    {
+      "id": "M12-EXT-02",
+      "title": "Bitmask Packet Loss Sliding Window Acknowledgement Register",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M13": [
+    {
+      "id": "M13-EXT-13",
+      "title": "Survivor Behavior-Tree Flavor Advisor",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M2": [
+    {
+      "id": "M2-EXT-05",
+      "title": "Mechanical Muscle Exhaustion Joint-Friction Damping Adder",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M2-EXT-43",
+      "title": "Nested Weapon Component Rig with Two-Bone IK Arm Locking",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M2-EXT-54",
+      "title": "Host-Authoritative Topography & Seeded Client Reconstruction",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M2-EXT-66",
+      "title": "Caloric Body Condition Scoring & Layered Thermal Insulation",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M3": [
+    {
+      "id": "M3-EXT-08",
+      "title": "Chemical Weathering & Particulate Deposition Tracker",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M4.5": [
+    {
+      "id": "M4.5-EXT-20",
+      "title": "Beer-Lambert Translucent Medium Light Extinction",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M4": [
+    {
+      "id": "M4-EXT-19",
+      "title": "Anthropogenic Infrastructure Exclusion Splines",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M4-EXT-86",
+      "title": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M5": [
+    {
+      "id": "M5-EXT-22",
+      "title": "Screamer Convergence & Holling Type II Cannibalism Feeding",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M5-EXT-36",
+      "title": "Skeletal Joint Yield Torque Bone Fracturing Filter",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M5-EXT-45",
+      "title": "Confidence-Gated Stealth Strikes",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M5-EXT-49",
+      "title": "Emergent Difficulty via Director Pacing & Outbreak Feedback (No Difficulty Setting)",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M6.5": [
+    {
+      "id": "M6.5-EXT-12",
+      "title": "Volumetric Micro-Atmospherics & Heat-Shimmer Fields",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M6": [
+    {
+      "id": "M6-EXT-11",
+      "title": "Voxel-Cone Acoustic Occlusion & Material Absorption",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M7": [
+    {
+      "id": "M7-EXT-04",
+      "title": "Soft-Body Cloth, Tethered Rot-Cloth & Cosserat-Rod Vegetation (Jolt 5.6.0 Soft-Body Unlock)",
+      "missing": [
+        "How It Works"
+      ]
+    },
+    {
+      "id": "M7-EXT-07",
+      "title": "Hierarchical Delta-State Persistence (Procedural Seed-Diff Engine)",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M8": [
+    {
+      "id": "M8-EXT-08",
+      "title": "Log-Normal Camouflage Masking",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    },
+    {
+      "id": "M8-EXT-32",
+      "title": "Genetic-Algorithm Settlement Macro-Layout Optimizer",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ],
+  "M9": [
+    {
+      "id": "M9-EXT-19",
+      "title": "Parallax-Occlusion Topography Deformation & Persistent Ruts",
+      "missing": [
+        "Systems Touched",
+        "Math",
+        "How It Works",
+        "Reference Implementation",
+        "Player-Facing Impact"
+      ]
+    }
+  ]
+}

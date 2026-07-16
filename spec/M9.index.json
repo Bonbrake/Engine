@@ -3,9 +3,9 @@
     "id": "M9-EXT-01",
     "title": "Fluid Momentum Traction Shear (Blood-Slick Viscosity)",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Connects M6.5 (GPU Fluid Blood Particles) directly to your M9 SurfaceFrictionSample interface — writes the bloodMuMultiplier term consumed by SurfaceFriction...",
-    "depends_on": [],
+    "depends_on": [
+      "[M9-EXT-01]"
+    ],
     "depended_by": [],
     "line": 82,
     "anchor": "MM9-EXT-01"
@@ -14,9 +14,9 @@
     "id": "M9-EXT-02",
     "title": "Non-Linear Tire Slip Friction Heating (Thermal Traction Breakdown)",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Feeds your M9 vehicle chassis components directly into the SurfaceFrictionSample system — writes the tireThermalMuMultiplier term consumed last in SurfaceFri...",
-    "depends_on": [],
+    "depends_on": [
+      "[M9-EXT-02]"
+    ],
     "depended_by": [],
     "line": 112,
     "anchor": "MM9-EXT-02"
@@ -25,9 +25,9 @@
     "id": "M9-EXT-03",
     "title": "High-Velocity Wet-Silt Aquaplaning",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Ties M10 shallow-water Saint-Venant flooding heightmaps directly into your M9 vehicle chassis handling loops.",
-    "depends_on": [],
+    "depends_on": [
+      "[M9-EXT-03]"
+    ],
     "depended_by": [],
     "line": 143,
     "anchor": "MM9-EXT-03"
@@ -36,12 +36,10 @@
     "id": "M9-EXT-04",
     "title": "Non-Newtonian Mud Silt Advection (Soil Rut Tracking)",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Links M10 groundwater and weather grids straight to the M9 vehicle chassis constraints.",
-    "depends_on": [],
-    "depended_by": [
-      "M9-EXT-20"
+    "depends_on": [
+      "[M9-EXT-04]"
     ],
+    "depended_by": [],
     "line": 180,
     "anchor": "MM9-EXT-04"
   },
@@ -49,9 +47,9 @@
     "id": "M9-EXT-05",
     "title": "Aerodynamic Wind Lift & Side-Slip Force Vectoring (Chassis Loft)",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Complements M9 vehicle chassis handling loops using M10 atmospheric wind vectors.",
-    "depends_on": [],
+    "depends_on": [
+      "[M9-EXT-05]"
+    ],
     "depended_by": [],
     "line": 226,
     "anchor": "MM9-EXT-05"
@@ -60,9 +58,9 @@
     "id": "M9-EXT-06",
     "title": "Horde Continuum Fluid Drag (The Swarm Plow Solver)",
     "cluster": null,
-    "tags": "general",
-    "tldr": "Feeds M9 vehicle chassis physics from the M5.4 horde SpatialHash density query, avoiding per-zombie Jolt rigid-body contact resolution at horde scale.",
-    "depends_on": [],
+    "depends_on": [
+      "[M9-EXT-06]"
+    ],
     "depended_by": [],
     "line": 265,
     "anchor": "MM9-EXT-06"
@@ -70,10 +68,10 @@
   {
     "id": "M9-EXT-07",
     "title": "Dynamic Skid-Mark Injection via Runtime Virtual Textures (RVT)",
-    "cluster": "A",
-    "tags": "RVT",
-    "tldr": "Replaces the broken G-buffer model; integrates M9 wheel slip with the persistent RVT terrain-overlay system built in M4.5 (chunk-anchored, imageStore write p...",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-07]"
+    ],
     "depended_by": [],
     "line": 293,
     "anchor": "MM9-EXT-07"
@@ -81,10 +79,10 @@
   {
     "id": "M9-EXT-08",
     "title": "Open/Locked Axle Torque Differential Splitter",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Integrates natively within M9 (Wheeled Vehicle Physics) inside Jolt wheel constraint updates.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-08]"
+    ],
     "depended_by": [],
     "line": 324,
     "anchor": "MM9-EXT-08"
@@ -92,10 +90,10 @@
   {
     "id": "M9-EXT-09",
     "title": "Volatile Fuel Tank Puncture Bernoulli Drainage",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Connects M3 macro-destruction structural hits directly to M9 vehicle metrics.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-09]"
+    ],
     "depended_by": [],
     "line": 357,
     "anchor": "MM9-EXT-09"
@@ -103,10 +101,10 @@
   {
     "id": "M9-EXT-10",
     "title": "Aero-Elastic Body Panel Drag Deformation Scaling",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Links M3 macro-destruction structural hits to your M9 vehicle chassis velocity curves.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-10]"
+    ],
     "depended_by": [],
     "line": 390,
     "anchor": "MM9-EXT-10"
@@ -114,10 +112,10 @@
   {
     "id": "M9-EXT-11",
     "title": "Wake-Slipstream Aerodynamic Drafting",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Links your M9 vehicle chassis velocity updates straight to the global wind paths.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-11]"
+    ],
     "depended_by": [],
     "line": 418,
     "anchor": "MM9-EXT-11"
@@ -125,10 +123,10 @@
   {
     "id": "M9-EXT-12",
     "title": "Exhaust Backpressure Aquatic Stutter",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Replaces the engine-bricking hydrolock trap; interfaces M10 shallow-water heights with M9 vehicle torque loops.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-12]"
+    ],
     "depended_by": [],
     "line": 446,
     "anchor": "MM9-EXT-12"
@@ -136,10 +134,10 @@
   {
     "id": "M9-EXT-13",
     "title": "Gyroscopic Wheel-Spin Precession Self-Righting",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Modifies M9 two-wheeled vehicle chassis setups inside your fixed physics callbacks.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-13]"
+    ],
     "depended_by": [],
     "line": 479,
     "anchor": "MM9-EXT-13"
@@ -147,10 +145,10 @@
   {
     "id": "M9-EXT-14",
     "title": "Non-Newtonian Mud-Slurry Catapult (Tire Rooster-Tails)",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Links M9 wheel spin velocities to your M6.5 GPU fluid particle generators.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-14]"
+    ],
     "depended_by": [],
     "line": 509,
     "anchor": "MM9-EXT-14"
@@ -158,10 +156,10 @@
   {
     "id": "M9-EXT-15",
     "title": "Chassis Vortex Debris Drafting",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Links M9 large vehicle chassis velocities to your background spatial items tracker.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-15]"
+    ],
     "depended_by": [],
     "line": 537,
     "anchor": "MM9-EXT-15"
@@ -169,24 +167,24 @@
   {
     "id": "M9-EXT-16",
     "title": "Socio-Economic Fuel Scarcity & Shared-Station Garage Repair",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Fuel spawn density keyed to the same socio-economic tags already placing loot (Appendix C) — no new scarcity table. Garages are CraftingStationComponent enti...",
-    "depends_on": [],
-    "depended_by": [
-      "M9-EXT-17"
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-16]",
+      "[M8-EXT-02]",
+      "[M3-EXT-06]"
     ],
+    "depended_by": [],
     "line": 570,
     "anchor": "MM9-EXT-16"
   },
   {
     "id": "M9-EXT-17",
     "title": "Rigid-Body Lateral Frame Shear Stress Accumulator",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Feeds M9 vehicle chassis impacts into the shared StructuralFatigue/TickFatigue() Palmgren-Miner accumulator already declared canonical by [M3-EXT-06] — this ...",
+    "cluster": null,
     "depends_on": [
-      "M9-EXT-16"
+      "[M9-EXT-17]",
+      "[M3-EXT-06]",
+      "[M9-EXT-16]"
     ],
     "depended_by": [],
     "line": 597,
@@ -195,10 +193,10 @@
   {
     "id": "M9-EXT-18",
     "title": "Vehicle Convoy Long-Range Router",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M9 + M5.4. Routes a vehicle convoy over long distance on the road graph, keeping spacing.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-18]"
+    ],
     "depended_by": [],
     "line": 624,
     "anchor": "MM9-EXT-18"
@@ -206,10 +204,10 @@
   {
     "id": "M9-EXT-19",
     "title": "Parallax-Occlusion Topography Deformation & Persistent Ruts",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "Parallax-Occlusion Topography Deformation & Persistent Ruts",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-19]"
+    ],
     "depended_by": [],
     "line": 644,
     "anchor": "MM9-EXT-19"
@@ -217,47 +215,46 @@
   {
     "id": "M9-EXT-20",
     "title": "Anti-Roll Torsional Suspension Stabilizer",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M9. Torsion bar linking wheel axes to curb rollover in hard cornering.",
+    "cluster": null,
     "depends_on": [
-      "M9-EXT-04"
+      "[M9-EXT-20]",
+      "[M9-EXT-04]"
     ],
     "depended_by": [],
-    "line": 645,
+    "line": 658,
     "anchor": "MM9-EXT-20"
   },
   {
     "id": "M9-EXT-21",
     "title": "Fluid Hydrodynamic Wading Resistance Modulator",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M9 vehicles + M2.9 flood bridge. Modulates vehicle wading resistance by water depth/hydrodynamics.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-21]"
+    ],
     "depended_by": [],
-    "line": 715,
+    "line": 728,
     "anchor": "MM9-EXT-21"
   },
   {
     "id": "M9-EXT-22",
     "title": "RVT Skid-Mark / Tire-Track Injector *(SOURCED FROM PLAN FILE)",
-    "cluster": "C",
-    "tags": "RVT, SOURCED, PLAN, FILE",
-    "tldr": "One of three features audit line 133 says blocked on missing RVT base. Writes tire tracks + drift scars into M4.5-EXT-26 RVT overlay from M9 wheel-contact + ...",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-22]"
+    ],
     "depended_by": [],
-    "line": 733,
+    "line": 746,
     "anchor": "MM9-EXT-22"
   },
   {
     "id": "M9-EXT-23",
     "title": "Day/Night, Weather & Atmosphere",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M10. No day/night cycle or weather system (only a comment in Engine.cpp).",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M9-EXT-23]"
+    ],
     "depended_by": [],
-    "line": 753,
+    "line": 766,
     "anchor": "MM9-EXT-23"
   }
 ]

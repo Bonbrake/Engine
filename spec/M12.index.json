@@ -2,23 +2,23 @@
   {
     "id": "M12-EXT-01",
     "title": "Bitstream Delta-Encoded Network Serialization Packet Encoder",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "The actual wire format for M12's Spatial Relevance Replication Filtering above. Distinct from [M2.8-EXT-02]/[M2.8-EXT-04] (those solve local co-op *determini...",
-    "depends_on": [],
-    "depended_by": [
-      "M12-EXT-04"
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-01]",
+      "[M2-EXT-51]",
+      "[M2-EXT-53]"
     ],
+    "depended_by": [],
     "line": 47,
     "anchor": "MM12-EXT-01"
   },
   {
     "id": "M12-EXT-02",
     "title": "Bitmask Packet Loss Sliding Window Acknowledgement Register",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "Bitmask Packet Loss Sliding Window Acknowledgement Register",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-02]"
+    ],
     "depended_by": [],
     "line": 75,
     "anchor": "MM12-EXT-02"
@@ -26,146 +26,145 @@
   {
     "id": "M12-EXT-04",
     "title": "Local Network-Relevancy Grid Culling Filter",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M12 + M1-EXT-27. Culls network updates by a relevancy grid around each player.",
+    "cluster": null,
     "depends_on": [
-      "M12-EXT-01"
+      "[M12-EXT-04]",
+      "[M12-EXT-01]"
     ],
     "depended_by": [],
-    "line": 78,
+    "line": 91,
     "anchor": "MM12-EXT-04"
   },
   {
     "id": "M12-EXT-07",
     "title": "Network Clock Sync & Tick-Drift Compensator",
-    "cluster": "A",
-    "tags": "general",
-    "tldr": "M12. Syncs client/server clocks and compensates tick drift.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-07]"
+    ],
     "depended_by": [],
-    "line": 135,
+    "line": 148,
     "anchor": "MM12-EXT-07"
   },
   {
     "id": "M12-EXT-12",
     "title": "Interest Management for Spatial Audio",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "Caps concurrent voices by distance/importance; pairs with M12 reverb zones and chunk streaming.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-12]"
+    ],
     "depended_by": [],
-    "line": 156,
+    "line": 169,
     "anchor": "MM12-EXT-12"
   },
   {
     "id": "M12-EXT-13",
     "title": "Interest-Management Spatial Hash (Net Culling)",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M12 + M1-EXT-27. Spatial-hash interest management for network scope.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-13]"
+    ],
     "depended_by": [],
-    "line": 180,
+    "line": 193,
     "anchor": "MM12-EXT-13"
   },
   {
     "id": "M12-EXT-14",
     "title": "Networking / Netcode Transport",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M12. grep Network|Socket|ENet|Udp → 0. M2.8 co-op has zero transport.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-14]"
+    ],
     "depended_by": [],
-    "line": 200,
+    "line": 213,
     "anchor": "MM12-EXT-14"
   },
   {
     "id": "M12-EXT-15",
     "title": "Voice Chat / Push-To-Talk",
-    "cluster": "B",
-    "tags": "general",
-    "tldr": "M12. grep voice|PushToTalk → 0 in spec and code.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-15]"
+    ],
     "depended_by": [],
-    "line": 216,
+    "line": 229,
     "anchor": "MM12-EXT-15"
   },
   {
     "id": "M12-EXT-16",
     "title": "Anti-Cheat / Server Authority",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M2.8/M12. grep anti.cheat|serverAuth → 0. Deterministic co-op needs a trust boundary.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-16]"
+    ],
     "depended_by": [],
-    "line": 233,
+    "line": 246,
     "anchor": "MM12-EXT-16"
   },
   {
     "id": "M12-EXT-17",
     "title": "Co-op Determinism Guard",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M2.8/M12. ENGINE_DETERMINISM_MODE (M0-010) must be enforced for netplay.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-17]"
+    ],
     "depended_by": [],
-    "line": 249,
+    "line": 262,
     "anchor": "MM12-EXT-17"
   },
   {
     "id": "M12-EXT-18",
     "title": "Matchmaking / Lobby / Session",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M12. No lobby/matchmaking for co-op.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-18]"
+    ],
     "depended_by": [],
-    "line": 265,
+    "line": 278,
     "anchor": "MM12-EXT-18"
   },
   {
     "id": "M12-EXT-19",
     "title": "Lobby / Session Integrity",
-    "cluster": "C",
-    "tags": "general",
-    "tldr": "M12. Session state authority.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-19]"
+    ],
     "depended_by": [],
-    "line": 286,
+    "line": 299,
     "anchor": "MM12-EXT-19"
   },
   {
     "id": "M12-EXT-20",
     "title": "Entity Interpolation",
-    "cluster": "D",
-    "tags": "general",
-    "tldr": "M12. No render interpolation.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-20]"
+    ],
     "depended_by": [],
-    "line": 308,
+    "line": 321,
     "anchor": "MM12-EXT-20"
   },
   {
     "id": "M12-EXT-21",
     "title": "Lag Compensation",
-    "cluster": "D",
-    "tags": "general",
-    "tldr": "M12. No lag comp.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-21]"
+    ],
     "depended_by": [],
-    "line": 327,
+    "line": 340,
     "anchor": "MM12-EXT-21"
   },
   {
     "id": "M12-EXT-22",
     "title": "Dedicated Server Model",
-    "cluster": "D",
-    "tags": "general",
-    "tldr": "M12. No headless server.",
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M12-EXT-22]"
+    ],
     "depended_by": [],
-    "line": 346,
+    "line": 359,
     "anchor": "MM12-EXT-22"
   }
 ]

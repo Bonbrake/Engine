@@ -2,144 +2,149 @@
   {
     "id": "M6.5-EXT-01",
     "title": "Shockwave Hydro-Cavitation (Gore Fragmentation Dispersal)",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-01]",
+      "[M2-EXT-59]"
+    ],
     "depended_by": [],
-    "line": 60,
-    "anchor": "M6.5-EXT-01"
+    "line": 49,
+    "anchor": "MM6.5-EXT-01"
   },
   {
     "id": "M6.5-EXT-02",
     "title": "Capillary Spatter Impact Angle Projection",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-02]"
+    ],
     "depended_by": [],
-    "line": 100,
-    "anchor": "M6.5-EXT-02"
+    "line": 84,
+    "anchor": "MM6.5-EXT-02"
   },
   {
     "id": "M6.5-EXT-03",
     "title": "Venturi-Effect Smoke Drafting",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-03]"
+    ],
     "depended_by": [],
-    "line": 136,
-    "anchor": "M6.5-EXT-03"
+    "line": 115,
+    "anchor": "MM6.5-EXT-03"
   },
   {
     "id": "M6.5-EXT-04",
     "title": "Particle Stream Compaction Pipeline",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-04]"
+    ],
     "depended_by": [],
-    "line": 175,
-    "anchor": "M6.5-EXT-04"
+    "line": 149,
+    "anchor": "MM6.5-EXT-04"
   },
   {
     "id": "M6.5-EXT-05",
     "title": "Stress-Intensity Glass Fracture",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-05]"
+    ],
     "depended_by": [],
-    "line": 219,
-    "anchor": "M6.5-EXT-05"
+    "line": 188,
+    "anchor": "MM6.5-EXT-05"
   },
   {
     "id": "M6.5-EXT-06",
     "title": "Cellular-Automata Fire Thermodynamics",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-06]",
+      "[M6.5-EXT-03]"
+    ],
     "depended_by": [],
-    "line": 251,
-    "anchor": "M6.5-EXT-06"
+    "line": 215,
+    "anchor": "MM6.5-EXT-06"
   },
   {
     "id": "M6.5-EXT-07",
     "title": "Depth-Buffer Particle Collision Proxies",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-07]"
+    ],
     "depended_by": [],
-    "line": 286,
-    "anchor": "M6.5-EXT-07"
+    "line": 245,
+    "anchor": "MM6.5-EXT-07"
   },
   {
     "id": "M6.5-EXT-08",
     "title": "Blue-Noise Importance Sampling",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-08]"
+    ],
     "depended_by": [],
-    "line": 319,
-    "anchor": "M6.5-EXT-08"
+    "line": 273,
+    "anchor": "MM6.5-EXT-08"
   },
   {
     "id": "M6.5-EXT-09",
     "title": "Linked-List Order-Independent Transparency",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-09]"
+    ],
     "depended_by": [],
-    "line": 351,
-    "anchor": "M6.5-EXT-09"
+    "line": 300,
+    "anchor": "MM6.5-EXT-09"
   },
   {
     "id": "M6.5-EXT-10",
     "title": "G-Buffer Attachment Feedback Loop",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-10]",
+      "[M6.5-EXT-02]"
+    ],
     "depended_by": [],
-    "line": 388,
-    "anchor": "M6.5-EXT-10"
+    "line": 332,
+    "anchor": "MM6.5-EXT-10"
   },
   {
     "id": "M6.5-EXT-11",
     "title": "fBm Wind Kinematics & Collision-Reactive Foliage",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-11]",
+      "[M4-EXT-18]"
+    ],
     "depended_by": [],
-    "line": 421,
-    "anchor": "M6.5-EXT-11"
+    "line": 360,
+    "anchor": "MM6.5-EXT-11"
   },
   {
     "id": "M6.5-EXT-12",
     "title": "Volumetric Micro-Atmospherics & Heat-Shimmer Fields",
-    "cluster": "A — bootstrap core",
-    "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-12]"
+    ],
     "depended_by": [],
-    "line": 465,
-    "anchor": "M6.5-EXT-12"
+    "line": 399,
+    "anchor": "MM6.5-EXT-12"
   },
   {
     "id": "M6.5-EXT-13",
     "title": "Capillary Blood-Spatter RVT Projection",
-    "cluster": "A — bootstrap core",
-    "tags": "RVT",
-    "tldr": null,
-    "depends_on": [],
+    "cluster": null,
+    "depends_on": [
+      "[M6.5-EXT-13]",
+      "[M4.5-EXT-04]"
+    ],
     "depended_by": [],
-    "line": 473,
-    "anchor": "M6.5-EXT-13"
+    "line": 415,
+    "anchor": "MM6.5-EXT-13"
   }
 ]
