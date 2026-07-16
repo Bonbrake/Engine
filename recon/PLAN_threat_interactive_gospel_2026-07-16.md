@@ -75,10 +75,13 @@ R13 Vendor-agnostic IQ; upscaling = fallback not primary.
 - T4: RGB10A2 normal format — fold into M4.5-EXT-22 (verified: no EXT sets normal fmt).
 - T5: shadow-mask stencil — append to M4.5-EXT-13 (verified: -13 is VSM gen only).
 - T8: subsurface scattering LUT — new EXT M4.5-EXT-35 (verified: -19 Heiligenschein only).
+- T7: forward-rendered skin/hair path — new EXT M4.5-EXT-32 (verified: -20 is Burley/
+  Beer-Lambert only; no forward skin/hair pass; TI quote is transcript-primary, not a
+  citable external spec rule). Re-classified from false-COVERED.
 - T10: emissive-in-basepass — M4 base-pass convention (not an EXT).
 - T12: POM surface detail — append to M4.5-EXT-20.
 - R1/R7/R8/R9/R10/R12/R13: COVERED — confirm only, don't re-add.
-- VERIFIER: recon/verify_ti_plan.py must pass (exit 0) before calling this plan "done".
+- VERIFIER: recon/ti_gate.py (merged gate) must pass (exit 0) before calling this plan "done".
 
 ## ALREADY COVERED (verify, don't re-add) — REAL EXT IDs
 - Burley/Kalisto diffuse + Beer-Lambert: M4.5-EXT-20
@@ -131,7 +134,10 @@ T6  **SSAO at half-res with RG16 + R8 normal buffers** (proven structure). "clea
     half resolution SSAO, creates half resolution RG16 and R8 normal buffers." → COVERED
     M4.5-EXT-27 (Scalable Ambient Obscurance), reads GBuffer depth+normal. VERIFIER: PASS.
 T7  **Hair + skin = FORWARD rendered** (not deferred) — matches R10. "hair and skin are
-    forward rendered" (opaque = tiled deferred). → M4.5-EXT-20 forward path. [COVERED]
+    forward rendered" (opaque = tiled deferred). → [GAP] M4.5-EXT-32 (new forward-rendered
+    skin/hair path). VERIFIER: EXT-20 body is Burley + Beer-Lambert only; "flesh" appears
+    solely as TRANSLUCENT TRANSMISSION (Beer-Lambert), "forward-scatter" is a scattering term.
+    No forward-rendered skin/hair pass exists -> T7 was FALSE-COVERED, re-marked GAP.
 T8  **Subsurface scattering via custom LUT** (not brute-force). "custom lookup table…
     lavish subsurface scattering skin." → [GAP] M4.5-EXT-19 is Heiligenschein only, no SSS
     LUT. New SSS LUT EXT or extend -19/-20. VERIFIER: T8-FAIL on -19.
