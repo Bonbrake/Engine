@@ -27,8 +27,12 @@ albedo_resolved = f16->f32(upstream_albedo) BEFORE lighting arithmetic; store GB
 albedo in RGBA16 (or RGB10A2 where alpha packs material tags) — never RGBA8/16-bit-pack.
 ##### How It Works
 1. GBuffer albedo written at >=24-bit effective precision (RGBA16 or RGB10A2+tags).
-2. Lighting resolve reads full-precision albedo; no 16-bit crush at prepass->basepass boundary.
-3. Tier-0 safe: RGBA16 GBuffer albedo costs ~+8 bytes/px vs RGBA8; bounded by 6GB VRAM budget.
+2. GBuffer NORMAL buffer written RGB10A2 (10-bit/channel + material tag in alpha) — not
+   RGBA8; less banding on smooth surfaces, still 32-bit (TI T4). Folded from R2 layout.
+3. Lighting resolve reads full-precision albedo + RGB10A2 normals; no 16-bit crush at
+   prepass->basepass boundary.
+4. Tier-0 safe: RGBA16 albedo + RGB10A2 normal cost ~+12 bytes/px vs RGBA8; bounded by 6GB
+   VRAM budget.
 ##### Reference Implementation
 ```cpp
 // GBuffer albedo: full precision (TI R2 — never crush to 16-bit)
@@ -162,12 +166,15 @@ GAP R11 — Tonemapper EXT (target: M4.5, new)
 ##### Systems Touched
 Post-processing ([M4.5]), HDR output, exposure/color-grade (LUT).
 ##### Math
-color = ACESFilm(x * exposure);  // or AgX
-out = pow(color, 1/2.2)          // gamma
-(no separate blur pass to "soften"; aliasing solved at geometry/specular level — T1 mip
- filtering + T3 MSAA-stencil, NOT a post smear)
+color = AgX(x * exposure);            // AgX (or Khronos PBR Neutral) — desaturates highs,
+                                      // does NOT hard-clip like ACES Narkowicz (SDR operator)
+out = pow(color, 1/2.2)               // gamma
+// NOTE: ACES filmic (Narkowicz) is an SDR operator — clips >1, can desaturate badly.
+// TI "demand for better tone mappers" = AgX / PBR Neutral class, not ACES-film.
+// NO separate blur pass to "soften"; aliasing solved at geometry/specular level — T1 mip
+// filtering + T3 MSAA-stencil, NOT a post smear.
 ##### How It Works
-1. HDR scene -> exposure -> ACES/AgX tonemap -> gamma. Single pass.
+1. HDR scene -> exposure -> AgX tonemap -> gamma. Single pass.
 2. NO motion-blur/film-grain pass used to mask shading deficiencies (TI R13).
 3. Tonemapper is the IQ lever; default engine tonemap replaced.
 ##### Reference Implementation
@@ -257,7 +264,8 @@ NEW GAP T8 — Subsurface scattering LUT (target: M4.5, new)
 ##### Systems Touched
 Skin/translucent shading ([M4.5-EXT-20]), forward path (T7), material system.
 ##### Math
-sss = texture(SSSLut, vec2(NoL, curvature)) * scatterColor   // LUT keyed by light angle + curvature
+sss = texture(SSSLut, vec2(NoV, curvature)) * scatterColor   // LUT keyed by view-angle + curvature
+// (NoV×curvature is the DOMINANT wrap term — Burke/Dawson '91; NoL alone misses backlit wrap)
 ##### How It Works
 1. Precompute SSS response (warp/wrap diffuse + transmission) into a 2D LUT (NoL x curvature).
 2. Skin shader samples LUT instead of multi-sample volumetric -> ~free, rich subsurface.
@@ -290,8 +298,12 @@ Forward shading path ([M4.5]), material system ([M4-EXT-14]), skinning ([M4.5-EX
 forward_skin(N,L,V,curv) = Burley(N,L,V) + SSS_LUT(NoL,curv)   // T8 LUT, no GBuffer round-trip
 hair = alpha-tested forward, depth-sorted, no deferred resolve
 ##### How It Works
-1. Skin/hair meshes routed to a dedicated forward pass (opaque = tiled deferred per TI).
-2. Forward skin uses Burley + SSS LUT (T8) directly — no GBuffer encode/decode precision loss.
+1. Skin/hair meshes routed to a dedicated FORWARD pass (opaque world = tiled deferred per TI).
+   Forward pass shades directly to the lit buffer — NO GBuffer albedo/normal write (mixing a
+   forward write into the deferred GBuffer would defeat the precision/normal-win and break
+   the GBuffer contract). It reads shared depth from the prepass for correct occlusion.
+2. Forward skin = Burley + SSS LUT (T8) computed inline — no GBuffer encode/decode round-trip,
+   so no precision loss on thin/translucent hair + subsurface skin.
 3. Hair = alpha-tested forward, drawn after opaque, depth-sorted; minority screen (~4%, TI).
 ##### Reference Implementation
 ```cpp
@@ -327,5 +339,5 @@ STILL-MISSING / FOLLOW-UPS (flagged, not drafted)
   claims remain TI-primary (Disney/Filament math for Burley loaded fine).
 - 4 missing transcripts (5lDkHQ1bxG0, w1OzfuqCS10, aB5qxp6SPPQ, oD1cvng8SJE) still
   pending home-IP cooldown re-pull.
-- VERIFIER: recon/ti_gate.py (merged) gates all COVERED/GAP claims against real block bodies.
+- VERIFIER: recon/ti_debug.py (merged) gates all COVERED/GAP claims against real block bodies.
   Re-run after any plan edit. Exit 0 = safe to call "done".

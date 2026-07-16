@@ -8,8 +8,10 @@
 > EXT-ID cross-check done via terminal grep on spec/M4.md + spec/M4.5.md + spec/M10.md
 > (search_files tool is broken on this path — external bug; grep is authoritative).
 > ALL EXT IDs below are REAL and verified against the actual block text this session.
-> NOTE: web independent-verification of TI's claims is BLOCKED right now (DDG/Bing bot-
-> blocked, egress throttled) — claims are TI-primary-source; flagged as such.
+> Web independent-verification of TI's claims: egress recovered 2026-07-16. Lazarov 2015
+> "Specular AA" confirmed = roughness-driven mip footprint / prefilter (SIGGRAPH 2015
+> shading course, canonical) — T1 draft grounded. T7 "hair and skin are forward rendered"
+> is TI-transcript-primary; no external citable spec rule found — kept as GAP, not invented.
 
 ## WHAT IT CHANGES (the look — not "none")
 TI's rules *are* the visual target. Adopting them moves the look from "plastic Unreal
@@ -85,7 +87,7 @@ R13 Vendor-agnostic IQ; upscaling = fallback not primary.
 - T10: emissive-in-basepass — M4 base-pass convention (not an EXT).
 - T12: POM surface detail — [GAP] append to M4.5-EXT-20.
 - R1/R7/R8/R9/R10/R12/R13: COVERED — confirm only, don't re-add.
-- VERIFIER: recon/ti_gate.py (merged gate) must pass (exit 0) before calling this plan "done".
+- VERIFIER: recon/ti_debug.py (merged gate) must pass (exit 0) before calling this plan "done".
 
 ## ALREADY COVERED (verify, don't re-add) — REAL EXT IDs
 - Burley/Kalisto diffuse + Beer-Lambert: M4.5-EXT-20
@@ -161,7 +163,10 @@ T12 **Parallax occlusion mapping for base-pass surface detail** (no extra depth)
 T13 **Motion blur / film grain / filmic blur = TI calls them deficiency-hiding.** "Epic
     tries to hide… deficiencies with motion blur, tons of film grain, and blurry filmic
     filters." → post chain must NOT rely on blur to mask shading errors. R11 tonemapper
-    crisp, not "filmic-blur." [GAP: R11]
+    crisp, not "filmic-blur." [GAP: folded into R11, M4.5-EXT-33 — no blur-mask pass.]
+T2  **Prepass = large opaque only, NO alpha-tested/distant-small geometry.** Crysis 3
+    prepass "renders expensive and extremely dense alpha tested content" (bad); HL Alyx
+    "specifically doesn't." → R3/R4 hardening (M4.5-EXT-23). [GAP per R3/R4]
 T14 **Nanite/cluster-mesh-shader rasterizer = 3x slower compute rasterizer** (TI claim).
     "Nanite's three times slower compute shader rasterizer." → Our meshlet LODs (M4-EXT-02)
     use HARDWARE raster, NOT the compute voxel rasterizer (M4.5-EXT-16 is compute — restrict
