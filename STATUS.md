@@ -3,7 +3,7 @@
 > **Canonical spec:** `spec/` (per-milestone M0-parity working set, the live source of truth for every `[Mx-EXT-nn]` block). The v79 pre-split master plan and old Antigravity working files are archived under `archive/docs/` and `archive/old_milestones/`. Binding agent rules live in `.hermes.md`.
 
 ## Active Branch
-`m2/physics-destruction`
+`spec/m0-parity-reformat`
 
 ## Current Milestone
 **M2.6 — Phase 1 COMPLETE** ✅  
