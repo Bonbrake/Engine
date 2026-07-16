@@ -10,7 +10,8 @@
 4. Inside a milestone file, read ONLY the `#### [ID]` block you need. Each block is a complete, self-contained unit (Systems Touched / Math / How It Works / Reference Implementation / Player-Facing Impact).
 
 ## File map
-- `llms.txt` — canonical AI index (H1 + summary + per-milestone file lists). Start here.
+- `ROADMAP.md` — build phases (P0–P4), engine-first→game order, vertical-slice gate. Read this to know WHAT TO BUILD NEXT.
+- `llms.txt` — canonical AI index (phased, per-milestone file lists with `build_order`). Start here.
 - `M0.md` … `M13.md` — one file per milestone (incl. `M4.5`). Each has a collapsible block index at top + `### Cluster` dividers. Sub-milestones (M2.6/2.7/2.8/2.9, M4.6, M5.1–5.4, M8.5–8.7) were merged into their parent files in Phase 9.
 - `APPENDICES.md` — merged AAA-parity gap-fill (K/L/M) EXT blocks + reference/protocol index.
 - `00_PROTOCOL.md` — changelogs, how-to-work, specificity protocol, engineering pillars, budgets. Read ONCE.
