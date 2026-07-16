@@ -1,0 +1,542 @@
+{
+  "M11-EXT-52": {
+    "id": "M11-EXT-52",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "..65, M13, M10",
+    "context": [
+      "| **5** | Frame / UI / Audio / SLM | P0\u2013P4 | M6 (+M6-EXT-09/10), M6.5, M11-EXT-52..65, M13, M10 | Looks/sounds alive; SLM narrates from real world-state; no gameplay logic in SLM |",
+      "- minimal HUD [M11-EXT-52] fades by context"
+    ]
+  },
+  "M11-EXT-53": {
+    "id": "M11-EXT-53",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2190 M2.9 time, M11-EXT-42 marker",
+    "context": [
+      "- watch [M11-EXT-53] \u2190 M2.9 time, M11-EXT-42 marker"
+    ]
+  },
+  "M11-EXT-54": {
+    "id": "M11-EXT-54",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2190 POI + SLM lore [M13-EXT-24]",
+    "context": [
+      "- journal [M11-EXT-54] \u2190 POI + SLM lore [M13-EXT-24]"
+    ]
+  },
+  "M11-EXT-55": {
+    "id": "M11-EXT-55",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2190 M8-EXT-13 condition",
+    "context": [
+      "- weapon inspect [M11-EXT-55] \u2190 M8-EXT-13 condition"
+    ]
+  },
+  "M11-EXT-57": {
+    "id": "M11-EXT-57",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2190 M4-EXT-62 surface map",
+    "context": [
+      "- map annotation [M11-EXT-57] \u2190 M4-EXT-62 surface map"
+    ]
+  },
+  "M11-EXT-58": {
+    "id": "M11-EXT-58",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2190 M2.9 XP, M2-EXT-26 respec",
+    "context": [
+      "- skill sheet [M11-EXT-58] \u2190 M2.9 XP, M2-EXT-26 respec"
+    ]
+  },
+  "M11-EXT-59": {
+    "id": "M11-EXT-59",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "], hub [M8.6-EXT-28]",
+    "context": [
+      "- sleep/fatigue [M2.9-EXT-24] \u2192 rest UI [M11-EXT-59], hub [M8.6-EXT-28]"
+    ]
+  },
+  "M12-EXT-12": {
+    "id": "M12-EXT-12",
+    "found_in": [
+      "PLAN_INDEX"
+    ],
+    "title": "interest management.",
+    "context": [
+      "4. **Performance is a gate, not a goal.** Floor: 6 GB VRAM, 1080p, 60 fps. Levers: M0-EXT-40 dynamic resolution, M4.6-EXT-05/06 GPU cull + indirect draw, M12-EXT-12 interest management."
+    ]
+  },
+  "M13-EXT-31": {
+    "id": "M13-EXT-31",
+    "found_in": [
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": "/32], \u2192 factions [M8.6-EXT-13], SLM broadcasts [M13-EXT-36/37]",
+    "context": [
+      "- karma [M5.4-EXT-17/18] \u2190 moral choices [M13-EXT-31/32], \u2192 factions [M8.6-EXT-13], SLM broadcasts [M13-EXT-36/37]",
+      "- missions [M13-EXT-31/32] \u2190 world-state, \u2192 karma [M5.4-EXT-17]"
+    ]
+  },
+  "M13-EXT-36": {
+    "id": "M13-EXT-36",
+    "found_in": [
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": "/37]",
+    "context": [
+      "- karma [M5.4-EXT-17/18] \u2190 moral choices [M13-EXT-31/32], \u2192 factions [M8.6-EXT-13], SLM broadcasts [M13-EXT-36/37]",
+      "- broadcasts [M13-EXT-36/37] \u2190 events, \u2192 factions"
+    ]
+  },
+  "M13-EXT-41": {
+    "id": "M13-EXT-41",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] / memory [M13-EXT-50] \u2190 NPC graph",
+    "context": [
+      "- rumor [M13-EXT-42] / diary [M13-EXT-41] / memory [M13-EXT-50] \u2190 NPC graph"
+    ]
+  },
+  "M13-EXT-42": {
+    "id": "M13-EXT-42",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] / diary [M13-EXT-41] / memory [M13-EXT-50] \u2190 NPC graph",
+    "context": [
+      "- rumor [M13-EXT-42] / diary [M13-EXT-41] / memory [M13-EXT-50] \u2190 NPC graph"
+    ]
+  },
+  "M13-EXT-43": {
+    "id": "M13-EXT-43",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "]) \u2014 they fight for reasons, not spawn as targets.",
+    "context": [
+      "3. Factions have ideology (SLM charter [M13-EXT-43]) \u2014 they fight for reasons, not spawn as targets."
+    ]
+  },
+  "M13-EXT-48": {
+    "id": "M13-EXT-48",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "]",
+    "context": [
+      "- companion [M5.1-EXT-09] \u2190 M8.6 recruitment, \u2192 SLM barks [M13-EXT-48]"
+    ]
+  },
+  "M13-EXT-50": {
+    "id": "M13-EXT-50",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2190 NPC graph",
+    "context": [
+      "- rumor [M13-EXT-42] / diary [M13-EXT-41] / memory [M13-EXT-50] \u2190 NPC graph"
+    ]
+  },
+  "M2.7-EXT-19": {
+    "id": "M2.7-EXT-19",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": ", M8.7-EXT-02/03, M4.6-EXT-05/06, M0-EXT-40",
+    "context": [
+      "| **0** | Foundation + walking skeleton | none | M0-EXT-01, M1-EXT-10/11/12, M2-EXT-27/28, M2.7-EXT-33/34, M2.7-EXT-19, M8.7-EXT-02/03, M4.6-EXT-05/06, M0-EXT-40 | Move/look/reload (fumbling)/skill-ri",
+      "- Reload starts fumbling (bad hand-position, dropped mag) [M2.7-EXT-19] and tightens with reps."
+    ]
+  },
+  "M2.7-EXT-29": {
+    "id": "M2.7-EXT-29",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2192 no menu mid-combat",
+    "context": [
+      "- holster/swap [M2.7-EXT-29] \u2192 no menu mid-combat"
+    ]
+  },
+  "M2.7-EXT-30": {
+    "id": "M2.7-EXT-30",
+    "found_in": [
+      "PLAN_INDEX",
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "/27, M2-EXT-24/25, M3-EXT-09",
+    "context": [
+      "| **2** | Threat & combat | P1 + physics stable | M5.4-EXT-05/07/12, M5.3-EXT-08, M2.7-EXT-30/27, M2-EXT-24/25, M3-EXT-09 | Zombies hear/follow/swarm; bait + fight; 100+ agents holds fps |",
+      "- Thrown-object = ANY small world object (M2.7-EXT-30), real physics. Shiv = crafting recipe (M8-EXT-16). Listen Mode + Cover System = removed per design decision.",
+      "- thrown-object [M2.7-EXT-30] \u2192 M5.4 fear-field (any small object, real physics)"
+    ]
+  },
+  "M2.7-EXT-33": {
+    "id": "M2.7-EXT-33",
+    "found_in": [
+      "PLAN_INDEX"
+    ],
+    "title": "/34, M2.7-EXT-19, M8.7-EXT-02/03, M4.6-EXT-05/06, M0-EXT-40",
+    "context": [
+      "| **0** | Foundation + walking skeleton | none | M0-EXT-01, M1-EXT-10/11/12, M2-EXT-27/28, M2.7-EXT-33/34, M2.7-EXT-19, M8.7-EXT-02/03, M4.6-EXT-05/06, M0-EXT-40 | Move/look/reload (fumbling)/skill-ri"
+    ]
+  },
+  "M2.9-EXT-16": {
+    "id": "M2.9-EXT-16",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2192 M6 lighting, M5.4 aggro, M2.9 farm ticks",
+    "context": [
+      "- day/night [M2.9-EXT-16] \u2192 M6 lighting, M5.4 aggro, M2.9 farm ticks"
+    ]
+  },
+  "M2.9-EXT-18": {
+    "id": "M2.9-EXT-18",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "..20] \u2190 M8 med items, M4-EXT-77/86 pharmacy",
+    "context": [
+      "- blood/bandage/splint [M2.9-EXT-18..20] \u2190 M8 med items, M4-EXT-77/86 pharmacy"
+    ]
+  },
+  "M2.9-EXT-19": {
+    "id": "M2.9-EXT-19",
+    "found_in": [
+      "PLAN_INDEX"
+    ],
+    "title": "/20",
+    "context": [
+      "| **3** | Survival pressure | P0 (data-isolated) | M2.9-EXT-09/10/26/29/30/31/32..40, M2-EXT-22/26/21, M8-EXT-09/16/10/17/18, M4-EXT-57, M2.9-EXT-19/20 | Eat/manage weight/craft; can die from neglect;"
+    ]
+  },
+  "M2.9-EXT-21": {
+    "id": "M2.9-EXT-21",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2192 M8.5 canning",
+    "context": [
+      "- spoilage [M2.9-EXT-21] \u2192 M8.5 canning"
+    ]
+  },
+  "M2.9-EXT-24": {
+    "id": "M2.9-EXT-24",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2192 rest UI [M11-EXT-59], hub [M8.6-EXT-28]",
+    "context": [
+      "- sleep/fatigue [M2.9-EXT-24] \u2192 rest UI [M11-EXT-59], hub [M8.6-EXT-28]"
+    ]
+  },
+  "M2.9-EXT-25": {
+    "id": "M2.9-EXT-25",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2192 M10 weather, fire/shelter",
+    "context": [
+      "- body heat [M2.9-EXT-25] \u2192 M10 weather, fire/shelter"
+    ]
+  },
+  "M2.9-EXT-40": {
+    "id": "M2.9-EXT-40",
+    "found_in": [
+      "PLAN_INDEX"
+    ],
+    "title": "realism-fun floor).",
+    "context": [
+      "6. **Realism serves fun.** Survival needs are meaningful but never \"uselessly cumbersome\" (M2.9-EXT-40 realism-fun floor)."
+    ]
+  },
+  "M4-EXT-61": {
+    "id": "M4-EXT-61",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "tide \u2192 M10 weather, M2.9 farming",
+    "context": [
+      "- M4-EXT-60 season / M4-EXT-61 tide \u2192 M10 weather, M2.9 farming"
+    ]
+  },
+  "M4-EXT-62": {
+    "id": "M4-EXT-62",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "surface map",
+    "context": [
+      "- map annotation [M11-EXT-57] \u2190 M4-EXT-62 surface map"
+    ]
+  },
+  "M4-EXT-63": {
+    "id": "M4-EXT-63",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "/75..86, M13-EXT-53",
+    "context": [
+      "| **4** | Living world | P1 (graph) + P2 (threat) | M8.6 (safehouse/turf/rep/vendors/civil war), M5.4-EXT-16/17/18, M5.1-EXT-09/10, M4-EXT-63/75..86, M13-EXT-53 | Factions fight; world reacts to deeds",
+      "- M4-EXT-63 environmental storytelling \u2192 SLM note [M13-EXT-24] on every POI"
+    ]
+  },
+  "M4-EXT-64": {
+    "id": "M4-EXT-64",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "..95, M2.6",
+    "context": [
+      "| **1** | World exists (procedural, connected) | P0 + render path | M4-EXT-10/11/08/09, M4-EXT-74, M4-EXT-64..95, M2.6 | Connected explorable map generates + walkable at 60 fps |",
+      "- M4-EXT-64..86 POIs \u2192 each links: graph [74] + faction influence [M8.6-EXT-12] + encounter [M5.4-EXT-16] + loot [M8-EXT-14] + SLM story [M13-EXT-24]"
+    ]
+  },
+  "M4-EXT-74": {
+    "id": "M4-EXT-74",
+    "found_in": [
+      "PLAN_INDEX",
+      "PLAN_INDEX",
+      "PLAN_INDEX",
+      "CROSSLINKS",
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": ") before POIs/factions/encounters.** All attach to it; nothing attaches to nothing.",
+    "context": [
+      "- **World-Graph Backbone (M4-EXT-74) before POIs/factions/encounters.** All attach to it; nothing attaches to nothing.",
+      "| **1** | World exists (procedural, connected) | P0 + render path | M4-EXT-10/11/08/09, M4-EXT-74, M4-EXT-64..95, M2.6 | Connected explorable map generates + walkable at 60 fps |",
+      "- Every POI / faction / encounter / route = a node/edge on **M4-EXT-74** World-Graph (see `_CROSSLINKS.md`).",
+      "> Every system attaches to the **World-Graph Backbone [M4-EXT-74]**. This document is the web that makes \"all connected.\" When implementing, follow these edges so the world behaves as one organism, no",
+      "- **World-Graph [M4-EXT-74]** = nodes (region / POI / hub / safe-zone) + edges (road / tunnel / smuggle-route), weighted by distance + threat.",
+      "- M4-EXT-74 backbone \u2190 all POIs, factions, encounters"
+    ]
+  },
+  "M4-EXT-77": {
+    "id": "M4-EXT-77",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "/86 pharmacy",
+    "context": [
+      "- blood/bandage/splint [M2.9-EXT-18..20] \u2190 M8 med items, M4-EXT-77/86 pharmacy"
+    ]
+  },
+  "M4-EXT-83": {
+    "id": "M4-EXT-83",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "water treatment",
+    "context": [
+      "- M4-EXT-57 rain \u2194 M2.9 water, M4-EXT-83 water treatment"
+    ]
+  },
+  "M5.1-EXT-09": {
+    "id": "M5.1-EXT-09",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "/10, M4-EXT-63/75..86, M13-EXT-53",
+    "context": [
+      "| **4** | Living world | P1 (graph) + P2 (threat) | M8.6 (safehouse/turf/rep/vendors/civil war), M5.4-EXT-16/17/18, M5.1-EXT-09/10, M4-EXT-63/75..86, M13-EXT-53 | Factions fight; world reacts to deeds",
+      "- companion [M5.1-EXT-09] \u2190 M8.6 recruitment, \u2192 SLM barks [M13-EXT-48]"
+    ]
+  },
+  "M5.4-EXT-11": {
+    "id": "M5.4-EXT-11",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "cannibal \u2192 world-state morality",
+    "context": [
+      "- M8.6-EXT-24 forced-labor / M5.4-EXT-11 cannibal \u2192 world-state morality"
+    ]
+  },
+  "M5.4-EXT-12": {
+    "id": "M5.4-EXT-12",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "] \u2190 noise field, \u2192 graph edges",
+    "context": [
+      "- horde migration [M5.4-EXT-12] \u2190 noise field, \u2192 graph edges"
+    ]
+  },
+  "M5.4-EXT-13": {
+    "id": "M5.4-EXT-13",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "/15/20..25",
+    "context": [
+      "| **6** | Persist & co-op & evolve | all prior | M7+M7-EXT-17/18, M9+M9-EXT-22, M12-EXT-01..22, M4-EXT-59/90..95, M5.4-EXT-13/15/20..25 | Save/load; local-split + online co-op (4, scalable 8/16); host",
+      "- mutant strains [M5.4-EXT-13] \u2190 zone heat [M8.6-EXT-12]"
+    ]
+  },
+  "M5.4-EXT-16": {
+    "id": "M5.4-EXT-16",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": "/17/18, M5.1-EXT-09/10, M4-EXT-63/75..86, M13-EXT-53",
+    "context": [
+      "| **4** | Living world | P1 (graph) + P2 (threat) | M8.6 (safehouse/turf/rep/vendors/civil war), M5.4-EXT-16/17/18, M5.1-EXT-09/10, M4-EXT-63/75..86, M13-EXT-53 | Factions fight; world reacts to deeds",
+      "- M4-EXT-64..86 POIs \u2192 each links: graph [74] + faction influence [M8.6-EXT-12] + encounter [M5.4-EXT-16] + loot [M8-EXT-14] + SLM story [M13-EXT-24]",
+      "- ambient encounters [M5.4-EXT-16] \u2190 world-state, \u2192 graph edges"
+    ]
+  },
+  "M5.4-EXT-17": {
+    "id": "M5.4-EXT-17",
+    "found_in": [
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": "/18] \u2190 moral choices [M13-EXT-31/32], \u2192 factions [M8.6-EXT-13], SLM broadcasts [M13-EXT-36/37]",
+    "context": [
+      "- karma [M5.4-EXT-17/18] \u2190 moral choices [M13-EXT-31/32], \u2192 factions [M8.6-EXT-13], SLM broadcasts [M13-EXT-36/37]",
+      "- missions [M13-EXT-31/32] \u2190 world-state, \u2192 karma [M5.4-EXT-17]"
+    ]
+  },
+  "M5.4-EXT-19": {
+    "id": "M5.4-EXT-19",
+    "found_in": [
+      "RETIRED"
+    ],
+    "title": "]`'s road graph (see line-referenced note in the v68 merge audit); re-adding it here would stand up a second road-graph ",
+    "context": [
+      "* **Long-Range Faction Caravan Route Router** (`update.txt` #36) \u2014 already built as the M5.4/M8.5 convoy extension of `[M5.4-EXT-19]`'s road graph (see line-referenced note in the v68 merge audit); re"
+    ]
+  },
+  "M8.5-EXT-07": {
+    "id": "M8.5-EXT-07",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "snares, M4-EXT-59 regrowth",
+    "context": [
+      "- M4-EXT-56 wildlife \u2194 M8.5-EXT-07 snares, M4-EXT-59 regrowth"
+    ]
+  },
+  "M8.6-EXT-12": {
+    "id": "M8.6-EXT-12",
+    "found_in": [
+      "CROSSLINKS",
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": "] + encounter [M5.4-EXT-16] + loot [M8-EXT-14] + SLM story [M13-EXT-24]",
+    "context": [
+      "- M4-EXT-64..86 POIs \u2192 each links: graph [74] + faction influence [M8.6-EXT-12] + encounter [M5.4-EXT-16] + loot [M8-EXT-14] + SLM story [M13-EXT-24]",
+      "- M8.6-EXT-12 turf war \u2192 graph node field, M5.4 events",
+      "- mutant strains [M5.4-EXT-13] \u2190 zone heat [M8.6-EXT-12]"
+    ]
+  },
+  "M8.6-EXT-13": {
+    "id": "M8.6-EXT-13",
+    "found_in": [
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": "reputation/vendors \u2190 player acts, \u2192 price",
+    "context": [
+      "- M8.6-EXT-13 reputation/vendors \u2190 player acts, \u2192 price",
+      "- karma [M5.4-EXT-17/18] \u2190 moral choices [M13-EXT-31/32], \u2192 factions [M8.6-EXT-13], SLM broadcasts [M13-EXT-36/37]"
+    ]
+  },
+  "M8.6-EXT-18": {
+    "id": "M8.6-EXT-18",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "civil war \u2192 M5.4 event",
+    "context": [
+      "- M8.6-EXT-18 civil war \u2192 M5.4 event"
+    ]
+  },
+  "M8.6-EXT-22": {
+    "id": "M8.6-EXT-22",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "smuggling \u2194 M5.4 encounters",
+    "context": [
+      "- M8.6-EXT-22 smuggling \u2194 M5.4 encounters"
+    ]
+  },
+  "M8.6-EXT-24": {
+    "id": "M8.6-EXT-24",
+    "found_in": [
+      "CROSSLINKS"
+    ],
+    "title": "forced-labor / M5.4-EXT-11 cannibal \u2192 world-state morality",
+    "context": [
+      "- M8.6-EXT-24 forced-labor / M5.4-EXT-11 cannibal \u2192 world-state morality"
+    ]
+  },
+  "M8.6-EXT-28": {
+    "id": "M8.6-EXT-28",
+    "found_in": [
+      "CROSSLINKS",
+      "CROSSLINKS"
+    ],
+    "title": "hub \u2190 M7 save, M2.9 rest, M7-EXT-16 stash",
+    "context": [
+      "- M8.6-EXT-28 hub \u2190 M7 save, M2.9 rest, M7-EXT-16 stash",
+      "- sleep/fatigue [M2.9-EXT-24] \u2192 rest UI [M11-EXT-59], hub [M8.6-EXT-28]"
+    ]
+  },
+  "M8.7-EXT-02": {
+    "id": "M8.7-EXT-02",
+    "found_in": [
+      "PLAN_INDEX",
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "/03, M4.6-EXT-05/06, M0-EXT-40",
+    "context": [
+      "| **0** | Foundation + walking skeleton | none | M0-EXT-01, M1-EXT-10/11/12, M2-EXT-27/28, M2.7-EXT-33/34, M2.7-EXT-19, M8.7-EXT-02/03, M4.6-EXT-05/06, M0-EXT-40 | Move/look/reload (fumbling)/skill-ri",
+      "- Skill-by-use (M8.7-EXT-02): reload/melee/lockpick/throw/aim/medicine/craft/drive level by doing. Terrible start via Fumble Director (M8.7-EXT-03). Perks (M2-EXT-21) raise ceilings only.",
+      "- Every action skill (reload/melee/lockpick/throw/medicine/craft/drive) improves by DOING it [M8.7-EXT-02]."
+    ]
+  },
+  "M8.7-EXT-03": {
+    "id": "M8.7-EXT-03",
+    "found_in": [
+      "PLAN_INDEX",
+      "CROSSLINKS"
+    ],
+    "title": "). Perks (M2-EXT-21) raise ceilings only.",
+    "context": [
+      "- Skill-by-use (M8.7-EXT-02): reload/melee/lockpick/throw/aim/medicine/craft/drive level by doing. Terrible start via Fumble Director (M8.7-EXT-03). Perks (M2-EXT-21) raise ceilings only.",
+      "- One Fumble Animation Director [M8.7-EXT-03] shows the terrible-start visually across all actions."
+    ]
+  }
+}
