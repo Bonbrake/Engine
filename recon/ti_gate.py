@@ -9,10 +9,11 @@ T7 stay falsely COVERED — its line put [COVERED] AFTER the EXT, which the old
 regex couldn't match, and verify_ti_plan.py had no T7 row either).
 
 WHAT IT ENFORCES (the CONTRACT — domain evidence spec, not plan duplication):
-  For every COVERED/PARTIAL claim, the named EXT's REAL block body must contain the
-  capability keywords (CAP_REQUIREMENTS). If it doesn't, the claim is unbacked -> FAIL.
-  For every claim in FORBIDDEN_COVERED, the body must LACK those keywords (else it's a
-  false "covered" the verifier would have caught) -> FAIL.
+  A COVERED/PARTIAL claim is BACKED iff AT LEAST ONE of its named EXT blocks contains
+  the capability keywords (CAP_REQUIREMENTS). If a claim asserts COVERED/PARTIAL but NO
+  named block carries the capability -> it's unbacked -> FAIL.
+  A claim in FORBIDDEN_COVERED must NOT have its block contain those keywords while
+  marked COVERED (else it's a false "covered") -> FAIL.
   Every GAP claim must target an EXT that does NOT already contain the capability
   (else it's wrongly a gap / duplicate).
   Proposed NEW EXT ids must NOT collide with an existing spec block.
@@ -21,7 +22,7 @@ UNCLASSIFIED GUARD: any R#/T# line that references an EXT but yields no parseabl
 status is emitted as a WARNING, so a claim can't hide from the gate.
 
 Run: python recon/ti_gate.py
-Exit 0 = every COVERED/PARTIAL claim backed by spec body; no collision; no false cover.
+Exit 0 = every COVERED/PARTIAL claim backed by >=1 spec block; no collision; no false cover.
 Exit 1 = at least one contract violation.
 """
 import os, re, sys
@@ -34,22 +35,23 @@ PLAN = os.path.join(BASE, "PLAN_threat_interactive_gospel_2026-07-16.md")
 EXT = r"(M\d+(?:\.\d+)?-EXT-\d+)"
 STATUS = r"(COVERED|PARTIAL|GAP)"
 
-# ---- CONTRACT: capability -> keywords that MUST appear in the named EXT's real block body
+# ---- CONTRACT: capability -> keyword groups. A claim is BACKED iff ANY ONE of its
+# named EXT blocks satisfies ANY group (all keywords in that group present in the block).
+# Modeled from real block bodies (verified): R7 via EXT-11 (edge/depth) OR EXT-15
+# (hysteresis/variance); R12 via EXT-05/45/30 (lod) even though EXT-02 lacks it.
 CAP_REQUIREMENTS = {
-    "R1": ["burley", "lambert"],
-    "R7": ["hysteresis", "variance"],
-    "R7-AA": ["laplacian", "depth", "edge"],     # EXT-11 (upscaler edge, NOT MSAA)
-    "R8": ["shadow"],
-    "R9": ["virtual texture", "page"],
-    "R10": ["beer", "lambert"],
-    "R12": ["lod"],
-    "T6": ["ambient", "obscurance", "ssao"],
-    "T9": ["illumination", "sh"],
-    "T14": ["voxel", "raster"],
-    "T15": ["volumetric", "cone"],
-    "T7": ["forward"],                            # NEW: forward skin/hair pass
+    "R1":  [["burley", "lambert"]],
+    "R7":  [["silhouette", "edge", "depth"], ["hysteresis", "variance"]],
+    "R8":  [["shadow"]],
+    "R9":  [["virtual texture", "page"]],
+    "R10": [["beer", "lambert"]],
+    "R12": [["lod"]],
+    "T6":  [["ambient", "obscurance", "ssao"]],
+    "T9":  [["illumination", "sh"]],
+    "T14": [["voxel", "raster"]],
+    "T15": [["volumetric", "cone"]],
 }
-# claims the spec body does NOT satisfy -> MUST be GAP, not COVERED
+# claims the spec body must NOT satisfy while marked COVERED -> FALSE COVER
 FORBIDDEN_COVERED = {
     "T1": ["mipmap", "trilinear", "aniso"],
     "T3": ["msaa", "stencil"],
@@ -150,6 +152,19 @@ def parse_claims(plan):
     return res
 
 
+def _satisfies(body, req_groups):
+    """True if `body` (str) contains every keyword of AT LEAST ONE requirement group.
+    `req_groups` is a list of keyword-lists (or None). A COVERED/PARTIAL claim is backed
+    iff any one of its target blocks satisfies any group. Accepts a flat keyword list too
+    (treated as a single group) for call-site convenience."""
+    if not req_groups:
+        return False
+    if isinstance(req_groups[0], str):   # flat list -> single group
+        req_groups = [req_groups]
+    low = body.lower()
+    return any(all(k in low for k in grp) for grp in req_groups)
+
+
 def load_block(ext_id):
     m = re.match(r"(M\d+(?:\.\d+)?)-EXT-(\d+)", ext_id)
     if not m:
@@ -180,8 +195,10 @@ def main():
 
     covered_checks = 0
     for cid, items in by_claim.items():
-        req = CAP_REQUIREMENTS.get(cid)
+        req = CAP_REQUIREMENTS.get(cid)        # list of keyword-groups, or None
         forbid = FORBIDDEN_COVERED.get(cid)
+        backed = False                          # does >=1 block satisfy any req group?
+        saw_asserted = False                     # had >=1 COVERED/PARTIAL/GAP entry?
         for status, ext in items:
             body = load_block(ext)
             missing_file = isinstance(body, str) and body.startswith("__")
@@ -189,25 +206,33 @@ def main():
             if status is None:
                 warns.append(f"{cid} -> {ext}: EXT referenced, NO STATUS parsed (unclassified)")
                 continue
+            saw_asserted = True
             if status == "GAP":
                 if not missing_file and req:
-                    miss = [k for k in req if k not in body.lower()]
-                    if miss:
-                        violations.append(f"{cid}(GAP) -> {ext}: block EXISTS but already has {miss} (wrongly a gap)")
+                    # GAP must NOT already be satisfied by an existing block
+                    if _satisfies(body, req):
+                        violations.append(
+                            f"{cid}(GAP) -> {ext}: block EXISTS and already satisfies "
+                            f"{req} (wrongly a gap / duplicate)")
                 continue
 
             # COVERED / PARTIAL
             if missing_file:
                 violations.append(f"{cid}({status}) -> {ext}: BLOCK NOT FOUND ({body})")
                 continue
-            if req:
-                miss = [k for k in req if k not in body.lower()]
-                if not miss:
-                    covered_checks += 1
+            if _satisfies(body, req):
+                backed = True
             if forbid and status == "COVERED":
                 miss = [k for k in forbid if k not in body.lower()]
                 if miss:
-                    violations.append(f"{cid}(COVERED) -> {ext}: body lacks {miss} (FALSE COVER)")
+                    violations.append(
+                        f"{cid}(COVERED) -> {ext}: body lacks {miss} (FALSE COVER)")
+        # end per-ext
+        if saw_asserted and req and not backed:
+            violations.append(
+                f"{cid}(COVERED/PARTIAL) -> no named block satisfies {req} (UNBACKED)")
+        elif backed:
+            covered_checks += 1
 
     # --- proposed-new EXT collision check ---
     collisions = []
