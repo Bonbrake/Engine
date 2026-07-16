@@ -218,7 +218,7 @@
   },
   {
     "id": "M4.5-EXT-20",
-    "title": "Beer-Lambert Translucent Medium Light Extinction",
+    "title": "Diffuse + Translucent Medium Light (Burley/Kalisto Diffuse, Beer-Lambert Extinction)",
     "cluster": null,
     "depends_on": [
       "[M4.5-EXT-20]"
@@ -236,7 +236,7 @@
       "[M6-EXT-11]"
     ],
     "depended_by": [],
-    "line": 772,
+    "line": 776,
     "anchor": "MM4.5-EXT-21"
   },
   {
@@ -247,7 +247,7 @@
       "[M4.5-EXT-24]"
     ],
     "depended_by": [],
-    "line": 838,
+    "line": 842,
     "anchor": "MM4.5-EXT-24"
   },
   {
@@ -258,7 +258,7 @@
       "[M4.5-EXT-25]"
     ],
     "depended_by": [],
-    "line": 858,
+    "line": 862,
     "anchor": "MM4.5-EXT-25"
   },
   {
@@ -269,7 +269,7 @@
       "[M4.5-EXT-26]"
     ],
     "depended_by": [],
-    "line": 878,
+    "line": 882,
     "anchor": "MM4.5-EXT-26"
   },
   {
@@ -280,7 +280,7 @@
       "[M4.5-EXT-27]"
     ],
     "depended_by": [],
-    "line": 899,
+    "line": 903,
     "anchor": "MM4.5-EXT-27"
   },
   {
@@ -291,7 +291,7 @@
       "[M4.5-EXT-28]"
     ],
     "depended_by": [],
-    "line": 918,
+    "line": 922,
     "anchor": "MM4.5-EXT-28"
   },
   {
@@ -302,7 +302,7 @@
       "[M4.5-EXT-29]"
     ],
     "depended_by": [],
-    "line": 937,
+    "line": 941,
     "anchor": "MM4.5-EXT-29"
   },
   {
@@ -313,7 +313,7 @@
       "[M4.5-EXT-30]"
     ],
     "depended_by": [],
-    "line": 958,
+    "line": 962,
     "anchor": "MM4.5-EXT-30"
   },
   {
@@ -324,7 +324,7 @@
       "[M4.5-EXT-31]"
     ],
     "depended_by": [],
-    "line": 977,
+    "line": 981,
     "anchor": "MM4.5-EXT-31"
   }
 ]
