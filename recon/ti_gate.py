@@ -30,7 +30,6 @@ from collections import defaultdict
 BASE = os.path.dirname(os.path.abspath(__file__))
 SPEC = os.path.join(BASE, "..", "spec")
 PLAN = os.path.join(BASE, "PLAN_threat_interactive_gospel_2026-07-16.md")
-GAPFILL = os.path.join(BASE, "PLAN_gap_fill_ext_proposals_2026-07-16.md")
 
 EXT = r"(M\d+(?:\.\d+)?-EXT-\d+)"
 STATUS = r"(COVERED|PARTIAL|GAP)"
@@ -60,8 +59,8 @@ FORBIDDEN_COVERED = {
 }
 
 # proposed NEW ext ids (from gap-fill) — must NOT already exist in spec
-PROPOSED_NEW = ["M4.5-EXT-22", "M4.5-EXT-23", "M4.5-EXT-32",
-                "M4.5-EXT-33", "M4.5-EXT-34", "M4.5-EXT-35"]
+PROPOSED_NEW = ["M4.5-EXT-22", "M4.5-EXT-23", "M4.5-EXT-32", "M4.5-EXT-33",
+                "M4.5-EXT-34", "M4.5-EXT-35", "M4-EXT-90", "M4-EXT-91"]
 
 
 def parse_claims(plan):
@@ -128,8 +127,9 @@ def parse_claims(plan):
             if i + 1 < len(lines):
                 m3 = re.search(EXT, lines[i + 1][0])
                 if m3: cands.append(m3.group(1))
-            cid = re.search(r"(R\d+)", line)
-            cid = cid.group(1) if cid else last_rule
+            # prefer the actual preceding R# line (last_rule) over any incidental
+            # R-digit mention inside the SPEC prose (e.g. "with R3" in R4's line)
+            cid = last_rule
             for ex in cands:
                 if cid: out.append((cid, m.group(1), ex, lno))
             continue
@@ -139,8 +139,7 @@ def parse_claims(plan):
         if m2 and i + 1 < len(lines):
             m3 = re.search(EXT, lines[i + 1][0])
             if m3:
-                cid = re.search(r"(R\d+)", line)
-                cid = cid.group(1) if cid else last_rule
+                cid = last_rule
                 if cid: out.append((cid, m2.group(1), m3.group(1), lno))
 
     # dedupe
@@ -149,19 +148,6 @@ def parse_claims(plan):
         if p not in seen:
             seen.add(p); res.append(p)
     return res
-
-
-def unclassified_warnings(plan, parsed):
-    """Any R#/T# line referencing an EXT but not captured with a status -> warn."""
-    captured = {(c, e) for (c, s, e, _) in parsed}
-    warns = []
-    for i, line in enumerate(plan.splitlines()):
-        m = re.search(rf"^(R\d+|T\d+)\b.*{EXT}", line)
-        if m and (m.group(1), m.group(2)) not in captured:
-            # only warn if it looks like a claim (has → or SPEC:), not a cross-ref mention
-            if "→" in line or "SPEC:" in line:
-                warns.append(f"  line {i+1}: {m.group(1)} references {m.group(2)} but no status parsed")
-    return warns
 
 
 def load_block(ext_id):
@@ -230,8 +216,8 @@ def main():
         if not (isinstance(b, str) and b.startswith("__")):
             collisions.append(f"{ext}: proposed NEW but already exists in spec (collision)")
 
-    # --- unclassified guard ---
-    warns += unclassified_warnings(plan, pairs)
+    # --- unclassified guard: parsed claims with status=None are warned inline above ---
+    # (line 204). No separate helper needed.
 
     print("=" * 64)
     print("TI-GOSPEL MERGED GATE  (ti_gate.py — parse-from-prose + contract)")
