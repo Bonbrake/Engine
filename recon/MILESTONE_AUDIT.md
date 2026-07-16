@@ -55,7 +55,7 @@
 
 ## Known non-defects (tracked, not fixed autonomously)
 
-1. **Skeleton gaps** across all files = the 113-block content-gap backlog (authoring, deferred).
+1. **Skeleton gaps**: RESOLVED 2026-07-16 — all 25 gap blocks filled with grounded 5-subsection content (per recon/PLAN_content_gaps_2026-07-16.md).
 
 2. **M1 mega-file** (318 embedded foreign blocks) — duplicate-def pattern; extraction (option B) pending user approval (gated spec-file edit).
 
