@@ -1,0 +1,785 @@
+{
+ "ElBUUMi_L5c": {
+  "tech": {
+   "shadow_cascade": [
+    "First, the pipeline processes six shadow map cascades for the sun/moon light.",
+    "A 4KX 4K shadow map atlas later used as a close-up cascade has a 1KX 1K portion reserved for a local scene light.",
+    "After the shadow contents render faster than the clear, the MSAA stencil alpha channel is cleared with a quad, followed by several geometry draws that write cascaded shadow bounds within the non MSAA depth stencil."
+   ],
+   "reflective_shadow_map": [
+    "Then a 384x 384 reflective shadow map or RSM is rendered, outputting three render targets and a depth buffer.",
+    "I personally have a very strong dislike for reflective shadow maps because they're very inaccurate and limited."
+   ],
+   "rsm": [
+    "Then a 384x 384 reflective shadow map or RSM is rendered, outputting three render targets and a depth buffer.",
+    "The data sampled by RSM could be baked down at a higher/ more accurate frequency and could then be compressed based on average data."
+   ],
+   "gi": [
+    "Onscreen geometry is rendered from this perspective to provide a rough estimate of world space information required to approximate global illumination."
+   ],
+   "indirect_lighting": [
+    "This data is then processed by the GPU to produce three indirect lighting atlases that will be represented on screen with spherical harmonic probe lighting.",
+    "The higher precision R32 depth is MIPC chained and used to create a number of formats just before the indirect lighting atlases have their alpha channel data refined.",
+    "The indirect lighting is shaded exclusively into the diffused prepass, but only with a pixel frequency pass."
+   ],
+   "spherical_harmonic": [
+    "This data is then processed by the GPU to produce three indirect lighting atlases that will be represented on screen with spherical harmonic probe lighting."
+   ],
+   "probe": [
+    "This data is then processed by the GPU to produce three indirect lighting atlases that will be represented on screen with spherical harmonic probe lighting."
+   ],
+   "render_target": [
+    "The prepass is slower than usual because it also outputs additional results to the normal/roughness render target, causing slow pixel invocations that wouldn't exist with standalone depth rendering.",
+    "The first half of the base pass outputs four different render targets along with the depth stencil.",
+    "These are used alongside the decal draws that project data into the original multis-sampled render targets."
+   ],
+   "pixel_invocation": [
+    "The prepass is slower than usual because it also outputs additional results to the normal/roughness render target, causing slow pixel invocations that wouldn't exist with standalone depth rendering."
+   ],
+   "r32": [
+    "This R32 stores the scene depth at a higher precision than the depth stencil buffer.",
+    "The R32 depth buffer and normal buffer are passed through subresource resolve draws in place of copy resource draws where the sample frequency data is blended into a single pixel value.",
+    "Take notice that the sample zero depth stencil only derived data from the MSAA R32 and two different non MSAA R32 buffers are created."
+   ],
+   "parallax": [
+    "And this R8 stores data related to parallax occlusion mapping.",
+    "This next portion of the base pass doesn't render any additional depth and renders parallax occlusion detail on top of existing geometry."
+   ],
+   "parallax_occlusion": [
+    "This next portion of the base pass doesn't render any additional depth and renders parallax occlusion detail on top of existing geometry."
+   ],
+   "lut": [
+    "It is denoised with a depthaware smoothing pass all done at native resolution.",
+    "Next, halfresolution volutric fog utilizes several cascaded shadow maps with precomputed noise.",
+    "A halfresolution nonSAA copy of the scene is made so that water reflections can be shaded."
+   ],
+   "rgba8": [
+    "A small 64x1 RGBA8 is cleared for a small bit of rendered information and is then used in the main ambient lighting pass which does not use the non-multsampled render targets in the pixel frequency pass.",
+    "Next, SMA uses one of the tonemapped RGBA88 to produce a stencil and edge mask.",
+    "The same thing is done with the second tonemapped RGBA except the smoothing pass combines the result with the last smoothed tone map RGBA8."
+   ],
+   "motion_vector": [
+    "Motion blur draws take place in between the depth of field pass starting with animated motion vectors followed by motion blur shading with a halfresolution downscale of the motion vectors."
+   ],
+   "downscale": [
+    "Motion blur draws take place in between the depth of field pass starting with animated motion vectors followed by motion blur shading with a halfresolution downscale of the motion vectors."
+   ],
+   "motion_blur_hide": [
+    "Motion blur draws take place in between the depth of field pass starting with animated motion vectors followed by motion blur shading with a halfresolution downscale of the motion vectors."
+   ],
+   "bloom": [
+    "Bloom processing begins next followed by tone mapping which provides two 24-bit colored outputs each render target containing different subsample values."
+   ],
+   "tone_map": [
+    "Bloom processing begins next followed by tone mapping which provides two 24-bit colored outputs each render target containing different subsample values.",
+    "The same thing is done with the second tonemapped RGBA except the smoothing pass combines the result with the last smoothed tone map RGBA8."
+   ],
+   "screen_space": [
+    "The next step composits the screen space effects but also incorporates the SMA2TX logic."
+   ],
+   "projection": [
+    "Days Gone also displays a more optimized micro detailing system, shadow projections, and compute shaderbased indirect lighting updates."
+   ],
+   "overdraw": [
+    "The micro detail system in Crisis 3 introduces a lot more overdraw and another 2 milliseconds could be easily clawed back with more elaborate prepass and draw sorting logic."
+   ],
+   "ssao": [
+    "SSDO is not only expensive to sample but prone to dated SSAO artifacts like haloing in comparison with cheaper and better-l lookinging horizonbased techniques shown in previous analysis."
+   ],
+   "half_res": [
+    "While a min only depth buffer is used for hardware Z testing, which Cole's oluded pixels from being evaluated, the difference between modern half-resolution effects and Fox Engine's default result, is extremely apparent, and you can even see a big difference in the grass."
+   ]
+  },
+  "faults": [
+   "If you would like to learn more about graphics rendering, what makes graphics truly great, and what real optimization is instead of lies based on incompetent temporal anti-aliasing, binge watch our content in order of release, and you will be ahead of most developers in the industry."
+  ],
+  "nums": [
+   "10 times",
+   "384x",
+   "60 fps",
+   "60fps"
+  ],
+  "words": 2255
+ },
+ "PhEIa5RtKVA": {
+  "tech": {
+   "lut": [
+    "This is a contradictory decision that should be recognized as a fault, but the devs did look into custom mipmap filtering solution for their BRDF, but ran out of time and didn't ship it.",
+    "This is why characters in game look more realistic up close because their low-resolution unfiltered mipmaps don't distort lighting accuracy.",
+    "Both of these screenshots are rendered at 1080p, whereas higher-resolution rendering most likely used in the presentation would switch to low-resolution mipmaps slower explaining the first difference in presentation lighting."
+   ],
+   "mipmap": [
+    "This is a contradictory decision that should be recognized as a fault, but the devs did look into custom mipmap filtering solution for their BRDF, but ran out of time and didn't ship it.",
+    "This is why characters in game look more realistic up close because their low-resolution unfiltered mipmaps don't distort lighting accuracy.",
+    "Both of these screenshots are rendered at 1080p, whereas higher-resolution rendering most likely used in the presentation would switch to low-resolution mipmaps slower explaining the first difference in presentation lighting."
+   ],
+   "mip_filter": [
+    "This is a contradictory decision that should be recognized as a fault, but the devs did look into custom mipmap filtering solution for their BRDF, but ran out of time and didn't ship it."
+   ],
+   "filtered_mipmap": [
+    "This is why characters in game look more realistic up close because their low-resolution unfiltered mipmaps don't distort lighting accuracy."
+   ],
+   "aces": [
+    "We used this comparison from the paper to show off pure Callisto BRDF results, but the developers went even further with faces using Realis, which is pretty subtle when you first see it.",
+    "We are not hyper-focused on faces.",
+    "We are stating games with more realistic BRDFs have a richer appearance and the limited objects in The Callisto Protocol that are not faces and use The Callisto BRDF further confirm how important a realistic BRDF is to visual richness."
+   ],
+   "screen_space": [
+    "First of all, this shot is ridiculous because before ray tracing, this would have been taken care of with noiseless screen space shadows, which was measured as a pretty fast technique God of War analysis."
+   ],
+   "dynamic_shadow_res": [
+    "Now we've talked about optimizing shadow resolutions with dynamic resizing, but a bigger problem exist."
+   ],
+   "screen_aware": [
+    "The character shadow cast is hurt a lot by hair, but if that was optimized more with screen aware shadow map FOV culling, the majority of the cost could have been reduced."
+   ]
+  },
+  "faults": [
+   "Striking Distance decided to abuse Unreal's incompetent anti-aliasing for many different graphical features and these so-called features hurt performance significantly promoting the use of aggressive upscaling.",
+   "It is important to properly watch our videos as we explained that the innovative Callisto BRDF is assigned to specific materials such as all the visible objects in the scene, while 90% of objects including the hideous hair is shaded with Unreal's BRDF that we specifically stated was extremely poor and dated.",
+   "Now ray tracing is supposed to be denoised with a default TA, which we've modified up until this point because remember, TA that supposedly denoises requires incompetent smear behavior and in the end the incompetent TA doesn't even fully denoise the image anyway."
+  ],
+  "nums": [],
+  "words": 2069
+ },
+ "SxCMaTEoBoI": {
+  "tech": {
+   "filtered_mipmap": [
+    "To defend MSAA, this channel explained how Halflife Alex and other devs combat specular aliasing independently of blurry or expensive temporal methods using modern shaders and filtered MIP maps."
+   ],
+   "specular_aliasing": [
+    "To defend MSAA, this channel explained how Halflife Alex and other devs combat specular aliasing independently of blurry or expensive temporal methods using modern shaders and filtered MIP maps."
+   ],
+   "mip_map": [
+    "To defend MSAA, this channel explained how Halflife Alex and other devs combat specular aliasing independently of blurry or expensive temporal methods using modern shaders and filtered MIP maps."
+   ],
+   "overdraw": [
+    "As long as the geometry quad overdraw is optimized, the depth rendering with or without MSAA will remain identical in rendering speed."
+   ],
+   "quad": [
+    "As long as the geometry quad overdraw is optimized, the depth rendering with or without MSAA will remain identical in rendering speed."
+   ],
+   "alpha_test": [
+    "The problem with Crisis 3's actual prepass is that it doesn't render large objects in the distance, and it renders expensive and extremely dense alpha tested content, which is something that HalfLife Alex's pipeline specifically doesn't do."
+   ],
+   "alpha_tested": [
+    "The problem with Crisis 3's actual prepass is that it doesn't render large objects in the distance, and it renders expensive and extremely dense alpha tested content, which is something that HalfLife Alex's pipeline specifically doesn't do."
+   ],
+   "prepass_large": [
+    "The problem with Crisis 3's actual prepass is that it doesn't render large objects in the distance, and it renders expensive and extremely dense alpha tested content, which is something that HalfLife Alex's pipeline specifically doesn't do."
+   ],
+   "gbuffer": [
+    "The GBuffer layout designed for Crisis 3 creates major visual issues that ruin MSAA.",
+    "while all other GBuffer information is stored in the alpha channels.",
+    "Gbuffer sizes are multiplied by the number of MSAA samples."
+   ],
+   "bandwidth": [
+    "To accommodate for bandwidth limitations found on 7th gen console hardware like the Xbox 360, values like geometry normals, which typically range from 24 to 30 bits, are only stored with 17 bits."
+   ],
+   "render_target": [
+    "So, this somewhat expensive draw appears after the base pass whenever MSAA is enabled and copies the sample zero data into separate non MSAA render targets.",
+    "First pixel frequency draws use the non-multsampled render targets to evaluate non multis-sampled quads.",
+    "Pixel frequency draws are immediately followed by sample frequency draws that create dedicated pixel shader invocations for each sample while swapping out the pixel frequency inputs for the original multi-sampled render targets."
+   ],
+   "lut": [
+    "While 4x and 2x MSAA receive performance gains, it's questionable to say if the gains are relevant considering more complex BRDFs are needed in modern shading, remember that MSAA has been around for years and it was created during a time where display resolutions could not provide sufficient sampling density.",
+    "And the first thing to notice is that the target density in resolution format is not sustainable at 60fps on modern affordable hardware.",
+    "The only reason why we care about resolution is because we want the results to scale properly with our modern displays like 1080p, which is luckily integer scalable with 4K."
+   ],
+   "motion_vector": [
+    "A vendor agnostic method will be able to utilize animated motion vectors and should be able to eliminate this kind of ghosting with modern rejection methods.",
+    "basically a modernized version of SMAA4X which is by far the most optimized anti-aliasing method in the game as it performs well and looks pretty good considering we've had major advancements in frame reprojection motion vectors are not generated for foliage or particles the MSA is not working properly as explained earlier there's no jittered mid maps and the sample positions are extremely primitive yet part of the reason why this looks so reasonable is because the standalone temporal options options are much more competent than modern solutions."
+   ],
+   "projection": [
+    "basically a modernized version of SMAA4X which is by far the most optimized anti-aliasing method in the game as it performs well and looks pretty good considering we've had major advancements in frame reprojection motion vectors are not generated for foliage or particles the MSA is not working properly as explained earlier there's no jittered mid maps and the sample positions are extremely primitive yet part of the reason why this looks so reasonable is because the standalone temporal options options are much more competent than modern solutions."
+   ],
+   "ssao": [
+    "We don't need to remove SSAO as this has been taken care of by modern graphic engineering."
+   ]
+  },
+  "faults": [
+   "And this highly specular aliased scene is due to dogpile MSAA for not minimizing shimmering, unlike blurry temporal methods used today.",
+   "The problem back then was the fact that display resolutions were too low to hide persistence flicker and it was vendor locked.",
+   "MFAA is Nvidia's version of this concept and this generally looks great with no noticeable texture blurring or ghosting.",
+   "This is particularly poor because as long as you're not in that beginning rain level, processing power was wasted computing subsample lighting."
+  ],
+  "nums": [
+   "16 bits",
+   "17\nbits",
+   "24 bits",
+   "2x",
+   "30 bits",
+   "4x",
+   "60 fps",
+   "60fps",
+   "8\ntimes",
+   "8 times"
+  ],
+  "words": 2553
+ },
+ "T1MKlxM04L4": {
+  "tech": {
+   "render_target": [
+    "The first portion starts off with render target clears and the usual Unreal Engine compute shader bloat taking up about 6 milliseconds.",
+    "While the majority of these draws send outputs to seven render targets, these orange draws output extra information to five more render targets that hold realis information.",
+    "And the face outputs to a sixth render target containing dual normals, which was another custom implementation made to GGX to correctly render sweat."
+   ],
+   "overdraw": [
+    "This is because their final depth requires opacity textures and this is combined with their extremely dense quad overdraw inducing geometry."
+   ],
+   "quad": [
+    "This is because their final depth requires opacity textures and this is combined with their extremely dense quad overdraw inducing geometry."
+   ],
+   "lut": [
+    "But we have to account for the fact that static objects also use highresolution BC3 and BC7 light maps.",
+    "The normal and one of the tiled albido textures are very high resolution despite little variation in detail.",
+    "Initial draws are always quite poor, but it's hard to say how much of this relates to poorly compressed masks, highresolution tiles, or light maps."
+   ],
+   "nanite": [
+    "The artist also extensively used cheap vertex painting for extra material effects, a technique that rendering systems like Nanite could not support."
+   ],
+   "stencil_mask": [
+    "This is copied into another buffer so the depth stencil channel can be used for later processes."
+   ],
+   "shadow_mask": [
+    "40 of these draws used the scene depth to project different shadow maps on a shadow mask, which are then used in those nine lighting draws.",
+    "It would only require nine shadow masking draws if those dynamic shadows were rendered on a larger atlas also containing the static cast geometry.",
+    "But 40 shadow masking draws are used because the masking is broken up by 146 stenciling draws."
+   ],
+   "occlusion_query": [
+    "In Unreal, if we put a light behind a wall, not only will its occlusion query fail, causing shadows to possibly redraw instead of being cached, but the GPU will waste time evaluating the light for pixels within that boundary, even if it's shadowed."
+   ],
+   "tone_map": [
+    "They specifically implemented the GT tone mapper to convey better realism.",
+    "This tone mapper is the predecessor to the GT7 tone mapper we explored in our 19th video.",
+    "The tone map frame is processed, copied, and sent to the display in.17 milliseconds."
+   ],
+   "tonemapper": [
+    "They specifically implemented the GT tone mapper to convey better realism.",
+    "This tone mapper is the predecessor to the GT7 tone mapper we explored in our 19th video."
+   ],
+   "screen_space": [
+    "Unreal 4 to 5's graphical pipeline is very dependent on a full prepass, and the reduced cost simply simulates a prepass without any alpha testing or tiny objects, which can easily be skipped based on screen space size values."
+   ]
+  },
+  "faults": [
+   "Now that we've covered the main outliers, we need to determine if 1 millisecond makes sense for the scene complexity.",
+   "Those 30 to 18 microcond outliers of course relate to the unoptimized hair meshes.",
+   "The scene lighting is processed in this portion and this is a bloated mess but it's very easy to understand if we break down the draws.",
+   "In comparison with other engines, the ending draws are clearly bloated."
+  ],
+  "nums": [
+   "1024 squared",
+   "18 draws"
+  ],
+  "words": 2318
+ },
+ "c3zZtVBspzU": {
+  "tech": {
+   "indirect_lighting": [
+    "Before any sensitive tone police attack my aggressiveness, Thrynninractive is the only mainstream voice that has showed various cheaper non-light map indirect lighting methods."
+   ],
+   "nanite": [
+    "But no, consumers are forced to process cluster calling logic, slow mesh shaders, and Nanite's three times slower compute shader rasterizer.",
+    "Now, we've previously shown that processing materials with Nanite is like processing an extremely unoptimized dense mesh."
+   ],
+   "compute_raster": [
+    "But no, consumers are forced to process cluster calling logic, slow mesh shaders, and Nanite's three times slower compute shader rasterizer."
+   ],
+   "tone_map": [
+    "There is demand for better tone mappers and the dying culture of custom engine graphics development is making a comeback in these communities because this channel is ripping apart games like Borderlands 4."
+   ],
+   "tonemapper": [
+    "There is demand for better tone mappers and the dying culture of custom engine graphics development is making a comeback in these communities because this channel is ripping apart games like Borderlands 4."
+   ]
+  },
+  "faults": [
+   "Lumen after 3 years still remains as an embarrassment to Epic Games and every person on the Lumen development team should be held accountable for the disgusting visuals we get in almost every single major UE5 release.",
+   "In Borderlands 4, that cost is tripled by their unoptimized materials and noisy virtual textures, where usage is highly recommended by Epic Games.",
+   "Whether it's Thrynninractive or another person online criticizing optimization, there's always some disgusting developer who responds with \"Oh, you're not a developer\" or \"Where's your game?\" usually followed up with some contrived rule about earning the right to criticize or earning the right to call things incompetent."
+  ],
+  "nums": [
+   "60 FPS"
+  ],
+  "words": 953
+ },
+ "ljWylilACdI": {
+  "tech": {
+   "lut": [
+    "Even though all of these are equally unoptimized, people need to stop being so obsessed with the base scenario performance, which is mostly just an expression of the hardware and resolution.",
+    "Include the target specs and internal resolution if you want to discuss FPS targets properly.",
+    "Better hardware or a lower resolution will reduce the effect millisecond timing providing better performance."
+   ],
+   "shadow_mask": [
+    "The 3D texture is used in a shadow mask projection draw."
+   ],
+   "projection": [
+    "The 3D texture is used in a shadow mask projection draw.",
+    "When the in-game weather condition is set to rain, after the decal pass, the albido and roughness specular GBuffers are duplicated so that their information can be used in a wetness projection pass."
+   ],
+   "3_4_res": [
+    "Then 3/4 res render targets have noisy cloud outputs rendered to them along with a depth downscale."
+   ],
+   "downscale": [
+    "Then 3/4 res render targets have noisy cloud outputs rendered to them along with a depth downscale.",
+    "The half-res depth stencil used in earlier SSAO passes is overwritten with a different type of depth downscale, while an RG16 stores the different minimal and maximum depth discontinuities."
+   ],
+   "render_target": [
+    "Then 3/4 res render targets have noisy cloud outputs rendered to them along with a depth downscale.",
+    "The only detectable changes exist in the second render target output and only in the red channel which holds the roughness information.",
+    "The ripples shaped is derived from a BC3 and projected on a small render target area with several overlapping quads."
+   ],
+   "decal_projection": [
+    "When the in-game weather condition is set to rain, after the decal pass, the albido and roughness specular GBuffers are duplicated so that their information can be used in a wetness projection pass."
+   ],
+   "gbuffer": [
+    "When the in-game weather condition is set to rain, after the decal pass, the albido and roughness specular GBuffers are duplicated so that their information can be used in a wetness projection pass."
+   ],
+   "bgr88": [
+    "A 512 squared BGR88 storing interior depth info is cross referenced with the scene depth to determine where a lower roughness should be applied by the rain."
+   ],
+   "tone_map": [
+    "A dedicated reflection Q map is used alongside all the main base pass lighting inputs during the tone mapping stage.",
+    "This particular shot is able to produce these effects in almost a single millisecond using sprite sheets in emissive decals rendered post tone mapping."
+   ],
+   "overdraw": [
+    "This means a high amount of overdraw is isolated in a small area.",
+    "The river mesh is quite simple, meaning quad overdraw won't affect performance too much.",
+    "The effect takes long to process because it's several overlapping animated triangles creating tons of pixel shader invocations and overdraw."
+   ],
+   "quad": [
+    "The river mesh is quite simple, meaning quad overdraw won't affect performance too much."
+   ],
+   "screen_space": [
+    "The ripple effect cost only scales with how many ripples are within screen space view."
+   ],
+   "half_res": [
+    "All of the effects were measured with a very high setting, but on low, a massive amount of performance can be saved through a very specific type of half-res shading.",
+    "The half-res depth stencil used in earlier SSAO passes is overwritten with a different type of depth downscale, while an RG16 stores the different minimal and maximum depth discontinuities.",
+    "Using the halfresolution depth stencil with greater equal testing, the RG16 is used alongside the usual graphic effect inputs, but two half-res render targets are written to simultaneously."
+   ],
+   "rg16": [
+    "The half-res depth stencil used in earlier SSAO passes is overwritten with a different type of depth downscale, while an RG16 stores the different minimal and maximum depth discontinuities.",
+    "Using the halfresolution depth stencil with greater equal testing, the RG16 is used alongside the usual graphic effect inputs, but two half-res render targets are written to simultaneously."
+   ],
+   "ssao": [
+    "The half-res depth stencil used in earlier SSAO passes is overwritten with a different type of depth downscale, while an RG16 stores the different minimal and maximum depth discontinuities."
+   ],
+   "half_resolution": [
+    "While 2023 titles like Dead Space remake also shade effects at a half resolution, the 2023 Frostbite pipeline does not go through the links Fox Engine makes to make sure depth edges have seamless upscaling."
+   ]
+  },
+  "faults": [
+   "Now to call the effects in these games optimized because they're faster is still terribly wrong because that acts as a justifier for hideous graphic approaches.",
+   "We're going to measure a slew of effects inside the Phantom Pain so that anyone can incriminate poorly optimized scenarios just by looking at them and so that anyone can aggressively confront ignorant fake experts that try to label incompetence as miracles.",
+   "These horribly dithered messes are not graphical progression, but instead a prime example of graphics getting worse while depending on incompetent smearing anti-aliasing."
+  ],
+  "nums": [
+   "10 FPS",
+   "10 times",
+   "250 FPS",
+   "3 FPS",
+   "35 fps",
+   "4 res",
+   "512 squared",
+   "600 FPS",
+   "70 FPS"
+  ],
+  "words": 2371
+ },
+ "qZtNU-4yqtI": {
+  "tech": {
+   "baked_light": [
+    "By the end of this video, you'll have the quantifiable data to prove liars wrong about why games from almost a decade ago look more realistic, and why the richness they provide has very little to do with baked lighting or nostalgia."
+   ],
+   "aces": [
+    "The Kalisto Protocols environments have that obvious plastic bland Unreal Engine look that is so strongly defined through a Lambert GXBRDF whereas the burly diffused surfaces in Dead Space remake convey a professional polished look in shading quality because your brain isn't as bothered by major inaccuracies."
+   ],
+   "gbuffer": [
+    "First, there's a limit of 255 materials on screen that can use the Kalisto BRDF because some of the GBuffer channels are repurposed to tell the lighting shader to reference these extra inputs inside a subsurface profile texture.",
+    "Back to the Kalisto BRDF, you can't fit all these parameters into an efficient GBuffer layout."
+   ],
+   "lut": [
+    "The overly praised Matrix demo characters look like absolute trash in comparison with Kalisto or burly BRDF driven visuals.",
+    "Lastly, the recent obsession with AI shading should infuriate you because now everyone should be aware of the fact that deterministic hardware agnostic shading is being neglected and it's allowing inefficient vendorbiased unstable AI to appear as a solution when in fact it is just a incompetent anti-consumer band-aid.",
+    "This is the best way to support our unique and undiluted takes on modern graphics."
+   ],
+   "motion_blur_hide": [
+    "Epic tries to hide a lot of their visual deficiencies with motion blur, tons of film grain, and blurry filmic filters."
+   ],
+   "film_grain": [
+    "Epic tries to hide a lot of their visual deficiencies with motion blur, tons of film grain, and blurry filmic filters."
+   ],
+   "filmic_blur": [
+    "Epic tries to hide a lot of their visual deficiencies with motion blur, tons of film grain, and blurry filmic filters."
+   ],
+   "filmic": [
+    "Epic tries to hide a lot of their visual deficiencies with motion blur, tons of film grain, and blurry filmic filters."
+   ]
+  },
+  "faults": [
+   "Older versions of UE4 offered somewhat hidden ways to swap out the Lambert model for Orina or Berling, but as always, only 5% of devs would take the time to alter a default setting.",
+   "Epic tries to hide a lot of their visual deficiencies with motion blur, tons of film grain, and blurry filmic filters.",
+   "The Andy Circus demo, the UFN Metahuman demo, The Witcher demo, all have this disgusting plastic CGI look that we don't need to have in 2025.",
+   "And then there's the fact that the Kalisto BRDF visuals don't rely on path tracing like technologies to compensate for dated BRDF visuals such as the disgustingly Lambert shaded Indiana Jones game that only ignorant reviewers with low graphic standards pretend looks realistic.",
+   "We shouldn't have to drown game visuals and blurred noise, chromatic aberration, lens distortion, and all these other tryhard effects to portray realism.",
+   "Lastly, the recent obsession with AI shading should infuriate you because now everyone should be aware of the fact that deterministic hardware agnostic shading is being neglected and it's allowing inefficient vendorbiased unstable AI to appear as a solution when in fact it is just a incompetent anti-consumer band-aid."
+  ],
+  "nums": [
+   "255 materials"
+  ],
+  "words": 2131
+ },
+ "sjZX5u3I4rM": {
+  "tech": {
+   "lut": [
+    "If we take a look at this Half-Life Alexene, just so we can reference a typical texture count, around 200 textures are at least 1024 squared resolution.",
+    "The shipped packing scheme of course takes advantage of BC1 efficiency, but it also lowers the resolution or completely excludes the last BC4 data depending on the asset.",
+    "The issue with the 3.2 millisecond shift solution isn't the cost, but what that cost offers in terms of visual quality in comparison with the TI compression scheme, which was shared about two months ago."
+   ],
+   "vram": [
+    "Now, this puts into perspective how quickly those bits add up in digital storage or VRAM.",
+    "But in reality, it's much worse and general content wouldn't even fit in VRAM if we used uncompressed textures for basic seventh gen games."
+   ],
+   "shadow_mask": [
+    "Take the creation of a shadow mask for example.",
+    "Only 120 bits multiplied by the internal resolution and shadowmat resolution are needed for the shadow mask creation which can reduce the amount of bits going into the lighting pass.",
+    "But most game engines don't use the minimum bits for shadow masking."
+   ],
+   "subsurface_scattering": [
+    "But opacity is an important value that allows the shadow map to premputee its interaction with on-screen subsurface scattering.",
+    "But the skin draws access an additional subsurface scattering lookup table, but not Unreal's default version."
+   ],
+   "projection": [
+    "Well, let's take a look at this full screen shadowmat projection draw in Silent Hill 2 remake.",
+    "For many of these tests, shadow softening will be turned off to measure the simplest projection cost.",
+    "Although the right-h hand numbers show the same projection cost with the bit sizes reduced using hardware debugging tools, there is already two different major conclusions from this one test."
+   ],
+   "render_target": [
+    "But if the shading model was packed inside the same render target, then we would only be wasting 16 bits."
+   ],
+   "gbuffer": [
+    "And since the deferred GBuffers will keep the lighting draws texture addressing bound, we have plenty of ALU headroom for highly configurable implicit BRDF logic.",
+    "A faster way to shade this light would require drawing the light twice, but with the first draw only containing the typical GBuffer inputs and stenciling out invocations for anything that's skin."
+   ],
+   "pixel_invocation": [
+    "A simplified way of looking at this is that the GPU draw cost is a product of pixel invocations and input bit size.",
+    "Even though a similar amount of pixels are worked on, the pixel invocations will be shading everything much faster without the additional skin buffer inputs.",
+    "Then the second draw representing the same light uses the additional skin inputs but stencils out pixel invocations for everything that isn't skin."
+   ],
+   "sss_lut": [
+    "But the skin draws access an additional subsurface scattering lookup table, but not Unreal's default version.",
+    "It's a custom lookup table, which most likely attributes to this game's uniquely lavish subsurface scattering skin."
+   ]
+  },
+  "faults": [
+   "But if we know highly compressed formats have a significant impact on performance, we become a little bit more familiar with the faults of forward rendering and how deferred rendering relies on massive uncompressed formats for later operations that could be just as texture addressing them."
+  ],
+  "nums": [
+   "1024\nsquared",
+   "1024 squared",
+   "120\nbits",
+   "16 bits",
+   "16bit",
+   "20 bits",
+   "200 textures",
+   "24\nbits",
+   "24 bits",
+   "240 bits",
+   "32 bits",
+   "5\nbits",
+   "5 bits",
+   "8 bit",
+   "8 bits",
+   "8bit"
+  ],
+  "words": 3246
+ },
+ "xojL9MdxcRs": {
+  "tech": {
+   "aces": [
+    "These dramatized races are distracting from the true consumer-based reality, which is horrendous."
+   ],
+   "screen_space": [
+    "That game is a visual treat, but it shipped with a very poor screen space ambient occlusion."
+   ],
+   "ssao": [
+    "And you can't use ReShade to use different SSAO because of anti-cheat restrictions.",
+    "They only have access to the game's poor default SSAO."
+   ],
+   "lut": [
+    "To achieve this, subpixel jitter is applied to the player's camera when 2X MSAA is enabled, and the frames are blended using a black box resolve solution.",
+    "Because the developers weren't restricted by a black box solution, they were able to surpass TXAA in clarity because TXAA accumulates multiple frames instead of a singular previous frame, causing a blurrier and smeared look.",
+    "This in combination with the anti-aliasing getting worse because of fake optimization, people were forced to compensate with computationally unsustainable resolutions such as 4K."
+   ],
+   "filtered_mipmap": [
+    "A fair test would have included MSAA with filtered mipmaps and modern specular anti-aliasing."
+   ],
+   "mipmap": [
+    "A fair test would have included MSAA with filtered mipmaps and modern specular anti-aliasing."
+   ],
+   "tone_map": [
+    "But when this channel makes a video about tone mapping, optimized shadow map implementations, the importance of BRDFs, people like Markiplier start talking about this tech."
+   ],
+   "nanite": [
+    "If you're missing why this is important, let me show you this retweet of someone asking why studios are purposely stating their games are not using Nanite or Lumen."
+   ]
+  },
+  "faults": [
+   "So, you take the industry's TAA, which started off as something conservative, meaning it only used one or two frames, so it wouldn't distort or smear the visuals.",
+   "The industry was quickly moving towards fixing these issues until a graphics programmer named Brian Karis took Epic Games pedestal to tell the entire industry, \"Forget making TAA look better, let's make TAA worse by smearing an infinite amount of past frames to pretend we're optimizing unrelated graphic features.\" So, as TAA decreased in quality, so did your basic features like SSR, ambient occlusion, and really an entire documentary's worth of graphics.",
+   "Because the developers weren't restricted by a black box solution, they were able to surpass TXAA in clarity because TXAA accumulates multiple frames instead of a singular previous frame, causing a blurrier and smeared look.",
+   "Whether it was paid incompetence or actual incompetence, but because Capcom butchered basic graphics including the visuals on console, consumers are punished for not having extremely high-end GPUs.",
+   "This is the same trillion-dollar company that will pay the biggest game journalism company to get a fake expert from Digital Foundry to lie to an unsuspecting consumer."
+  ],
+  "nums": [
+   "2X",
+   "2x",
+   "4X",
+   "4x",
+   "60\nFPS",
+   "60 FPS"
+  ],
+  "words": 2823
+ },
+ "ytUD8UkrY18": {
+  "tech": {
+   "overdraw": [
+    "Opaque textureless meshes are rendered in a pre-pass where overly dense quad overdraw inducing geometry destroys hardware depth rendering efficiency."
+   ],
+   "lut": [
+    "While a bloated pre-pass already alluded to this turn of events because PBR textures and outputs will multiply the results of any pre-pass, 21 high and low resolution additional textures are fed as inputs to each base pass draw including the base pass draws that wrote extra skin information.",
+    "Those 21 extra textures are absolutely impacting performance because this basic mesh with medium resolution, fairly compressed textures has a completely butchered shading ratio.",
+    "This small stage of events clears the half resolution SSAO, creates half resolution RG16 and R8 normal buffers from the base pass normals, and creates a same precision half resolution depth buffer used in the half resolution SSAO pass."
+   ],
+   "pixel_invocation": [
+    "Geometric decals are written into the base pass outputs pretty fast, but the most expensive draw comes from this overly large vertex boundary causing almost 2 million wasted pixel invocations.",
+    "Now, some pipelines like we saw with Jedi Survivor will output emissives to the lit buffer in the base pass to prevent all of these extra pixel invocations and the cost of redundant texture addressing, which is a much better approach."
+   ],
+   "rg16": [
+    "This small stage of events clears the half resolution SSAO, creates half resolution RG16 and R8 normal buffers from the base pass normals, and creates a same precision half resolution depth buffer used in the half resolution SSAO pass.",
+    "Then the half resolution depth and RG16 normal are used alongside several 3D textures to shade a half resolution indirect lighting buffer."
+   ],
+   "ssao": [
+    "This small stage of events clears the half resolution SSAO, creates half resolution RG16 and R8 normal buffers from the base pass normals, and creates a same precision half resolution depth buffer used in the half resolution SSAO pass.",
+    "Now, idiotic modern development culture would call Dead Space remake's SSAO as the most optimized because it has the fastest timing, but optimization is not about speed.",
+    "What needs to be discussed is that Dead Space remake is the only game here that offers expensive hardware locked ray-traced ambient occlusion, and its rasterized screen space counterpart is one of the few SSAO versions that shaded at a half resolution, which means 1/4 of the screen has SSAO evaluated in comparison with most of the other techniques."
+   ],
+   "half_resolution": [
+    "This small stage of events clears the half resolution SSAO, creates half resolution RG16 and R8 normal buffers from the base pass normals, and creates a same precision half resolution depth buffer used in the half resolution SSAO pass.",
+    "What needs to be discussed is that Dead Space remake is the only game here that offers expensive hardware locked ray-traced ambient occlusion, and its rasterized screen space counterpart is one of the few SSAO versions that shaded at a half resolution, which means 1/4 of the screen has SSAO evaluated in comparison with most of the other techniques.",
+    "Then the half resolution depth and RG16 normal are used alongside several 3D textures to shade a half resolution indirect lighting buffer."
+   ],
+   "screen_space": [
+    "What needs to be discussed is that Dead Space remake is the only game here that offers expensive hardware locked ray-traced ambient occlusion, and its rasterized screen space counterpart is one of the few SSAO versions that shaded at a half resolution, which means 1/4 of the screen has SSAO evaluated in comparison with most of the other techniques."
+   ],
+   "rtao": [
+    "And Dead Space remake is the only game here that doesn't feed the scene normals as an SSAO input, which will drastically decrease the AO's visual quality, and it's a major reason why the in-game SSAO can't properly ground objects in comparison with RTAO."
+   ],
+   "rgba8": [
+    "This compute shader analyzes the base pass RGBA8 roughness specular buffer later used in the lighting pass.",
+    "Usually shadow map projections utilize the scene normals, but this pipeline only uses the depth and one of the base pass RGBA8 alpha channel."
+   ],
+   "projection": [
+    "The atlas is processed in a stream of small compute shaders, and at the end a full screen stencil is rendered in the main depth stencil buffer for the next projection draw that projects a far field shadow map.",
+    "Usually shadow map projections utilize the scene normals, but this pipeline only uses the depth and one of the base pass RGBA8 alpha channel.",
+    "Another stencil is made for the projection, and this time about half the scene is subjected to that projection cost."
+   ],
+   "shadow_cascade": [
+    "The stencil is cleared and the second cascaded shadow map is rendered inside an 896 squared resolution shadow map.",
+    "The small stencil portion is cleared again, and the last cascaded shadow map is rendered."
+   ],
+   "indirect_lighting": [
+    "Then the half resolution depth and RG16 normal are used alongside several 3D textures to shade a half resolution indirect lighting buffer."
+   ],
+   "aces": [
+    "But forcing SSR to shade at native resolution provides a much more pleasing result without much cost because shading SSR traces was already cheap to begin with."
+   ],
+   "tiled_deferred": [
+    "Tiled deferred lighting is processed for most opaque objects while hair and skin are forward rendered."
+   ],
+   "tiled": [
+    "Tiled deferred lighting is processed for most opaque objects while hair and skin are forward rendered."
+   ],
+   "stencil_mask": [
+    "The depth and stencil channels are copied into a duplicate format for later draws followed by the geometric re-renders of emissive objects.",
+    "Another redundant copy texture resource is processed for the depth and stencil channel, followed by more translucent effects."
+   ],
+   "emissive_basepass": [
+    "Now, some pipelines like we saw with Jedi Survivor will output emissives to the lit buffer in the base pass to prevent all of these extra pixel invocations and the cost of redundant texture addressing, which is a much better approach."
+   ],
+   "rgba16": [
+    "The RGBA16 type list is copied to an RGBA16 float where translucents are rendered on top."
+   ],
+   "motion_vector": [
+    "RG 16 motion vectors are derived exclusively from the depth and camera movement.",
+    "Then, skinned objects are rendered again on top to correct animated motion vectors.",
+    "Using the depth, the motion vectors are altered for motion blur."
+   ],
+   "motion_blur_hide": [
+    "Using the depth, the motion vectors are altered for motion blur.",
+    "While Threat Reactive aims for a very specific approach for this technique, a big problem with modern motion blur is that most implementations are based on this 2014 paper, which made genuine improvements to sampling, but is ruined by the second technique discussed in the paper.",
+    "Now, Need for Speed 2015 doesn't use the 2014 motion blur technique."
+   ],
+   "bloom": [
+    "Bloom mid-maps are processed, and the RGBA 16 is converted into an RG11B10, followed by massive copy texture regions, which copy video data to buffers larger than the game's set resolution for patterns used in the menus."
+   ]
+  },
+  "faults": [
+   "Smash that subscriber button before we show you how Frostbite has regressed visually and performance-wise since one of its best releases being Need for Speed 2015, how once again butchered rasterized graphics manufacture visual value in unoptimized ray-traced graphic techniques and conclude what really killed performance by measuring the timings of a single frame so that we can learn about what could have been done to prevent such shameful optimization.",
+   "LODs and topology was severely butchered in this title, but unlike better performing titles that may not have perfect pre-pass logic, they don't do everything wrong like Dead Space remake.",
+   "While a bloated pre-pass already alluded to this turn of events because PBR textures and outputs will multiply the results of any pre-pass, 21 high and low resolution additional textures are fed as inputs to each base pass draw including the base pass draws that wrote extra skin information.",
+   "Geometric decals are written into the base pass outputs pretty fast, but the most expensive draw comes from this overly large vertex boundary causing almost 2 million wasted pixel invocations.",
+   "But this chart has more purpose than just showing how incompetently unoptimized Unreal is.",
+   "Interleaved gradient noise introduces a hideous, highly perceptible sawtooth pattern."
+  ],
+  "nums": [
+   "12\nGB",
+   "60\nFPS",
+   "896 squared"
+  ],
+  "words": 2575
+ },
+ "yxSrDAOB2xc": {
+  "tech": {
+   "film_grain": [
+    "The demo that was being referenced was this Star Wars ray-traced reflections demo that was riddled with horrible compensatory effects like blur, film grain, chromatic aberration.",
+    "This draw transfers the anti-aliased RGBA16 output into an RGBA8 with the screen composite effects stored in the RG11B10 along with some film grain."
+   ],
+   "lut": [
+    "The demo is not even running at a native resolution.",
+    "Keep in mind, they are running at a quarter rate of the native resolution, and as you can see, it's a massive 8-millisecond cost.",
+    "But, let's go back to native resolution and check out the performance with the defaulted checkerboarded RT reflections."
+   ],
+   "quarter_res": [
+    "Keep in mind, they are running at a quarter rate of the native resolution, and as you can see, it's a massive 8-millisecond cost.",
+    "That quarter pixel count we mentioned earlier."
+   ],
+   "r8_buffer": [
+    "The R8 goes completely unused in this pipeline, and the RGBA8 and RGBA16 buffers are completely overwritten with hardware resource copying in the next draws they're used in.",
+    "Some new resources are cleared and the first index of the R8 shadow map array has some type of sky/cloud shadow written inside the first R8 in the array.",
+    "That stencil channel is used to restrict expensive shadow map projection invocations on the R8 shadow mask mentioned before."
+   ],
+   "rgba16": [
+    "The R8 goes completely unused in this pipeline, and the RGBA8 and RGBA16 buffers are completely overwritten with hardware resource copying in the next draws they're used in.",
+    "And while normals are usually stored in 32-bit formats like RGBA8 or preferably in RGB10A2, normals here are packed in an RGBA16 along with additional material tags in the alpha.",
+    "That native R32 float is then used to output an unused half-resolution 540p D24 and depth-downscaled RGBA16, with the different channels containing different depth data, like minimum-maximum 2x2 pixel values and other depth discontinuity information."
+   ],
+   "rgba8": [
+    "The R8 goes completely unused in this pipeline, and the RGBA8 and RGBA16 buffers are completely overwritten with hardware resource copying in the next draws they're used in.",
+    "And while normals are usually stored in 32-bit formats like RGBA8 or preferably in RGB10A2, normals here are packed in an RGBA16 along with additional material tags in the alpha.",
+    "The normal map RGBA16, albedo buffer, and remaining RGBA8 PBR buffer are copied into identical buffers to act as inputs along with a hardware depth stencil channel and native depth R32 for a rain projection pass."
+   ],
+   "rgb10a2": [
+    "And while normals are usually stored in 32-bit formats like RGBA8 or preferably in RGB10A2, normals here are packed in an RGBA16 along with additional material tags in the alpha.",
+    "The half-resolution RGBA16 depth discontinuity and that post-DOF blurred 270p image texture are used to create this half-resolution RGB10A2, which ends up being a completely blank image.",
+    "The RG8 unsigned integer is used earlier is cleared for the next stage, where SMAA stores a two-channel edge mask based on the tone-mapped RGB10A2 scene."
+   ],
+   "rgb10": [
+    "And while normals are usually stored in 32-bit formats like RGBA8 or preferably in RGB10A2, normals here are packed in an RGBA16 along with additional material tags in the alpha.",
+    "The half-resolution RGBA16 depth discontinuity and that post-DOF blurred 270p image texture are used to create this half-resolution RGB10A2, which ends up being a completely blank image.",
+    "The RG8 unsigned integer is used earlier is cleared for the next stage, where SMAA stores a two-channel edge mask based on the tone-mapped RGB10A2 scene."
+   ],
+   "overdraw": [
+    "This overdraw view mode is really the best thing to determine the contribution of those, but what you need to see is that by the end of the base pass, lots of that super expensive material surface area is overwritten by later draws indicated by blue surface area."
+   ],
+   "rg16": [
+    "At the end, animated objects are rendered in the base pass with the additional motion vector RG16.",
+    "That texture is then used along several G-buffers to create the 64 by 64 HDR luminance RG16, which is then averaged all the way down to a 1 by 1 RG16."
+   ],
+   "motion_vector": [
+    "At the end, animated objects are rendered in the base pass with the additional motion vector RG16.",
+    "Here it works great in Jedi Survivor which doesn't even use specular motion vectors which will eventually discuss in another video."
+   ],
+   "r32": [
+    "Afterwards, a pixel shader is used to copy the native 24-bit hardware depth into a native 32-bit R32 float buffer.",
+    "That native R32 float is then used to output an unused half-resolution 540p D24 and depth-downscaled RGBA16, with the different channels containing different depth data, like minimum-maximum 2x2 pixel values and other depth discontinuity information.",
+    "Then, that native R32 depth and copied normal map RGBA16 are used as additional inputs for box projection decals."
+   ],
+   "half_res": [
+    "That native R32 float is then used to output an unused half-resolution 540p D24 and depth-downscaled RGBA16, with the different channels containing different depth data, like minimum-maximum 2x2 pixel values and other depth discontinuity information.",
+    "That half-resolution RGBA16 depth discontinuity buffer is then used to create a 135p RGBA16 and 135p D24, which will be used for light culling later on.",
+    "Two half-resolution RGBA16s are created with depth of field related information along with a depth related texture that is mipmapped in this section before being used to create near and far field blurred half-resolution versions of the scene which are then composited on the frame in the last draw of this section."
+   ],
+   "downscale": [
+    "That native R32 float is then used to output an unused half-resolution 540p D24 and depth-downscaled RGBA16, with the different channels containing different depth data, like minimum-maximum 2x2 pixel values and other depth discontinuity information.",
+    "Two lists are cleared and are updated accordingly by these draws that render geometrical light bounds against a downscaled D24 resource and uses the smallest depth discontinuity RGBA16 as input."
+   ],
+   "projection": [
+    "The hardware depth is used again to create a high- Z, followed by a decal pass, which does not use any additional buffer inputs for projection.",
+    "Then, that native R32 depth and copied normal map RGBA16 are used as additional inputs for box projection decals.",
+    "The normal map RGBA16, albedo buffer, and remaining RGBA8 PBR buffer are copied into identical buffers to act as inputs along with a hardware depth stencil channel and native depth R32 for a rain projection pass."
+   ],
+   "aces": [
+    "Those two reserved 256x256 spaces in the shadow map have information rendered inside of them.",
+    "Unreal Engine eventually implemented checkerboard traces in newer versions.",
+    "We can see low roughness surfaces are traced in a uniform fashion based on input normals, but these windows have alternated lines."
+   ],
+   "decal_projection": [
+    "The normal map RGBA16, albedo buffer, and remaining RGBA8 PBR buffer are copied into identical buffers to act as inputs along with a hardware depth stencil channel and native depth R32 for a rain projection pass."
+   ],
+   "stencil_mask": [
+    "The normal map RGBA16, albedo buffer, and remaining RGBA8 PBR buffer are copied into identical buffers to act as inputs along with a hardware depth stencil channel and native depth R32 for a rain projection pass.",
+    "Then, a geometry volume representing a light's casting range is rendered inside of the hardware depth stencil channel.",
+    "That stencil channel is used to restrict expensive shadow map projection invocations on the R8 shadow mask mentioned before."
+   ],
+   "half_resolution": [
+    "So, they will typically provide a lower ray tracing option that will trace at a half resolution, which means it's a three times smaller RT buffer, which means the spatial upscaling will look extremely pixelated and require four different frames with little variance in motion to be temporally accumulated to a native-like RT image, which will never happen in basic gameplay.",
+    "The half resolution SSR shown here is still completely unoptimized."
+   ],
+   "tiled_deferred": [
+    "A small compute shader processes some tiled lighting parameters, which are used in the next full screen triangle tiled deferred shading draw, which lights the RT resources."
+   ],
+   "tiled": [
+    "A small compute shader processes some tiled lighting parameters, which are used in the next full screen triangle tiled deferred shading draw, which lights the RT resources."
+   ],
+   "stencil_restrict": [
+    "That stencil channel is used to restrict expensive shadow map projection invocations on the R8 shadow mask mentioned before."
+   ],
+   "shadow_mask": [
+    "Two more volumes imprint a new value in the stencil, which is used to prevent the corresponding shadow map pixel shading invocations in the second index of the R8 shadow mask buffer."
+   ],
+   "indirect_lighting": [
+    "A massive multi-purpose shader performs direct lighting and composites SSDO color bleeding, indirect lighting, and the RT reflection buffer in a native RGBA16 with what could potentially be scene luminance stored in the alpha channel and RG11B10 is also outputted, but that's for materials that need screen space subsurface scattering like skin in which these two draws would scale with in terms of cost."
+   ],
+   "subsurface_scattering": [
+    "A massive multi-purpose shader performs direct lighting and composites SSDO color bleeding, indirect lighting, and the RT reflection buffer in a native RGBA16 with what could potentially be scene luminance stored in the alpha channel and RG11B10 is also outputted, but that's for materials that need screen space subsurface scattering like skin in which these two draws would scale with in terms of cost."
+   ],
+   "screen_space": [
+    "A massive multi-purpose shader performs direct lighting and composites SSDO color bleeding, indirect lighting, and the RT reflection buffer in a native RGBA16 with what could potentially be scene luminance stored in the alpha channel and RG11B10 is also outputted, but that's for materials that need screen space subsurface scattering like skin in which these two draws would scale with in terms of cost.",
+    "The skin screen space ASS RG11 B10 outputted by the lighting stage is cleared to hold some composite effects."
+   ],
+   "bloom": [
+    "Transparents and sprite effects are rendered followed by some type of effect that uses the lowest resolution depth discontinuity buffer, rain occlusion map, and noise texture to produce this result, which is then blurred in two passes and used along several rain textures and the last frame's bloom RG11B10 to ensure raindrops are only seen in bright illuminated parts of the frame.",
+    "Then, that 270p texture is recycled and blurred down continuously until it overwrites the last frame's bloom RG11 B10.",
+    "This lookup table is created and managed in two draws and is then used in this tone mapping stage, where bloom compositing also takes place."
+   ],
+   "mipmap": [
+    "Two half-resolution RGBA16s are created with depth of field related information along with a depth related texture that is mipmapped in this section before being used to create near and far field blurred half-resolution versions of the scene which are then composited on the frame in the last draw of this section."
+   ],
+   "dof": [
+    "That post-DOF result is blurred down into a 270p blurred texture.",
+    "The half-resolution RGBA16 depth discontinuity and that post-DOF blurred 270p image texture are used to create this half-resolution RGB10A2, which ends up being a completely blank image."
+   ],
+   "depth_of_field": [
+    "That post-DOF result is blurred down into a 270p blurred texture.",
+    "The half-resolution RGBA16 depth discontinuity and that post-DOF blurred 270p image texture are used to create this half-resolution RGB10A2, which ends up being a completely blank image."
+   ],
+   "sss_lut": [
+    "This lookup table is created and managed in two draws and is then used in this tone mapping stage, where bloom compositing also takes place."
+   ],
+   "tone_map": [
+    "This lookup table is created and managed in two draws and is then used in this tone mapping stage, where bloom compositing also takes place."
+   ],
+   "pixel_invocation": [
+    "The hardware depth stencil channel stores what pixels were affected by the first SMAA pass to restrict pixel invocations in the next SMAA blending stage."
+   ]
+  },
+  "faults": [],
+  "nums": [
+   "100\nFPS",
+   "60 FPS"
+  ],
+  "words": 4653
+ }
+}
