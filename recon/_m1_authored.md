@@ -1,17 +1,12 @@
 ---
-
-title: GPU-driven ECS framework (EnTT + Jolt bridge)
+title: M1 milestone spec
 milestone: M1
-ext_blocks: 41
+ext_blocks: 42
 clusters: 4
-cross_file_deps: 561
+cross_file_deps: 518
 self_contained: true
 index: see llms.txt or the <details> block index below
-layer: engine
-build_phase: P0-foundation
-build_order: 2
 ---
-
 
 ## M1 — GPU-driven ECS framework
 > **M1 quick-index (42 EXT blocks).** Read ONLY the block(s) you need — each is self-contained. <details><summary>M1 block index (click to expand)</summary>
@@ -22,6 +17,7 @@ build_order: 2
 - `M1-EXT-05` Persistent-Mapped Staging Ring Buffer
 - `M1-EXT-06` EnTT Archetype Component SPSC Mutation Queue Committer
 - `M1-EXT-07` Thread-Local Zero-Allocation Linear Page-Bump Arena
+- `M1-EXT-08` Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
 - `M1-EXT-09` EnTT Concurrent Component Archetype View Iteration Cache
 - `M1-EXT-10` Render-Graph Pass Dependency DAG Flattener
 - `M1-EXT-11` Compute-to-Indirect-Draw Execution Barrier
@@ -61,9 +57,9 @@ build_order: 2
 <a id="M1-EXT-01"></a>
 #### [M1-EXT-01] SpatialHash Uniform Grid Cell Bucketing Engine
 > **tags** · SpatialHash
-> **tl;dr** · SpatialHash Uniform Grid Cell Bucketing Engine
-> **meta** · depends-on: [M1-EXT-01], [M1-EXT-02], [M1-EXT-03], [M1-EXT-04], [M1-EXT-05], [M1-EXT-06], [M1-EXT-07], [M1-EXT-08] · depended-by: -
-> **ctx** · SpatialHash Uniform Grid Cell Bucketing Engine
+> **tl;dr** · // Packs a 2m grid cell into one 64-bit key; floor() keeps negative-coordinate cells continuous
+> **meta** · depends-on: - · depended-by: M1-EXT-23
+> **ctx** · SpatialHash Uniform Grid Cell Bucketing Engine -- // Packs a 2m grid cell into one 64-bit key; floor() keeps negative-coordinate cells continuous
 ##### Systems Touched
 Broad-phase collision, crowd/horde proximity queries, chunk-streaming load/unload, physics cooking (Jolt), and GPU culling all read the spatial hash. Writes feed [M2] physics broadphase and [M5] scent/fear diffusion grid. Seeded world layout makes cell contents deterministic per seed.
 ##### Math
@@ -80,10 +76,10 @@ uint64_t SpatialHashKey(float x, float z) { int64_t cx = static_cast<int64_t>(st
 (impact not specified in source)
 <a id="M1-EXT-02"></a>
 #### [M1-EXT-02] Generational Resource Table Pointer Validator
-> **tags** · generational
-> **tl;dr** · Generational Resource Table Pointer Validator
-> **meta** · depends-on: [M1-EXT-02] · depended-by: -
-> **ctx** · Generational Resource Table Pointer Validator
+> **tags** · general
+> **tl;dr** · bool IsHandleValid(const Handle& h, const std::vector<uint32_t>& generations) { return h.index < generations.size() && h.generation == generations[h.index];
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Generational Resource Table Pointer Validator -- bool IsHandleValid(const Handle& h, const std::vector<uint32_t>& generations) { return h.index < generations.size() && h.generation == generations[h.index];
 ##### Systems Touched
 Entity registry handle table (EnTT). Every system that holds a reference to a live entity validates through this before dereferencing. Backs [M1-EXT-01] cell payloads and [M1-EXT-06] deferred mutations.
 ##### Math
@@ -99,10 +95,10 @@ bool IsHandleValid(const Handle& h, const std::vector<uint32_t>& generations) { 
 (impact not specified in source)
 <a id="M1-EXT-03"></a>
 #### [M1-EXT-03] Multi-Threaded Command Pool Matrix
-> **tags** · multi
-> **tl;dr** · Multi-Threaded Command Pool Matrix
-> **meta** · depends-on: [M1-EXT-03] · depended-by: -
-> **ctx** · Multi-Threaded Command Pool Matrix
+> **tags** · general
+> **tl;dr** · uint32_t GetPoolIndex(uint32_t frameResourceIndex, uint32_t threadCount, uint32_t threadId) { assert(threadId < threadCount); return (frameResourceIndex * th...
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Multi-Threaded Command Pool Matrix -- uint32_t GetPoolIndex(uint32_t frameResourceIndex, uint32_t threadCount, uint32_t threadId) { assert(threadId < threadCount); return (frameResourceIndex * threadCount) + threadId;
 ##### Systems Touched
 Multi-threaded command-buffer recording (render graph, M1). Maps (frame, thread) -> a per-thread command pool so N threads record in parallel without a global lock.
 ##### Math
@@ -118,10 +114,10 @@ uint32_t GetPoolIndex(uint32_t frameResourceIndex, uint32_t threadCount, uint32_
 (impact not specified in source)
 <a id="M1-EXT-04"></a>
 #### [M1-EXT-04] Frame-Scoped Deletion Queue
-> **tags** · frame
-> **tl;dr** · Frame-Scoped Deletion Queue
-> **meta** · depends-on: [M1-EXT-04] · depended-by: -
-> **ctx** · Frame-Scoped Deletion Queue
+> **tags** · general
+> **tl;dr** · bool ReadyToPurge(uint64_t completedFenceValue, uint64_t resourceFenceValue) { return completedFenceValue >= resourceFenceValue;
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Frame-Scoped Deletion Queue -- bool ReadyToPurge(uint64_t completedFenceValue, uint64_t resourceFenceValue) { return completedFenceValue >= resourceFenceValue;
 ##### Systems Touched
 GPU resource lifetime management. Gates destruction of buffers/images until the GPU has finished the frame that last used them (fence-based).
 ##### Math
@@ -137,10 +133,10 @@ bool ReadyToPurge(uint64_t completedFenceValue, uint64_t resourceFenceValue) { r
 (impact not specified in source)
 <a id="M1-EXT-05"></a>
 #### [M1-EXT-05] Persistent-Mapped Staging Ring Buffer
-> **tags** · persistent
-> **tl;dr** · Persistent-Mapped Staging Ring Buffer
-> **meta** · depends-on: [M1-EXT-05] · depended-by: -
-> **ctx** · Persistent-Mapped Staging Ring Buffer
+> **tags** · general
+> **tl;dr** · void* GetFrameStagingRegion(void* basePtr, size_t maxFrameSize, size_t totalPoolSize, uint32_t frameIdx) { size_t offset = (static_cast<size_t>(frameIdx) * m...
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Persistent-Mapped Staging Ring Buffer -- void* GetFrameStagingRegion(void* basePtr, size_t maxFrameSize, size_t totalPoolSize, uint32_t frameIdx) { size_t offset = (static_cast<size_t>(frameIdx) * maxFrameSize) % totalPoolSize; return static_cast<uint8_t*>(basePtr) + offset;
 ##### Systems Touched
 Per-frame CPU->GPU upload path (UI text, dynamic material tweaks, streaming). Sits on a single persistent map instead of map/unmap per upload.
 ##### Math
@@ -156,10 +152,10 @@ void* GetFrameStagingRegion(void* basePtr, size_t maxFrameSize, size_t totalPool
 (impact not specified in source)
 <a id="M1-EXT-06"></a>
 #### [M1-EXT-06] EnTT Archetype Component SPSC Mutation Queue Committer
-> **tags** · entt
-> **tl;dr** · EnTT Archetype Component SPSC Mutation Queue Committer
-> **meta** · depends-on: [M1-EXT-06] · depended-by: -
-> **ctx** · EnTT Archetype Component SPSC Mutation Queue Committer
+> **tags** · SPSC
+> **tl;dr** · struct DeferredMutation { entt::entity targetEntity; uint32_t operationBitmask; };
+> **meta** · depends-on: - · depended-by: M1-EXT-09, M1-EXT-53
+> **ctx** · EnTT Archetype Component SPSC Mutation Queue Committer -- struct DeferredMutation { entt::entity targetEntity; uint32_t operationBitmask; };
 ##### Systems Touched
 EnTT component mutation from background threads (chunk streaming, physics cooking, procedural gen). Bridges thread-local writes into the main-thread registry without locking the registry per write.
 ##### Math
@@ -176,11 +172,10 @@ struct alignas(64) SPSCMutationQueue { DeferredMutation dataPool[1024]; alignas(
 (impact not specified in source)
 <a id="M1-EXT-07"></a>
 #### [M1-EXT-07] Thread-Local Zero-Allocation Linear Page-Bump Arena
-> **tags** · thread
-> **tl;dr** · Thread-Local Zero-Allocation Linear Page-Bump Arena
-> **meta** · depends-on: [M1-EXT-01], [M1-EXT-02], [M1-EXT-07] · depended-by: -
-> **ctx** · Thread-Local Zero-Allocation Linear Page-Bump Arena
-> **STUB** · unfilled in source spec — no Systems Touched/Math/How It Works/Reference Impl
+> **tags** · general
+> **tl;dr** · struct BumpArena { uint8_t* memoryBufferPage; size_t capacity; size_t currentOffset; };
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Thread-Local Zero-Allocation Linear Page-Bump Arena -- struct BumpArena { uint8_t* memoryBufferPage; size_t capacity; size_t currentOffset; };
 ##### Systems Touched
 Thread-local scratch allocation for pathfinding, raycast, and other per-worker algorithms. Removes malloc contention on hot parallel paths.
 ##### Math
@@ -192,25 +187,32 @@ Linear bump inside a fixed page: `ptr = base + offset; offset += align(size, ali
 struct BumpArena { uint8_t* memoryBufferPage; size_t capacity; size_t currentOffset; };
 inline void* ArenaAllocateBump(BumpArena& arena, size_t size, size_t alignment = 16) { size_t alignedOffset = (arena.currentOffset + alignment - 1) & ~(alignment - 1); if (alignedOffset + size > arena.capacity) return nullptr; // Arena page boundary hit arena.currentOffset = alignedOffset + size; return arena.memoryBufferPage + alignedOffset;
 }
-Broad-phase collision, crowd/horde proximity queries, chunk-streaming load/unload, physics cooking, and GPU culling all read the spatial hash. Writes: [M1-EXT-02] (handle table), [M2] physics broadphase, [M5] scent/fear diffusion grid. Depends on [M1-EXT-01] key packing + [M0] Vulkan buffer backing.
-Cell key packs a uniform 2 m grid: `cx = floor(x/cell)`, `cz = floor(z/cell)`, `key = (cx & 0x1FFFF) | ((cz & 0x1FFFF) << 21)` in a 64-bit word (21 bits/axis → ±1,048,575 cells, ~±2,097 km at 2 m). Hash bucketing: `bucket = hash(key) % tableSize` with `tableSize` a power of two (Knuth multiplicative: `h = (key * 2654435761u) >> (32 - log2(tableSize))`). Average load factor kept < 0.75; overflow chains use a free-list (see [M1-EXT-02]).
-1. Entity insert: compute cell key from world (x,z), hash to bucket, push entity id onto that bucket's chain (lock-free per-bucket spinlock or atomic append — never a global lock). 2. Query (radius r): iterate the `(2·ceil(r/cell)+1)²` neighbourhood of cells, collect candidates, refine with exact distance. 3. Move: on position change, recompute key; if bucket changed, unlink from old chain, append to new. 4. Clear per frame for dynamic sets, or persist for static (terrain) sets. Seed-driven world layout makes cell contents deterministic for a given seed (repeatable worlds, a la Minecraft/No Man's Sky PCG).
-// key packing (see header above); bucket insert:
-void SpatialHashInsert(uint64_t key, entt::entity e, Bucket* table, uint32_t tableSize) {
-    uint32_t b = (uint32_t)((key * 2654435761ull) >> (32 - log2i(tableSize)));
-    uint32_t idx = table[b].head.exchange(tail);      // atomic push
-    freeList[tail].next = idx; table[b].head = tail++; // chain link
-}
-See Also: [M1-EXT-02] (generational handle table), [M2] (Jolt broadphase bridge).
 ```
+##### Player-Facing Impact
+(impact not specified in source)
+<a id="M1-EXT-08"></a>
+#### [M1-EXT-08] Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
+> **tags** · general
+> **tl;dr** · Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
+> **STUB** · unfilled in source spec — no Systems Touched/Math/How It Works/Reference Implementation/Player-Facing Impact authored yet.
+##### Systems Touched
+Cross-thread component visibility. Lets worker threads read entity state without the registry taking a lock, feeding [M1-EXT-01] queries and [M1-EXT-06] mutations.
+##### Math
+Double-buffered view epoch: readers see `epoch[read]`, writers publish to `epoch[1-read]` then flip `read ^= 1` under a seqlock. Version counter prevents torn reads.
+##### How It Works
+1. Worker reads the stable epoch. 2. Main thread mutates the shadow buffer. 3. Flip epoch; subsequent worker reads see the new state. No per-read lock.
+##### Reference Implementation
+(no reference implementation present in source)
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-09"></a>
 #### [M1-EXT-09] EnTT Concurrent Component Archetype View Iteration Cache
 > **tags** · general
-> **tl;dr** · EnTT Concurrent Component Archetype View Iteration Cache
-> **meta** · depends-on: [M1-EXT-09], [M4-EXT-12], [M4-EXT-13], [M4-EXT-14], [M4-EXT-15], [M4-EXT-16], [M10-EXT-01], [M4-EXT-17], [M4-EXT-18], [M6.5-EXT-11], [M4-EXT-19], [M4-EXT-08], [M4-EXT-09], [M4-EXT-10], [M4-EXT-11], [M4-EXT-21], [M4-EXT-28], [M4-EXT-27], [M4-EXT-26], [M4-EXT-25], [M4-EXT-24], [M4-EXT-23], [M4-EXT-22], [M4-EXT-20], [M5-EXT-51], [M4.5-EXT-01], [M4.5-EXT-02], [M4.5-EXT-03], [M4.5-EXT-04], [M4.5-EXT-06], [M4.5-EXT-05], [M4.5-EXT-07], [M4-EXT-84], [M4.5-EXT-08], [M4.5-EXT-09], [M0-EXT-08], [M4.5-EXT-10], [M4.5-EXT-11], [M4.5-EXT-12], [M4.5-EXT-13], [M4.5-EXT-19], [M10-EXT-02], [M4.5-EXT-20], [M4.5-EXT-14], [M4.5-EXT-15], [M4.5-EXT-16], [M4.5-EXT-17], [M4.5-EXT-18], [M4.5-EXT-27], [M4.5-EXT-28], [M4.5-EXT-29], [M4.5-EXT-30], [M4.5-EXT-31], [M4.5-EXT-26], [M4.5-EXT-25], [M4.5-EXT-24], [M4.5-EXT-21], [M6-EXT-11], [M4-EXT-85], [M0-EXT-04], [M4-EXT-86], [M4-EXT-87], [M4-EXT-89], [M4-EXT-88], [M5-EXT-01], [M5-EXT-02], [M5-EXT-19], [M5-EXT-03], [M5-EXT-49], [M5-EXT-04], [M5-EXT-05], [M5-EXT-17], [M5-EXT-18], [M5-EXT-20], [M5-EXT-21], [M5-EXT-22], [M5-EXT-23], [M5-EXT-25], [M5-EXT-26], [M5-EXT-27], [M5-EXT-28], [M5-EXT-29], [M5-EXT-30], [M5-EXT-31], [M5-EXT-32], [M5-EXT-33], [M5-EXT-34], [M5-EXT-35], [M0-EXT-01], [M1-EXT-07], [M5-EXT-36], [M5-EXT-37], [M5-EXT-38], [M5-EXT-39], [M5-EXT-40], [M5-EXT-41], [M5-EXT-42], [M5-EXT-43], [M5-EXT-44], [M5-EXT-45], [M5-EXT-46], [M4.6-EXT-04], [M5-EXT-47], [M5-EXT-48], [M5-EXT-50], [M5-EXT-52], [M5-EXT-53], [M6-EXT-01], [M6-EXT-02], [M6-EXT-03], [M6-EXT-04], [M6-EXT-05], [M6-EXT-06], [M6-EXT-07], [M6-EXT-08], [M6-EXT-09], [M6-EXT-10], [M6-EXT-12], [M6.5-EXT-01], [M2-EXT-59], [M6.5-EXT-02], [M6.5-EXT-03], [M6.5-EXT-04], [M6.5-EXT-05], [M6.5-EXT-06], [M6.5-EXT-07], [M6.5-EXT-08], [M6.5-EXT-09], [M6.5-EXT-10], [M6.5-EXT-12], [M6.5-EXT-13], [M7-EXT-01], [M2-EXT-02], [M7-EXT-02], [M7-EXT-03], [M7-EXT-04], [M7-EXT-05], [M8-EXT-03], [M7-EXT-06], [M7-EXT-07], [M7-EXT-11], [M7-EXT-10], [M7-EXT-09], [M7-EXT-08], [M8-EXT-01], [M8-EXT-02], [M9-EXT-16], [M8-EXT-20], [M8-EXT-04], [M3-EXT-06], [M8-EXT-21], [M8-EXT-29], [M8-EXT-05], [M8-EXT-06], [M8-EXT-07], [M8-EXT-08], [M8-EXT-10], [M8-EXT-09], [M8-EXT-19], [M8-EXT-22], [M8-EXT-24], [M8-EXT-25], [M8-EXT-27], [M8-EXT-26], [M8-EXT-28], [M8-EXT-30], [M8-EXT-31], [M8-EXT-32], [M8-EXT-33], [M9-EXT-01], [M9-EXT-02], [M9-EXT-03], [M9-EXT-04], [M9-EXT-05], [M9-EXT-06], [M9-EXT-07], [M9-EXT-08], [M9-EXT-09], [M9-EXT-10], [M9-EXT-11], [M9-EXT-12], [M9-EXT-13], [M9-EXT-14], [M9-EXT-15], [M9-EXT-17], [M9-EXT-19], [M9-EXT-18], [M9-EXT-21], [M9-EXT-22], [M9-EXT-20], [M10-EXT-03], [M10-EXT-05], [M10-EXT-04], [M10-EXT-06], [M10-EXT-11], [M11-EXT-01], [M11-EXT-02], [M11-EXT-03], [M11-EXT-04], [M11-EXT-05], [M11-EXT-06], [M11-EXT-07], [M11-EXT-09], [M11-EXT-08], [M5.4-EXT-04], [M12-EXT-01], [M2-EXT-51], [M2-EXT-53], [M12-EXT-02], [M12-EXT-13], [M12-EXT-07], [M12-EXT-04], [M1-EXT-06], [M13-EXT-11], [M13-EXT-01], [M13-EXT-02], [M13-EXT-03], [M13-EXT-04], [M13-EXT-05], [M13-EXT-06], [M13-EXT-07], [M13-EXT-08], [M13-EXT-09], [M13-EXT-10], [M13-EXT-12], [M2-EXT-50], [M13-EXT-13], [M13-EXT-15], [M4-EXT-03], [M2-EXT-54], [M4-EXT-01], [M12-EXT-03], [M1-EXT-11], [M2-EXT-68], [M2-EXT-57], [M0-EXT-10], [M0-EXT-11], [M0-EXT-12], [M1-EXT-10], [M1-EXT-13], [M1-EXT-15], [M1-EXT-16], [M1-EXT-17], [M1-EXT-18], [M1-EXT-19], [M1-EXT-20], [M1-EXT-21], [M1-EXT-22], [M1-EXT-23], [M1-EXT-24], [M1-EXT-03], [M1-EXT-25], [M2-EXT-06], [M2-EXT-07], [M2-EXT-44], [M2-EXT-45], [M2-EXT-55], [M2-EXT-56], [M2-EXT-67], [M4-EXT-02], [M5.4-EXT-10], [M1-EXT-08], [M0-EXT-14], [M12-EXT-05], [M5.2-EXT-13], [M4.6-EXT-06], [M5.4-EXT-08], [M3-EXT-09], [M3-EXT-08] · depended-by: -
-> **ctx** · EnTT Concurrent Component Archetype View Iteration Cache
+> **tl;dr** · #include <cstdint>
+> **meta** · depends-on: M1-EXT-07, M1-EXT-06, M1-EXT-11, M1-EXT-10, M1-EXT-13, M1-EXT-15, M1-EXT-16, M1-EXT-17, M1-EXT-18, M1-EXT-19, M1-EXT-20, M1-EXT-21, M1-EXT-22, M1-EXT-23, M1-EXT-24, M1-EXT-03, M1-EXT-25, M1-EXT-08 · depended-by: -
+> **ctx** · EnTT Concurrent Component Archetype View Iteration Cache -- #include <cstdint>
 ##### Systems Touched
 Hot component pools (position, velocity, transform) cached in a contiguous, lock-friendly buffer for flocking / crowd evaluation.
 ##### Math
@@ -227,10 +229,10 @@ Cache line aligned: `rawDataBufferMemoryHead` padded so each pool element starts
 (impact not specified in source)
 <a id="M1-EXT-10"></a>
 #### [M1-EXT-10] Render-Graph Pass Dependency DAG Flattener 
-> **tags** · render
-> **tl;dr** · Render-Graph Pass Dependency DAG Flattener
-> **meta** · depends-on: [M1-EXT-10] · depended-by: -
-> **ctx** · Render-Graph Pass Dependency DAG Flattener
+> **tags** · DAG
+> **tl;dr** · topo = Kahn(N, E); inDeg[v]-- on emit; stable order by priority when tied. 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Render-Graph Pass Dependency DAG Flattener -- topo = Kahn(N, E); inDeg[v]-- on emit; stable order by priority when tied. 
 ##### Systems Touched
 Render-graph pass scheduler. Orders GPU passes so all inter-pass barriers are satisfied before a pass runs.
 ##### Math
@@ -249,9 +251,9 @@ Render passes always execute in a valid order - no read-before-write hazards, no
 <a id="M1-EXT-11"></a>
 #### [M1-EXT-11] Compute-to-Indirect-Draw Execution Barrier 
 > **tags** · general
-> **tl;dr** · Compute-to-Indirect-Draw Execution Barrier
-> **meta** · depends-on: [M1-EXT-11] · depended-by: -
-> **ctx** · Compute-to-Indirect-Draw Execution Barrier
+> **tl;dr** · barrier(srcStage=COMPUTE, dstStage=DRAW, buf=visibleList, access=WRITE->READ). 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Compute-to-Indirect-Draw Execution Barrier -- barrier(srcStage=COMPUTE, dstStage=DRAW, buf=visibleList, access=WRITE->READ). 
 ##### Systems Touched
 Explicit Vulkan barrier injection between compute (e.g. culling) and draw stages, so the GPU never reads a buffer mid-write.
 ##### Math
@@ -260,8 +262,6 @@ Barrier spans stages: `srcStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT`, `ds
 1. After the compute pass writes a buffer (e.g. visible-list), emit a barrier with WRITE->READ access transition. 2. The draw pass waits on dstStage before reading. 3. Per [M1-EXT-10] ordering, barriers are inserted exactly where the graph edge demands.
 ##### Reference Implementation
 ```cpp
-GPU-driven render path: compute cull pass ([M3] renderer) writes the visible-instance buffer; this barrier orders it before the indirect draw ([M1-EXT-01] spatial hash also reads the visible set for CPU-side refinement). Depends on [M0] Vulkan synchronization primitives.
-Barrier spans stages `srcStageMask = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT` → `dstStageMask = VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT`, with `srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT` → `dstAccessMask = VK_ACCESS_INDIRECT_COMMAND_READ_BIT`. No explicit dt in a barrier; correctness is a happens-before edge enforced by the Vulkan memory model. For `MAX_FRAMES_IN_FLIGHT = 2/3`, pair with a fence per frame so the GPU never reads a buffer mid-write.
 barrier(srcStage=COMPUTE, dstStage=DRAW, buf=visibleList, access=WRITE->READ). 
 After the compute cull pass writes the visible-instance buffer, an explicit barrier (or split barrier) ensures the indirect-draw pass sees the writes before reading instance counts/offsets. Prevents reading stale or partial cull data. 
 vkCmdPipelineBarrier(cb, COMPUTE, DRAW, 0, 0,nullptr, 1,&bufBarrier, 0,nullptr);
@@ -272,9 +272,9 @@ GPU culling + indirect draw stay correct across passes - no popped or duplicated
 <a id="M1-EXT-12"></a>
 #### [M1-EXT-12] Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
 > **tags** · MSDF, RVT
-> **tl;dr** · Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
-> **meta** · depends-on: [M1-EXT-12], [M1-EXT-30], [M1-EXT-31], [M1-EXT-32], [M1-EXT-33], [M1-EXT-34], [M1-EXT-35], [M1-EXT-36], [M1-EXT-37], [M1-EXT-38], [M13-EXT-14], [M13-EXT-13], [M12-EXT-06], [M5.2-EXT-16], [M5-EXT-32], [M5-EXT-33], [M11-EXT-42], [M10-EXT-02], [M9-EXT-04], [M4.6-EXT-09], [M4-EXT-84], [M12-EXT-23], [M12-EXT-01], [M12-EXT-02], [M12-EXT-03], [M2-EXT-53], [M2-EXT-54], [M1-EXT-13] · depended-by: -
-> **ctx** · Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
+> **tl;dr** · Every consumer of M1's SoA Transform component — skinning, indirect draw,
+> **meta** · depends-on: M1-EXT-30, M1-EXT-31, M1-EXT-32, M1-EXT-33, M1-EXT-34, M1-EXT-35, M1-EXT-36, M1-EXT-37, M1-EXT-38 · depended-by: -
+> **ctx** · Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface -- Every consumer of M1's SoA Transform component — skinning, indirect draw,
 ##### Systems Touched
 World-space rendering of entities whose authority lives in a moving/streaming origin (large-world double-precision root).
 ##### Math
@@ -448,9 +448,9 @@ the doc itself already called out as unresolved. ### M.2 — Rejected or deferre
 (impact not specified in source)
 <a id="M1-EXT-13"></a>
 #### [M1-EXT-13] Render-Graph Barrier Topological Sorter 
-> **tags** · render
+> **tags** · general
 > **tl;dr** · Render-Graph Barrier Topological Sorter
-> **meta** · depends-on: [M1-EXT-13] · depended-by: -
+> **meta** · depends-on: - · depended-by: M1-EXT-09
 > **ctx** · Render-Graph Barrier Topological Sorter
 ##### Systems Touched
 PARENTING — hierarchical transform propagation for weapon sockets, camera-on-head, turrets. NOTE: block is EMPTY in source spec; authored from engine convention + sibling blocks [M1-EXT-12]/[M1-EXT-41]. Needs source confirmation.
@@ -465,9 +465,9 @@ Source block empty — see [M1-EXT-41] `struct Parent { entt::entity value; }` f
 <a id="M1-EXT-15"></a>
 #### [M1-EXT-15] GPU Query Pool Timestamp Profiler 
 > **tags** · GPU
-> **tl;dr** · GPU Query Pool Timestamp Profiler
-> **meta** · depends-on: [M1-EXT-15], [M1-EXT-16], [M1-EXT-17], [M1-EXT-18], [M1-EXT-19], [M1-EXT-20], [M1-EXT-21], [M1-EXT-22], [M1-EXT-23], [M1-EXT-01], [M2-EXT-53], [M2-EXT-01], [M2-EXT-02], [M7-EXT-01], [M2-EXT-03], [M2-EXT-29], [M2-EXT-04], [M5-EXT-25], [M2-EXT-05], [M2-EXT-06], [M2-EXT-07], [M2-EXT-30], [M8-EXT-01], [M2-EXT-31], [M2-EXT-32], [M2-EXT-33], [M2-EXT-34], [M2-EXT-35], [M2-EXT-40], [M2-EXT-36], [M2-EXT-37], [M2-EXT-38], [M2-EXT-39], [M2-EXT-41], [M2-EXT-42], [M2-EXT-43], [M2-EXT-44], [M2-EXT-45], [M2-EXT-50], [M2-EXT-51], [M2-EXT-52], [M2-EXT-54], [M2-EXT-55], [M2-EXT-56], [M2-EXT-57], [M2-EXT-58], [M2-EXT-59], [M2-EXT-60], [M2-EXT-61], [M2-EXT-62], [M2-EXT-63], [M2-EXT-64], [M2-EXT-65], [M2-EXT-66], [M2-EXT-67], [M2-EXT-68], [M3-EXT-01], [M3-EXT-02], [M3-EXT-03], [M3-EXT-04], [M3-EXT-05], [M3-EXT-06], [M3-EXT-07], [M4.5-EXT-04], [M3-EXT-08], [M3-EXT-11], [M3-EXT-10], [M4-EXT-01], [M4-EXT-02], [M4-EXT-03], [M4-EXT-04], [M4-EXT-05] · depended-by: -
-> **ctx** · GPU Query Pool Timestamp Profiler
+> **tl;dr** · ts = QueryPool.GetTimestamp(pass); dt = ts_end - ts_start; 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · GPU Query Pool Timestamp Profiler -- ts = QueryPool.GetTimestamp(pass); dt = ts_end - ts_start; 
 ##### Systems Touched
 GPU timestamp queries for per-pass CPU/GPU timing (Tracy-fed).
 ##### Math
@@ -479,16 +479,16 @@ Delta from pooled timestamps: `ts = QueryPool.GetTimestamp(pass); dt = ts_end - 
 ts = QueryPool.GetTimestamp(pass); dt = ts_end - ts_start; 
 A query pool records GPU timestamps at pass boundaries; the CPU reads them back (deferred) to build a per-pass GPU time breakdown. Off by default in shipping, dev-only. 
 float dt = (tsEnd - tsStart) * period;
-You can see where GPU time goes per pass - real profiling, not guesses. --- 
+You can see where GPU time goes per pass - real profiling, not guesses. --- <a id="M1-EXT-16"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-16"></a>
 #### [M1-EXT-16] SoA Cache-Line Padding 
-> **tags** · soa
-> **tl;dr** · SoA Cache-Line Padding
-> **meta** · depends-on: [M1-EXT-16] · depended-by: -
-> **ctx** · SoA Cache-Line Padding
+> **tags** · general
+> **tl;dr** · stride = align(sizeof(T), 64); base = alloc(n*stride, 64). 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · SoA Cache-Line Padding -- stride = align(sizeof(T), 64); base = alloc(n*stride, 64). 
 ##### Systems Touched
 Cache-line-padded SoA component storage for the ECS. Prevents false sharing / cache-line straddle on multithreaded component updates.
 ##### Math
@@ -500,16 +500,16 @@ Stride padded to 64 B: `stride = align(sizeof(T), 64); base = alloc(n*stride, 64
 stride = align(sizeof(T), 64); base = alloc(n*stride, 64). 
 Hot component arrays are allocated with a stride rounded to a cache line and base-aligned to 64B, so concurrent jobs touching different entities don't thrash the same line. Applied to the components M0-EXT-12 identified as hot. 
 auto* a = (T*)aligned_alloc(64, n*align(sizeof(T),64));
-Multithreaded ECS updates avoid cache-line contention - smoother frame under load. 
+Multithreaded ECS updates avoid cache-line contention - smoother frame under load. <a id="M1-EXT-17"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-17"></a>
 #### [M1-EXT-17] Deterministic Secondary Command-Buffer Merger 
-> **tags** · deterministic
-> **tl;dr** · Deterministic Secondary Command-Buffer Merger
-> **meta** · depends-on: [M1-EXT-17] · depended-by: -
-> **ctx** · Deterministic Secondary Command-Buffer Merger
+> **tags** · general
+> **tl;dr** · merge(secondaries, order=M1-EXT-13) -> primary; stable sort by pass id. 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Deterministic Secondary Command-Buffer Merger -- merge(secondaries, order=M1-EXT-13) -> primary; stable sort by pass id. 
 ##### Systems Touched
 Secondary-command-buffer merging into the primary for recorded pass groups.
 ##### Math
@@ -521,16 +521,16 @@ Merge is a stable sort: `merge(secondaries, order=[M1-EXT-13]) -> primary` (stab
 merge(secondaries, order=M1-EXT-13) -> primary; stable sort by pass id. 
 Worker threads record secondary command buffers; a merger stitches them into the primary in the topological order M1-EXT-13 produced, deterministically, so multi-threaded recording reproduces the same final command stream. 
 Merge(secondaries, topoOrder, primary);
-Multi-threaded command recording stays deterministic - co-op/save replays match. --- 
+Multi-threaded command recording stays deterministic - co-op/save replays match. --- <a id="M1-EXT-18"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-18"></a>
 #### [M1-EXT-18] Material-Batched Mesh-Pass Rendering 
-> **tags** · material
-> **tl;dr** · Material-Batched Mesh-Pass Rendering
-> **meta** · depends-on: [M1-EXT-18] · depended-by: -
-> **ctx** · Material-Batched Mesh-Pass Rendering
+> **tags** · general
+> **tl;dr** · batch = GroupBy(materialId, draws); one bind per batch; 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Material-Batched Mesh-Pass Rendering -- batch = GroupBy(materialId, draws); one bind per batch; 
 ##### Systems Touched
 Draw-call batching by material to cut binding overhead.
 ##### Math
@@ -542,16 +542,16 @@ Group draws by material id: `batch = GroupBy(materialId, draws); one bind per ba
 batch = GroupBy(materialId, draws); one bind per batch; 
 Draws are sorted/batched by material (pipeline + descriptor set) so each batch binds once; slashes pipeline-switch overhead on dense scenes. Complements M1-EXT-25 bindless. 
 for(b in batches) { Bind(b.mat); Draw(b.draws); }
-Far more draws per frame at the same cost - denser worlds run smooth. --- 
+Far more draws per frame at the same cost - denser worlds run smooth. --- <a id="M1-EXT-19"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-19"></a>
 #### [M1-EXT-19] SoA Layout for Hot Components 
-> **tags** · soa
-> **tl;dr** · SoA Layout for Hot Components
-> **meta** · depends-on: [M1-EXT-19] · depended-by: -
-> **ctx** · SoA Layout for Hot Components
+> **tags** · general
+> **tl;dr** · array<T> pos; array<T> vel; iterate i linearly; no pointer chase. 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · SoA Layout for Hot Components -- array<T> pos; array<T> vel; iterate i linearly; no pointer chase. 
 ##### Systems Touched
 EnTT view/group iteration for systems that touch a fixed component set.
 ##### Math
@@ -563,16 +563,16 @@ Group is a pre-indexed intersection: `group = reg.group<Pos,Vel>()`; iteration i
 array<T> pos; array<T> vel; iterate i linearly; no pointer chase. 
 Hot component arrays are stored SoA (one contiguous array per field) so system loops stream linearly through cache. Pairs with M1-EXT-16 padding. Cold components stay AoS. 
 for(i) Integrate(pos[i], vel[i]);
-Hot systems iterate cache-friendly - less stall, more entities per ms. --- 
+Hot systems iterate cache-friendly - less stall, more entities per ms. --- <a id="M1-EXT-20"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-20"></a>
 #### [M1-EXT-20] EnTT Group-Backed Hot-Component Storage 
-> **tags** · entt
-> **tl;dr** · EnTT Group-Backed Hot-Component Storage
-> **meta** · depends-on: [M1-EXT-20] · depended-by: -
-> **ctx** · EnTT Group-Backed Hot-Component Storage
+> **tags** · general
+> **tl;dr** · group = reg.group<Pos,Vel>(); for(auto e: group) ...; 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · EnTT Group-Backed Hot-Component Storage -- group = reg.group<Pos,Vel>(); for(auto e: group) ...; 
 ##### Systems Touched
 Skinned-mesh bone matrix upload to the GPU skinning buffer.
 ##### Math
@@ -584,16 +584,16 @@ Bone mats written to a mapped GPU buffer: `mat4* bones = (mat4*)skbuffAddr;` str
 group = reg.group<Pos,Vel>(); for(auto e: group) ...; 
 Hot component pairs are registered as an EnTT group so views over them are O(1) and cache-coherent (group backs them with a shared packed array). Faster than ad-hoc views for the per-frame hot set. 
 auto g = reg.group<Pos,Vel>(); for(auto e: g) Step(e);
-Hot-system iteration is near-free - big entity counts stay at 60fps. --- 
+Hot-system iteration is near-free - big entity counts stay at 60fps. --- <a id="M1-EXT-21"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-21"></a>
 #### [M1-EXT-21] Buffer Device Address for Skinned-Mesh Animation Data 
-> **tags** · buffer
-> **tl;dr** · Buffer Device Address for Skinned-Mesh Animation Data
-> **meta** · depends-on: [M1-EXT-21] · depended-by: -
-> **ctx** · Buffer Device Address for Skinned-Mesh Animation Data
+> **tags** · general
+> **tl;dr** · matrices: device_address; shader reads *((mat4*)addr + boneIdx); 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Buffer Device Address for Skinned-Mesh Animation Data -- matrices: device_address; shader reads *((mat4*)addr + boneIdx); 
 ##### Systems Touched
 Deterministic simulationstep ordering so multiplayer/seed-replay stays bit-stable.
 ##### Math
@@ -605,16 +605,16 @@ Order is a fixed topo over system dependencies (see [M1-EXT-10]); each step runs
 matrices: device_address; shader reads *((mat4*)addr + boneIdx); 
 Skinning bone-matrix buffers are bound by device address so the vertex shader reads bone data directly without descriptor indirection - fewer binds, faster skinning at scale. 
 mat4* bones = (mat4*)skbuffAddr;
-Skinning binds drop away - more animated characters for the same cost. --- 
+Skinning binds drop away - more animated characters for the same cost. --- <a id="M1-EXT-22"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-22"></a>
 #### [M1-EXT-22] CVar System (ImGui-Backed) 
-> **tags** · cvar
-> **tl;dr** · CVar System (ImGui-Backed)
-> **meta** · depends-on: [M1-EXT-22] · depended-by: -
-> **ctx** · CVar System (ImGui-Backed)
+> **tags** · CVar, ImGui
+> **tl;dr** · CVarRegistry::Get().Set(name, val); panel binds to registry; 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · CVar System (ImGui-Backed) -- CVarRegistry::Get().Set(name, val); panel binds to registry; 
 ##### Systems Touched
 Render-graph resource versioning so a pass reads the correct prior write.
 ##### Math
@@ -626,16 +626,16 @@ Each resource has a version counter bumped on write; a pass declares `(resource,
 CVarRegistry::Get().Set(name, val); panel binds to registry; 
 A typed CVar registry holds tunables (exposed to ImGui sliders/console); systems read live values. Dev/QA tuning without recompiles. Ship-disabled UI. 
 CVarF32 r(&reg,"render.ssao",1.0f);
-Tunables are live-editable in-dev - fast iteration on feel/perf. --- 
+Tunables are live-editable in-dev - fast iteration on feel/perf. --- <a id="M1-EXT-23"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-23"></a>
 #### [M1-EXT-23] Timeline Semaphores for Multi-Queue Sync 
-> **tags** · timeline
-> **tl;dr** · Timeline Semaphores for Multi-Queue Sync
-> **meta** · depends-on: [M1-EXT-01], [M1-EXT-23], [M2-EXT-53] · depended-by: -
-> **ctx** · Timeline Semaphores for Multi-Queue Sync
+> **tags** · general
+> **tl;dr** · wait(timeline, val); signal(timeline, val+1); 
+> **meta** · depends-on: M1-EXT-01 · depended-by: M1-EXT-09
+> **ctx** · Timeline Semaphores for Multi-Queue Sync -- wait(timeline, val); signal(timeline, val+1); 
 ##### Systems Touched
 Cache-line-padded SoA arrays (see [M1-EXT-16]) applied to M1 ECS storage; strided allocation avoids false sharing.
 ##### Math
@@ -695,9 +695,9 @@ struct BulletComponent { glm::vec3 velocity{0.0f}; float mass = 0.0f; float drag
 <a id="M1-EXT-24"></a>
 #### [M1-EXT-24] Multi-Threaded Secondary Command Buffer Recording 
 > **tags** · general
-> **tl;dr** · M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).
-> **meta** · depends-on: [M1-EXT-24], [M1-EXT-25], [M1-EXT-26], [M1-EXT-27], [M1-EXT-28], [M1-EXT-39], [M1-EXT-40], [M1-EXT-41], [M1-EXT-42], [M1-EXT-43], [M1-EXT-44] · depended-by: -
-> **ctx** · Multi-Threaded Secondary Command Buffer Recording -- M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).
+> **tl;dr** · for(w in workers) w.Record(secondaries[w]); merge after (M1-EXT-17). 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Multi-Threaded Secondary Command Buffer Recording -- for(w in workers) w.Record(secondaries[w]); merge after (M1-EXT-17). 
 ##### Systems Touched
 Bindless descriptor-set management for the material/shader permutation space.
 ##### Math
@@ -709,16 +709,16 @@ Per-frame bindless writes use update templates (one memcpy-shaped write) instead
 for(w in workers) w.Record(secondaries[w]); merge after (M1-EXT-17). 
 Each worker thread records its slice of secondaries in parallel; the merger (M1-EXT-17) stitches them deterministically. Cuts CPU record time on big scenes. 
 parallel_for(workers, RecordSecondary);
-Command recording parallelized - lower CPU frame cost on dense draws. --- 
+Command recording parallelized - lower CPU frame cost on dense draws. --- <a id="M1-EXT-25"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-25"></a>
 #### [M1-EXT-25] Descriptor Update Templates for Per-Frame Bindless Writes 
-> **tags** · descriptor
-> **tl;dr** · Descriptor Update Templates for Per-Frame Bindless Writes
-> **meta** · depends-on: [M1-EXT-25] · depended-by: -
-> **ctx** · Descriptor Update Templates for Per-Frame Bindless Writes
+> **tags** · general
+> **tl;dr** · vkUpdateDescriptorSetWithTemplate(ds, tpl, data); 
+> **meta** · depends-on: - · depended-by: M1-EXT-09
+> **ctx** · Descriptor Update Templates for Per-Frame Bindless Writes -- vkUpdateDescriptorSetWithTemplate(ds, tpl, data); 
 ##### Systems Touched
 Persistent descriptor pool for bindless handle churn.
 ##### Math
@@ -730,16 +730,16 @@ Pool sized to peak simultaneous handles; allocations are O(1) offsets into a fix
 vkUpdateDescriptorSetWithTemplate(ds, tpl, data); 
 Per-frame bindless descriptor writes use update templates (one memcpy-shaped write) instead of N individual writes, slashing CPU cost of replenishing the bindless table each frame. 
 vkUpdateDescriptorSetWithTemplate(set, tpl, staging);
-Bindless replenishment is near-free - texture/resource churn stays cheap. --- 
+Bindless replenishment is near-free - texture/resource churn stays cheap. --- <a id="M1-EXT-26"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-26"></a>
 #### [M1-EXT-26] Chunk-Boundary Spatial-Hash Transfer 
-> **tags** · chunk
-> **tl;dr** · Chunk-Boundary Spatial-Hash Transfer
-> **meta** · depends-on: [M1-EXT-26] · depended-by: -
-> **ctx** · Chunk-Boundary Spatial-Hash Transfer
+> **tags** · general
+> **tl;dr** · on chunk unload: move cells in border into neighbor hash; re-key by cell. 
+> **meta** · depends-on: - · depended-by: M1-EXT-53
+> **ctx** · Chunk-Boundary Spatial-Hash Transfer -- on chunk unload: move cells in border into neighbor hash; re-key by cell. 
 ##### Systems Touched
 GPU-driven draw indirect argument buffer construction.
 ##### Math
@@ -751,16 +751,16 @@ Indirect args built as a `VkDrawIndexedIndirectCommand[]` written by compute (cu
 on chunk unload: move cells in border into neighbor hash; re-key by cell. 
 When a world chunk unloads, its border spatial-hash cells are handed to the neighbor chunk's hash (re-keyed) so broadphase pairs spanning the seam stay valid. Pairs with M3-EXT-11. 
 TransferBorderCells(from, to);
-Streaming chunks don't drop collisions at seams - no pop-through at boundaries. --- 
+Streaming chunks don't drop collisions at seams - no pop-through at boundaries. --- <a id="M1-EXT-27"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-27"></a>
 #### [M1-EXT-27] Uniform-Grid Spatial Hash Broad-Phase 
-> **tags** · uniform
-> **tl;dr** · Uniform-Grid Spatial Hash Broad-Phase
-> **meta** · depends-on: [M1-EXT-27] · depended-by: -
-> **ctx** · Uniform-Grid Spatial Hash Broad-Phase
+> **tags** · general
+> **tl;dr** · cell = floor(p/cell); bucket; pairs = cells overlapping both AABBs. 
+> **meta** · depends-on: - · depended-by: M1-EXT-53
+> **ctx** · Uniform-Grid Spatial Hash Broad-Phase -- cell = floor(p/cell); bucket; pairs = cells overlapping both AABBs. 
 ##### Systems Touched
 Broad-phase pair discovery between two AABBs (collision/avoidance) on top of [M1-EXT-01].
 ##### Math
@@ -772,16 +772,16 @@ Broad-phase pair discovery between two AABBs (collision/avoidance) on top of [M1
 cell = floor(p/cell); bucket; pairs = cells overlapping both AABBs. 
 A uniform-grid spatial hash accelerates CPU-side broadphase (physics, AI queries) complementary to GPU HiZ culling; used where GPU culling isn't applicable. Shares cell convention with M2.6-EXT-01. 
 uint32_t key=SpatialHash(p);
-CPU broadphase stays cheap - physics/AI neighbor queries scale. --- 
+CPU broadphase stays cheap - physics/AI neighbor queries scale. --- <a id="M1-EXT-28"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-28"></a>
 #### [M1-EXT-28] GPU Software Occlusion Rasterizer (HZB Feeder) 
-> **tags** · gpu
-> **tl;dr** · GPU Software Occlusion Rasterizer (HZB Feeder)
-> **meta** · depends-on: [M1-EXT-28] · depended-by: -
-> **ctx** · GPU Software Occlusion Rasterizer (HZB Feeder)
+> **tags** · GPU, HZB
+> **tl;dr** · raster occ proxies -> HZB mip0; feeds M4.6-EXT-06 downsample. 
+> **meta** · depends-on: - · depended-by: M1-EXT-53
+> **ctx** · GPU Software Occlusion Rasterizer (HZB Feeder) -- raster occ proxies -> HZB mip0; feeds M4.6-EXT-06 downsample. 
 ##### Systems Touched
 Hash-grid neighbour query used by scent/fear seeding ([M5]) and crowd cohesion.
 ##### Math
@@ -793,16 +793,16 @@ Hash-grid neighbour query used by scent/fear seeding ([M5]) and crowd cohesion.
 raster occ proxies -> HZB mip0; feeds M4.6-EXT-06 downsample. 
 Small/cheap occluder proxies are rasterized on CPU into the HZB's base mip so the GPU HiZ downsample (M4.6-EXT-06) can reject hidden draws even before full depth exists. Cheap, low-count occluders only. 
 RasterOccluders(proxies, hzbMip0);
-Distant hidden geometry is culled early - fewer draws, more FPS. --- 
+Distant hidden geometry is culled early - fewer draws, more FPS. --- <a id="M1-EXT-39"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-39"></a>
 #### [M1-EXT-39] SpatialHash Query Has No Gameplay Consumer
-> **tags** · spatialhash
-> **tl;dr** · SpatialHash Query Has No Gameplay Consumer
-> **meta** · depends-on: [M1-EXT-39] · depended-by: -
-> **ctx** · SpatialHash Query Has No Gameplay Consumer
+> **tags** · SpatialHash
+> **tl;dr** · M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · SpatialHash Query Has No Gameplay Consumer -- M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).
 ##### Systems Touched
 Hearing model: a zombie hears a source iff no ray in the batch query hits occluding geometry AND distance is within hearing range.
 ##### Math
@@ -815,16 +815,16 @@ Audible(listener, source) = ¬Hit(RayBatchQuery(source?listener)) ? Distance(sou
 M1. `QueryRadius`/`QueryCell` defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).
 Give AI/audio/proximity systems a real `QueryRadius` consumer.
 auto near = hash.QueryRadius(zombiePos, hearRadius);
-Proximity queries stop reimplementing spatial search. --- --- 
+Proximity queries stop reimplementing spatial search. --- --- <a id="M1-EXT-40"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-40"></a>
 #### [M1-EXT-40] No Batched Raycast (RayBatchQuery)
-> **tags** · no
-> **tl;dr** · No Batched Raycast (RayBatchQuery)
-> **meta** · depends-on: [M1-EXT-40] · depended-by: -
-> **ctx** · No Batched Raycast (RayBatchQuery)
+> **tags** · RayBatchQuery
+> **tl;dr** · M1/M5/M6/M9. grep RayBatch → 0. Jolt CastRay collector = multi-hit-per-ray, not N independent rays.
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · No Batched Raycast (RayBatchQuery) -- M1/M5/M6/M9. grep RayBatch → 0. Jolt CastRay collector = multi-hit-per-ray, not N independent rays.
 ##### Systems Touched
 Multi-ray batch narrow-phase query against Jolt (hearing/visibility LOS). Single struct, multi-hit-per-ray.
 ##### Math
@@ -837,16 +837,16 @@ Multi-ray batch narrow-phase query against Jolt (hearing/visibility LOS). Single
 M1/M5/M6/M9. `grep RayBatch` → 0. Jolt `CastRay` collector = multi-hit-per-ray, not N independent rays.
 Build `RayBatchQuery` fanning out over Jolt; one batch, many rays, multi-hit per ray.
 struct RayBatch { std::vector<JPH::RayCast> rays; std::vector<JPH::RayCastResult> hits; };
-AI sight, audio occlusion, bullets share one ray path. --- --- 
+AI sight, audio occlusion, bullets share one ray path. --- --- <a id="M1-EXT-41"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-41"></a>
 #### [M1-EXT-41] Parent-Child Hierarchy
-> **tags** · parent
-> **tl;dr** · Parent-Child Hierarchy
-> **meta** · depends-on: [M1-EXT-41] · depended-by: -
-> **ctx** · Parent-Child Hierarchy
+> **tags** · general
+> **tl;dr** · M1/M9. grep "struct Parent" → 0. Weapon sockets, camera-on-head, turrets need it.
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Parent-Child Hierarchy -- M1/M9. grep "struct Parent" → 0. Weapon sockets, camera-on-head, turrets need it.
 ##### Systems Touched
 Parenting component (weapon sockets, camera-on-head, turrets). See also [M1-EXT-13].
 ##### Math
@@ -859,16 +859,16 @@ Parenting component (weapon sockets, camera-on-head, turrets). See also [M1-EXT-
 M1/M9. `grep "struct Parent"` → 0. Weapon sockets, camera-on-head, turrets need it.
 Add `Parent` component + dirty-flag world-transform propagation.
 struct Parent { entt::entity parent; glm::dmat4 local; };
-Attached objects follow parents correctly. --- --- 
+Attached objects follow parents correctly. --- --- <a id="M1-EXT-42"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-42"></a>
 #### [M1-EXT-42] EnTTCache Narrow Coverage
-> **tags** · enttcache
-> **tl;dr** · EnTTCache Narrow Coverage
-> **meta** · depends-on: [M1-EXT-42] · depended-by: -
-> **ctx** · EnTTCache Narrow Coverage
+> **tags** · general
+> **tl;dr** · M1-EXT-09. Only Transform snapshot tested (Engine.cpp:391-412); other hot components not cached.
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · EnTTCache Narrow Coverage -- M1-EXT-09. Only Transform snapshot tested (Engine.cpp:391-412); other hot components not cached.
 ##### Systems Touched
 Input action state with deadzone + curve shaping (gamepad/steam-deck).
 ##### Math
@@ -881,16 +881,16 @@ Input action state with deadzone + curve shaping (gamepad/steam-deck).
 M1-EXT-09. Only `Transform` snapshot tested (Engine.cpp:391-412); other hot components not cached.
 Extend TTCache to all hot components; assert round-trip in tests.
 EnTTCache::Snapshot<Velocity, Health>(e);
-Deterministic transport has full component coverage. --- --- 
+Deterministic transport has full component coverage. --- --- <a id="M1-EXT-43"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-43"></a>
 #### [M1-EXT-43] Action Map / ActionState Layer
-> **tags** · action
-> **tl;dr** · Action Map / ActionState Layer
-> **meta** · depends-on: [M1-EXT-43] · depended-by: -
-> **ctx** · Action Map / ActionState Layer
+> **tags** · ActionState
+> **tl;dr** · M0-EXT-15/M11. Input.cpp polls continuous keyboard (good) but no ActionState/ActionMap, no gamepad hot-plug, no deadzone.
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Action Map / ActionState Layer -- M0-EXT-15/M11. Input.cpp polls continuous keyboard (good) but no ActionState/ActionMap, no gamepad hot-plug, no deadzone.
 ##### Systems Touched
 Virtual-head camera entity (semi-implicit spring), not a fixed FlyCamera.
 ##### Math
@@ -903,16 +903,16 @@ M0-EXT-15/M11. `Input.cpp` polls continuous keyboard (good) but no `ActionState`
 `ActionState.value = Curve(RawAxis, Deadzone)`.
 Resolve raw input once/tick into named `ActionState`; gameplay reads actions, not scancodes.
 struct ActionState { bool held, pressedThisFrame; float value; };
-Input is rebindable + device-agnostic. --- --- 
+Input is rebindable + device-agnostic. --- --- <a id="M1-EXT-44"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-44"></a>
 #### [M1-EXT-44] Procedural Camera Rig
-> **tags** · procedural
-> **tl;dr** · Procedural Camera Rig
-> **meta** · depends-on: [M1-EXT-44] · depended-by: -
-> **ctx** · Procedural Camera Rig
+> **tags** · general
+> **tl;dr** · M1/M2.7. FlyCamera.cpp = WASD+mouse-look only. Real player cam = virtual-head entity, semi-implicit Euler damped spring.
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Procedural Camera Rig -- M1/M2.7. FlyCamera.cpp = WASD+mouse-look only. Real player cam = virtual-head entity, semi-implicit Euler damped spring.
 ##### Systems Touched
 Input binding load/apply from JSON settings.
 ##### Math
@@ -933,7 +933,7 @@ Smooth, professional camera feel. --- --- ### Cluster D — gpu features / occlu
 #### [M1-EXT-45] Input-Rebinding Persistence
 > **tags** · general
 > **tl;dr** · M1/M11. No bind file / save of key mappings.
-> **meta** · depends-on: [M1-EXT-45], [M1-EXT-46], [M1-EXT-47], [M1-EXT-48], [M1-EXT-49], [M1-EXT-50], [M1-EXT-51], [M1-EXT-52], [M2-EXT-08], [M2-EXT-09], [M2-EXT-10], [M2-EXT-11], [M2-EXT-12], [M2-EXT-13], [M2-EXT-14], [M2-EXT-15], [M2-EXT-16], [M2-EXT-17], [M2-EXT-18], [M2-EXT-19], [M2-EXT-20], [M2-EXT-21], [M2-EXT-22], [M2-EXT-23], [M2-EXT-24], [M2-EXT-25], [M2-EXT-26], [M2-EXT-27], [M2-EXT-28], [M3-EXT-12], [M3-EXT-13], [M3-EXT-14], [M3-EXT-15], [M3-EXT-16], [M3-EXT-17], [M3-EXT-18], [M3-EXT-19], [M3-EXT-20], [M3-EXT-21], [M3-EXT-22], [M3-EXT-23], [M3-EXT-24], [M3-EXT-25], [M3-EXT-26], [M3-EXT-27], [M3-EXT-28], [M3-EXT-29], [M3-EXT-30], [M3-EXT-31], [M3-EXT-32], [M3-EXT-33], [M3-EXT-34], [M3-EXT-35], [M4-EXT-29], [M4-EXT-30], [M4-EXT-31], [M4-EXT-32], [M4-EXT-33], [M4-EXT-34], [M4-EXT-35], [M4-EXT-36], [M4-EXT-37], [M4-EXT-38], [M4-EXT-39], [M4-EXT-40], [M4-EXT-41], [M4-EXT-42], [M4-EXT-43], [M4-EXT-44], [M4-EXT-45], [M4-EXT-46], [M4-EXT-47], [M4-EXT-48], [M4-EXT-49], [M4-EXT-50], [M4-EXT-51], [M4-EXT-52], [M4-EXT-53], [M4-EXT-54], [M4-EXT-55], [M4-EXT-56], [M4-EXT-57], [M4-EXT-58], [M4-EXT-59], [M4-EXT-60], [M5-EXT-06], [M5-EXT-07], [M5-EXT-08], [M5-EXT-09], [M5-EXT-10], [M5-EXT-11], [M5-EXT-12], [M5-EXT-13], [M5-EXT-14], [M5-EXT-15], [M5-EXT-16], [M6-EXT-13], [M6-EXT-14], [M6-EXT-15], [M6-EXT-16], [M6-EXT-17], [M6-EXT-18], [M6-EXT-19], [M6-EXT-20], [M6-EXT-21], [M6-EXT-22], [M7-EXT-12], [M7-EXT-13], [M7-EXT-14], [M7-EXT-15], [M7-EXT-16], [M7-EXT-17], [M7-EXT-18], [M7-EXT-19], [M8-EXT-11], [M8-EXT-12], [M8-EXT-13], [M8-EXT-14], [M8-EXT-15], [M8-EXT-16], [M8-EXT-17], [M8-EXT-18], [M9-EXT-23], [M10-EXT-12], [M10-EXT-13], [M10-EXT-14], [M10-EXT-15], [M10-EXT-16], [M10-EXT-17], [M10-EXT-18], [M10-EXT-19], [M10-EXT-20], [M10-EXT-21], [M10-EXT-22], [M10-EXT-23], [M10-EXT-24], [M10-EXT-25], [M10-EXT-26], [M10-EXT-27], [M10-EXT-28], [M10-EXT-29], [M11-EXT-10], [M11-EXT-11], [M11-EXT-12], [M11-EXT-13], [M11-EXT-14], [M11-EXT-15], [M11-EXT-16], [M11-EXT-17], [M11-EXT-18], [M11-EXT-19], [M11-EXT-20], [M11-EXT-21], [M11-EXT-22], [M11-EXT-23], [M11-EXT-24], [M11-EXT-25], [M11-EXT-26], [M11-EXT-27], [M11-EXT-28], [M11-EXT-29], [M11-EXT-30], [M11-EXT-31], [M11-EXT-32], [M11-EXT-33], [M11-EXT-34], [M11-EXT-35], [M11-EXT-36], [M11-EXT-37], [M11-EXT-38], [M11-EXT-39], [M11-EXT-40], [M11-EXT-41], [M12-EXT-14], [M12-EXT-15], [M12-EXT-16], [M12-EXT-17], [M12-EXT-18], [M12-EXT-19], [M12-EXT-20], [M12-EXT-21], [M12-EXT-22], [M13-EXT-16], [M13-EXT-17], [M13-EXT-18], [M13-EXT-19], [M13-EXT-20], [M13-EXT-21], [M13-EXT-22], [M13-EXT-23], [M13-EXT-24], [M13-EXT-25], [M13-EXT-26], [M13-EXT-27], [M13-EXT-28], [M1-EXT-53], [M1-EXT-06], [M4.5-EXT-13], [M6.5-EXT-08], [M13-EXT-54], [M5-EXT-32], [M5-EXT-33], [M5-EXT-29], [M3-EXT-36], [M0-EXT-54], [M4-EXT-87], [M2.8-EXT-10], [M2-EXT-53], [M2-EXT-51], [M4.5-EXT-24], [M9-EXT-04], [M9-EXT-19], [M9-EXT-12], [M9-EXT-15], [M1-EXT-27], [M1-EXT-26], [M3-EXT-11], [M5-EXT-53], [M1-EXT-28], [M4.5-EXT-31], [M5-EXT-38], [M9-EXT-22], [M4.5-EXT-26], [M4-EXT-02], [M6.5-EXT-13], [M10-EXT-11], [M10-EXT-02], [M10-EXT-03], [M8-EXT-33], [M8-EXT-32], [M4-EXT-08], [M12-EXT-13], [M12-EXT-01], [M6-EXT-12], [M6-EXT-11], [M4-EXT-89], [M4-EXT-25], [M0-EXT-13], [M5.4-EXT-10], [M4-EXT-09], [M4-EXT-27], [M4.5-EXT-30], [M4-EXT-18], [M6.5-EXT-11], [M4-EXT-28], [M4-EXT-17], [M7-EXT-11], [M7-EXT-10], [M0-EXT-30], [M0-EXT-31], [M0-EXT-32], [M0-EXT-33], [M0-EXT-34], [M0-EXT-35], [M0-EXT-36], [M0-EXT-37], [M0-EXT-38], [M0-EXT-39], [M0-EXT-40], [M0-EXT-41], [M0-EXT-42], [M0-EXT-43], [M0-EXT-44], [M0-EXT-45], [M0-EXT-46], [M0-EXT-47], [M0-EXT-48], [M0-EXT-49], [M0-EXT-50], [M0-EXT-51], [M0-EXT-52], [M0-EXT-53] · depended-by: -
+> **meta** · depends-on: - · depended-by: -
 > **ctx** · Input-Rebinding Persistence -- M1/M11. No bind file / save of key mappings.
 ##### Systems Touched
 Persistent input-binding save file (settings).
@@ -947,16 +947,16 @@ On-disk shape: `{"version":1,"binds":{}}`. Version-gated for forward/back compat
 M1/M11. No bind file / save of key mappings.
 Serialize bindings to `settings/input.json`; load at boot.
 json bindings = Load("settings/input.json"); Apply(bindings);
-Players keep their keybinds across sessions. --- --- 
+Players keep their keybinds across sessions. --- --- <a id="M1-EXT-46"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-46"></a>
 #### [M1-EXT-46] M1 Exit Criteria Don't Reflect Reality
-> **tags** · m1
-> **tl;dr** · M1 Exit Criteria Don't Reflect Reality
-> **meta** · depends-on: [M1-EXT-46] · depended-by: -
-> **ctx** · M1 Exit Criteria Don't Reflect Reality
+> **tags** · general
+> **tl;dr** · M1 audit hygiene (J2). Criteria claim GPU indirect draw verified, but verified path is demo-only (M0-001).
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · M1 Exit Criteria Don't Reflect Reality -- M1 audit hygiene (J2). Criteria claim GPU indirect draw verified, but verified path is demo-only (M0-001).
 ##### Systems Touched
 Deterministic serialization round-trip for save/network state.
 ##### Math
@@ -969,16 +969,16 @@ Deterministic serialization round-trip for save/network state.
 M1 audit hygiene (J2). Criteria claim GPU indirect draw verified, but verified path is demo-only (M0-001).
 Require the *game* path drawing via indirect+cull in headless before M1 closes.
 // headless render harness asserts "Rendered N ECS entities"
-Milestone status becomes trustworthy. --- --- 
+Milestone status becomes trustworthy. --- --- <a id="M1-EXT-47"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-47"></a>
 #### [M1-EXT-47] EntityFactory Unknown-Component Warning
-> **tags** · entityfactory
-> **tl;dr** · EntityFactory Unknown-Component Warning
-> **meta** · depends-on: [M1-EXT-47] · depended-by: -
-> **ctx** · EntityFactory Unknown-Component Warning
+> **tags** · EntityFactory
+> **tl;dr** · M1/M2. Prefab with UnregisteredComponent silently dropped. 
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · EntityFactory Unknown-Component Warning -- M1/M2. Prefab with UnregisteredComponent silently dropped. 
 ##### Systems Touched
 Settings/persistence schema versioning.
 ##### Math
@@ -991,16 +991,16 @@ M1/M2. Prefab with `UnregisteredComponent` silently dropped.
 - 
 Log a warning (not silent drop) on unknown component type. 
 if (!meta.valid(type)) Warn("unknown component "+name);
-Mod/prefab mistakes visible, not silent. --- --- 
+Mod/prefab mistakes visible, not silent. --- --- <a id="M1-EXT-48"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-48"></a>
 #### [M1-EXT-48] Generational Table Headroom Check
-> **tags** · generational
-> **tl;dr** · Generational Table Headroom Check
-> **meta** · depends-on: [M1-EXT-48] · depended-by: -
-> **ctx** · Generational Table Headroom Check
+> **tags** · general
+> **tl;dr** · M1. EnTT cap = 1,048,576 (2^20, issue #197). 
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Generational Table Headroom Check -- M1. EnTT cap = 1,048,576 (2^20, issue #197). 
 ##### Systems Touched
 Entity count ceiling for the ECS (EnTT).
 ##### Math
@@ -1013,16 +1013,16 @@ M1. EnTT cap = 1,048,576 (2^20, issue #197).
 2^20 = 1,048,576 
 Assert entity count under cap; plan chunking if horde exceeds. 
 assert(live < 1'048'576);
-No silent entity-ID exhaustion. --- --- 
+No silent entity-ID exhaustion. --- --- <a id="M1-EXT-49"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-49"></a>
 #### [M1-EXT-49] EnTTCache Round-Trip Test
-> **tags** · enttcache
-> **tl;dr** · EnTTCache Round-Trip Test
-> **meta** · depends-on: [M1-EXT-49] · depended-by: -
-> **ctx** · EnTTCache Round-Trip Test
+> **tags** · general
+> **tl;dr** · M1-EXT-09. Only Transform tested. 
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · EnTTCache Round-Trip Test -- M1-EXT-09. Only Transform tested. 
 ##### Systems Touched
 Compile-time component-size assertion so SoA stride math ([M1-EXT-16]) stays valid.
 ##### Math
@@ -1035,16 +1035,16 @@ M1-EXT-09. Only Transform tested.
 - 
 Add round-trip tests for all hot components. 
 assert(RoundTrip<Velocity>(v) == v);
-Full deterministic transport coverage. --- --- 
+Full deterministic transport coverage. --- --- <a id="M1-EXT-50"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-50"></a>
 #### [M1-EXT-50] Action Map Persistence Format
-> **tags** · action
-> **tl;dr** · Action Map Persistence Format
-> **meta** · depends-on: [M1-EXT-50] · depended-by: -
-> **ctx** · Action Map Persistence Format
+> **tags** · general
+> **tl;dr** · M1/M11. Bind file schema. 
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Action Map Persistence Format -- M1/M11. Bind file schema. 
 ##### Systems Touched
 Default/empty input-profile bootstrap.
 ##### Math
@@ -1057,16 +1057,16 @@ M1/M11. Bind file schema.
 - 
 Versioned JSON bind schema with migration. 
 {"version":1,"binds":{}}
-Bindings survive updates. --- --- 
+Bindings survive updates. --- --- <a id="M1-EXT-51"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-51"></a>
 #### [M1-EXT-51] GPU Memory Budget & Defrag
-> **tags** · gpu
-> **tl;dr** · GPU Memory Budget & Defrag
-> **meta** · depends-on: [M1-EXT-51] · depended-by: -
-> **ctx** · GPU Memory Budget & Defrag
+> **tags** · GPU
+> **tl;dr** · M1. No GPU mem budget. 
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · GPU Memory Budget & Defrag -- M1. No GPU mem budget. 
 ##### Systems Touched
 Pipeline permutation cache (variant -> compiled VkPipeline).
 ##### Math
@@ -1079,16 +1079,16 @@ M1. No GPU mem budget.
 - 
 Track GPU allocation vs budget; defrag/compact on threshold. `if (gpuUsed>budget) Compact();` 
 No GPU OOM. 
-Stable VRAM. --- 
+Stable VRAM. --- <a id="M1-EXT-52"></a>
 ```
 ##### Player-Facing Impact
 (impact not specified in source)
 <a id="M1-EXT-52"></a>
 #### [M1-EXT-52] Shader Variant/Permutation Manager
-> **tags** · shader
-> **tl;dr** · Shader Variant/Permutation Manager
-> **meta** · depends-on: [M1-EXT-52] · depended-by: -
-> **ctx** · Shader Variant/Permutation Manager
+> **tags** · general
+> **tl;dr** · M2. grep CharacterController|CharacterBody → 0. Jolt has Character but nothing wires it to input.
+> **meta** · depends-on: - · depended-by: -
+> **ctx** · Shader Variant/Permutation Manager -- M2. grep CharacterController|CharacterBody → 0. Jolt has Character but nothing wires it to input.
 ##### Systems Touched
 Spatiotemporal blue-noise (STBN) sampling volume for denoising/shading.
 ##### Math
@@ -1107,10 +1107,10 @@ No shader spam. ---
 (impact not specified in source)
 <a id="M1-EXT-53"></a>
 #### [M1-EXT-53] (provisional) Chunk Boundary Entity Transfer Queue
-> **tags** · provisional
-> **tl;dr** · (provisional) Chunk Boundary Entity Transfer Queue
-> **meta** · depends-on: [M0-EXT-13], [M0-EXT-54], [M1-EXT-06], [M1-EXT-26], [M1-EXT-27], [M1-EXT-28], [M1-EXT-53], [M10-EXT-02], [M10-EXT-03], [M10-EXT-11], [M12-EXT-01], [M12-EXT-13], [M13-EXT-54], [M2-EXT-51], [M2-EXT-53], [M2.8-EXT-10], [M3-EXT-11], [M3-EXT-36], [M4-EXT-02], [M4-EXT-08], [M4-EXT-25], [M4-EXT-87], [M4-EXT-89], [M4.5-EXT-13], [M4.5-EXT-24], [M4.5-EXT-26], [M4.5-EXT-31], [M5-EXT-29], [M5-EXT-32], [M5-EXT-33], [M5-EXT-38], [M5-EXT-53], [M6-EXT-11], [M6-EXT-12], [M6.5-EXT-08], [M6.5-EXT-13], [M8-EXT-32], [M8-EXT-33], [M9-EXT-04], [M9-EXT-12], [M9-EXT-15], [M9-EXT-19], [M9-EXT-22] · depended-by: -
-> **ctx** · (provisional) Chunk Boundary Entity Transfer Queue
+> **tags** · general
+> **tl;dr** · M0/M1. InstanceData instances(100) (:91), indirect sized 100 (:107,293), occlusion pool 100 (:491), pc.instanceCount=100 (:592).
+> **meta** · depends-on: M1-EXT-06, M1-EXT-27, M1-EXT-26, M1-EXT-28 · depended-by: -
+> **ctx** · (provisional) Chunk Boundary Entity Transfer Queue -- M0/M1. InstanceData instances(100) (:91), indirect sized 100 (:107,293), occlusion pool 100 (:491), pc.instanceCount=100 (:592).
 ##### Systems Touched
 Cross-sector entity ownership handoff (streaming/seamless world). Single atomic transition per entity.
 ##### Math

@@ -250,7 +250,10 @@ C = {
 SUB_ORDER = ["Systems Touched", "Math", "How It Works", "Reference Implementation", "Player-Facing Impact"]
 
 def split_subheaders(seg_lines):
-    """Return dict: subsection_name -> list of prose lines (split welded '##### X <prose>')."""
+    """Return dict: subsection_name -> list of prose lines.
+    Welded source can repeat a subsection name (e.g. multiple '##### Player-Facing
+    Impact' from foreign content welded into one block) — CONCATENATE all occurrences,
+    do NOT discard, so the first (genuine) occurrence is preserved."""
     subs = {}
     cur = None
     buf = []
@@ -260,7 +263,6 @@ def split_subheaders(seg_lines):
             if cur is not None:
                 subs.setdefault(cur, []).extend(buf)
             name = m.group(1).split(":")[0].strip()
-            # if name has trailing prose on the same line, treat as first prose line
             rest = l[m.end():].strip()
             cur = name
             buf = [rest] if rest else []
@@ -269,6 +271,8 @@ def split_subheaders(seg_lines):
                 buf.append(l)
     if cur is not None:
         subs.setdefault(cur, []).extend(buf)
+    # merge repeated names: if a name appears with multiple buffered groups, they were
+    # already concatenated above (setdefault only seeds once, later extends append).
     return subs
 
 def extract_code(seg_lines):
