@@ -18,6 +18,9 @@ Run:
   python recon/ti_debug.py                 # JSON (piped) or human (TTY)
   python recon/ti_debug.py --human         # force human view
   python recon/ti_debug.py --jsonl         # NDJSON: one object per finding + summary
+  python recon/ti_debug.py --claim R7      # narrow to one claim (debug isolation)
+  python recon/ti_debug.py --kind unbacked # narrow to one finding kind
+  python recon/ti_debug.py --gha           # GitHub Actions annotations (::error file=::)
   python recon/ti_debug.py --selftest      # self-verify (retires temp verify scripts)
   python recon/ti_debug.py --schema        # print embedded SCHEMA, exit 0
   python recon/ti_debug.py --plan P --spec D --strict
@@ -197,7 +200,9 @@ def load_block(ext_id):
 
 
 # --------------------------------------------------------------------------- core
-def run(plan_path=PLAN, spec_dir=SPEC, strict=False):
+def run(plan_path=PLAN, spec_dir=SPEC, strict=False, claim=None, kind=None):
+    """Run the gate. `claim` (e.g. 'R7') and `kind` (e.g. 'unbacked') narrow the
+    emitted findings+claims for debugging a single item."""
     plan = open(plan_path, encoding="utf-8").read()
     pairs = parse_claims(plan)
     findings, claims = [], []
@@ -282,6 +287,15 @@ def run(plan_path=PLAN, spec_dir=SPEC, strict=False):
         has_err = True
     exit_code = 1 if has_err else 0
 
+    # debug filters: narrow findings+claims to one claim or finding kind
+    if claim:
+        claim = claim.upper()
+        findings = [f for f in findings if (f.get("claim") or "").upper() == claim]
+        claims = [c for c in claims if c["claim"].upper() == claim]
+    if kind:
+        kind = kind.lower()
+        findings = [f for f in findings if f["kind"].lower() == kind]
+
     summary = {
         "claims_parsed": len(pairs),
         "covered_partial_backed": covered_backed,
@@ -348,6 +362,19 @@ def _human(contract):
     s = contract["summary"]
     print(f"claims parsed: {s['claims_parsed']} | backed: {s['covered_partial_backed']} | "
           f"gaps: {s['gaps']} | proposed-new check: {len(contract.get('proposed_new', []))}")
+    if contract.get("claims"):
+        print(f"\nMATRIX ({len(contract['claims'])}):")
+        for c in contract["claims"]:
+            b = c.get("backed")
+            if c["status"] == "PARTIAL":
+                bstr = "partial"
+            elif b is True:
+                bstr = "backed"
+            elif b is False:
+                bstr = "NO"
+            else:
+                bstr = "-"
+            print(f"  {c['claim']:<4} {c['status']:<8} {c['ext']:<14} {bstr}")
     if contract.get("findings"):
         print(f"\nFINDINGS ({len(contract['findings'])}):")
         for f in contract["findings"]:
@@ -418,7 +445,8 @@ def selftest():
 def main(argv=None):
     argv = argv if argv is not None else sys.argv[1:]
     args = {"human": False, "jsonl": False, "selftest": False, "schema": False,
-            "plan": PLAN, "spec": SPEC, "strict": False}
+            "gha": False, "plan": PLAN, "spec": SPEC, "strict": False,
+            "claim": None, "kind": None}
     i = 0
     while i < len(argv):
         a = argv[i]
@@ -426,7 +454,10 @@ def main(argv=None):
         elif a == "--jsonl": args["jsonl"] = True
         elif a == "--selftest": args["selftest"] = True
         elif a == "--schema": args["schema"] = True
+        elif a == "--gha": args["gha"] = True
         elif a == "--strict": args["strict"] = True
+        elif a == "--claim": i += 1; args["claim"] = argv[i]
+        elif a == "--kind": i += 1; args["kind"] = argv[i]
         elif a == "--plan": i += 1; args["plan"] = argv[i]
         elif a == "--spec": i += 1; args["spec"] = argv[i]
         elif a in ("-h", "--help"):
@@ -438,7 +469,20 @@ def main(argv=None):
     if args["schema"]:
         print(json.dumps(SCHEMA, indent=2)); return 0
 
-    contract, rc = run(args["plan"], args["spec"], args["strict"])
+    contract, rc = run(args["plan"], args["spec"], args["strict"],
+                       claim=args["claim"], kind=args["kind"])
+
+    if args["gha"]:
+        for f in contract["findings"]:
+            sev = "error" if f["severity"] == "error" else "warning"
+            loc = f["locs"]["plan"] or f["locs"]["spec"] or {}
+            fn = loc.get("file", "recon/PLAN_threat_interactive_gospel_2026-07-16.md")
+            ln = loc.get("line", 1)
+            msg = f"{f['id']} {f.get('claim') or ''}->{f.get('ext') or ''}: {f['detail']}"
+            print(f"::{sev} file={fn},line={ln},title={f['id']}::{msg}")
+        if rc == 0:
+            print("::notice title=ti_debug::GATE PASS — all claims backed")
+        return rc
 
     use_human = args["human"] or (sys.stdout.isatty() and not args["jsonl"])
     if args["jsonl"]:
