@@ -164,3 +164,11 @@ M2-EXT-01 now live (F3). EXT-02/03/04/06 wired; EXT-05/07 present as math helper
 1. **M2:EXIT-meshswap (COMPILES + GPU-VERIFIED, dev-gated)** — F1 is coded end-to-end and visually confirmed on RTX 2070: dev-test entity swaps to the shattered `dev_test_cube_destroyed` mesh on lethal damage and the swap renders (capture `devcube_swap7.png`). Two render-path bugs (missing unconditional viewport set, missing `vkCmdBindPipeline` in the bridge) were fixed to get the visual. See F1 note above. Remaining: extend the swap to non-dev destructibles (gameplay barrels/walls/zombies) before calling F1 fully shipped. No longer a blocker on the dev path.
 2. **M2:D4** — redundant `tick()`+`flush()`; left alone per user (harmless).
 3. **M2:D3 (ctest discovery)** — `ctest` finds no tests though `catch_discover_tests` present; run `ZombieEngineTests.exe` directly (12 cases / 61 assertions). Harness gap.
+---
+## RESUME POINTER (2026-07-16)
+Session state saved to `recon/SESSION_STATE_2026-07-16.md` — read it to continue.
+Open items: [A] M1 mega-file extraction (gated, blocked by mid-line concatenation),
+[B] deeper Threat Interactive research (search 429 this turn — retry or user provides file),
+[C] 4 duplicate merges (M0-EXT-24/41, M0-EXT-25/40, M5-EXT-22/52, M5-EXT-17/09-11),
+[D] naming-scheme rename (user wants it; gated big refactor).
+Spec consolidation + 25 gaps + audits ALL DONE and committed on `spec/m0-parity-reformat`.
