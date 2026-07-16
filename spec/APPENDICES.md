@@ -44,7 +44,7 @@ Diary/journal entry generator composed from template grammars filled from simula
 
 The following `master_feature_list.md` tables were deliberately excluded from this v43 pass (solo dev asked to sequence engine layer first):
 
-* **Procedural Generation — World/Systems** (Poisson disk sampling, domain-warped noise, WFC adjacency validator [already `[M4-EXT-03]`/`[M4-EXT-11]`], chunk-boundary determinism test [route to §5.10 verification suite], graph-based room connectivity [already `[K-EXT-18]` + `[M4-EXT-08]`], rejection sampling [shared gate, not a standalone system — see draft pass-2 note], seed-sharing [already `[M2-EXT-54]`], cellular automata [now `[M4-EXT-24]`], graph grammars [covered by Procedural Mission & Event Director, Dormans & Bakkes], genetic algorithms [now `[M8.6-EXT-09]`], Whittaker biome classification [now `[M4-EXT-23]`], thermal erosion, spline-based roads/rivers [roads fully covered by `[M4-EXT-01]`/`[M4-EXT-19]`/`[M4-EXT-10]`; rivers half-covered — bank/confluence hydrology detail only], hidden difficulty correction) — deferred, engine layer first.
+* **Procedural Generation — World/Systems** (Poisson disk sampling, domain-warped noise, WFC adjacency validator [already `[M4-EXT-03]`/`[M4-EXT-11]`], chunk-boundary determinism test [route to §5.10 verification suite], graph-based room connectivity [already `[K-EXT-18]` + `[M4-EXT-08]`], rejection sampling [shared gate, not a standalone system — see draft pass-2 note], seed-sharing [already `[M2-EXT-54]`], cellular automata [now `[M4-EXT-24]`], graph grammars [covered by Procedural Mission & Event Director, Dormans & Bakkes], genetic algorithms [now `[M8-EXT-32]`], Whittaker biome classification [now `[M4-EXT-23]`], thermal erosion, spline-based roads/rivers [roads fully covered by `[M4-EXT-01]`/`[M4-EXT-19]`/`[M4-EXT-10]`; rivers half-covered — bank/confluence hydrology detail only], hidden difficulty correction) — deferred, engine layer first.
 * **Procedural Asset Generation (Solo/No-Artist)** (histogram-preserving blending [now `[M4-EXT-25]`], PPTBF materials [now `[M4-EXT-25]`], node-graph procedural materials [now `[M4-EXT-25]`], noise→normal map derivation [now `[M4-EXT-25]`], procedural mesh via primitive+grammar [already `[K-EXT-17]`], procedural foliage L-system [now `[M4-EXT-28]`], procedural color palette [now `[M4-EXT-25]`], procedural UV unwrap [recommended `[M4-EXT-26]`-class, deliberately not merged this pass — decal atlas renumbered to `[M4-EXT-26]` instead], procedural skeletal rig generation [already `[M5-EXT-19]`], procedural decal atlasing [now `[M4-EXT-26]`], procedural loot icon generation [now `[M8-EXT-10]`]) — deferred, engine layer first. See teq-v78-procedural-gapfill-draft.md close-out notes (pass 1 + pass 2) and Part A Hermes gap-fill appendix for the ID citations above.
 * **AI** (behavior tree/planning layer, line-of-sight result caching) — deferred, engine layer first.
 * **Audio** (dynamic/adaptive music, voice-line barking system) — deferred, engine layer first.
@@ -192,7 +192,7 @@ debris); no visual change.
 
 **[M1-EXT-19] SoA Layout for Hot Components**
 
-Systems: Transform + bone-matrix arrays, `SpatialHash` consumers (M5.1, M5.4, `[M8.5-EXT-02]`),
+Systems: Transform + bone-matrix arrays, `SpatialHash` consumers (M5.1, M5.4, `[M8-EXT-20]`),
 composes with `[M1-EXT-09]`'s pointer/stride cache rather than replacing it — EXT-09 still resolves
 offsets into whatever layout backs the pool; this changes what that layout physically is for the
 named hot fields.
@@ -1655,16 +1655,16 @@ for (auto& pr : pairs) if (Overlap(pr.a, pr.b)) NarrowPhase(pr.a, pr.b);
 Collapsing walls throw believable, colliding rubble that interacts with the horde without the sim stuttering — the spectacle of destruction stays smooth on the floor spec.
 
 
-**[M8.6-EXT-10] Settlement NavMesh from GA Layout**
+**[M8-EXT-33] Settlement NavMesh from GA Layout**
 
 ##### Systems Touched
-Consumes `[M8.6-EXT-09]`'s GA building-footprint layout and produces the walkable NavMesh the AI director (`[M5.4]`) and horde pathing need inside a settlement. Distinct from `[M4-EXT-08]`'s WFC reachability (that is interiors; this is the settlement exterior/plaza graph).
+Consumes `[M8-EXT-32]`'s GA building-footprint layout and produces the walkable NavMesh the AI director (`[M5.4]`) and horde pathing need inside a settlement. Distinct from `[M4-EXT-08]`'s WFC reachability (that is interiors; this is the settlement exterior/plaza graph).
 
 ##### Math
 From the GA's footprint polygon set, compute the free-space polygon (building set subtracted from the zoning polygon), then run a standard NavMesh triangulation (e.g. improved funnel / Delaunay over the walkable region) with portal edges between adjacent polygons for string-pulling path queries.
 
 ##### How It Works
-Once `[M8.6-EXT-09]` bakes building footprints + gate positions, this derives the settlement's walkable mesh in the same one-time bake. Doorways become portals; the perimeter chokepoints the GA optimized for defense become natural funnel points the horde pathing uses. Cached with the layout — never recomputed per-frame.
+Once `[M8-EXT-32]` bakes building footprints + gate positions, this derives the settlement's walkable mesh in the same one-time bake. Doorways become portals; the perimeter chokepoints the GA optimized for defense become natural funnel points the horde pathing uses. Cached with the layout — never recomputed per-frame.
 
 ##### Reference Implementation
 ```cpp

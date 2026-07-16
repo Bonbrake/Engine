@@ -7,7 +7,7 @@
     "tldr": "Reads the canonical BarrelHeat struct (locked in M2.7's base Implementation Steps) — specifically kelvin and grimeFactor — and intersects with your M8 JSON i...",
     "depends_on": [],
     "depended_by": [],
-    "line": 67,
+    "line": 68,
     "anchor": "MM8-EXT-01"
   },
   {
@@ -20,7 +20,7 @@
     "depended_by": [
       "M8-EXT-05"
     ],
-    "line": 105,
+    "line": 107,
     "anchor": "MM8-EXT-02"
   },
   {
@@ -29,11 +29,14 @@
     "cluster": null,
     "tags": "SEIR",
     "tldr": "Reuses M8's existing Personal Compartmental SEIR Infection engine (the same one modeling zombie-bite infection) with different R0/incubation/mortality consta...",
-    "depends_on": [],
-    "depended_by": [
-      "M8-EXT-04"
+    "depends_on": [
+      "M8-EXT-20"
     ],
-    "line": 142,
+    "depended_by": [
+      "M8-EXT-04",
+      "M8-EXT-20"
+    ],
+    "line": 145,
     "anchor": "MM8-EXT-03"
   },
   {
@@ -43,12 +46,14 @@
     "tags": "general",
     "tldr": "Rolls its own R0/mutation-drift/antigen-signature parameters per save file (independent of the M8-EXT-03 illness constants) at world-gen time. Sample integri...",
     "depends_on": [
+      "M8-EXT-21",
+      "M8-EXT-29",
       "M8-EXT-03"
     ],
     "depended_by": [
       "M8-EXT-05"
     ],
-    "line": 175,
+    "line": 179,
     "anchor": "MM8-EXT-04"
   },
   {
@@ -62,7 +67,7 @@
       "M8-EXT-04"
     ],
     "depended_by": [],
-    "line": 224,
+    "line": 229,
     "anchor": "MM8-EXT-05"
   },
   {
@@ -75,7 +80,7 @@
     "depended_by": [
       "M8-EXT-07"
     ],
-    "line": 255,
+    "line": 261,
     "anchor": "MM8-EXT-06"
   },
   {
@@ -88,7 +93,7 @@
       "M8-EXT-06"
     ],
     "depended_by": [],
-    "line": 303,
+    "line": 310,
     "anchor": "MM8-EXT-07"
   },
   {
@@ -99,7 +104,7 @@
     "tldr": "Log-Normal Camouflage Masking",
     "depends_on": [],
     "depended_by": [],
-    "line": 336,
+    "line": 344,
     "anchor": "MM8-EXT-08"
   },
   {
@@ -110,7 +115,7 @@
     "tldr": "M8. Memory-maps a flat-binary item-definition dictionary for instant lookup.",
     "depends_on": [],
     "depended_by": [],
-    "line": 339,
+    "line": 348,
     "anchor": "MM8-EXT-09"
   },
   {
@@ -121,7 +126,7 @@
     "tldr": "M8 + M8-EXT-09. Renders item icons procedurally from defs (not hand-authored art).",
     "depends_on": [],
     "depended_by": [],
-    "line": 388,
+    "line": 398,
     "anchor": "MM8-EXT-10"
   },
   {
@@ -132,7 +137,7 @@
     "tldr": "M8. No item/weapon def system; only BulletComponent data fields.",
     "depends_on": [],
     "depended_by": [],
-    "line": 409,
+    "line": 420,
     "anchor": "MM8-EXT-11"
   },
   {
@@ -143,7 +148,7 @@
     "tldr": "M8. No stacking/slot model.",
     "depends_on": [],
     "depended_by": [],
-    "line": 425,
+    "line": 437,
     "anchor": "MM8-EXT-12"
   },
   {
@@ -154,7 +159,7 @@
     "tldr": "M8. No ammo variants/crafting.",
     "depends_on": [],
     "depended_by": [],
-    "line": 444,
+    "line": 457,
     "anchor": "MM8-EXT-13"
   },
   {
@@ -165,7 +170,7 @@
     "tldr": "M8.5. No trade system.",
     "depends_on": [],
     "depended_by": [],
-    "line": 465,
+    "line": 479,
     "anchor": "MM8-EXT-14"
   },
   {
@@ -176,7 +181,7 @@
     "tldr": "M8.5. No currency design.",
     "depends_on": [],
     "depended_by": [],
-    "line": 484,
+    "line": 499,
     "anchor": "MM8-EXT-15"
   },
   {
@@ -187,7 +192,7 @@
     "tldr": "M8.6. No resident NPCs.",
     "depends_on": [],
     "depended_by": [],
-    "line": 504,
+    "line": 520,
     "anchor": "MM8-EXT-16"
   },
   {
@@ -198,7 +203,7 @@
     "tldr": "M8.7. No perk tree.",
     "depends_on": [],
     "depended_by": [],
-    "line": 523,
+    "line": 540,
     "anchor": "MM8-EXT-17"
   },
   {
@@ -209,7 +214,301 @@
     "tldr": "M8.7. No XP curve.",
     "depends_on": [],
     "depended_by": [],
-    "line": 542,
+    "line": 560,
     "anchor": "MM8-EXT-18"
+  },
+  {
+    "id": "M8-EXT-19",
+    "title": "Poisson-Disk Farm Plot Growth & Scent-Attractor Coupling",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Reuses the Poisson-disk clustering already driving foliage placement (Appendix F). Reads live M10 weather/season state for growth gating. Writes a positive s...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 579,
+    "anchor": "MM8-EXT-19"
+  },
+  {
+    "id": "M8-EXT-20",
+    "title": "Boid-Flock Fish Population & Hazard-Cell Contamination",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Lightweight Reynolds boid flocking (already used for zombie crowd movement and drafting in M5.1) applied to fish inside existing Jolt water volumes. Contamin...",
+    "depends_on": [
+      "M8-EXT-03"
+    ],
+    "depended_by": [
+      "M8-EXT-03"
+    ],
+    "line": 616,
+    "anchor": "MM8-EXT-20"
+  },
+  {
+    "id": "M8-EXT-21",
+    "title": "Recruitable Survivor AI (Companion Command Layer over Existing Zombie AI)",
+    "cluster": "C",
+    "tags": "AI",
+    "tldr": "Runs the existing M5.1 Weighted Consideration Utility AI stack with the faction flag flipped, plus a command-override layer. Extends M8.5's existing Bayesian...",
+    "depends_on": [],
+    "depended_by": [
+      "M8-EXT-04"
+    ],
+    "line": 660,
+    "anchor": "MM8-EXT-21"
+  },
+  {
+    "id": "M8-EXT-22",
+    "title": "Live Economy-Sim Trade Pricing (Barter)",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Reads directly from M8.5's existing Elastic Supply-Demand Trade Model and Macro Regional Price Inflation (MV=PQ) — this feature is a UI/interaction layer ove...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 696,
+    "anchor": "MM8-EXT-22"
+  },
+  {
+    "id": "M8-EXT-23",
+    "title": "Snare / Trap Detailing for Foraging",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Supports M8 food spawns and M4-EXT-59 regrowth loops; trap nodes placed in valid cells.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 726,
+    "anchor": "MM8-EXT-23"
+  },
+  {
+    "id": "M8-EXT-24",
+    "title": "Kirchhoff Power Grid Overload Arcing",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Connects your M8.6 electrical network arrays directly into your M6.5 cellular-automata fire grids.",
+    "depends_on": [],
+    "depended_by": [
+      "M8-EXT-26",
+      "M8-EXT-30"
+    ],
+    "line": 751,
+    "anchor": "MM8-EXT-24"
+  },
+  {
+    "id": "M8-EXT-25",
+    "title": "Surface-Saturation Capacitive Arc Tracking",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Extends M8.6 (Kirchhoff Power Networks) across M10 shallow-water flooding maps.",
+    "depends_on": [
+      "M8-EXT-27"
+    ],
+    "depended_by": [
+      "M8-EXT-26",
+      "M8-EXT-27"
+    ],
+    "line": 783,
+    "anchor": "MM8-EXT-25"
+  },
+  {
+    "id": "M8-EXT-26",
+    "title": "Catenary Cable Tension Snapping Solver",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Complements M8.6 electrical wiring layouts and handles Jolt distance constraints. Declares the canonical CableSpanComponent — the single shared component bac...",
+    "depends_on": [
+      "M8-EXT-28",
+      "M8-EXT-24",
+      "M8-EXT-25"
+    ],
+    "depended_by": [
+      "M8-EXT-28",
+      "M8-EXT-29",
+      "M8-EXT-30"
+    ],
+    "line": 818,
+    "anchor": "MM8-EXT-26"
+  },
+  {
+    "id": "M8-EXT-27",
+    "title": "Electro-Capacitive Water-Wading Chain Stun",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Merges your M8.6 Kirchhoff power networks directly into M10 Saint-Venant flooding tiles.",
+    "depends_on": [
+      "M8-EXT-25"
+    ],
+    "depended_by": [
+      "M8-EXT-25",
+      "M8-EXT-30"
+    ],
+    "line": 864,
+    "anchor": "MM8-EXT-27"
+  },
+  {
+    "id": "M8-EXT-28",
+    "title": "Catenary Wire Clothesline Decapitation Loop",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Extends M8.6 wiring anchor blocks, setting clean Jolt distance constraints. Reuses the canonical CableSpanComponent and CheckCableSnap() declared in [M8-EXT-...",
+    "depends_on": [
+      "M8-EXT-26"
+    ],
+    "depended_by": [
+      "M8-EXT-26",
+      "M8-EXT-30"
+    ],
+    "line": 899,
+    "anchor": "MM8-EXT-28"
+  },
+  {
+    "id": "M8-EXT-29",
+    "title": "Player-Placed Barricade Snap Constraints (Fortification)",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Reuses the exact CableSpanComponent/CheckCableSnap() pattern declared in [M8-EXT-26], adding a third CableRole::Barricade value rather than new constraint co...",
+    "depends_on": [
+      "M8-EXT-26"
+    ],
+    "depended_by": [
+      "M8-EXT-04"
+    ],
+    "line": 930,
+    "anchor": "MM8-EXT-29"
+  },
+  {
+    "id": "M8-EXT-30",
+    "title": "Kirchhoff Circuit Ohmic Dissipation Water Vaporization Solver",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Links M8.6's Kirchhoff power grid to M10's Saint-Venant shallow-water flooding grid — when a snapped live line ([M8-EXT-26]/[M8-EXT-28], CableSpanComponent) ...",
+    "depends_on": [
+      "M8-EXT-26",
+      "M8-EXT-28",
+      "M8-EXT-24",
+      "M8-EXT-27"
+    ],
+    "depended_by": [],
+    "line": 969,
+    "anchor": "MM8-EXT-30"
+  },
+  {
+    "id": "M8-EXT-31",
+    "title": "M/M/c Queueing Labor Model for Workstation Assignment",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Declares the base \"M/M/c Queueing Labor Models for workstation assignment\" bullet. Reads survivor population and assigned-labor counts from M8.5's faction ec...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1000,
+    "anchor": "MM8-EXT-31"
+  },
+  {
+    "id": "M8-EXT-32",
+    "title": "Genetic-Algorithm Settlement Macro-Layout Optimizer",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Genetic-Algorithm Settlement Macro-Layout Optimizer",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1050,
+    "anchor": "MM8-EXT-32"
+  },
+  {
+    "id": "M8-EXT-33",
+    "title": "Settlement NavMesh from GA Layout *(SOURCED FROM PLAN FILE)",
+    "cluster": "C",
+    "tags": "NavMesh, GA, SOURCED, PLAN, FILE",
+    "tldr": "Consumes M8.6-EXT-09 GA building-footprint layout, produces walkable NavMesh the AI director M5.4 + horde pathing need inside a settlement. Distinct from M4-...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1052,
+    "anchor": "MM8-EXT-33"
+  },
+  {
+    "id": "M8-EXT-34",
+    "title": "Encounter+Loot+Story Bundle",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Assembles an event from M5.4 resolver, M8 loot, M13 lore; resolved under M8.6 faction context.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1100,
+    "anchor": "MM8-EXT-34"
+  },
+  {
+    "id": "M8-EXT-35",
+    "title": "Faction Reputation / Vendor Edge Graph",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Reputation edges consumed by vendors (price) and hub ownership (M8.6-EXT-28); fed by M5.4-EXT-17, M13-EXT-41.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1125,
+    "anchor": "MM8-EXT-35"
+  },
+  {
+    "id": "M8-EXT-36",
+    "title": "Civil-War Faction Event",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Driven by M8.6-EXT-13 reputation splits; emits M5.4 encounter events; M13-EXT-31 narrates.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1150,
+    "anchor": "MM8-EXT-36"
+  },
+  {
+    "id": "M8-EXT-37",
+    "title": "Smuggling ↔ Encounter Hook",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Smuggling routes raise M5.4 encounter pressure; reputation (M8.6-EXT-13) modulates heat.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1175,
+    "anchor": "MM8-EXT-37"
+  },
+  {
+    "id": "M8-EXT-38",
+    "title": "Forced-Labor / Exploitation Event",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "An encounter archetype consuming M5.4-EXT-11 moral framing; shifts M8.6-EXT-13 standing by response.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1200,
+    "anchor": "MM8-EXT-38"
+  },
+  {
+    "id": "M8-EXT-39",
+    "title": "Player-Owned Hub",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Hub ownership consumed by M11-EXT-59 travel, M2.9-EXT-24 rest, M7-EXT-16 stash; gates M8.6-EXT-13 perks.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1225,
+    "anchor": "MM8-EXT-39"
+  },
+  {
+    "id": "M8-EXT-40",
+    "title": "Crafting Recipe Graph (Tier 2)",
+    "cluster": "C",
+    "tags": "general",
+    "tldr": "Recipe set feeding M8.7-EXT-03 + M2.7-EXT-19 shell; depends on M0-EXT-40 parts and M2-EXT-21 perk ceilings.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1250,
+    "anchor": "MM8-EXT-40"
+  },
+  {
+    "id": "M8-EXT-41",
+    "title": "Perk-Ceiling Gated Crafting",
+    "cluster": "B",
+    "tags": "general",
+    "tldr": "Enforces M2-EXT-21 ceiling on M8.7-EXT-02 recipes; M0-EXT-40 parts still required.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1276,
+    "anchor": "MM8-EXT-41"
   }
 ]
