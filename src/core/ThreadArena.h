@@ -16,13 +16,4 @@ struct BumpArena {
     }
 };
 
-inline void* ArenaAllocateBump(BumpArena& arena, size_t size, size_t alignment = 16) {
-    size_t alignedOffset = (arena.currentOffset + alignment - 1) & ~(alignment - 1);
-    if (alignedOffset + size > arena.capacity) {
-        return nullptr; // Arena page boundary hit
-    }
-    arena.currentOffset = alignedOffset + size;
-    return arena.memoryBufferPage + alignedOffset;
-}
-
 } // namespace core
