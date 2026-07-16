@@ -20,13 +20,21 @@
   - My autonomous extraction attempt FAILED (mid-line concatenation broke parser) → reverted.
   - NEEDS: a parser that splits on `#### [` even mid-line, OR user explicit approval.
   - BLOCKER: reliable M1 verification depends on this. Everything else verifies clean.
-- **[B] Deeper Threat Interactive research — BLOCKED by search 429 this turn.**
-  - All engines (DDG/Bing/Mojeek/YouTube/Searx×3) returned HTTP 429 on our egress IP.
-  - Basic egress works (example.com loaded) → search-specific rate-limit, environmental.
-  - Desktop has NO saved Threat Interactive files.
-  - VERIFIED ONLY: lighting/Burley-Kalisto (applied). Their broader thesis (slop auto-LOD,
-    lossy streaming, "9th-gen neglect") is PARAPHRASED from se7en.ws summary, NOT fetch-verified.
-  - TODO: retry fetch after rate-limit cools; OR user drops a video/transcript file path.
+- **[B] Deeper Threat Interactive research — RESOLVED (fetch-verified 2026-07-16, this resume).**
+  - Search rate-limit had cooled; YouTube channel `@ThreatInteractive` loaded (1.1 MB).
+    Channel ID `UC2ksme4hP4Nx97ilFTQ0K0Q`; 15 videos via public RSS.
+  - Captions API IP-blocked (`ip=0.0.0.0` in signed URL) → could NOT pull transcript text.
+    Video TITLES + chapter lists (primary source) extracted successfully.
+  - Video 20 "Fake Realism" chapter list CONFIRMS the Burley/Disney + "Callisto BRDF"
+    thesis behind M4.5-EXT-20 (previously only paraphrased from se7en.ws). Fix now
+    PRIMARY-SOURCE verified. ✅
+  - Video 30 "Regression In Graphics" chapters ("Stop Defending Graphics That Are
+    Purposefully Worse", "Reward System Of Garbage & Lies") CONFIRM the slop/LOD/streaming
+    + 9th-gen-neglect thesis framing we mapped to M4/M4.5 guardrails. ✅
+  - FULL RECORD: recon/THREAT_INTERACTIVE_RESEARCH_2026-07-16.md. Thesis framing verified;
+    exact algorithmic specifics remain unverified (need transcript — captions blocked).
+  - STILL GATED: writing the M4/M4.5 guardrail language into milestone files = spec edit →
+    needs user GO (same gate as [A]/[C]/[D]).
 - **[C] Duplicate merges** (from recon/dup_cohesion_scan.json + PLAN_spec_hygiene_2026-07-16.md):
   - TRUE DUPES to merge: M0-EXT-24==M0-EXT-41, M0-EXT-25==M0-EXT-40, M5-EXT-22==M5-EXT-52,
     M5-EXT-17==M9-EXT-11. (Other 3 pairs are DISTINCT — keep.)
