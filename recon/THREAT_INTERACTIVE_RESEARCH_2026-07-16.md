@@ -68,12 +68,55 @@ primary-source confirmed (was previously paraphrased).
 - Exact technical mechanism of their LOD/streaming critique (they argue for
   silhouette/material-identity preservation, but the precise algorithmic claim was NOT
   extracted — only the thesis framing via chapter titles).
-- Any claim requiring transcript text (captions IP-blocked this session).
-- ACTION if deeper quotes needed later: retry captions after egress IP rotates, OR user
-  drops a saved transcript/video file. For now, thesis framing is verified; specifics are not.
+- **RESOLVED 2026-07-16 (resume session):** transcripts ARE now extracted (see below).
+  The IP-block was on the caption *URL signature* (YouTube signs timedtext to the
+  headless client's apparent `ip=0.0.0.0`, serving an empty body to both in-page fetch
+  AND host-side curl). Solved with **yt-dlp** (negotiates a fresh signed caption URL via
+  its own Innertube client). 11 transcripts pulled → `recon/transcripts/yt_<VID>.{json3,txt}`.
+
+## TRANSCRIPTS EXTRACTED (primary source, 2026-07-16 resume) — via yt-dlp
+Method: `yt-dlp --skip-download --write-auto-subs --sub-langs en --sub-format json3`
+→ json3 converted to plain `.txt`. 11 videos, ~2.7 MB raw. Brave (headless CDP) was
+launched per user instruction but its in-page/host caption fetch hit YouTube's
+IP-signed empty-body; yt-dlp is the working path. Files in `recon/transcripts/`:
+- yt_qZtNU-4yqtI  Fake Realism (BRDF/Burley/Kalisto) — 349 lines
+- yt_xojL9MdxcRs  Regression In Graphics — 475 lines
+- yt_yxSrDAOB2xc  Vendor Agnostic Ray Tracing 120FPS — 739 lines
+- yt_ElBUUMi_L5c  Crysis 3 Rendering — 362 lines
+- yt_SxCMaTEoBoI  Why MSAA In Every Deferred Renderer — 411 lines
+- yt_ljWylilACdI  Older Realistic Effects Render Faster — 375 lines
+- yt_T1MKlxM04L4  Never Let THIS Happen (optimize) — 367 lines
+- yt_PhEIa5RtKVA  Butchered Rasterization -> Raytracing — 342 lines
+- yt_sjZX5u3I4rM  Textures & GPU Utilization — 509 lines
+- yt_ytUD8UkrY18  Poorly Optimized Menu Kills FPS — 419 lines
+- yt_c3zZtVBspzU  Proving Older Effects Render Faster (2) — 162 lines
+
+### Verified primary-source quotes (citable)
+- **Lambert = "plastic bland" / Burley = fix** (Fake Realism):
+  > "The Kalisto Protocols environments have that obvious plastic bland Unreal Engine
+  > look that is so strongly defined through a Lambert GXBRDF whereas the burly diffused
+  > surfaces in Dead Space remake convey a professional polished look in shading quality."
+- **Kalisto BRDF material cap** (real constraint, citable):
+  > "There's a limit of 255 materials on screen that can use the Kalisto BRDF because some
+  > of the GBuffer channels are repurposed to tell the lighting shader to reference these
+  > extra inputs inside a subsurface profile texture."
+  → NOTE for M4.5-EXT-20: if we adopt a Kalisto-style BRDF, budget ~255 simultaneous
+  subsurface-BRDF materials; the GBuffer channel repurposing is the cost.
+- **TAA-as-fake-optimization thesis** (Regression): they explicitly attack smearing past
+  frames (TAA) as pretending to optimize unrelated features — supports M4.5 anti-TAA-abuse
+  guardrails if we add them.
+- **Texture/atlas compression** (MSAA video): "foliage draws use multiple 4K by 2K texture
+  atlases that should have at least used BC4 compression to prevent unnecessary performance
+  wasting RGB processing" — supports M4 streaming/compression guardrails.
+- **Material texture sampling budget** (Ray Tracing vid): "At the very most, you want to
+  sample three, maybe four textures if it's a really complex material" — supports M4.5
+  material-complexity budgets.
 
 ## Spec impact (already applied / to apply)
-- M4.5-EXT-20 Burley/Kalisto diffuse: APPLIED earlier, now PRIMARY-SOURCE CONFIRMED. ✅
+- M4.5-EXT-20 Burley/Kalisto diffuse: APPLIED earlier, now PRIMARY-SOURCE CONFIRMED
+  with verbaTim quotes. ✅ Also note the 255-material Kalisto cap as a budget constraint.
 - M4 (streaming) + M4.5 (LOD) silhouette/material-identity guardrails: drafted in
-  SESSION_STATE [B] mapping; NOT yet written into milestone files (those are GATED spec
-  edits — needs user GO, see [A]/[C]/[D] decision).
+  SESSION_STATE [B] mapping; now backed by transcript quotes on texture compression +
+  material sampling budgets. NOT yet written into milestone files (GATED spec edit —
+  needs user GO, see [A]/[C]/[D] decision).
+- M4.5 anti-TAA-abuse guardrail (optional): supported by Regression transcript quotes.
