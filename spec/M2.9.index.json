@@ -2,111 +2,192 @@
   {
     "id": "M2.9-EXT-01",
     "title": "Projectile Hydrodynamic Cavitation Tensors (Soft-Tissue Impact)",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Deepens M2.9 semi-implicit ballistic updates using M5.1 anatomical hit-volume SDF gradients.",
     "depends_on": [],
     "depended_by": [],
-    "line": 59,
-    "anchor": "M2.9-EXT-01"
+    "line": 48,
+    "anchor": "MM2.9-EXT-01"
   },
   {
     "id": "M2.9-EXT-02",
     "title": "Ballistic Kinetic Spalling & Secondary Fragment Shell Vectors",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Integrates M2.9's ballistics pipeline with M3's macro-destruction material-yield data to gate fragmentation yields.",
     "depends_on": [],
     "depended_by": [],
-    "line": 101,
-    "anchor": "M2.9-EXT-02"
+    "line": 85,
+    "anchor": "MM2.9-EXT-02"
   },
   {
     "id": "M2.9-EXT-03",
     "title": "Diurnal Atmospheric Air-Density Ballistic Shift",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Deepens M2.9 semi-implicit ballistic updates using M10 day/night temperature tracks.",
     "depends_on": [],
     "depended_by": [],
-    "line": 137,
-    "anchor": "M2.9-EXT-03"
+    "line": 116,
+    "anchor": "MM2.9-EXT-03"
   },
   {
     "id": "M2.9-EXT-04",
     "title": "Projectile Ricochet Tumbling Stability Matrix",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Expands the M2.9 Semi-Implicit Ballistic Integration loops.",
     "depends_on": [],
     "depended_by": [],
-    "line": 175,
-    "anchor": "M2.9-EXT-04"
+    "line": 149,
+    "anchor": "MM2.9-EXT-04"
   },
   {
     "id": "M2.9-EXT-05",
     "title": "Deflective Projectile Ricochet Shredder",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Integrates within the M2.9 semi-implicit ballistics pipeline, using surface hardness bits.",
     "depends_on": [],
     "depended_by": [],
-    "line": 212,
-    "anchor": "M2.9-EXT-05"
+    "line": 181,
+    "anchor": "MM2.9-EXT-05"
   },
   {
     "id": "M2.9-EXT-06",
     "title": "Biomechanical Momentum-Gated Parkour",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Extends M2.7 (JPH::CharacterVirtual input loops) and scales over M2.9 metabolic stamina pools.",
     "depends_on": [],
     "depended_by": [],
-    "line": 243,
-    "anchor": "M2.9-EXT-06"
+    "line": 207,
+    "anchor": "MM2.9-EXT-06"
   },
   {
     "id": "M2.9-EXT-07",
     "title": "Coupled Hydration-Exertion Depletion (Hunger & Thirst)",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Extends M2.9's Two-Compartment Exertion Model directly — does not introduce parallel hunger/thirst meters. Reads M10 ambient temperature for sweat-rate scali...",
     "depends_on": [],
-    "depended_by": [],
-    "line": 274,
-    "anchor": "M2.9-EXT-07"
+    "depended_by": [
+      "M2.9-EXT-10"
+    ],
+    "line": 233,
+    "anchor": "MM2.9-EXT-07"
   },
   {
     "id": "M2.9-EXT-08",
     "title": "Caloric Body Condition Scoring & Layered Thermal Insulation",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Caloric Body Condition Scoring & Layered Thermal Insulation",
     "depends_on": [],
     "depended_by": [],
-    "line": 319,
-    "anchor": "M2.9-EXT-08"
+    "line": 273,
+    "anchor": "MM2.9-EXT-08"
   },
   {
     "id": "M2.9-EXT-09",
     "title": "Pneumatic Tire Slip-Angle Deformation Loop",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.9 vehicles. Models tire deformation under slip angle for handling + wear.",
     "depends_on": [],
     "depended_by": [],
-    "line": 325,
-    "anchor": "M2.9-EXT-09"
+    "line": 274,
+    "anchor": "MM2.9-EXT-09"
   },
   {
     "id": "M2.9-EXT-10",
     "title": "Kinematic Character Flood Buoyancy & Drag Bridge",
-    "cluster": "A — bootstrap core",
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2.9 + M2.7 character controller. Bridges the character controller to water buoyancy/drag so wading/swimming is stable.",
+    "depends_on": [
+      "M2.9-EXT-07"
+    ],
+    "depended_by": [],
+    "line": 293,
+    "anchor": "MM2.9-EXT-10"
+  },
+  {
+    "id": "M2.9-EXT-16",
+    "title": "Farm Tick Scheduler",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Driven by M6 lighting day/night and M5.4 aggro windows; plots grow on tick.",
     "depends_on": [],
     "depended_by": [],
     "line": 349,
-    "anchor": "M2.9-EXT-10"
+    "anchor": "MM2.9-EXT-16"
+  },
+  {
+    "id": "M2.9-EXT-18",
+    "title": "Medical / Pharmacy Loot Hook",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Consumes M4-EXT-77 pharmacy tag and M8 med items; gates M2.9-EXT-19/20 meds loot.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 373,
+    "anchor": "MM2.9-EXT-18"
+  },
+  {
+    "id": "M2.9-EXT-19",
+    "title": "Medication / Stim Effect System",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Applies effects from M2.9-EXT-18 medical loot; interacts with M8 med items.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 397,
+    "anchor": "MM2.9-EXT-19"
+  },
+  {
+    "id": "M2.9-EXT-21",
+    "title": "Canning / Preservation Station",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Consumes M8.5 canning output; converts perishable food to shelf-stable with a timer.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 421,
+    "anchor": "MM2.9-EXT-21"
+  },
+  {
+    "id": "M2.9-EXT-24",
+    "title": "Rest UI / Sleep State",
+    "cluster": "A",
+    "tags": "UI",
+    "tldr": "Drives M11-EXT-58 HUD; reads M8.6-EXT-28 hub and M2-EXT-26 respec; advances rest tick.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 445,
+    "anchor": "MM2.9-EXT-24"
+  },
+  {
+    "id": "M2.9-EXT-25",
+    "title": "Shelter / Fire Weather Hook",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Reads M10 weather; M2.9-EXT-24 rest checks exposure; fire (M4) warms.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 469,
+    "anchor": "MM2.9-EXT-25"
+  },
+  {
+    "id": "M2.9-EXT-40",
+    "title": "Realism/Fun Floor (Survival Ceiling)",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Clamps M2.9 survival debuffs and M5.4 event severity to a designer-set floor; M6 lighting unaffected.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 493,
+    "anchor": "MM2.9-EXT-40"
   }
 ]
