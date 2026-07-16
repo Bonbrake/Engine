@@ -1,0 +1,407 @@
+[
+ {
+  "id": "M1-EXT-01",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 5,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-01], [M1-EXT-02], [M1-EXT-03], [M1-EXT-04], [M1-EXT-05], [M1-EXT-06], [M1-EXT-07], [M1-"
+ },
+ {
+  "id": "M1-EXT-02",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 4,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-02] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-03",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 4,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-03] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-04",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 4,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-04] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-05",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 4,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-05] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-06",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 5,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-06] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-07",
+  "missing": [
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 21,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-01], [M1-EXT-02], [M1-EXT-07] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-09",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": true,
+  "n_body": 5,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-09], [M4-EXT-12], [M4-EXT-13], [M4-EXT-14], [M4-EXT-15], [M4-EXT-16], [M10-EXT-01], [M4"
+ },
+ {
+  "id": "M1-EXT-10",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-10] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-11",
+  "missing": [],
+  "has_code": true,
+  "n_body": 14,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-11] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-12",
+  "missing": [],
+  "has_code": true,
+  "n_body": 233,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-12], [M1-EXT-30], [M1-EXT-31], [M1-EXT-32], [M1-EXT-33], [M1-EXT-34], [M1-EXT-35], [M1-"
+ },
+ {
+  "id": "M1-EXT-13",
+  "missing": [
+   "Systems Touched",
+   "Math",
+   "How It Works",
+   "Reference Implementation",
+   "Player-Facing Impact"
+  ],
+  "has_code": false,
+  "n_body": 0,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-13] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-15",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-15], [M1-EXT-16], [M1-EXT-17], [M1-EXT-18], [M1-EXT-19], [M1-EXT-20], [M1-EXT-21], [M1-"
+ },
+ {
+  "id": "M1-EXT-16",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-16] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-17",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-17] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-18",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-18] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-19",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-19] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-20",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-20] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-21",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-21] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-22",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-22] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-23",
+  "missing": [],
+  "has_code": true,
+  "n_body": 71,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-01], [M1-EXT-23], [M2-EXT-53] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-24",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-24], [M1-EXT-25], [M1-EXT-26], [M1-EXT-27], [M1-EXT-28], [M1-EXT-39], [M1-EXT-40], [M1-"
+ },
+ {
+  "id": "M1-EXT-25",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-25] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-26",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-26] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-27",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-27] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-28",
+  "missing": [
+   "Systems Touched",
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-28] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-39",
+  "missing": [
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-39] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-40",
+  "missing": [
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-40] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-41",
+  "missing": [
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-41] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-42",
+  "missing": [
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-42] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-43",
+  "missing": [
+   "Systems Touched"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-43] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-44",
+  "missing": [
+   "Systems Touched"
+  ],
+  "has_code": true,
+  "n_body": 12,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-44] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-45",
+  "missing": [
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-45], [M1-EXT-46], [M1-EXT-47], [M1-EXT-48], [M1-EXT-49], [M1-EXT-50], [M1-EXT-51], [M1-"
+ },
+ {
+  "id": "M1-EXT-46",
+  "missing": [
+   "Math"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-46] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-47",
+  "missing": [
+   "Systems Touched"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-47] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-48",
+  "missing": [
+   "Systems Touched"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-48] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-49",
+  "missing": [
+   "Systems Touched"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-49] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-50",
+  "missing": [
+   "Systems Touched"
+  ],
+  "has_code": true,
+  "n_body": 11,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-50] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-51",
+  "missing": [
+   "Systems Touched"
+  ],
+  "has_code": false,
+  "n_body": 9,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-51] \u00b7 depended-by: -"
+ },
+ {
+  "id": "M1-EXT-52",
+  "missing": [],
+  "has_code": true,
+  "n_body": 2159,
+  "meta": "> **meta** \u00b7 depends-on: [M1-EXT-52], [M10-EXT-12], [M10-EXT-13], [M10-EXT-14], [M10-EXT-15], [M10-EXT-16], [M10-EXT-17]"
+ },
+ {
+  "id": "M1-EXT-53",
+  "missing": [],
+  "has_code": true,
+  "n_body": 256,
+  "meta": "> **meta** \u00b7 depends-on: [M0-EXT-13], [M0-EXT-54], [M1-EXT-06], [M1-EXT-26], [M1-EXT-27], [M1-EXT-28], [M1-EXT-53], [M10"
+ }
+]

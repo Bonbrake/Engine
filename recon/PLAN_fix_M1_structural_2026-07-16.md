@@ -4,6 +4,8 @@
 - **BLOCKING**: `spec/M1.md` is corrupted in **HEAD** (already committed). The debug tool (`recon/ti_debug.py`) does NOT parse M1 and is unaffected — verified: 0 references to M1 in `ti_debug.py`, `--selftest` is 7/7 PASS.
 - This plan requires editing a **milestone spec file** (read-only gate). Execute only after explicit GO.
 - **GO gate is double-stored**: this committed plan file AND agent memory both carry the "ask GO before any M1.md edit" directive. Either surviving prevents the gate being silently dropped.
+- **Structural repair is BUILT + DRY-RUN VERIFIED** (`recon/fix_m1.py` → `recon/_m1_fixed.md`): un-welds 277 headers + 2025 subsections, strips 3693 foreign lines, keeps 41 M1-EXT blocks, adds anchors + injected layers, regens TOC + `M1.index.json`. Spec untouched. Running it on the real file yields **36 FIX** because 35/41 M1-EXT blocks are **missing real subsections in source** (not weld artifacts — measured in `recon/_m1_content_needs.json`). A reformat cannot invent them.
+- **Companion plan (content pass):** `recon/PLAN_fix_M1_content_pass_2026-07-16.md` — authors the 35 missing-subsection blocks. Also GO-gated. Do NOT run `--apply` on `fix_m1.py` until the content pass plan is also GO'd (or the file will read 36 FIX).
 
 ## What Is Broken (measured, not guessed)
 | Check | Result |
