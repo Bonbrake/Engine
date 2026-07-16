@@ -164,7 +164,8 @@ Post-processing ([M4.5]), HDR output, exposure/color-grade (LUT).
 ##### Math
 color = ACESFilm(x * exposure);  // or AgX
 out = pow(color, 1/2.2)          // gamma
-(no separate blur pass to "soften"; AA handled by M4.5-EXT-11)
+(no separate blur pass to "soften"; aliasing solved at geometry/specular level — T1 mip
+ filtering + T3 MSAA-stencil, NOT a post smear)
 ##### How It Works
 1. HDR scene -> exposure -> ACES/AgX tonemap -> gamma. Single pass.
 2. NO motion-blur/film-grain pass used to mask shading deficiencies (TI R13).
@@ -178,12 +179,106 @@ vec3 aces(vec3 x){ const float a=2.51,b=0.03,c=2.43,d=0.59,e=0.14;
 Richer, less "CGI" image (TI bar). Crisp edges preserved; no temporal mush from post.
 
 ═══════════════════════════════════════════════════════
+NEW GAP T1 — BRDF mipmap/trilinear/aniso filtering (target: M4.5-EXT-20, append)
+═══════════════════════════════════════════════════════
+#### add to [M4.5-EXT-20] — Filtered Mipmap BRDF (specular-aliasing fix)
+> **ctx addition** · TI T1: "Halflife Alex combat specular aliasing using filtered MIP maps"
+>   (no temporal). VERIFIER confirmed M4.5-EXT-19 (Heiligenschein only) and -20 (Burley only)
+>   have NO mipmap/trilinear/aniso filtering for the BRDF. Add it so low-res mip levels don't
+>   distort lighting (TI: Callisto chars look better up-close BECAUSE mipmaps are unfiltered).
+##### How It Works addition
+- Material BRDF samples use trilinear (mip-lerp) + anisotropic filtering; roughness drives a
+  mip LOD bias so specular highlights don't alias at distance (Lazarov 2015 "specular AA" via
+  roughness-mip-footprint — screen-space derivative of roughness used to bias mip).
+- This is the geometry/specular-level AA (T1), complementing T3 MSAA-stencil. No TAA-smear.
+
+═══════════════════════════════════════════════════════
+NEW GAP T3 — MSAA edge-detection stencil (target: M4.5, new — EXT-11 is upscaler-edge only)
+═══════════════════════════════════════════════════════
+#### [M4.5-EXT-34] MSAA Edge-Detection Stencil (stable edges, no temporal smear)
+> **tags** · AA, msaa, stencil, TI-gospel
+> **tl;dr** · Custom edge-detection stencil marks geometric edges so MSAA shades them at
+>   sample frequency WITHOUT temporal reprojection/smear (TI: "custom edge detection stencil
+>   does recognize these edges properly"). VERIFIER: M4.5-EXT-11 is a depth-Laplacian
+>   UPSCALER-edge aid, NOT this — so T3 is a genuine gap.
+> **ctx** · MSAA Edge-Detection Stencil -- pairs with [M4.5-EXT-11] (upscaler edge) + [M4.5-EXT-20].
+##### Systems Touched
+MSAA resolve, depth prepass ([M4.5]), stencil buffer.
+##### Math
+edge = detectDepthDiscontinuity(N/S/E/W) OR detectNonMSAAEdge()
+stencil.edges = edge ? 1 : 0   // only edge pixels get per-sample shading
+##### How It Works
+1. After prepass, a stencil pass tags geometric edges (depth/normal discontinuity).
+2. MSAA resolve shades ONLY stencil-tagged pixels at sample frequency; interior = 1 sample.
+3. No history buffer, no temporal blend -> no shimmer, no smear (TI R7).
+##### Reference Implementation
+```cpp
+// T3: edge stencil (TI: stable edges, no temporal smear)
+float edge = depthDisc(dpdx,dpdy) | normalDisc;
+if (edge > thr) stencilMask |= EDGE_BIT;   // MSAA shades these per-sample
+```
+##### Player-Facing Impact
+Crisp silhouettes on moving geometry with zero temporal shimmer — the HL Alyx look TI praises.
+
+═══════════════════════════════════════════════════════
+NEW GAP T4 — GBuffer normal format RGB10A2 (target: M4.5-EXT-22, fold into R2 draft)
+═══════════════════════════════════════════════════════
+#### add to [M4.5-EXT-22] — Normal buffer = RGB10A2 (+ material tags in alpha)
+> **ctx addition** · TI T4: "normals are usually stored in 32-bit formats like RGBA8 or
+>   preferably in RGB10A2." VERIFIER: no EXT sets normal format (M4.5-EXT-12 is visibility-buffer
+>   compaction, not format). Fold into R2's GBuffer layout mandate.
+##### How It Works addition
+- GBuffer normal encoded RGB10A2 (10-bit channels, 2-bit unused or pack material tag in A).
+- Higher precision than RGBA8 normals -> less banding on smooth surfaces; cheap (32-bit).
+
+═══════════════════════════════════════════════════════
+NEW GAP T5 — Shadow-mask stencil (target: M4.5-EXT-13, append)
+═══════════════════════════════════════════════════════
+#### add to [M4.5-EXT-13] — Shadow-Mask Stencil (cheap projection)
+> **ctx addition** · TI T5: "stencil channel is used to restrict expensive shadow map
+>   projection invocations." VERIFIER: M4.5-EXT-13 is VSM generation (no stencil-mask). Add a
+>   stencil pre-pass that marks only pixels needing shadow projection; conservative stencils in
+>   one shadow atlas -> "shadow masking cost would be way lower."
+##### How It Works addition
+- Before shadow projection, a stencil pass tags pixels inside shadow-caster silhouette.
+- Shadow projection shader early-outs where stencil == 0 (no wasted invocations).
+- Conservative stencil (slightly over-mark) avoids leaks; cost << blind full-screen project.
+
+═══════════════════════════════════════════════════════
+NEW GAP T8 — Subsurface scattering LUT (target: M4.5, new)
+═══════════════════════════════════════════════════════
+#### [M4.5-EXT-35] Subsurface Scattering LUT (cheap, rich skin)
+> **tags** · sss, skin, TI-gospel
+> **tl;dr** · Subsurface scattering driven by a custom lookup table (TI: "custom lookup table…
+>   lavish subsurface scattering skin"), NOT brute-force volumetric. VERIFIER: M4.5-EXT-19 is
+>   Heiligenschein wet-surface only — no SSS LUT. Genuine gap.
+> **ctx** · SSS LUT -- pairs with [M4.5-EXT-20] (Burley/Beer-Lambert). Skin/flesh forward path
+>   (T7) uses this for rich subsurface without per-pixel path cost.
+##### Systems Touched
+Skin/translucent shading ([M4.5-EXT-20]), forward path (T7), material system.
+##### Math
+sss = texture(SSSLut, vec2(NoL, curvature)) * scatterColor   // LUT keyed by light angle + curvature
+##### How It Works
+1. Precompute SSS response (warp/wrap diffuse + transmission) into a 2D LUT (NoL x curvature).
+2. Skin shader samples LUT instead of multi-sample volumetric -> ~free, rich subsurface.
+3. Forward-rendered skin (T7) only — minority screen (TI: 240-bit TCP skin buffer = 4% screen).
+##### Reference Implementation
+```cpp
+vec3 SSS(vec3 N, vec3 L, float curv, vec3 scatter){
+  float nol = max(dot(N,L),0.0);
+  return texture(uSSSLut, vec2(nol, curv)).rgb * scatter; }
+```
+##### Player-Facing Impact
+Flesh reads alive (not plastic) on zombies/survivors; cheap enough for Tier-0 forward skin.
+
+═══════════════════════════════════════════════════════
 STILL-MISSING / FOLLOW-UPS (flagged, not drafted)
 ═══════════════════════════════════════════════════════
-- T1 (filtered-mip BRDF): confirm M4.5-EXT-19/20 ships trilinear/aniso + mipmap filtering
-  for BRDF; if not, add a line to M4.5-EXT-20. (Not a new EXT — append.)
-- T4 (RGB10A2 normals): fold into M4.5-EXT-22 (R2) GBuffer layout note.
 - Web independent verification of TI claims (RGB10A2, specular-alias-via-mip, TAA
-  hysteresis) BLOCKED — DDG/Bing bot-blocked, egress throttled. Claims are TI-primary.
+  hysteresis, Lazarov specular-AA formula) BLOCKED — DDG/Bing/selfshadow bot-blocked,
+  egress throttled. Claims are TI-primary; math above is from Filament/Disney (Burley)
+  which DID load. Lazarov specular-AA formula NOT yet online-verified — flag for re-check.
 - 4 missing transcripts (5lDkHQ1bxG0, w1OzfuqCS10, aB5qxp6SPPQ, oD1cvng8SJE) still
   pending home-IP cooldown re-pull.
+- VERIFIER: recon/verify_ti_plan.py gates all "COVERED" claims against real block bodies.
+  Re-run after any plan edit. Exit 0 = safe to call "done".

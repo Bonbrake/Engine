@@ -64,13 +64,21 @@ R13 Vendor-agnostic IQ; upscaling = fallback not primary.
     as primary IQ; FSR/DLSS optional fallback only.
 
 ## GAPS TO FILL (need user GO before spec edits)
-- R2: base-color precision rule (new EXT or note in M4.5-EXT-20).
-- R3/R4: prepass discipline (zero-texture bind + 1-BC4 budget) — new guard EXT.
-- R5: BC1/BC4 path + BC5-normal caveat added to M4-EXT-25/89.
-- R6: material sample cap (new compiler rule).
-- R9: noise-free VT mandate on M4.5-EXT-26.
-- R11: tonemapper EXT (new).
+- R2: base-color precision rule (new EXT M4.5-EXT-22).
+- R3/R4: prepass discipline (zero-texture bind + 1-BC4 budget) — new guard EXT M4.5-EXT-23.
+- R5: BC1/BC4 path + BC5-normal caveat added (new EXT M4-EXT-90).
+- R6: material sample cap (new EXT M4-EXT-91).
+- R9: noise-free VT mandate on M4.5-EXT-26 (append).
+- R11: tonemapper EXT (new M4.5-EXT-33).
+- T1: BRDF mipmap/trilinear/aniso filtering — append to M4.5-EXT-20 (verified missing).
+- T3: MSAA edge-detection stencil — new EXT M4.5-EXT-34 (verified: -11 is upscaler-edge only).
+- T4: RGB10A2 normal format — fold into M4.5-EXT-22 (verified: no EXT sets normal fmt).
+- T5: shadow-mask stencil — append to M4.5-EXT-13 (verified: -13 is VSM gen only).
+- T8: subsurface scattering LUT — new EXT M4.5-EXT-35 (verified: -19 Heiligenschein only).
+- T10: emissive-in-basepass — M4 base-pass convention (not an EXT).
+- T12: POM surface detail — append to M4.5-EXT-20.
 - R1/R7/R8/R9/R10/R12/R13: COVERED — confirm only, don't re-add.
+- VERIFIER: recon/verify_ti_plan.py must pass (exit 0) before calling this plan "done".
 
 ## ALREADY COVERED (verify, don't re-add) — REAL EXT IDs
 - Burley/Kalisto diffuse + Beer-Lambert: M4.5-EXT-20
@@ -101,49 +109,56 @@ Verified 2026-07-16 via curl.
 
 ## TECHNIQUE-LEVEL RULES (concrete methods behind the 13 rules, from TI pipeline teardowns)
 T1  **Filtered mipmaps kill specular aliasing** (no TAA-smear). HL Alyx uses filtered MIP
-    maps; unfiltered low-res mipmaps distort lighting. → M4.5-EXT-19/20 BRDF: ship proper
-    trilinear/aniso + mipmap filtering. [GAP if absent]
+    maps; unfiltered low-res mipmaps distort lighting. → [GAP] M4.5-EXT-19/20 BRDF has NO
+    mipmap/trilinear/aniso filtering for BRDF (verified: -19 only Heiligenschein, -20 only
+    Burley/Beer-Lambert). Add mip-filter line to M4.5-EXT-20. VERIFIER: T1-FAIL on -19.
 T2  **Prepass = large opaque only, NO alpha-tested/distant-small geometry.** Crysis 3
     prepass "renders expensive and extremely dense alpha tested content" (bad); HL Alyx
-    "specifically doesn't." → R3/R4 hardening.
+    "specifically doesn't." → R3/R4 hardening. [GAP per R3/R4]
 T3  **Custom edge-detection stencil for stable MSAA** (not temporal). "custom edge
-    detection stencil does recognize these edges properly." → M4.5-EXT-11.
+    detection stencil does recognize these edges properly." → [GAP] M4.5-EXT-11 is a
+    depth-Laplacian UPSCALER-edge aid (feeds upscale edge mask), NOT MSAA/stencil. VERIFIER:
+    T3-FAIL on -11. New technique EXT needed or extend -11 to true MSAA-stencil.
 T4  **Normals format: prefer RGB10A2, not RGBA8; pack material tags in alpha.** "normals
-    are usually stored in 32-bit formats like RGBA8 or preferably in RGB10A2." → GBuffer
-    layout (M4.5-EXT-12 visibility buffer / M4.5-EXT-20) should target RGB10A2.
+    are usually stored in 32-bit formats like RGBA8 or preferably in RGB10A2." → [GAP] no
+    EXT sets normal format (M4.5-EXT-12 is visibility-buffer compaction, not format). Folds
+    into R2 (M4.5-EXT-22) GBuffer layout. VERIFIER: T4-FAIL on -12.
 T5  **Shadow masking via stencil + R8 shadow-mask buffer** (cheap). "stencil channel is
-    used to restrict expensive shadow map projection invocations." Conservative stencils
-    → "shadow masking cost would be way lower." → M4.5-EXT-13 (VSM) stencil-mask.
+    used to restrict expensive shadow map projection invocations." → [GAP] M4.5-EXT-13 is
+    VSM generation (no stencil-mask). New stencil-mask rule on -13 or new EXT. VERIFIER:
+    T5-FAIL on -13.
 T6  **SSAO at half-res with RG16 + R8 normal buffers** (proven structure). "clears the
-    half resolution SSAO, creates half resolution RG16 and R8 normal buffers." → M4.5-EXT-27
-    (Scalable Ambient Obscurance), which reads GBuffer depth+normal (matches).
+    half resolution SSAO, creates half resolution RG16 and R8 normal buffers." → COVERED
+    M4.5-EXT-27 (Scalable Ambient Obscurance), reads GBuffer depth+normal. VERIFIER: PASS.
 T7  **Hair + skin = FORWARD rendered** (not deferred) — matches R10. "hair and skin are
-    forward rendered" (opaque = tiled deferred). → M4.5-EXT-20 forward path.
+    forward rendered" (opaque = tiled deferred). → M4.5-EXT-20 forward path. [COVERED]
 T8  **Subsurface scattering via custom LUT** (not brute-force). "custom lookup table…
-    lavish subsurface scattering skin." → M4.5-EXT-19/20 BRDF extension.
+    lavish subsurface scattering skin." → [GAP] M4.5-EXT-19 is Heiligenschein only, no SSS
+    LUT. New SSS LUT EXT or extend -19/-20. VERIFIER: T8-FAIL on -19.
 T9  **Indirect lighting = atlases + spherical-harmonic probes** (not baked lightmaps).
-    "three indirect lighting atlases… spherical harmonic probe lighting." → M4.5-EXT-29
-    (SSGI) + M4.5-EXT-17 (Ambient Visibility Field) + M10-EXT-03 (SH ambient). Prefer
-    dynamic probe/atlas GI over baked lightmaps (TI: richness "has little to do with baked
-    lighting").
+    "three indirect lighting atlases… spherical harmonic probe lighting." → COVERED
+    M4.5-EXT-29 (SSGI) + M4.5-EXT-17 (Ambient Visibility Field) + M10-EXT-03 (SH ambient).
+    VERIFIER: PASS (all three).
 T10 **Emissives written in BASE PASS** (avoid redundant pixel invocations). "output
     emissives to the lit buffer in the base pass to prevent all these extra pixel
-    invocations." → M4 base-pass design rule.
+    invocations." → M4 base-pass design rule. [GAP: base-pass convention, not an EXT]
 T11 **Dynamic/FOV-culled shadow resolution** (not fixed huge maps). "optimizing shadow
-    resolutions with dynamic resizing" + "screen aware shadow map FOV culling." → M4.5-EXT-13.
+    resolutions with dynamic resizing" + "screen aware shadow map FOV culling." →
+    M4.5-EXT-13 tightening (partially: VSM exists, dynamic-res not explicit). [PARTIAL]
 T12 **Parallax occlusion mapping for base-pass surface detail** (no extra depth). "renders
     parallax occlusion detail on top of existing geometry." → M4.5-EXT-19/20 material.
+    [PARTIAL: BRDF exists, POM not explicit] → add to M4.5-EXT-20.
 T13 **Motion blur / film grain / filmic blur = TI calls them deficiency-hiding.** "Epic
     tries to hide… deficiencies with motion blur, tons of film grain, and blurry filmic
     filters." → post chain must NOT rely on blur to mask shading errors. R11 tonemapper
-    crisp, not "filmic-blur."
+    crisp, not "filmic-blur." [GAP: R11]
 T14 **Nanite/cluster-mesh-shader rasterizer = 3x slower compute rasterizer** (TI claim).
     "Nanite's three times slower compute shader rasterizer." → Our meshlet LODs (M4-EXT-02)
     use HARDWARE raster, NOT the compute voxel rasterizer (M4.5-EXT-16 is compute — restrict
-    to voxels/volumetrics, not opaque geometry).
+    to voxels/volumetrics, not opaque geometry). VERIFIER: PASS (-16 is compute voxel).
 T15 **Clouds = temporal BUT separated from bad AA** (warning). "clouds utilize temporal
     rendering, but separately from poor anti-aliasing methods." → M4.5-EXT-01 volumetrics:
-    temporal decoupled from AA smear.
+    temporal decoupled from AA smear. VERIFIER: PASS (-01 volumetric cone).
 
 ## IMPLEMENTATION ORDER (proposal)
 1. R1 confirm (M4.5-EXT-20 already Burley — verify, no work) + R7/R8/R10/R12/R13 validate.
