@@ -16,11 +16,14 @@ import subprocess, os, sys, json, time
 from youtube_transcript_api import YouTubeTranscriptApi
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "transcripts_api")
+# Write directly into transcripts/ with the yt_ prefix that analyze_transcripts.py
+# reads (it globs recon/transcripts/yt_*.txt). Previously wrote to transcripts_api/
+# which analyze never saw — a silent pipeline seam. Existing yt_*.txt are skipped.
+OUT = os.path.join(HERE, "transcripts")
 os.makedirs(OUT, exist_ok=True)
 
 ids = [l.strip() for l in open(os.path.join(HERE, "ti_all_vids.txt"), encoding="utf-8") if l.strip()]
-ids = [v for v in ids if not os.path.exists(os.path.join(OUT, f"{v}.txt"))]
+ids = [v for v in ids if not os.path.exists(os.path.join(OUT, f"yt_{v}.txt"))]
 print(f"remaining to fetch: {len(ids)}")
 
 def via_api(v):
@@ -64,7 +67,7 @@ def main():
                     time.sleep(10)
                     continue
         if text:
-            open(os.path.join(OUT, f"{v}.txt"), "w", encoding="utf-8").write(text)
+            open(os.path.join(OUT, f"yt_{v}.txt"), "w", encoding="utf-8").write(text)
             done += 1
             print(f"  OK {v} ({len(text)} chars)")
         else:

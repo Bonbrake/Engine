@@ -32,11 +32,20 @@
 - **M4.5-EXT-19 is Heiligenschein wet-surface only** — no SSS LUT, no mip-filter (T1/T8 gaps).
 
 ## OPEN ITEMS (resume here)
-- [ ] **Pull 4 missing transcripts** (home IP was cooling when session ended; VPN made
-  YouTube WORSE — datacenter IP gets "sign in to confirm you're not a bot"). IDs:
-  `5lDkHQ1bxG0 w1OzfuqCS10 aB5qxp6SPPQ oD1cvng8SJE`. Use `recon/pull_ti_transcripts.py`
-  (API-first, yt-dlp fallback) once IP cooldown passes. Then re-run `analyze_transcripts.py`
-  + re-verify plan still accurate.
+- [~] **Pull 4 missing transcripts** — IDs `5lDkHQ1bxG0 w1OzfuqCS10 aB5qxp6SPPQ oD1cvng8SJE`.
+  Live probe 2026-07-16 (resume) returned `IpBlocked` (datacenter egress still in cooldown;
+  VPN makes it worse — "sign in to confirm you're not a bot"). Started
+  `python recon/pull_ti_transcripts.py` in BACKGROUND with 6x backoff — it self-retries and
+  grabs the 4 once YouTube lifts the block. Skip-list already resolves to exactly those 4 IDs.
+  After it lands: re-run `analyze_transcripts.py` + re-verify plan/contract gate still accurate.
+- [x] **PIPELINE SEAM FIX (done, uncommitted at resume)** — `pull_ti_transcripts.py` used to
+  write to `recon/transcripts_api/<VID>.txt`, which `analyze_transcripts.py` NEVER reads (it
+  globs `transcripts/yt_*.txt`). Silent seam: every successful pull fed nothing. Patched
+  puller to write `transcripts/yt_<VID>.txt` (correct prefix + dir). Compile-checked; skip-list
+  verified to resolve to the 4 missing IDs. Commit as its own batch.
+- [ ] **Web independent-check of TI claims** — online egress still throttled/bot-blocked
+  (DDG/Bing/selfshadow). Burley verified via Filament. Lazarov specular-AA formula still NOT
+  online-verified — flag for re-check when egress recovers.
 - [ ] **User GO to paste gap-fill EXTs into spec** (read-only gate). When approved, paste
   from `PLAN_gap_fill_ext_proposals_2026-07-16.md` into correct Mx.md following 5-subsection
   skeleton + `<a id>` anchor. Verify ascending IDs, no dup defs, balanced fences.
