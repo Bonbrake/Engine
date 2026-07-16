@@ -317,6 +317,17 @@
     "anchor": "MM4.5-EXT-30"
   },
   {
+    "id": "M4.5-EXT-22",
+    "title": "GBuffer Base-Color Full-Precision Mandate",
+    "cluster": null,
+    "depends_on": [
+      "[M4.5-EXT-22]"
+    ],
+    "depended_by": [],
+    "line": 964,
+    "anchor": "MM45-EXT-22"
+  },
+  {
     "id": "M4.5-EXT-31",
     "title": "Signed Distance Field (SDF) Shadow Cascade *(SOURCED FROM PLAN FILE)",
     "cluster": null,
@@ -326,5 +337,60 @@
     "depended_by": [],
     "line": 981,
     "anchor": "MM4.5-EXT-31"
+  },
+  {
+    "id": "M4.5-EXT-23",
+    "title": "Depth-Prepass Discipline",
+    "cluster": null,
+    "depends_on": [
+      "[M4.5-EXT-23]"
+    ],
+    "depended_by": [],
+    "line": 999,
+    "anchor": "MM45-EXT-23"
+  },
+  {
+    "id": "M4.5-EXT-32",
+    "title": "Forward-Rendered Skin/Hair Path",
+    "cluster": null,
+    "depends_on": [
+      "[M4.5-EXT-32]"
+    ],
+    "depended_by": [],
+    "line": 1228,
+    "anchor": "MM45-EXT-32"
+  },
+  {
+    "id": "M4.5-EXT-33",
+    "title": "Filmic/ACES Tonemapper",
+    "cluster": null,
+    "depends_on": [
+      "[M4.5-EXT-33]"
+    ],
+    "depended_by": [],
+    "line": 1254,
+    "anchor": "MM45-EXT-33"
+  },
+  {
+    "id": "M4.5-EXT-34",
+    "title": "MSAA Edge-Detection Stencil",
+    "cluster": null,
+    "depends_on": [
+      "[M4.5-EXT-34]"
+    ],
+    "depended_by": [],
+    "line": 1276,
+    "anchor": "MM45-EXT-34"
+  },
+  {
+    "id": "M4.5-EXT-35",
+    "title": "Subsurface Scattering LUT",
+    "cluster": null,
+    "depends_on": [
+      "[M4.5-EXT-35]"
+    ],
+    "depended_by": [],
+    "line": 1300,
+    "anchor": "MM45-EXT-35"
   }
 ]
