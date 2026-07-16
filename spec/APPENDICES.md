@@ -140,7 +140,7 @@ Purpose: unrolls nested render-pass dependencies into one linear Vulkan executio
 
 **[M4.6-EXT-04] VRAM Sparse-Resident Memory Page Physical Allocation Tracker** — canonical copy is under §5.1/M4.6 in the main body; see there. *(v75: was a byte-identical duplicate, no divergence found — collapsed to a stub for the same reason as `[M1-EXT-09]` above.)*
 
-**[M4.6-EXT-05] DirectStorage Decompression Buffer Ring Allocator Pool**
+**[M4-EXT-87] DirectStorage Decompression Buffer Ring Allocator Pool**
 
 Systems: GPU decompression streaming.
 Purpose: recycles raw byte allocations on the VRAM streaming channel so high-speed chunk load bursts (e.g. driving fast) don't spike memory footprint. Note: requires GDeflate-capable path — confirm this is actually available on your target Vulkan drivers (DirectStorage proper is Windows/DX; on Vulkan you're relying on VK_EXT/vendor GDeflate compute decompression, not the DirectStorage API itself — name this something like "GPU Decompression Ring Allocator" to avoid implying a Windows-only API).
@@ -241,7 +241,7 @@ player-facing effect.
 
 Systems: graphics/compute/transfer submission, `[M13-EXT-11]`'s async compute queue (this
 formalizes the cross-queue sync mechanism EXT-11 already assumes exists rather than introducing a
-competing one), `[M4.6-EXT-05]`'s streaming transfer queue.
+competing one), `[M4-EXT-87]`'s streaming transfer queue.
 
 Purpose: `VK_KHR_timeline_semaphore` (core Vulkan 1.2+, mandatory-core in 1.4) replaces
 per-submission fence+binary-semaphore pairs with one monotonically increasing counter per queue
@@ -1225,13 +1225,13 @@ Every biome/weather combination has a distinct, reactive soundscape with zero ha
 Fleshes the §5.8 one-liner **Asynchronous glTF Geometry Cache Purger** (line 9109): distance-weighted LRU unload of static meshes under VRAM pressure, the eviction half that M2.6's glTF Geometry Caching (line 1188) only sketches ("decay candidate, not an immediate free").
 
 ##### Systems Touched
-Downstream of M2.6's glTF Geometry Caching table (`std::unordered_map<uint64_t, MeshHandle>`). Acts on `[M4.6-EXT-01]`'s GPU vertex-buffer pool and the M4.6 VRAM budget tracker the cache is already LRU-bounded against. Runs on the general enkiTS scheduler (one scheduler, not Jolt's — per AGENTS.md two-job-systems rule), not the render thread.
+Downstream of M2.6's glTF Geometry Caching table (`std::unordered_map<uint64_t, MeshHandle>`). Acts on `[M4-EXT-84]`'s GPU vertex-buffer pool and the M4.6 VRAM budget tracker the cache is already LRU-bounded against. Runs on the general enkiTS scheduler (one scheduler, not Jolt's — per AGENTS.md two-job-systems rule), not the render thread.
 
 ##### Math
 Eviction score per cached mesh `i`: `S_i = refCount_i * w_ref + (1 / (1 + d_i)) * w_dist`, where `d_i` = distance of nearest active chunk referencing mesh `i`. Lowest-`S` meshes exceeding the VRAM headroom threshold are purged first; `refCount > 0` never purges (hard guard).
 
 ##### How It Works
-A background task periodically scans the cache, computes `S_i`, and builds a purge list of meshes whose combined VRAM exceeds the free-headroom deficit and whose `S_i` is below a moving threshold. Unmaps GPU buffers via `[M4.6-EXT-01]` and drops the map entry; on next chunk-stream request the existing M2.6 loader re-fetches from disk (already implemented). Async so a bursty unload never stalls a frame.
+A background task periodically scans the cache, computes `S_i`, and builds a purge list of meshes whose combined VRAM exceeds the free-headroom deficit and whose `S_i` is below a moving threshold. Unmaps GPU buffers via `[M4-EXT-84]` and drops the map entry; on next chunk-stream request the existing M2.6 loader re-fetches from disk (already implemented). Async so a bursty unload never stalls a frame.
 
 ##### Reference Implementation
 ```cpp
@@ -1418,13 +1418,13 @@ AI perception stays cheap even with many agents querying LOS, holding the 5 ms A
 
 #### `[M0-EXT-54]` (provisional) GPU-Side Storage-Buffer Decompressor (compute GDeflate)
 
-Fleshes the §5.8 one-liner **GPU-Side Storage Buffer Decompressor (GDeflate, compute)** (line 9107). Per the doc's own caveat (and `[M4.6-EXT-05]`), this is the Vulkan-compute-shader path — name it accordingly, not "DirectStorage" (a Windows/DX API). It is the decompression compute kernel that `[M4.6-EXT-05]`'s ring allocator feeds; this entry supplies the kernel itself.
+Fleshes the §5.8 one-liner **GPU-Side Storage Buffer Decompressor (GDeflate, compute)** (line 9107). Per the doc's own caveat (and `[M4-EXT-87]`), this is the Vulkan-compute-shader path — name it accordingly, not "DirectStorage" (a Windows/DX API). It is the decompression compute kernel that `[M4-EXT-87]`'s ring allocator feeds; this entry supplies the kernel itself.
 
 ##### Systems Touched
-Sits directly under `[M4.6-EXT-05]` (GPU Decompression Ring Allocator) — that owns buffer recycling, this owns the actual decode. Reads compressed chunk payloads from the streaming channel M4.6 manages. Downstream of the mesh/texture loaders that currently block on CPU decode.
+Sits directly under `[M4-EXT-87]` (GPU Decompression Ring Allocator) — that owns buffer recycling, this owns the actual decode. Reads compressed chunk payloads from the streaming channel M4.6 manages. Downstream of the mesh/texture loaders that currently block on CPU decode.
 
 ##### Math
-GDeflate is a Huffman + LZ77-variant byte stream decoded in a compute shader: each invocation decodes one symbol group, writing reconstructed bytes into the ring-allocated output buffer (`[M4.6-EXT-05]`). No closed-form equation; the "math" is the bit-unpacking state machine: `symbol = DecodeHuffman(bitstream); if (symbol == LITERAL) emit(symbol); else { len, dist = ReadMatch(); Copy(dest-dist, len); }`.
+GDeflate is a Huffman + LZ77-variant byte stream decoded in a compute shader: each invocation decodes one symbol group, writing reconstructed bytes into the ring-allocated output buffer (`[M4-EXT-87]`). No closed-form equation; the "math" is the bit-unpacking state machine: `symbol = DecodeHuffman(bitstream); if (symbol == LITERAL) emit(symbol); else { len, dist = ReadMatch(); Copy(dest-dist, len); }`.
 
 ##### How It Works
 On a chunk-load burst, the CPU hands the compressed byte range + a ring-allocated output buffer to a compute dispatch. The shader walks the GDeflate bitstream, expands literals/matches in parallel across invocations (each invocation owns a contiguous output span, resolving match-back-references within its span or cooperatively across the span boundary), then signals completion so the loader uploads the now-decompressed mesh/texture. Offloads decode from the CPU so fast driving doesn't stall on a synchronous decompress.
@@ -1723,7 +1723,7 @@ ImpulseResponse BuildIR(const VoxelField& vf, vec3 listener) {
 Interiors and under-bridges sound enclosed, sewers sound dead, open streets sound live — the audio space matches the visual space instead of one global reverb setting.
 
 
-**[M4.6-EXT-08] BC7 / Block-Texture Compression & Transcode**
+**[M4-EXT-89] BC7 / Block-Texture Compression & Transcode**
 
 ##### Systems Touched
 Zero mention of block compression in doc. Adds GPU-friendly BC7 (desktop) / ASTC (mobile) compression for the material/atlas textures `[M4-EXT-25]` and `[M4.5-EXT-26]`'s RVT produce, cutting VRAM on the 6 GB Tier-0 floor. Runs on the enkiTS scheduler at bake/load time (not the render thread).

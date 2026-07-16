@@ -9,7 +9,7 @@
     "depended_by": [
       "M4-EXT-03"
     ],
-    "line": 95,
+    "line": 96,
     "anchor": "MM4-EXT-01"
   },
   {
@@ -22,7 +22,7 @@
     "depended_by": [
       "M4-EXT-05"
     ],
-    "line": 129,
+    "line": 131,
     "anchor": "MM4-EXT-02"
   },
   {
@@ -35,7 +35,7 @@
       "M4-EXT-01"
     ],
     "depended_by": [],
-    "line": 158,
+    "line": 161,
     "anchor": "MM4-EXT-03"
   },
   {
@@ -48,7 +48,7 @@
     "depended_by": [
       "M4-EXT-05"
     ],
-    "line": 187,
+    "line": 191,
     "anchor": "MM4-EXT-04"
   },
   {
@@ -62,7 +62,7 @@
       "M4-EXT-04"
     ],
     "depended_by": [],
-    "line": 218,
+    "line": 223,
     "anchor": "MM4-EXT-05"
   },
   {
@@ -73,7 +73,7 @@
     "tldr": "M4 WFC. Guarantees vertical structural dependencies (floor supports wall above) are satisfied.",
     "depends_on": [],
     "depended_by": [],
-    "line": 296,
+    "line": 263,
     "anchor": "MM4-EXT-08"
   },
   {
@@ -84,7 +84,7 @@
     "tldr": "M4 + M2.6. Places furniture in rooms respecting clearances/reachability deterministically.",
     "depends_on": [],
     "depended_by": [],
-    "line": 315,
+    "line": 283,
     "anchor": "MM4-EXT-09"
   },
   {
@@ -95,7 +95,7 @@
     "tldr": "M4 + M5.4. Welds road corridor splines into one continuous drivable path graph.",
     "depends_on": [],
     "depended_by": [],
-    "line": 334,
+    "line": 303,
     "anchor": "MM4-EXT-10"
   },
   {
@@ -106,7 +106,7 @@
     "tldr": "M4 WFC. On contradiction, rolls back to a saved horizon and re-expands instead of stalling.",
     "depends_on": [],
     "depended_by": [],
-    "line": 353,
+    "line": 323,
     "anchor": "MM4-EXT-11"
   },
   {
@@ -121,7 +121,7 @@
       "M4-EXT-14",
       "M4-EXT-16"
     ],
-    "line": 372,
+    "line": 343,
     "anchor": "MM4-EXT-12"
   },
   {
@@ -136,7 +136,7 @@
     "depended_by": [
       "M4-EXT-14"
     ],
-    "line": 412,
+    "line": 384,
     "anchor": "MM4-EXT-13"
   },
   {
@@ -153,7 +153,7 @@
       "M4-EXT-15",
       "M4-EXT-17"
     ],
-    "line": 451,
+    "line": 424,
     "anchor": "MM4-EXT-14"
   },
   {
@@ -166,7 +166,7 @@
       "M4-EXT-14"
     ],
     "depended_by": [],
-    "line": 483,
+    "line": 457,
     "anchor": "MM4-EXT-15"
   },
   {
@@ -179,7 +179,7 @@
       "M4-EXT-12"
     ],
     "depended_by": [],
-    "line": 513,
+    "line": 488,
     "anchor": "MM4-EXT-16"
   },
   {
@@ -196,7 +196,7 @@
       "M4-EXT-18",
       "M4-EXT-20"
     ],
-    "line": 549,
+    "line": 525,
     "anchor": "MM4-EXT-17"
   },
   {
@@ -211,7 +211,7 @@
     "depended_by": [
       "M4-EXT-17"
     ],
-    "line": 580,
+    "line": 557,
     "anchor": "MM4-EXT-18"
   },
   {
@@ -222,7 +222,7 @@
     "tldr": "Anthropogenic Infrastructure Exclusion Splines",
     "depends_on": [],
     "depended_by": [],
-    "line": 613,
+    "line": 591,
     "anchor": "MM4-EXT-19"
   },
   {
@@ -235,7 +235,7 @@
       "M4-EXT-17"
     ],
     "depended_by": [],
-    "line": 614,
+    "line": 593,
     "anchor": "MM4-EXT-20"
   },
   {
@@ -246,7 +246,7 @@
     "tldr": "M4 PCG + M13 SLM + M11 UI. Generates contextual signage text via a grammar for world flavor.",
     "depends_on": [],
     "depended_by": [],
-    "line": 683,
+    "line": 663,
     "anchor": "MM4-EXT-21"
   },
   {
@@ -257,7 +257,7 @@
     "tldr": "M4 + M5.1. Reorders mesh indices for vertex-cache and fetch efficiency.",
     "depends_on": [],
     "depended_by": [],
-    "line": 703,
+    "line": 684,
     "anchor": "MM4-EXT-22"
   },
   {
@@ -268,7 +268,7 @@
     "tldr": "M4 PCG. Classifies biome from temp/precipitation via Whittaker curves.",
     "depends_on": [],
     "depended_by": [],
-    "line": 723,
+    "line": 705,
     "anchor": "MM4-EXT-23"
   },
   {
@@ -279,7 +279,7 @@
     "tldr": "M4 + M3. Cellular-automata rule that turns damaged structures into rubble fields.",
     "depends_on": [],
     "depended_by": [],
-    "line": 743,
+    "line": 726,
     "anchor": "MM4-EXT-24"
   },
   {
@@ -290,7 +290,7 @@
     "tldr": "M4 + M4.5. Compiles a procedural material node graph to a shader/texture set.",
     "depends_on": [],
     "depended_by": [],
-    "line": 763,
+    "line": 747,
     "anchor": "MM4-EXT-25"
   },
   {
@@ -301,7 +301,7 @@
     "tldr": "M4 + M4.5-EXT-26 RVT. Packs decals into an atlas and projects at runtime.",
     "depends_on": [],
     "depended_by": [],
-    "line": 783,
+    "line": 768,
     "anchor": "MM4-EXT-26"
   },
   {
@@ -312,7 +312,7 @@
     "tldr": "M4 + M4.5-EXT-30. Generates vegetation impostors (billboards) for distant foliage.",
     "depends_on": [],
     "depended_by": [],
-    "line": 803,
+    "line": 789,
     "anchor": "MM4-EXT-27"
   },
   {
@@ -323,7 +323,7 @@
     "tldr": "M4. L-System generates foliage meshes (branches/leaves) procedurally.",
     "depends_on": [],
     "depended_by": [],
-    "line": 823,
+    "line": 810,
     "anchor": "MM4-EXT-28"
   },
   {
@@ -334,7 +334,7 @@
     "tldr": "M4. Monolithic gen → layered passes consuming neighbor context (LayerProcGen/EPC2024).",
     "depends_on": [],
     "depended_by": [],
-    "line": 843,
+    "line": 831,
     "anchor": "MM4-EXT-29"
   },
   {
@@ -345,7 +345,7 @@
     "tldr": "M4/M11. Declares passes; mods insert/reorder.",
     "depends_on": [],
     "depended_by": [],
-    "line": 861,
+    "line": 850,
     "anchor": "MM4-EXT-30"
   },
   {
@@ -356,7 +356,7 @@
     "tldr": "M4. Hard biome cuts → smooth blend.",
     "depends_on": [],
     "depended_by": [],
-    "line": 877,
+    "line": 867,
     "anchor": "MM4-EXT-31"
   },
   {
@@ -367,7 +367,7 @@
     "tldr": "M4/V. Rules before commit.",
     "depends_on": [],
     "depended_by": [],
-    "line": 893,
+    "line": 884,
     "anchor": "MM4-EXT-32"
   },
   {
@@ -378,7 +378,7 @@
     "tldr": "M4/M8. Seed-stable tables → resolved drops.",
     "depends_on": [],
     "depended_by": [],
-    "line": 910,
+    "line": 902,
     "anchor": "MM4-EXT-33"
   },
   {
@@ -389,7 +389,7 @@
     "tldr": "M4/D. world→region→chunk→entity derivation.",
     "depends_on": [],
     "depended_by": [],
-    "line": 926,
+    "line": 919,
     "anchor": "MM4-EXT-34"
   },
   {
@@ -400,7 +400,7 @@
     "tldr": "M4/ECS. IDs stable across regen.",
     "depends_on": [],
     "depended_by": [],
-    "line": 942,
+    "line": 936,
     "anchor": "MM4-EXT-35"
   },
   {
@@ -411,7 +411,7 @@
     "tldr": "M4/M5.1. Per-archetype salt, not global seed.",
     "depends_on": [],
     "depended_by": [],
-    "line": 958,
+    "line": 953,
     "anchor": "MM4-EXT-36"
   },
   {
@@ -422,7 +422,7 @@
     "tldr": "M4/M0-EXT-23. Caps entities/triangles per chunk.",
     "depends_on": [],
     "depended_by": [],
-    "line": 974,
+    "line": 970,
     "anchor": "MM4-EXT-37"
   },
   {
@@ -433,7 +433,7 @@
     "tldr": "M4. Bounds noise cost at zoom.",
     "depends_on": [],
     "depended_by": [],
-    "line": 990,
+    "line": 987,
     "anchor": "MM4-EXT-38"
   },
   {
@@ -444,7 +444,7 @@
     "tldr": "M4/AssetManager. Biome → texture/mesh set.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1006,
+    "line": 1004,
     "anchor": "MM4-EXT-39"
   },
   {
@@ -455,7 +455,7 @@
     "tldr": "M4. Non-gameplay dress-up.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1022,
+    "line": 1021,
     "anchor": "MM4-EXT-40"
   },
   {
@@ -477,7 +477,7 @@
     "tldr": "M4. Vertical chunks.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1054,
+    "line": 1055,
     "anchor": "MM4-EXT-42"
   },
   {
@@ -488,7 +488,7 @@
     "tldr": "M4/M7. Revisits instant + deterministic.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1070,
+    "line": 1072,
     "anchor": "MM4-EXT-43"
   },
   {
@@ -499,7 +499,7 @@
     "tldr": "M4/T95. Which pass produced what + seed inspector.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1086,
+    "line": 1089,
     "anchor": "MM4-EXT-44"
   },
   {
@@ -510,7 +510,7 @@
     "tldr": "M4/M3. Gen at multiple detail levels.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1102,
+    "line": 1106,
     "anchor": "MM4-EXT-45"
   },
   {
@@ -521,7 +521,7 @@
     "tldr": "M4/M10. Night atmosphere, moddable.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1118,
+    "line": 1123,
     "anchor": "MM4-EXT-46"
   },
   {
@@ -532,7 +532,7 @@
     "tldr": "M4/M0 jobs. Gen in worker jobs; main thread never stalls.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1136,
+    "line": 1142,
     "anchor": "MM4-EXT-47"
   },
   {
@@ -543,7 +543,7 @@
     "tldr": "M4/M0-EXT-23. N ms cap; spill to next frame (Epic hitching guide).",
     "depends_on": [],
     "depended_by": [],
-    "line": 1153,
+    "line": 1160,
     "anchor": "MM4-EXT-48"
   },
   {
@@ -554,7 +554,7 @@
     "tldr": "M4. Player-adjacent first.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1169,
+    "line": 1177,
     "anchor": "MM4-EXT-49"
   },
   {
@@ -565,7 +565,7 @@
     "tldr": "M4. Gen 1 ring ahead during idle.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1185,
+    "line": 1194,
     "anchor": "MM4-EXT-50"
   },
   {
@@ -576,7 +576,7 @@
     "tldr": "M4. Chunk unloaded mid-gen → cancel.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1201,
+    "line": 1211,
     "anchor": "MM4-EXT-51"
   },
   {
@@ -587,7 +587,7 @@
     "tldr": "M4. queued→generating→ready→active→unloading.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1217,
+    "line": 1228,
     "anchor": "MM4-EXT-52"
   },
   {
@@ -598,7 +598,7 @@
     "tldr": "M4/physics. Build geometry + physics shape concurrently.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1233,
+    "line": 1245,
     "anchor": "MM4-EXT-53"
   },
   {
@@ -609,7 +609,7 @@
     "tldr": "M8 (quests). No runtime quest generator.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1249,
+    "line": 1262,
     "anchor": "MM4-EXT-54"
   },
   {
@@ -620,7 +620,7 @@
     "tldr": "M13 (narrative). No dialogue generator wired.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1270,
+    "line": 1284,
     "anchor": "MM4-EXT-55"
   },
   {
@@ -631,7 +631,7 @@
     "tldr": "M5.4/M13. No auto-tuned difficulty curve.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1291,
+    "line": 1306,
     "anchor": "MM4-EXT-56"
   },
   {
@@ -642,7 +642,7 @@
     "tldr": "M4/M0. Record RNG draws per chunk.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1312,
+    "line": 1328,
     "anchor": "MM4-EXT-57"
   },
   {
@@ -653,7 +653,7 @@
     "tldr": "M4/M0. Fixed-order reductions.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1333,
+    "line": 1350,
     "anchor": "MM4-EXT-58"
   },
   {
@@ -664,7 +664,7 @@
     "tldr": "M4. Roads only as noise threshold.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1354,
+    "line": 1372,
     "anchor": "MM4-EXT-59"
   },
   {
@@ -675,7 +675,7 @@
     "tldr": "M4/M5.4. No event spawner.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1373,
+    "line": 1392,
     "anchor": "MM4-EXT-60"
   },
   {
@@ -686,7 +686,7 @@
     "tldr": "Couples to M10 weather tides and M2.9 farming; tags shoreline cells with wet/dry state each tidal step.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1391,
+    "line": 1411,
     "anchor": "MM4-EXT-61"
   },
   {
@@ -697,7 +697,7 @@
     "tldr": "Backs the world map UI (M11) and encounter placement; holds road + biome + water coverage as tiles.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1416,
+    "line": 1437,
     "anchor": "MM4-EXT-62"
   },
   {
@@ -708,7 +708,7 @@
     "tldr": "Drives vendor stock (M8.6), quest targets, and faction footprint; folds into Appendix C loot/zone tagging.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1441,
+    "line": 1463,
     "anchor": "MM4-EXT-63"
   },
   {
@@ -719,7 +719,7 @@
     "tldr": "Feeds M2.6 survival crafting node spawns and M4-EXT-14 substrate horizons; veins follow layer boundaries.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1465,
+    "line": 1488,
     "anchor": "MM4-EXT-64"
   },
   {
@@ -730,7 +730,7 @@
     "tldr": "All POIs/factions/encounters attach to this root via the road graph; prevents orphaned systems.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1489,
+    "line": 1513,
     "anchor": "MM4-EXT-74"
   },
   {
@@ -741,7 +741,7 @@
     "tldr": "Supports M8 med-item spawns and M2.9 medical/farm loot; tags interior cells as pharmacy.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1513,
+    "line": 1538,
     "anchor": "MM4-EXT-77"
   },
   {
@@ -752,7 +752,77 @@
     "tldr": "Ties to M4-EXT-15 aquifer and M4-EXT-16 erosion watersheds; supplies clean-water loot nodes.",
     "depends_on": [],
     "depended_by": [],
-    "line": 1537,
+    "line": 1563,
     "anchor": "MM4-EXT-83"
+  },
+  {
+    "id": "M4-EXT-84",
+    "title": "Procedural Vertex Buffer Pooling & Dynamic GPU Compaction",
+    "cluster": "C",
+    "tags": "GPU",
+    "tldr": "Complements M4.6 memory management and streams mesh data into M1 storage allocations.",
+    "depends_on": [],
+    "depended_by": [
+      "M4-EXT-88"
+    ],
+    "line": 1588,
+    "anchor": "MM4-EXT-84"
+  },
+  {
+    "id": "M4-EXT-85",
+    "title": "Asynchronous OS Overlapped Direct-VRAM Disk Streaming Queue",
+    "cluster": "C",
+    "tags": "OS, VRAM",
+    "tldr": "Backs M4.6's \"DirectStorage Streaming Pipelines\" bullet with a concrete I/O mechanism. [OVERLAP FLAG] Checks out native file handles from [M0-EXT-04]'s exist...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1621,
+    "anchor": "MM4-EXT-85"
+  },
+  {
+    "id": "M4-EXT-86",
+    "title": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
+    "cluster": "A",
+    "tags": "general",
+    "tldr": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1654,
+    "anchor": "MM4-EXT-86"
+  },
+  {
+    "id": "M4-EXT-87",
+    "title": "DirectStorage Decompression Buffer Ring Allocator Pool",
+    "cluster": "A",
+    "tags": "DirectStorage",
+    "tldr": "M4.6 + M0 streaming. Ring-allocates GPU buffers for DirectStorage asset decompression so streaming never stalls.",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1656,
+    "anchor": "MM4-EXT-87"
+  },
+  {
+    "id": "M4-EXT-88",
+    "title": "Basis Universal GPU Texture Transcoder",
+    "cluster": "B",
+    "tags": "GPU",
+    "tldr": "M4.6. Transcodes Basis Universal supercompressed textures to GPU formats at load.",
+    "depends_on": [
+      "M4-EXT-84"
+    ],
+    "depended_by": [],
+    "line": 1677,
+    "anchor": "MM4-EXT-88"
+  },
+  {
+    "id": "M4-EXT-89",
+    "title": "BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)",
+    "cluster": "B",
+    "tags": "BC7, SOURCED, PLAN, FILE",
+    "tldr": "Zero mention previously. GPU-friendly BC7 (desktop)/ASTC (mobile) compression for material/atlas textures M4-EXT-25 + M4.5-EXT-26 RVT produce, cutting VRAM o...",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 1754,
+    "anchor": "MM4-EXT-89"
   }
 ]
