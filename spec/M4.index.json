@@ -796,5 +796,27 @@
     "depended_by": [],
     "line": 1780,
     "anchor": "MM4-EXT-89"
+  },
+  {
+    "id": "M4-EXT-90",
+    "title": "BC1/BC4 Preferred Path + BC5-Normal Cost Caveat",
+    "cluster": null,
+    "depends_on": [
+      "[M4-EXT-90]"
+    ],
+    "depended_by": [],
+    "line": 2167,
+    "anchor": "MM4EXT90"
+  },
+  {
+    "id": "M4-EXT-91",
+    "title": "Material Texture-Sample Budget",
+    "cluster": null,
+    "depends_on": [
+      "[M4-EXT-91]"
+    ],
+    "depended_by": [],
+    "line": 2197,
+    "anchor": "MM4EXT91"
   }
 ]

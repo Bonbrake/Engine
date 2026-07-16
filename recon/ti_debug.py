@@ -64,7 +64,7 @@ FORBIDDEN_COVERED = {
     "T8": ["subsurface", "lut"],
 }
 
-PROPOSED_NEW = ["M4-EXT-90", "M4-EXT-91"]
+PROPOSED_NEW = []
 
 SCHEMA = {
     "type": "object",
