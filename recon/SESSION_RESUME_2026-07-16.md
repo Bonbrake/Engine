@@ -15,9 +15,11 @@
    - These are PROPOSALS — milestone spec files are READ-ONLY to the agent; need user GO
      before pasting into spec/M4 / M4.5 / M4.6.
 4. **Mechanical bug-catchers (committed)**:
-   - `recon/verify_ti_plan.py` — reads real spec block bodies, fails unbacked claims.
-   - `recon/ti_contract.py` — DESIGN-BY-CONTRACT gate: parses plan claim→EXT pairs, fails
-     if a COVERED claim's spec block lacks the capability keywords. Prevention, not detection.
+   - `recon/ti_gate.py` — MERGED design-by-contract gate (replaces the old `ti_contract.py`
+     + `verify_ti_plan.py`, which were retired 2026-07-16 after the T7 false-COVERED slip).
+     Parses claim→EXT→status from the plan PROSE (single source of truth, can't drift),
+     enforces capability-keyword contract against real spec block bodies, flags unclassified
+     claims, and checks proposed-new EXT ids for collisions.
    - `recon/analyze_transcripts.py` — 3-pass transcript extractor (tech/fault/number).
    - `recon/transcript_analysis.json` — extracted data (committed this session-end).
 
@@ -52,14 +54,13 @@
 - [ ] **Web independent-check of TI claims still BLOCKED** (DDG/Bing/selfshadow bot-blocked,
   egress throttled). Burley math verified via Filament. Lazarov specular-AA formula NOT yet
   online-verified — flag for re-check when egress recovers.
-- [ ] **Run `ti_contract.py` after ANY plan edit** — exit 0 = safe to call done.
+- [ ] **Run `ti_gate.py` after ANY plan edit** — exit 0 = safe to call done.
 
 ## RESUME COMMANDS (copy-paste)
 ```bat
 cd C:\ZombieEngine
 git log --oneline -3
-python recon/ti_contract.py          # gate: exit 0 = plan claims backed by spec
-python recon/verify_ti_plan.py        # secondary check
+python recon/ti_gate.py              # merged gate: exit 0 = plan claims backed by spec
 python recon/analyze_transcripts.py   # re-extract transcripts if 4 new ones added
 ls recon/transcripts/yt_*.txt | wc -l # should be 11; goal 15
 ```
@@ -72,7 +73,7 @@ python pull_ti_transcripts.py
 ## FILE MAP (what to read)
 - Plan: `recon/PLAN_threat_interactive_gospel_2026-07-16.md`
 - Gap drafts: `recon/PLAN_gap_fill_ext_proposals_2026-07-16.md`
-- Gate tool: `recon/ti_contract.py`  |  Verifier: `recon/verify_ti_plan.py`
+- Gate tool: `recon/ti_gate.py` (merged; replaces retired ti_contract.py + verify_ti_plan.py)
 - Transcripts: `recon/transcripts/yt_*.txt` (11)  |  Extractor: `recon/analyze_transcripts.py`
 - User directive reminder: "Threat Interactive is gospel — it's the rule." TI claims are
   HARD CONSTRAINTS on the renderer, not suggestions.

@@ -271,14 +271,61 @@ vec3 SSS(vec3 N, vec3 L, float curv, vec3 scatter){
 ##### Player-Facing Impact
 Flesh reads alive (not plastic) on zombies/survivors; cheap enough for Tier-0 forward skin.
 
-═══════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════════════
+NEW GAP T7 — Forward-Rendered Skin/Hair Path (target: M4.5, new)
+═════════════════════════════════════════════════════════════════════════════════
+#### [M4.5-EXT-32] Forward-Rendered Skin/Hair Path (not deferred)
+> **tags** · forward, skin, hair, TI-gospel
+> **tl;dr** · Skin and hair are FORWARD-rendered (opaque world = tiled deferred). TI: "hair and
+>   skin are forward rendered." VERIFIER: M4.5-EXT-20 (Burley/Beer-Lambert) has NO forward skin/
+>   hair pass — "flesh" appears only as translucent Beer-Lambert transmission, "forward-scatter"
+>   is a scattering term. T7 was falsely marked COVERED; re-classified GAP. (TI quote is
+>   transcript-primary; no external citable spec mandates it — kept as GAP, not invented citation.)
+> **ctx** · Forward-Rendered Skin/Hair Path -- pairs with [M4.5-EXT-20] (Burley shading) + T8
+>   (SSS LUT) for rich forward skin. Forward path avoids deferred GBuffer precision/normal
+>   artifacts on thin/translucent hair + subsurface skin.
+##### Systems Touched
+Forward shading path ([M4.5]), material system ([M4-EXT-14]), skinning ([M4.5-EXT-14]/18).
+##### Math
+forward_skin(N,L,V,curv) = Burley(N,L,V) + SSS_LUT(NoL,curv)   // T8 LUT, no GBuffer round-trip
+hair = alpha-tested forward, depth-sorted, no deferred resolve
+##### How It Works
+1. Skin/hair meshes routed to a dedicated forward pass (opaque = tiled deferred per TI).
+2. Forward skin uses Burley + SSS LUT (T8) directly — no GBuffer encode/decode precision loss.
+3. Hair = alpha-tested forward, drawn after opaque, depth-sorted; minority screen (~4%, TI).
+##### Reference Implementation
+```cpp
+// T7: skin/hair forward (TI: "hair and skin are forward rendered")
+if (mat.isSkin || mat.isHair) { out = ShadeForward(p); }  // not deferred resolve
+```
+##### Player-Facing Impact
+Correct thin-geometry + subsurface look on zombies/survivors/hair without deferred GBuffer
+banding. Matches TI's praised HL Alyx forward-skin result.
+
+═════════════════════════════════════════════════════════════════════════════════
+NEW GAP T12 — Parallax Occlusion Mapping (target: M4.5-EXT-20, append)
+═════════════════════════════════════════════════════════════════════════════════
+#### add to [M4.5-EXT-20] — Parallax Occlusion Mapping (base-pass surface detail)
+> **ctx addition** · TI T12: "renders parallax occlusion detail on top of existing geometry"
+> (no extra depth pass). VERIFIER: EXT-20 body has Burley/Beer-Lambert only — no POM. Add so
+> materials get relief detail without a second geometry/depth pass.
+##### How It Works addition
+- Material BRDF samples use parallax occlusion mapping in the base pass: ray-march the height
+  field along the view vector in the pixel shader, offset UVs per layer. Detail "on top of"
+  existing geometry — no extra depth prepass, no vertex displacement.
+- Step count bounded (TI: cheap, base-pass only); combines with T1 filtered-mip BRDF so the
+  parallax samples don't alias at distance.
+
+═════════════════════════════════════════════════════════════════════════════════
 STILL-MISSING / FOLLOW-UPS (flagged, not drafted)
 ═══════════════════════════════════════════════════════
-- Web independent verification of TI claims (RGB10A2, specular-alias-via-mip, TAA
-  hysteresis, Lazarov specular-AA formula) BLOCKED — DDG/Bing/selfshadow bot-blocked,
-  egress throttled. Claims are TI-primary; math above is from Filament/Disney (Burley)
-  which DID load. Lazarov specular-AA formula NOT yet online-verified — flag for re-check.
+- Web independent verification of TI claims: egress recovered 2026-07-16 (resume). Confirmed
+  Lazarov 2015 "Specular AA" = roughness-driven mip footprint / prefilter (SIGGRAPH 2015
+  shading course, canonical) — T1 draft grounded. T7 "hair and skin are forward rendered" is
+  TI-transcript-primary; no external citable spec rule found (Bing exact-quote returned only
+  TI's own wording) — correctly kept as GAP, not invented citation. RGB10A2 / TAA-hysteresis
+  claims remain TI-primary (Disney/Filament math for Burley loaded fine).
 - 4 missing transcripts (5lDkHQ1bxG0, w1OzfuqCS10, aB5qxp6SPPQ, oD1cvng8SJE) still
   pending home-IP cooldown re-pull.
-- VERIFIER: recon/verify_ti_plan.py gates all "COVERED" claims against real block bodies.
+- VERIFIER: recon/ti_gate.py (merged) gates all COVERED/GAP claims against real block bodies.
   Re-run after any plan edit. Exit 0 = safe to call "done".
