@@ -2,463 +2,544 @@
   {
     "id": "M1-EXT-01",
     "title": "SpatialHash Uniform Grid Cell Bucketing Engine",
-    "cluster": null,
+    "cluster": "A",
     "tags": "SpatialHash",
-    "tldr": null,
+    "tldr": "// Packs a 2m grid cell into one 64-bit key; floor() keeps negative-coordinate cells continuous",
     "depends_on": [],
-    "depended_by": [],
-    "line": 35,
-    "anchor": "M1-EXT-01"
+    "depended_by": [
+      "M1-EXT-23"
+    ],
+    "line": 28,
+    "anchor": "MM1-EXT-01"
   },
   {
     "id": "M1-EXT-02",
     "title": "Generational Resource Table Pointer Validator",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "bool IsHandleValid(const Handle& h, const std::vector<uint32_t>& generations) { return h.index < generations.size() && h.generation == generations[h.index];",
     "depends_on": [],
     "depended_by": [],
-    "line": 46,
-    "anchor": "M1-EXT-02"
+    "line": 34,
+    "anchor": "MM1-EXT-02"
   },
   {
     "id": "M1-EXT-03",
     "title": "Multi-Threaded Command Pool Matrix",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "uint32_t GetPoolIndex(uint32_t frameResourceIndex, uint32_t threadCount, uint32_t threadId) { assert(threadId < threadCount); return (frameResourceIndex * th...",
     "depends_on": [],
-    "depended_by": [],
-    "line": 56,
-    "anchor": "M1-EXT-03"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 39,
+    "anchor": "MM1-EXT-03"
   },
   {
     "id": "M1-EXT-04",
     "title": "Frame-Scoped Deletion Queue",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "bool ReadyToPurge(uint64_t completedFenceValue, uint64_t resourceFenceValue) { return completedFenceValue >= resourceFenceValue;",
     "depends_on": [],
     "depended_by": [],
-    "line": 66,
-    "anchor": "M1-EXT-04"
+    "line": 44,
+    "anchor": "MM1-EXT-04"
   },
   {
     "id": "M1-EXT-05",
     "title": "Persistent-Mapped Staging Ring Buffer",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "void* GetFrameStagingRegion(void* basePtr, size_t maxFrameSize, size_t totalPoolSize, uint32_t frameIdx) { size_t offset = (static_cast<size_t>(frameIdx) * m...",
     "depends_on": [],
     "depended_by": [],
-    "line": 76,
-    "anchor": "M1-EXT-05"
+    "line": 49,
+    "anchor": "MM1-EXT-05"
   },
   {
     "id": "M1-EXT-06",
     "title": "EnTT Archetype Component SPSC Mutation Queue Committer",
-    "cluster": null,
+    "cluster": "A",
     "tags": "SPSC",
-    "tldr": null,
+    "tldr": "struct DeferredMutation { entt::entity targetEntity; uint32_t operationBitmask; };",
     "depends_on": [],
-    "depended_by": [],
-    "line": 86,
-    "anchor": "M1-EXT-06"
+    "depended_by": [
+      "M1-EXT-09",
+      "M1-EXT-53"
+    ],
+    "line": 54,
+    "anchor": "MM1-EXT-06"
   },
   {
     "id": "M1-EXT-07",
     "title": "Thread-Local Zero-Allocation Linear Page-Bump Arena",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "struct BumpArena { uint8_t* memoryBufferPage; size_t capacity; size_t currentOffset; };",
     "depends_on": [],
-    "depended_by": [],
-    "line": 97,
-    "anchor": "M1-EXT-07"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 60,
+    "anchor": "MM1-EXT-07"
   },
   {
     "id": "M1-EXT-08",
     "title": "Dynamic Spatial Hash Cell Quadtree Subdivision Splitter",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Dynamic Spatial Hash Cell Quadtree Subdivision Splitter",
     "depends_on": [],
-    "depended_by": [],
-    "line": 108,
-    "anchor": "M1-EXT-08"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 66,
+    "anchor": "MM1-EXT-08"
   },
   {
     "id": "M1-EXT-09",
     "title": "EnTT Concurrent Component Archetype View Iteration Cache",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "#include <cstdint>",
+    "depends_on": [
+      "M1-EXT-07",
+      "M1-EXT-06",
+      "M1-EXT-11",
+      "M1-EXT-10",
+      "M1-EXT-13",
+      "M1-EXT-15",
+      "M1-EXT-16",
+      "M1-EXT-17",
+      "M1-EXT-18",
+      "M1-EXT-19",
+      "M1-EXT-20",
+      "M1-EXT-21",
+      "M1-EXT-22",
+      "M1-EXT-23",
+      "M1-EXT-24",
+      "M1-EXT-03",
+      "M1-EXT-25",
+      "M1-EXT-08"
+    ],
     "depended_by": [],
-    "line": 115,
-    "anchor": "M1-EXT-09"
+    "line": 68,
+    "anchor": "MM1-EXT-09"
   },
   {
     "id": "M1-EXT-10",
     "title": "Render-Graph Pass Dependency DAG Flattener",
-    "cluster": null,
+    "cluster": "A",
     "tags": "DAG",
-    "tldr": null,
+    "tldr": "topo = Kahn(N, E); inDeg[v]-- on emit; stable order by priority when tied. ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2095,
-    "anchor": "M1-EXT-10"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2043,
+    "anchor": "MM1-EXT-10"
   },
   {
     "id": "M1-EXT-11",
     "title": "Compute-to-Indirect-Draw Execution Barrier",
-    "cluster": null,
+    "cluster": "A",
     "tags": "general",
-    "tldr": null,
+    "tldr": "barrier(srcStage=COMPUTE, dstStage=DRAW, buf=visibleList, access=WRITE->READ). ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2108,
-    "anchor": "M1-EXT-11"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2051,
+    "anchor": "MM1-EXT-11"
   },
   {
     "id": "M1-EXT-12",
     "title": "Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "MSDF, RVT",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "Every consumer of M1's SoA Transform component — skinning, indirect draw,",
+    "depends_on": [
+      "M1-EXT-30",
+      "M1-EXT-31",
+      "M1-EXT-32",
+      "M1-EXT-33",
+      "M1-EXT-34",
+      "M1-EXT-35",
+      "M1-EXT-36",
+      "M1-EXT-37",
+      "M1-EXT-38"
+    ],
     "depended_by": [],
-    "line": 2122,
-    "anchor": "M1-EXT-12"
+    "line": 2060,
+    "anchor": "MM1-EXT-12"
   },
   {
     "id": "M1-EXT-13",
     "title": "Render-Graph Barrier Topological Sorter",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "Render-Graph Barrier Topological Sorter",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2396,
-    "anchor": "M1-EXT-13"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2329,
+    "anchor": "MM1-EXT-13"
   },
   {
     "id": "M1-EXT-15",
     "title": "GPU Query Pool Timestamp Profiler",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "GPU",
-    "tldr": null,
+    "tldr": "ts = QueryPool.GetTimestamp(pass); dt = ts_end - ts_start; ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2402,
-    "anchor": "M1-EXT-15"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2330,
+    "anchor": "MM1-EXT-15"
   },
   {
     "id": "M1-EXT-16",
     "title": "SoA Cache-Line Padding",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "stride = align(sizeof(T), 64); base = alloc(n*stride, 64). ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2415,
-    "anchor": "M1-EXT-16"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2338,
+    "anchor": "MM1-EXT-16"
   },
   {
     "id": "M1-EXT-17",
     "title": "Deterministic Secondary Command-Buffer Merger",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "merge(secondaries, order=M1-EXT-13) -> primary; stable sort by pass id. ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2428,
-    "anchor": "M1-EXT-17"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2346,
+    "anchor": "MM1-EXT-17"
   },
   {
     "id": "M1-EXT-18",
     "title": "Material-Batched Mesh-Pass Rendering",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "batch = GroupBy(materialId, draws); one bind per batch; ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2441,
-    "anchor": "M1-EXT-18"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2354,
+    "anchor": "MM1-EXT-18"
   },
   {
     "id": "M1-EXT-19",
     "title": "SoA Layout for Hot Components",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "array<T> pos; array<T> vel; iterate i linearly; no pointer chase. ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2454,
-    "anchor": "M1-EXT-19"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2362,
+    "anchor": "MM1-EXT-19"
   },
   {
     "id": "M1-EXT-20",
     "title": "EnTT Group-Backed Hot-Component Storage",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "group = reg.group<Pos,Vel>(); for(auto e: group) ...; ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2467,
-    "anchor": "M1-EXT-20"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2370,
+    "anchor": "MM1-EXT-20"
   },
   {
     "id": "M1-EXT-21",
     "title": "Buffer Device Address for Skinned-Mesh Animation Data",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
+    "tldr": "matrices: device_address; shader reads *((mat4*)addr + boneIdx); ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2480,
-    "anchor": "M1-EXT-21"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2378,
+    "anchor": "MM1-EXT-21"
   },
   {
     "id": "M1-EXT-22",
     "title": "CVar System (ImGui-Backed)",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "CVar, ImGui",
-    "tldr": null,
+    "tldr": "CVarRegistry::Get().Set(name, val); panel binds to registry; ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2493,
-    "anchor": "M1-EXT-22"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2386,
+    "anchor": "MM1-EXT-22"
   },
   {
     "id": "M1-EXT-23",
     "title": "Timeline Semaphores for Multi-Queue Sync",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "B",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
-    "depended_by": [],
-    "line": 2506,
-    "anchor": "M1-EXT-23"
+    "tldr": "wait(timeline, val); signal(timeline, val+1); ##### How It Works",
+    "depends_on": [
+      "M1-EXT-01"
+    ],
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2394,
+    "anchor": "MM1-EXT-23"
   },
   {
     "id": "M1-EXT-24",
     "title": "Multi-Threaded Secondary Command Buffer Recording",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "for(w in workers) w.Record(secondaries[w]); merge after (M1-EXT-17). ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2973,
-    "anchor": "M1-EXT-24"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2857,
+    "anchor": "MM1-EXT-24"
   },
   {
     "id": "M1-EXT-25",
     "title": "Descriptor Update Templates for Per-Frame Bindless Writes",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "vkUpdateDescriptorSetWithTemplate(ds, tpl, data); ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2986,
-    "anchor": "M1-EXT-25"
+    "depended_by": [
+      "M1-EXT-09"
+    ],
+    "line": 2865,
+    "anchor": "MM1-EXT-25"
   },
   {
     "id": "M1-EXT-26",
     "title": "Chunk-Boundary Spatial-Hash Transfer",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "on chunk unload: move cells in border into neighbor hash; re-key by cell. ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 2999,
-    "anchor": "M1-EXT-26"
+    "depended_by": [
+      "M1-EXT-53"
+    ],
+    "line": 2873,
+    "anchor": "MM1-EXT-26"
   },
   {
     "id": "M1-EXT-27",
     "title": "Uniform-Grid Spatial Hash Broad-Phase",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "cell = floor(p/cell); bucket; pairs = cells overlapping both AABBs. ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 3012,
-    "anchor": "M1-EXT-27"
+    "depended_by": [
+      "M1-EXT-53"
+    ],
+    "line": 2881,
+    "anchor": "MM1-EXT-27"
   },
   {
     "id": "M1-EXT-28",
     "title": "GPU Software Occlusion Rasterizer (HZB Feeder)",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "GPU, HZB",
-    "tldr": null,
+    "tldr": "raster occ proxies -> HZB mip0; feeds M4.6-EXT-06 downsample. ##### How It Works",
     "depends_on": [],
-    "depended_by": [],
-    "line": 3025,
-    "anchor": "M1-EXT-28"
+    "depended_by": [
+      "M1-EXT-53"
+    ],
+    "line": 2889,
+    "anchor": "MM1-EXT-28"
   },
   {
     "id": "M1-EXT-39",
     "title": "SpatialHash Query Has No Gameplay Consumer",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "SpatialHash",
-    "tldr": null,
+    "tldr": "M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).",
     "depends_on": [],
     "depended_by": [],
-    "line": 3038,
-    "anchor": "M1-EXT-39"
+    "line": 2897,
+    "anchor": "MM1-EXT-39"
   },
   {
     "id": "M1-EXT-40",
     "title": "No Batched Raycast (RayBatchQuery)",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "RayBatchQuery",
-    "tldr": null,
+    "tldr": "M1/M5/M6/M9. grep RayBatch → 0. Jolt CastRay collector = multi-hit-per-ray, not N independent rays.",
     "depends_on": [],
     "depended_by": [],
-    "line": 3055,
-    "anchor": "M1-EXT-40"
+    "line": 2909,
+    "anchor": "MM1-EXT-40"
   },
   {
     "id": "M1-EXT-41",
     "title": "Parent-Child Hierarchy",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1/M9. grep \"struct Parent\" → 0. Weapon sockets, camera-on-head, turrets need it.",
     "depends_on": [],
     "depended_by": [],
-    "line": 3072,
-    "anchor": "M1-EXT-41"
+    "line": 2921,
+    "anchor": "MM1-EXT-41"
   },
   {
     "id": "M1-EXT-42",
     "title": "EnTTCache Narrow Coverage",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1-EXT-09. Only Transform snapshot tested (Engine.cpp:391-412); other hot components not cached.",
     "depends_on": [],
     "depended_by": [],
-    "line": 3089,
-    "anchor": "M1-EXT-42"
+    "line": 2933,
+    "anchor": "MM1-EXT-42"
   },
   {
     "id": "M1-EXT-43",
     "title": "Action Map / ActionState Layer",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "ActionState",
-    "tldr": null,
+    "tldr": "M0-EXT-15/M11. Input.cpp polls continuous keyboard (good) but no ActionState/ActionMap, no gamepad hot-plug, no deadzone.",
     "depends_on": [],
     "depended_by": [],
-    "line": 3106,
-    "anchor": "M1-EXT-43"
+    "line": 2945,
+    "anchor": "MM1-EXT-43"
   },
   {
     "id": "M1-EXT-44",
     "title": "Procedural Camera Rig",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "C",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1/M2.7. FlyCamera.cpp = WASD+mouse-look only. Real player cam = virtual-head entity, semi-implicit Euler damped spring.",
     "depends_on": [],
     "depended_by": [],
-    "line": 3123,
-    "anchor": "M1-EXT-44"
+    "line": 2957,
+    "anchor": "MM1-EXT-44"
   },
   {
     "id": "M1-EXT-45",
     "title": "Input-Rebinding Persistence",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1/M11. No bind file / save of key mappings.",
     "depends_on": [],
     "depended_by": [],
-    "line": 3140,
-    "anchor": "M1-EXT-45"
+    "line": 2970,
+    "anchor": "MM1-EXT-45"
   },
   {
     "id": "M1-EXT-46",
     "title": "M1 Exit Criteria Don't Reflect Reality",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1 audit hygiene (J2). Criteria claim GPU indirect draw verified, but verified path is demo-only (M0-001).",
     "depends_on": [],
     "depended_by": [],
-    "line": 3157,
-    "anchor": "M1-EXT-46"
+    "line": 2982,
+    "anchor": "MM1-EXT-46"
   },
   {
     "id": "M1-EXT-47",
     "title": "EntityFactory Unknown-Component Warning",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "EntityFactory",
-    "tldr": null,
+    "tldr": "M1/M2. Prefab with UnregisteredComponent silently dropped. ##### Math",
     "depends_on": [],
     "depended_by": [],
-    "line": 3174,
-    "anchor": "M1-EXT-47"
+    "line": 2994,
+    "anchor": "MM1-EXT-47"
   },
   {
     "id": "M1-EXT-48",
     "title": "Generational Table Headroom Check",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1. EnTT cap = 1,048,576 (2^20, issue #197). ##### Math",
     "depends_on": [],
     "depended_by": [],
-    "line": 3188,
-    "anchor": "M1-EXT-48"
+    "line": 3003,
+    "anchor": "MM1-EXT-48"
   },
   {
     "id": "M1-EXT-49",
     "title": "EnTTCache Round-Trip Test",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1-EXT-09. Only Transform tested. ##### Math",
     "depends_on": [],
     "depended_by": [],
-    "line": 3202,
-    "anchor": "M1-EXT-49"
+    "line": 3012,
+    "anchor": "MM1-EXT-49"
   },
   {
     "id": "M1-EXT-50",
     "title": "Action Map Persistence Format",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M1/M11. Bind file schema. ##### Math",
     "depends_on": [],
     "depended_by": [],
-    "line": 3216,
-    "anchor": "M1-EXT-50"
+    "line": 3021,
+    "anchor": "MM1-EXT-50"
   },
   {
     "id": "M1-EXT-51",
     "title": "GPU Memory Budget & Defrag",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "GPU",
-    "tldr": null,
+    "tldr": "M1. No GPU mem budget. ##### Math",
     "depends_on": [],
     "depended_by": [],
-    "line": 3230,
-    "anchor": "M1-EXT-51"
+    "line": 3030,
+    "anchor": "MM1-EXT-51"
   },
   {
     "id": "M1-EXT-52",
     "title": "Shader Variant/Permutation Manager",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
+    "tldr": "M2. grep CharacterController|CharacterBody → 0. Jolt has Character but nothing wires it to input.",
     "depends_on": [],
     "depended_by": [],
-    "line": 3241,
-    "anchor": "M1-EXT-52"
+    "line": 3036,
+    "anchor": "MM1-EXT-52"
   },
   {
     "id": "M1-EXT-53",
     "title": "(provisional) Chunk Boundary Entity Transfer Queue",
-    "cluster": "B — spatial / ecs storage",
+    "cluster": "D",
     "tags": "general",
-    "tldr": null,
-    "depends_on": [],
+    "tldr": "M0/M1. InstanceData instances(100) (:91), indirect sized 100 (:107,293), occlusion pool 100 (:491), pc.instanceCount=100 (:592).",
+    "depends_on": [
+      "M1-EXT-06",
+      "M1-EXT-27",
+      "M1-EXT-26",
+      "M1-EXT-28"
+    ],
     "depended_by": [],
-    "line": 4940,
-    "anchor": "M1-EXT-53"
+    "line": 4730,
+    "anchor": "MM1-EXT-53"
   }
 ]
