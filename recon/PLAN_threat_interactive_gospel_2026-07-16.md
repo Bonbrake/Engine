@@ -79,7 +79,7 @@ R13 Vendor-agnostic IQ; upscaling = fallback not primary.
   Beer-Lambert only; no forward skin/hair pass; TI quote is transcript-primary, not a
   citable external spec rule). Re-classified from false-COVERED.
 - T10: emissive-in-basepass — M4 base-pass convention (not an EXT).
-- T12: POM surface detail — append to M4.5-EXT-20.
+- T12: POM surface detail — [GAP] append to M4.5-EXT-20.
 - R1/R7/R8/R9/R10/R12/R13: COVERED — confirm only, don't re-add.
 - VERIFIER: recon/ti_gate.py (merged gate) must pass (exit 0) before calling this plan "done".
 
@@ -152,8 +152,8 @@ T11 **Dynamic/FOV-culled shadow resolution** (not fixed huge maps). "optimizing 
     resolutions with dynamic resizing" + "screen aware shadow map FOV culling." →
     M4.5-EXT-13 tightening (partially: VSM exists, dynamic-res not explicit). [PARTIAL]
 T12 **Parallax occlusion mapping for base-pass surface detail** (no extra depth). "renders
-    parallax occlusion detail on top of existing geometry." → M4.5-EXT-19/20 material.
-    [PARTIAL: BRDF exists, POM not explicit] → add to M4.5-EXT-20.
+    parallax occlusion detail on top of existing geometry." → [PARTIAL] M4.5-EXT-20
+    (BRDF exists, POM not explicit — add POM to M4.5-EXT-20 per gap draft).
 T13 **Motion blur / film grain / filmic blur = TI calls them deficiency-hiding.** "Epic
     tries to hide… deficiencies with motion blur, tons of film grain, and blurry filmic
     filters." → post chain must NOT rely on blur to mask shading errors. R11 tonemapper
