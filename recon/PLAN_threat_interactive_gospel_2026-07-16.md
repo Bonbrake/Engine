@@ -29,17 +29,20 @@ R1  Diffuse >= Burley, physically derived.
     SPEC: COVERED — M4.5-EXT-20 "Diffuse + Translucent Medium Light (Burley/Kalisto
     Diffuse, Beer-Lambert Extinction)" explicitly ships Burley, branded Kalisto, with
     "never ship Lambert" in its reference impl. Confirm only (no gap).
-R2  No base-color precision crush (24->16 bit fault).  [GAP — no EXT guarantees this]
+R2  No base-color precision crush (24->16 bit fault).  [GAP]
+    SPEC: GAP — M4.5-EXT-22 (new GBuffer base-color full-precision mandate).
     Impl: GBuffer base-color at full precision through lighting stage.
 R3  Depth prepass = depth ONLY, no textures/shaders.
     SPEC: PARTIAL — M4.5-EXT-08 (HZB/cluster occlusion culling) exists; the explicit
     "prepass binds zero material textures / no pixel-shader prepass draws" RULE is a GAP.
-R4  Prepass uses single BC4 mask, not 21 textures.  [GAP — no EXT exists]
+R4  Prepass uses single BC4 mask, not 21 textures.  [GAP]
+    SPEC: GAP — M4.5-EXT-23 (new prepass-discipline guard EXT, with R3).
     Impl: hard budget (1 BC4 max for opaque prepass inputs).
 R5  BC1 king / BC5-normal expensive / BC7~uncompressed.
     SPEC: PARTIAL — M4-EXT-25 + M4-EXT-89 (BC7/ASTC) exist. Add BC1/BC4 path +
     BC5-normal caveat (BC5-normal costly; use only when BC1 artifacts proven).
-R6  3–4 texture samples/material max (memory-bound, not ALU).  [GAP — no EXT exists]
+R6  3–4 texture samples/material max (memory-bound, not ALU).  [GAP]
+    SPEC: GAP — M4-EXT-91 (new material sample-cap EXT).
     Impl: material compiler enforces sample cap; spend ALU headroom on shading.
 R7  MSAA viable in deferred if prepass clean; TAA = conservative 1–2 frame clamp only.
     SPEC: COVERED — M4.5-EXT-11 (Multi-Sampled Depth Derivative Silhouette Reconstruction
@@ -54,7 +57,8 @@ R9  Virtual textures: clean or don't (noisy VT triples cost).
 R10 Hero/translucent = forward, not deferred.
     SPEC: COVERED — M4.5-EXT-20 (Beer-Lambert Translucent Medium Light Extinction) is the
     forward-path translucency system. Make explicit: hero/translucent = forward.
-R11 Ship proper tonemapper (default inadequate).  [GAP — no tonemapper EXT exists]
+R11 Ship proper tonemapper (default inadequate).  [GAP]
+    SPEC: GAP — M4.5-EXT-33 (new filmic/ACES tonemapper EXT).
     Impl: add filmic/ACES-style tonemapper EXT; not engine default.
 R12 LOD preserves silhouette + material identity.
     SPEC: COVERED — M4-EXT-02 (Async Quadric Meshlet Decimation LODs) + M4-EXT-05 (Edge
