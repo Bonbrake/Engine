@@ -11,10 +11,9 @@
 
 ## File map
 - `llms.txt` — canonical AI index (H1 + summary + per-milestone file lists). Start here.
-- `M0.md` … `M13.md` — one file per milestone (incl. `M2.6`, `M2.7`, `M2.8`, `M2.9`, `M4.5`, `M4.6`). Each has a collapsible block index at top + `### Cluster` dividers.
-- `APPENDIX_K.md` / `APPENDIX_L.md` / `APPENDIX_M.md` — AAA-parity gap-fill EXT blocks (K/L/M style: bold subsections, not the M 5-subsection skeleton).
+- `M0.md` … `M13.md` — one file per milestone (incl. `M4.5`). Each has a collapsible block index at top + `### Cluster` dividers. Sub-milestones (M2.6/2.7/2.8/2.9, M4.6, M5.1–5.4, M8.5–8.7) were merged into their parent files in Phase 9.
+- `APPENDICES.md` — merged AAA-parity gap-fill (K/L/M) EXT blocks + reference/protocol index.
 - `00_PROTOCOL.md` — changelogs, how-to-work, specificity protocol, engineering pillars, budgets. Read ONCE.
-- `APPENDICES.md` — §5.x reference prose, not-yet-merged, Part A, close-out.
 - `_v79_presplit.md` — untouched backup of the original 19.5k-line master spec.
 
 ## Editing rules (keep it agent-readable)

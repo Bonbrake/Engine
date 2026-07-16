@@ -1892,3 +1892,1092 @@ Saves stay small and load fast even with a huge explored world — the 12 GB RAM
 # Extended Systems Library — Appendix EXT (merged 2026-07-14)
 
 *225 gap entries merged from `ZombieEngine_Milestone_Gaps.md`, renumbered to next-free per-milestone EXT IDs. Each block notes its original gap-file id. Fact-checked vs this spec (0 ID collisions at merge time).*
+
+## APPENDIX_K
+
+#### [K-EXT-01] Skeletal Upper-Body Action-Layering Override (fleshes §5.8 "Upper-Body Animation Layer Override")
+
+**Systems Touched:** M5.2 procedural animation pipeline, M2.7 combat/reload state machine. Slots directly into the pose chain M5.2 already documents but left open: Motion Matching → **Upper-Body Override (this)** → Procedural Rig → Physics Post-Process → Final Pose.
+
+**How It Works:** A spine-root bone index splits the skeleton into a lower-body half (owned by Motion Matching's locomotion output) and an upper-body half (owned by whatever action state — reload, aim, melee swing — is currently active). Every tick, bones at and above the spine root are lerped from the base locomotion pose toward the action pose by a per-state blend weight; bones below stay untouched, so sprinting legs never freeze when the player reloads.
+
+**Reference Implementation**
+
+```cpp
+// Blends upper-body action transforms over lower-body Motion-Matching output via an explicit spine-root bone index.
+void ApplyUpperBodyOverride(std::span<Transform> basePose, std::span<const Transform> actionPose,
+                             float weight, uint32_t spineRootIdx) {
+    for (size_t i = spineRootIdx; i < basePose.size(); ++i)
+        basePose[i] = Transform::Lerp(basePose[i], actionPose[i], weight);
+}
+```
+
+`weight` ramps 0→1 over ~0.15s on action entry/exit (critically-damped spring, reusing M5.2's existing spring-damper convention) rather than snapping, so transitions don't pop.
+
+**Player-Facing Impact:** Entities reload, aim, and melee while sprinting/strafing without needing a pre-baked clip for every locomotion × action combination.
+
+
+#### [K-EXT-02] Continuum-Fluid Holling Type II Horde Pressure Solver (fleshes §5.8 "Continuum-Fluid Horde Density Pressure Field")
+
+**Systems Touched:** M5.4 AI Director / horde steering, M3 structural graph (barricades/doors).
+
+**Math:** Non-linear saturating pressure curve (Holling Type II functional response) instead of a linear density→force scale, so pressure plateaus realistically at extreme crowd density rather than growing unbounded:
+
+`P(density) = (F_max · density) / (K_half + density)`
+
+**How It Works:** Reuses M1-EXT-08's spatial hash to bucket zombie entities per cell and compute a local density scalar per cell each tick (staggered, same convention as other spatial-hash queries in the doc). `P(density)` converts that scalar into a directional force applied against `[M3]`'s structural graph nodes (barricades/doors), so a packed horde crushes/breaks structures with cumulative physical weight instead of per-agent capsule-to-capsule contact tests (which don't scale to thousands of overlapping entities).
+
+**Reference Implementation**
+
+```cpp
+// Scales crowd pushing pressure non-linearly (Holling Type II) so density saturates instead of growing unbounded.
+float ComputeHordePressure(float density, float maxForce, float halfSaturation) {
+    return (maxForce * density) / (halfSaturation + density + 1e-5f);
+}
+```
+
+**Player-Facing Impact:** Thousands of overlapping zombies visibly push and crush barricades with real weight instead of clipping through each other silently.
+
+
+#### [K-EXT-03] Non-Linear Dual-Clutch Transmission Controller (fleshes §5.8 "Dual-Clutch Transmission RPM/Torque Controller")
+
+**Systems Touched:** M9 vehicle physics tick (Jolt constraint solver), consumes `StructuralFatigue` wear (`[M3-EXT-06]`) as an input to slip severity.
+
+**How It Works:** Engagement point (0 = fully disengaged clutch, 1 = fully locked) is smoothstepped rather than linear, so slip drops off sharply near full engagement instead of a mechanical-feeling straight ramp; a salvaged/worn gearbox (higher `dynamicSlip`, fed from the vehicle's fatigue accumulator) sputters and loses torque efficiency at the same engagement point a fresh gearbox would handle cleanly.
+
+**Reference Implementation**
+
+```cpp
+// Computes clutch-slip torque efficiency inside the fixed-timestep vehicle physics tick.
+void StepGearClutch(float dynamicSlip, float engagementPoint, float& outTorqueEfficiency) {
+    outTorqueEfficiency = std::clamp(
+        1.0f - (dynamicSlip * (1.0f - std::smoothstep(0.2f, 0.8f, engagementPoint))), 0.15f, 1.0f);
+}
+```
+
+**Player-Facing Impact:** Older, salvaged vehicles feel heavier and slip/sputter under load instead of every car handling identically.
+
+
+#### [K-EXT-04] Isolated Micro-Population ODE Survivor Drift Simulator (fleshes §5.8 "Offline Time-Lapse Population Drift Simulator")
+
+**Systems Touched:** M8.5 Faction Population ODEs (extends the existing per-faction-scalar hourly update, not a second population model), Appendix D lone-survivor/dead-camp spawning.
+
+**Math:** Logistic growth against a per-region carrying capacity, minus a disease-kill term sourced from the existing SEIR severity value M8.5 already tracks — no new epidemiological model, this just reuses the SEIR output as the kill-rate input:
+
+`dP/dt = r·P·(1 - P/K) - k_disease·P`
+
+**How It Works:** Runs once per in-game hour per hibernated (unrendered) sector, same cadence M8.5 already uses for faction scalars. When the player re-enters a sector, the accumulated population delta resolves into concrete outcomes: growth spawns a new Lone Survivor via Appendix D's existing spawn path, population collapsing to ~0 flips the sector to a Dead Camp (also an existing Appendix D path) with cause-of-death tagged from whichever term dominated the ODE (disease vs. starvation vs. raid, if a raid event fired separately).
+
+**Reference Implementation**
+
+```cpp
+// Advances a hibernated sector's survivor population on an hourly tick using logistic growth minus SEIR-driven mortality.
+void AdvanceRegionalPopulation(float growthRate, float carryingCapacity, float diseaseKillRate, float& population) {
+    population = std::max(0.0f,
+        population + (growthRate * population * (1.0f - population / carryingCapacity) - diseaseKillRate * population));
+}
+```
+
+**Player-Facing Impact:** Sectors you haven't visited in days feel like they kept living without it — a family may have grown, moved on, or died out entirely by the time you return.
+
+
+#### [K-EXT-05] Dynamic SVO Irradiance Cache Injection Pass (fleshes §5.8 "Dynamic Voxel GI Cache Injection Pass")
+
+**Systems Touched:** Existing Tier-1 Sparse Voxel Octree GI fallback (M4.5), M3 structural-destruction events.
+
+**How It Works:** The SVO GI grid already updates lazily as the sun moves; this adds the missing write path for *structural* changes — when `[M3]` destroys a wall panel, the newly-exposed voxel cells (previously occluded, now open to sky/interior light) are marked dirty and re-sampled on the next lazy GI pass instead of waiting for the sun-angle bucket to change naturally, so a blown-open wall lets light in the same tick, not several in-game minutes later.
+
+**Reference Implementation**
+
+```glsl
+// Samples cached SVO irradiance at a world position; called both by shading and by the dirty-cell re-injection pass.
+vec4 SampleSvoIrradiance(vec3 worldPosition, float voxelScaleSize) {
+    ivec3 voxelCoord = ivec3(floor(worldPosition / voxelScaleSize));
+    return textureLod(SvoVolumeTextureTarget, vec4(vec3(voxelCoord) / 128.0, 0.0).xyz, 0.0);
+}
+```
+
+**Player-Facing Impact:** Blowing a hole in a wall visibly lets light flood the room immediately instead of on a multi-minute GI-refresh delay.
+
+
+#### [K-EXT-17] Procedural Mesh Grammar Kitbasher & Micro-Detail Synthesizer Pipeline (fleshes §5.8 "Procedural Mesh Kitbasher Pipeline")
+
+**Systems Touched:** M4 chunk stream-in (character/clothing/attachment assembly), consumes the same primitive-SDF + Dual Contouring extraction path `[M4-EXT-13]`'s cave carving and `[K-EXT-10]`/`[K-EXT-12]`'s fracture/weapon-blend systems already use — one extractor, this is a fourth caller, not a second mesher.
+
+**How It Works:** A deterministic split-grammar (L-system) runs on chunk stream-in, combining primitive SDF shapes (cylinders, capsules, tapered boxes) along procedural growth axes to assemble clothing, gear, and weapon-furniture geometry from a handful of grammar rules instead of hand-modeled meshes. Micro-surface detail (scratches, bevels, fabric-weave frequency) is added via the same domain-warped OpenSimplex2 technique the terrain micro-detail pass already uses (§4's `detail(p)` warped-noise pattern), applied to the SDF before extraction so normals stay mathematically exact through Dual Contouring rather than being faked with a normal map. Seeded via the item system's existing Two-Tier archetype/instance split — grammar rule selection is archetype-seeded (permanent per item type), micro-detail warp phase is instance-seeded (per-item variation).
+
+**Reference Implementation**
+
+```cpp
+// Spawns structural geometric primitive rings down a procedural vector axis — barrel segments, gear rails, clothing folds.
+void GenerateCylinderGrammar(std::vector<glm::vec3>& verts, glm::vec3 start, glm::vec3 dir, float r, uint32_t segments) {
+    for (uint32_t i = 0; i < segments; ++i)
+        verts.push_back(start + dir * (float)i + glm::vec3(cosf((float)i) * r, 0.0f, sinf((float)i) * r));
+}
+```
+
+Grammar output SDF is triangulated through the shared Dual Contouring extractor (same call site as `[K-EXT-10]`/`[K-EXT-12]`), then decimated through `[M4-EXT-02]`'s existing quadric-error LOD pass — no new LOD system for kitbashed geometry.
+
+**Player-Facing Impact:** Characters, clothing, and weapon furniture read as visually detailed and non-repetitive without a single hand-modeled asset, completing the last of the six formerly-stubbed §5.8 systems.
+
+
+### K.2 — Genuinely new systems (absent from v68)
+
+#### [K-EXT-06] Soft-Body Vertex Collision Vehicle Deformation
+
+**Systems Touched:** M9 vehicle physics (Jolt), consumes/feeds `StructuralFatigue` (`[M3-EXT-06]`) so a deformed panel and a fatigued panel are the same underlying wear state, not two parallel damage models.
+
+**How It Works:** On collision, impulse magnitude and contact point are used to displace hull vertices within a falloff radius, softened by a hardness term (steel deforms less than sheet-aluminum trim for the same impulse — `hardness` reads the same material-tag table `[M9]`'s friction/salvage systems already use). This is a *visual + collision-shape* deformation layer sitting on top of the existing fatigue/salvage accumulator — it does not replace `TickFatigue()`, it renders what that accumulator implies.
+
+**Reference Implementation**
+
+```cpp
+// Deforms hull vertices based on impact impulse; radius/hardness pulled from the same per-material table [M9] friction uses.
+void ApplyImpactDeformation(std::span<glm::vec3> vertices, glm::vec3 impactPoint, glm::vec3 impulse,
+                             float radius, float hardness) {
+    for (auto& v : vertices) {
+        float d = glm::distance(v, impactPoint);
+        if (d < radius) v += impulse * (1.0f - (d / radius)) * (1.0f / (hardness + 1e-5f));
+    }
+}
+```
+
+Vertex buffer is CPU-side-mutable per-instance (not the shared procedural template), then re-uploaded through the existing chunk/instance upload path — no new GPU resource type.
+
+**Player-Facing Impact:** Crashes visibly crumple the hull instead of the car staying rigid while an invisible fatigue number ticks down.
+
+
+#### [K-EXT-07] GPU-Driven Broadphase Spatial Hash Compute Pipeline
+
+**Systems Touched:** Complements (does not replace) `[M1-EXT-08]`'s CPU-side spatial hash quadtree — this is the GPU compute path used specifically for horde-scale (thousands of entities) proximity queries; `[M1-EXT-08]` remains canonical for lower-volume CPU-side queries (player interactions, vehicle contacts).
+
+**How It Works:** A compute shader packs each entity's 2D cell coordinate into a flat hash once per frame, replacing per-entity CPU registry walks. Flocking/crowd-pressure/perception systems (M5.1, M5.3, K-EXT-02 above) read the resulting hash buffer instead of touching the CPU-side registry for bulk horde queries.
+
+**Reference Implementation**
+
+```glsl
+// Packs each entity's 2D cell coordinate into a flat hash for fast GPU-side bucket sorting.
+layout(local_size_x = 64) in;
+void main() {
+    uint id = gl_GlobalInvocationID.x;
+    ivec2 cell = ivec2(floor(EntityPositions[id].xz / 2.0)); // 2.0m cell stride
+    EntityCellHashes[id] = (uint(cell.x) & 0xFFFFu) | ((uint(cell.y) & 0xFFFFu) << 16);
+}
+```
+
+**Player-Facing Impact:** Keeps flocking/crowd-pressure/perception responsive when thousands of zombies are active simultaneously, protecting the 5.0ms AI frame budget.
+
+
+#### [K-EXT-08] Real-Time Procedural Friction & Impact Audio Synthesizer
+
+**Systems Touched:** M6 hardware-accelerated audio, reads the same `SurfaceFrictionSample`/material-tag data `[M9]` vehicle friction and `ResolveFriction()` already resolve — one shared friction value drives both physics and audio, not two independent friction reads.
+
+**How It Works:** Instead of streaming pre-recorded tire-screech/engine/impact clips, waveforms are synthesized per-frame from slip ratio and material impedance — modulated white noise for tire slip, tied directly to the same slip-ratio scalar `[M9]`'s traction chain already computes.
+
+**Reference Implementation**
+
+```cpp
+// Synthesizes tire-slide audio from the same slip ratio [M9]'s ResolveFriction() chain already produces.
+float SynthesizeTireScreech(float slipRatio, float materialImpedance, float time) {
+    float whiteNoise = static_cast<float>(rand() % 2000 - 1000) / 1000.0f;
+    return sinf(440.0f * 3.14159f * time * (1.0f + slipRatio)) * whiteNoise
+           * std::clamp(slipRatio * materialImpedance, 0.0f, 1.0f);
+}
+```
+
+**Player-Facing Impact:** Zero runtime audio-clip disk footprint for tire/engine/impact sound, consistent with the doc's zero-hand-authored-asset pillar.
+
+
+#### [K-EXT-09] Reaction-Diffusion Forensic Skin & Tissue Decal Projector
+
+**Systems Touched:** M6.5 GPU particle/VFX, writes into the same RVT terrain/object overlay pages `[M4.5-EXT-07]` (skid marks) and blood-spatter (`[M6.5]`) already use — a third writer into that existing overlay system, appended to `ResolveFriction()`'s ordered-writer front-matter fix (audit item #3) so it doesn't reintroduce an order-dependent conflict.
+
+**How It Works:** A localized Gray-Scott reaction-diffusion solver runs per-decal-region to simulate decomposition/bruising/drying-blood patterns over real elapsed time (reusing the same Arrhenius-style elapsed-Δt pattern M7's sector-hibernation degradation already uses), rather than a static blood-decal texture.
+
+**Reference Implementation**
+
+```glsl
+// One Gray-Scott reaction-diffusion step, evaluated per forensic decal region over real elapsed time.
+float StepReactionDiffusion(float u, float v, float feed, float kill, float lapU) {
+    return u + (0.2 * lapU - u * v * v + feed * (1.0 - u));
+}
+```
+
+**Player-Facing Impact:** Wound/decomposition/blood-pool weathering reads as context-aware (time since death, ambient temp) instead of a fixed decal.
+
+
+#### [K-EXT-10] Dynamic Memory-Pooled Implicit Surface Fracture Solver
+
+**Systems Touched:** M3 macro-destruction & structural graphs — this is the SDF-native companion to M3's existing structural-graph fracture logic, used specifically for character/vehicle volumes that are SDF-authored rather than pre-baked destructible meshes.
+
+**How It Works:** On a high-velocity Jolt impact, an analytical cutting plane (impact normal + offset) is intersected against the entity's SDF via a max() combine, producing an instant, exact fracture surface with no pre-baked broken-mesh variant needed.
+
+**Reference Implementation**
+
+```cpp
+// Slices an entity's volume SDF against an analytical cutting plane derived from impact normal/offset.
+float SampleSdfFracturedSlice(glm::vec3 point, float baseSdfSample, glm::vec3 planeNormal, float planeOffset) {
+    float dPlane = glm::dot(point, planeNormal) - planeOffset;
+    return std::max(baseSdfSample, dPlane);
+}
+```
+
+Resulting sliced SDF is triangulated through the same Dual Contouring extractor `[M4-EXT-13]`'s cave-carving already uses — one extractor, two callers, not a second mesher.
+
+**Player-Facing Impact:** Context-aware zombie dismemberment and sheared structural pieces with no pre-baked broken-art variants.
+
+
+#### [K-EXT-11] Modular Vehicle Chassis Assembly Grammar Engine
+
+**Systems Touched:** M9 vehicle system — this is the missing geometry-generation step feeding M9's existing physics/fatigue/friction systems, which all currently assume a chassis exists but never specify how one is built.
+
+**How It Works:** A structural grammar spawns frame rails, wheel-axis mounts, and engine-block volumes as primitive SDF segments down a procedural vector axis, seeded via the same Two-Tier archetype/instance seed split the item system (§ "Global Archetype Manifest") already uses — chassis identity is a permanent per-archetype seed, wear/scavenge state is a per-instance seed layered on top. ~90% of spawned chassis roll as non-functional wrecks (`StructuralFatigue` already crossing its yield threshold at spawn time) suitable only for part harvesting, consistent with the doc's scarcity design for functional vehicles.
+
+**Reference Implementation**
+
+```cpp
+// Spawns structural frame rail primitives down a procedural vector axis, seeded from the archetype/instance split.
+void BuildChassisRail(std::vector<glm::vec3>& vertices, glm::vec3 origin, glm::vec3 direction, float width, uint32_t segments) {
+    for (uint32_t i = 0; i < segments; ++i)
+        vertices.push_back(origin + direction * (float)i + glm::vec3(width, 0.0f, 0.0f));
+}
+```
+
+**Player-Facing Impact:** Hundreds of distinct, functional car/truck/military-chassis categories generated purely from code + seeds, with realistic scavenging (most wrecks are parts, not drivable finds).
+
+
+#### [K-EXT-12] SDF Boolean Prim-Blending Weapon Customization Fabricator
+
+**Systems Touched:** M8 itemization, downstream of the same Two-Tier archetype/instance weapon seed already canonical there — this is specifically the *attachment geometry* step (scopes/barrels/stocks) that seed system doesn't yet specify a mesh method for.
+
+**How It Works:** Smooth-minimum SDF blending fuses attachment primitives onto a base weapon SDF with a soft transition (no hard seam at the socket), rather than a hard union — the same Dual Contouring extractor used elsewhere in the doc triangulates the result.
+
+**Reference Implementation**
+
+```cpp
+// Smooth-minimum blend between two SDF distance samples, producing a seamless attachment-to-receiver transition.
+float SmoothSdfUnion(float d1, float d2, float k) {
+    float h = std::clamp(0.5f + 0.5f * (d2 - d1) / (k + 1e-5f), 0.0f, 1.0f);
+    return std::lerp(d2, d1, h) - k * h * (1.0f - h);
+}
+```
+
+**Player-Facing Impact:** Visually seamless, modular weapon customization built entirely from code, no attachment mesh assets.
+
+
+#### [K-EXT-13] Data-Table Modding & Hot-Reload Path
+
+**Systems Touched:** M0 asset toolchain — extends the existing shader hot-reload path (`VK_EXT_graphics_pipeline_library` / DXC, already in M0) to JSON data tables (weapon/vehicle archetypes, caravan/scarcity tuning, brand-tier tables), which currently have no equivalent live-reload path.
+
+**How It Works:** File resolution checks a prioritized mod directory before falling back to the built-in data directory; schema validation runs loudly at boot (or on file-change event) so a malformed mod JSON fails fast with a clear error instead of silently corrupting a table.
+
+**Reference Implementation**
+
+```cpp
+// Resolves a data-table path, preferring a mod-directory override over the built-in table of the same name.
+std::string ResolveModAssetPath(const std::string& filename, const std::string& modDir, const std::string& baseDir) {
+    return std::filesystem::exists(modDir + filename) ? (modDir + filename) : (baseDir + filename);
+}
+```
+
+**Player-Facing Impact:** Weapon/vehicle/scarcity tuning can be iterated via JSON edits without a full recompile — this is also the mechanism that lets *you* (JJ) add new guns/cars/systems fastest during development.
+
+
+#### [K-EXT-14] Property-Matching Material Synthesizer & Derived Item Stat Generator
+
+**Systems Touched:** M8 itemization — extends the existing material/mass/volume tags every scavenged item already carries for physics, adding a stat-derivation step so a new scrap item doesn't need a hand-written recipe-table entry.
+
+**How It Works:** Crafting validity and resulting stats are derived from raw material tag + mass/volume bounds rather than a lookup table keyed by item name, so any new item with a "metallic, high-density" tag automatically qualifies for weapon-action/armor-brace crafting without a new table row.
+
+**Reference Implementation**
+
+```cpp
+// Derives a component's kinetic-impact damage capacity from its material tag and density, no per-item table entry needed.
+float DeriveImpactDamage(uint32_t materialTag, float mass, float volume) {
+    return (materialTag == 1 /* Metal Class */) ? (mass / (volume + 1e-5f)) * 45.0f : mass * 12.0f;
+}
+```
+
+**Player-Facing Impact:** Adding a new scrap item to the game is a data-tag change, not a new crafting-recipe entry.
+
+
+#### [K-EXT-15] Hidden Outpost/Hideout Node Placement Selector
+
+**Systems Touched:** Appendix D (Lone Survivors & Dead Camps), M4 world generation — this is the placement-selection step Appendix D's spawn logic currently assumes but never specifies.
+
+**How It Works:** Candidate cells are scored from terrain slope, distance from major roads (reusing `[M4]`'s road graph, not a second distance field), and the existing socio-economic zoning tags M4 already assigns; low-slope, high-road-distance, low-commercial-zoning cells score highest and are selected deterministically from the world seed.
+
+**Reference Implementation**
+
+```cpp
+// Scores a candidate cell's fitness as a hidden hideout site from terrain slope, road distance, and zoning tag.
+float EvaluateHideoutFitness(float slope, float proximityToHighways, float zoningTagCommercial) {
+    return (slope < 0.15f && proximityToHighways > 300.0f) ? (1.0f - zoningTagCommercial) * 85.0f : 0.0f;
+}
+```
+
+**Player-Facing Impact:** Survivor safehouses and bandit nests land in believable, defensible, out-of-the-way spots instead of random placement.
+
+
+#### [K-EXT-16] Procedural Vector-Distance UI Canvas Renderer
+
+**Systems Touched:** M11 UI/HUD — this is a rendering-method addition (not a new HUD design) for whichever HUD elements M11 already specifies.
+
+**How It Works:** Menu/inventory/crosshair geometry is drawn as analytical distance functions (lines, rounded boxes, font curvature) evaluated per-pixel in a fragment shader, rather than image-texture UI assets, keeping M11 consistent with the doc's zero-hand-authored-asset pillar.
+
+**Reference Implementation**
+
+```glsl
+// Draws an analytical crosshair ring via implicit circle distance, resolution-independent at any display scale.
+float DrawImplicitCrosshairRing(vec2 screenPixelCoord, vec2 centerAnchor, float radius, float edgeThickness) {
+    float d = length(screenPixelCoord - centerAnchor) - radius;
+    return smoothstep(edgeThickness, 0.0, abs(d));
+}
+```
+
+**Player-Facing Impact:** Perfectly sharp UI at any resolution, zero UI texture-asset files.
+
+
+#### [K-EXT-18] Implicit SDF Building Interior Splitting Grammar Engine (fleshes M4's one-liner "Procedural Urban Detail (L-systems, BSP interiors)")
+
+**Systems Touched:** M4 procedural world generation, downstream of the macro-graph city layout pass (§4's top-down road/zoning graph) and upstream of `[K-EXT-17]`'s furniture/clothing kitbasher, which populates the rooms this creates.
+
+**How It Works:** A building's bounding SDF envelope (produced by M4's existing structure-placement pass) is recursively subtracted against room/corridor volumes using a BSP-style split grammar — each split picks an axis and offset from the building's zoning tag and footprint aspect ratio, carving hallways, room partitions, and stairwells as boolean subtractions rather than as a hand-placed floorplan. Door openings are punched as smaller box subtractions at each partition boundary and immediately get the base `DoorComponent` the front-matter audit (item 4) already mandates in M2.6/M3, so every procedurally-cut doorway is a real, breakable door from the moment it's generated, not a static gap. Runs at chunk stream-in, same cadence as the rest of M4's WFC/L-system content.
+
+**Reference Implementation**
+
+```cpp
+// Evaluates a subtraction between a building's bounding envelope and an interior room/corridor volume.
+float SampleSdfSubtractedRoom(glm::vec3 p, glm::vec3 bBox, glm::vec3 roomBox) {
+    float dStructure = glm::length(glm::max(glm::abs(p) - bBox, glm::vec3(0.0f)));
+    float dInterior  = glm::length(glm::max(glm::abs(p) - roomBox, glm::vec3(0.0f)));
+    return std::max(dStructure, -dInterior);
+}
+```
+
+Resulting interior SDF is triangulated through the same Dual Contouring extractor `[M4-EXT-13]` and `[K-EXT-17]` already call.
+
+**Player-Facing Impact:** Buildings have real, explorable, non-repetitive interiors — rooms, hallways, stairwells, breakable doors — generated entirely from grammar rules with zero hand-authored floorplans.
+
+
+#### [K-EXT-19] Volumetric Weather Fog & Light-Shaft Scattering Pass
+
+**Systems Touched:** M10 weather system (feeds off the existing meteorology density output `[M10-EXT-05]` already produces), M4.5's rendering pipeline — this is the general atmospheric-volume companion to `[M4.5-EXT-01]`'s flashlight-specific volumetric cone (that one is a single artificial light source with hand-tuned constants; this is the sun/moon through ambient weather density, reusing the sky LUT's Rayleigh/Mie coefficients from §M10 rather than a second scattering model).
+
+**How It Works:** A froxel (view-frustum-aligned voxel) grid accumulates in-scattered light along the camera's view rays each frame, sampling local fog/rain/dust density from M10's existing meteorology density field and the same `β_Rayleigh`/Henyey-Greenstein Mie phase function the sky LUT (§7.4xx) already defines — one shared scattering model driving both the sky color and the volumetric shafts, not two independent atmospheric systems. Sun/moon shadow-map occlusion tested per froxel produces visible light shafts through gaps in structures and canopy.
+
+**Reference Implementation**
+
+```glsl
+// Beer-Lambert transmittance step through a single froxel cell, using the same scatterCoeff the sky LUT already derives.
+float ComputeVolumetricTransmittance(float scatterCoeff, float stepLength, float localDensity) {
+    return exp(-scatterCoeff * localDensity * stepLength);
+}
+```
+
+Froxel accumulation buffer is consumed by the main G-buffer composite pass as a screen-space multiply, same insertion point as existing post-process passes.
+
+**Player-Facing Impact:** Fog, rain, and dust get real, sun-occluded light shafts and depth-cued haze instead of a flat fog color — the atmospheric depth AAA titles use for tone, especially through broken structures and forest canopy.
+
+
+#### [K-EXT-20] Ambient Traffic & Survivor-Vehicle Scarcity Spawn Orchestrator
+
+**Systems Touched:** M8.5 population/scarcity systems (extends the existing per-region loot-scarcity tagging, not a new economy), M5.4's road graph (the same graph `[M5-EXT-51]`'s faction caravans already route on) — this is specifically the walking-survivor / functional-vehicle encounter-density layer that sits alongside caravan routing, not a replacement for it.
+
+**How It Works:** A deterministic per-region Bernoulli roll (SplitMix64, reusing the doc's standard PRNG convention) gates whether a given lone-survivor spawn (Appendix D) or settlement-adjacent scavenge point also rolls a functional vehicle — weighted heavily toward zero, and boosted only near settlements/hideouts, so a lone survivor with a *working* car is a rare, memorable find rather than a routine one. Most ambient population is on foot; faction caravans (already covered by `[M5-EXT-51]`) are a separate, much rarer, unkillable macro-graph event layered on top of the same road network, not competing with this roll for the same spawn budget.
+
+**Reference Implementation**
+
+```cpp
+// Deterministic Bernoulli trial gating whether a lone-survivor/scavenge spawn also rolls a functional vehicle.
+bool RollScarcityVehicleSpawn(uint64_t& seed, float baseProbability, bool nearSettlement) {
+    seed = (seed ^ 0xBF5Dull) * 0x9E3779B97F4A7C15ull;
+    return (static_cast<float>(seed & 0xFFFFFFFFu) / 4294967295.0f) < (baseProbability * (nearSettlement ? 5.0f : 0.1f));
+}
+```
+
+Reads the same `CraftingStationComponent`/socio-economic zoning tags Appendix D and `[K-EXT-15]`'s hideout selector already use for placement context — one shared scarcity/zoning read path, not a parallel tagging system.
+
+**Player-Facing Impact:** Finding another living survivor is uncommon; finding one with a working car is a genuine rare event, distinct from the much rarer, unkillable armored caravans passing through on the highway graph.
+
+
+#### [K-EXT-21] Clustered Froxel Light Culling Pass (fleshes §5.8 "Dynamic Light Frustum & Occlusion Culler")
+
+**Gap this closes:** every other rendering system in this doc (Nanite-equivalent meshlet clustering, Lumen-equivalent SVO GI, Virtual Shadow Maps) already matches current-gen practice, but the doc repeatedly assumes "thousands of procedural lights" (muzzle flashes, headlights, fires, floodlights, `[M8-EXT-27]`'s electrical traps) get to a "tight GPU list" without ever specifying how — that phrase was §5.8-listed as a one-liner and never implemented. A per-object or per-tile linear light loop does not scale to that count; clustered/froxel light culling is the current standard fix (Forward+/clustered forward, the same family of technique DOOM Eternal and most UE5/Unity HDRP titles use for exactly this problem) and is the natural counterpart to this doc's existing clustered depth-bounds shadow voxelizer (`[M4.5-EXT-13]`).
+
+**Systems Touched:** M4.5 GPU render pipeline — sits between the M1 GPU-driven G-buffer pass and shading; consumed by every forward-lit surface (translucent particles, foliage) and by the deferred lighting pass. Shares its light list with `[K-EXT-08]`'s friction/impact audio synthesizer only in the sense that both read the same light-source entity set `[M0-EXT-01]`'s spatial hash already indexes — no new registry.
+
+**How It Works:** View frustum is subdivided into a 3D grid of froxels (screen-space tiles × exponential depth slices, matching `[M4.5-EXT-13]`'s existing depth-bounds slicing so the two systems share one depth-bucketing scheme instead of each computing its own). A compute pass assigns each active light to every froxel its bounding sphere overlaps, writing a per-froxel `(offset, count)` pair into an indirection buffer plus a flat light-index list. The shading pass then only evaluates lights in its fragment's froxel instead of the full scene light array.
+
+**Reference Implementation**
+
+```glsl
+// Pass 1: compute froxel index for a light's bounding sphere and mark it active in every overlapped froxel.
+layout(local_size_x = 64) in;
+void main() {
+    uint lightId = gl_GlobalInvocationID.x;
+    if (lightId >= activeLightCount) return;
+    vec3 viewPos = (View * vec4(Lights[lightId].worldPos, 1.0)).xyz;
+    float radius = Lights[lightId].radius;
+    ivec3 minCell = FroxelCellFromView(viewPos - vec3(radius), zSliceExpBase);
+    ivec3 maxCell = FroxelCellFromView(viewPos + vec3(radius), zSliceExpBase);
+    for (int z = minCell.z; z <= maxCell.z; ++z)
+        for (int y = minCell.y; y <= maxCell.y; ++y)
+            for (int x = minCell.x; x <= maxCell.x; ++x)
+                AppendLightToFroxel(ivec3(x, y, z), lightId); // atomic append into that froxel's index list
+}
+```
+
+**Player-Facing Impact:** Frame rate holds steady when a horde fight lights up with muzzle flashes, a burning building, and multiple vehicle headlights simultaneously, instead of the lighting pass becoming the frame-time bottleneck at exactly the moment the most is happening on screen.
+
+
+### K.3 — Explicitly not added (checked and rejected as duplicates)
+
+* **Sparse Virtual Texturing (SVT) Asset Page Allocator** (`update.txt` #3) — the doc's existing RVT terrain/object-overlay system plus `[M0-EXT-08]`'s bindless descriptor paging already cover the VRAM-budget problem this solves; a second sparse-paging texture system would fragment the VRAM budget table across two competing allocators instead of one.
+* **Two-Tier Deterministic Archetype Weapon Synthesizer** (`update.txt` #29) — the doc's existing "Global Archetype Manifest / Session Mutation Vector" split (§ near M8 itemization) is the same mechanism with more detail already worked out; adding #29 verbatim would reintroduce the exact split-state-variable problem the front-matter audit (item #2) already flags as a class of bug to avoid.
+* **Public-Domain Alphanumeric Lexicon** (`update.txt` #33) — exact duplicate of existing §5.9.
+* **Long-Range Faction Caravan Route Router** (`update.txt` #36) — already built as the M5.4/M8.5 convoy extension of `[M5-EXT-51]`'s road graph (see line-referenced note in the v68 merge audit); re-adding it here would stand up a second road-graph system, which that same audit explicitly warns against.
+* **Local SLM Diagnostic Text Generator (vehicle)** (`update.txt` #42) — exact duplicate of the existing `[M13-EXT]` `vehicle_diag` generator.
+* **Asynchronous PSO Warm-Up Engine** (`update.txt` #6) — the doc's existing `VK_EXT_shader_object` dynamic-stage-binding system (M4.5, removes PSO *stage* permutations) plus its Asynchronous Shader Compilation via `VK_EXT_graphics_pipeline_library` (§ Tooling & developer iteration loop, batched `vkCreateGraphicsPipelines` calls) already solve the same PSO-compile-stutter problem this proposes; a second warm-up scheme would compete with the shader-object path for the same stutter budget instead of sharing it.
+* **Temporal Super-Resolution & Subpixel Jitter Anti-Aliasing Pipeline** (`update.txt` #23) — M4.5's existing Adaptive Upscaling Interface (vendor-detected FSR/DLSS/XeSS) plus its per-pixel motion velocity buffer and Visibility Buffer silhouette AA reconstruction is a superset of what a custom TAA reprojection pass would add, and defers to vendor-tuned upscalers instead of a bespoke implementation the doc would then have to maintain against every future driver update.
+* **Structural Fatigue-Life Scrap Salvage Router** (`update.txt` #34) — the doc's existing `StructuralFatigue`/`TickFatigue()` Palmgren-Miner accumulator (canonical since `[M3-EXT-06]`) already drives the M9 vehicle-fatigue consumer path, and `[K-EXT-11]`'s ~90% non-functional-wreck spawn rate already implements this proposal's scarcity outcome; a second salvage-state router would be a fourth parallel wear model, exactly the class of bug the front-matter audit (item #6, `BarrelHeat`) already warns against for shared structs.
+
+## APPENDIX_L
+
+#### [L-EXT-01] Layered Multi-Mod Manifest & Load-Order Resolver
+
+**Systems Touched:** Extends `[K-EXT-13]`'s single-mod-directory `ResolveModAssetPath` from one override folder to an ordered stack of them — this is that system's direct successor, not a parallel loader.
+
+**How It Works:** Each mod is a folder containing a `manifest.json` (`{ "id": "...", "name": "...", "version": "...", "author": "...", "priority": int, "requires": ["other_mod_id@>=1.0"] }`) plus the same JSON table structure the base game already reads. At boot, all installed mod folders are sorted by `priority` (ties broken alphabetically by `id` for determinism) into an ordered stack; `requires` version constraints are checked before any table loads, and a mod whose dependency isn't satisfied is skipped with a loud boot-log entry rather than silently loading half-broken. Asset/table resolution walks the stack top-down, same lookup shape as `[K-EXT-13]`'s two-path check, just generalized to N paths instead of 2.
+
+**Reference Implementation**
+
+```cpp
+// Resolves a data-table path by walking the sorted mod stack top-down; falls through to the base game table if no mod overrides it.
+struct ModManifest { std::string id, version; int priority; std::vector<std::string> requires_; };
+
+std::string ResolveLayeredAssetPath(const std::string& filename, const std::vector<ModManifest>& sortedModStack,
+                                     const std::string& modsRootDir, const std::string& baseDir) {
+    for (const auto& mod : sortedModStack) { // already sorted by priority at boot
+        std::string candidate = modsRootDir + mod.id + "/" + filename;
+        if (std::filesystem::exists(candidate)) return candidate;
+    }
+    return baseDir + filename; // no mod overrides this file — base game table wins
+}
+```
+
+**Player-Facing Impact:** Multiple mods combine automatically instead of one mod silently clobbering another's files, with a deterministic, inspectable load order.
+
+
+#### [L-EXT-02] Boot-Time Conflict & Schema Validation Report
+
+**Systems Touched:** Runs immediately after `[L-EXT-01]`'s stack resolves, before any table is handed to gameplay systems — extends `[M0-EXT-08]`'s existing "validate loudly at boot" pattern already established for the single-mod-dir case in `[K-EXT-13]`.
+
+**How It Works:** For every JSON table key, if two or more mods in the stack define the *same* key (a weapon archetype hash, a scarcity-tuning constant), the winner (highest priority) is logged alongside every mod it overrode — visible in a `mod_conflicts.log`, not silently swallowed. Every loaded table is validated against its schema (same field-presence/type check `[K-EXT-13]` already runs for a single mod dir) before it reaches gameplay code; a malformed entry disables just that entry (falls back to the base game's version) and logs which mod/key failed, rather than crashing the whole table load.
+
+**Player-Facing Impact:** A broken or conflicting mod produces a readable log line pointing at exactly which mod and key caused it, instead of an unexplained crash or silently wrong behavior — the single biggest driver of "why won't my modlist load" support burden in every moddable game's community.
+
+
+#### [L-EXT-03] Namespaced Content ID Convention
+
+**Systems Touched:** Extends the existing Two-Tier archetype/instance hash seed (§ near M8 itemization) — this is the namespacing rule that seed system needs once more than one mod can define a `Hash64("Weapon_...")` string.
+
+**How It Works:** Every mod-defined content key is required to be prefixed with the mod's `manifest.json` `id` (e.g. `mymod.Weapon_RustySickle` rather than a bare `Weapon_RustySickle`) before it's hashed into the archetype seed. Base-game content has no prefix (implicitly `core.`). This is a pure naming convention enforced at `[L-EXT-02]`'s schema-validation step — it costs nothing at runtime and is the single change that lets two unrelated mods both add a "Weapon_Shotgun" without their `SplitMix64` archetype hashes colliding.
+
+**Player-Facing Impact:** Two mods can both add content with the same human-readable name without one silently overwriting the other's item in save files.
+
+
+#### [L-EXT-04] Modding API Surface Document (auto-generated, not hand-maintained)
+
+**Systems Touched:** M0 build step — a small tool run at the end of every engine build, not a runtime system.
+
+**How It Works:** A build-time script walks every JSON schema struct already declared across M8/M8.5/M9/M5.4 (weapon archetypes, vehicle chassis tables, scarcity-tuning constants, caravan route weights) and emits a single `MODDING_API.md` documenting every moddable field, its type, and its valid range — generated from the same schema `[L-EXT-02]` validates against, so the published documentation can never silently drift out of sync with what the engine actually accepts (a common failure mode in hand-maintained modding docs).
+
+**Player-Facing Impact:** Modders get accurate, always-current documentation of exactly what they can change, generated from the real schema instead of a stale wiki page.
+
+
+**Explicitly out of scope for this pass:** a Lua/scripting hook for mod *logic* (not just data) — the polymod-style research above confirms this is the natural next step once data-driven modding is solid, but it's a real scope increase (sandboxing, a scripting VM, an API-stability contract) that deserves its own milestone slot rather than being folded in here. Flagged in `[K-EXT]`-style form for a future pass: **Scripted Mod Hook Layer** — a sandboxed script VM (Wren or a stripped Lua build are the usual lightweight choices for a C++ engine this size) exposed read/write access to a deliberately small, versioned subset of ECS components, not the whole registry.
+
+## APPENDIX_M
+
+#### [M0-EXT-14] Asynchronous Hardware Compute Interleaver & Pipeline Lifecycle Matrix
+
+*(Renumbered from the update's `[M0-EXT-11]` — that ID already belongs to an unrelated existing M0 system.)*
+
+**Systems Touched:** M0 capability tiering, `[M4.5-EXT-07]` procedural texture synthesizer, M13 SLM worker threads.
+
+**How It Works:** Background compute work (texture synthesis, SLM inference) submits to a dedicated `VK_QUEUE_COMPUTE_BIT` queue instead of the primary graphics queue, coordinated with cross-queue timeline semaphores. This is a standard, well-supported Vulkan pattern on any GPU with an async compute queue family (your RTX 2070 Super has one) — it's the correct fix for background work stalling your 16.6ms/frame budget, and it's cheap to add now before more systems assume inline execution.
+
+**Player-Facing Impact:** Texture streaming and (if you keep M13) SLM inference stop causing frame hitches.
+
+
+#### [M12-EXT-05] Manifold Impulse History Rollback Buffer & Fixed-Point State Matrix
+
+**Systems Touched:** M12 networked co-op, `[M12-EXT-01]` bitstream delta encoder, `[M12-EXT-02]` loss sliding window, Jolt `PhysicsSystem`.
+
+**How It Works:** Maintains a 60-frame rolling history of physics state per dynamic entity. On a desync (checksum mismatch via xxHash64), rolls back to the last-agreed tick and re-integrates from there — applying corrective *impulses* through Jolt's normal solver rather than snapping transforms directly, which avoids the solver-island blowups a hard position reset causes. This is the same family of technique as rollback netcode in fighting games and Rocket League; it directly targets the tunneling/rubber-banding failure mode you're trying to prevent, and it's the right scope for M12 since you're already committed to deterministic co-op.
+
+**Note:** the update's fixed-point (32.32) coordinate conversion is worth keeping specifically for the *replicated/networked* state — don't convert your whole engine's `glm::dvec3` world space to fixed-point, only the data that crosses the wire.
+
+**Player-Facing Impact:** Dropped packets during a siege cause a brief correction instead of getting shoved through a wall or crate.
+
+
+#### [M5.2-EXT-13] Kinematic Character Ledge-Locking Coordinate Re-Basing Matrix
+
+**Systems Touched:** `JPH::CharacterVirtual`, M2.7 player controller, M3 structural graphs, M2.6 open-world foundations.
+
+**How It Works:** While anchored to a moving platform (vehicle bed, collapsing floor section), the character's position is tracked as a local double-precision offset from the platform's root transform rather than in absolute world space, then converted to camera-relative single precision only at the final draw step. This is the standard fix for jitter/sinking on moving platforms in large open worlds using floating-origin techniques — directly useful since you already have double-precision world space and moving structural pieces.
+
+**Player-Facing Impact:** No sliding/jitter while standing on a moving vehicle or a partially-collapsed floor.
+
+
+#### [M4.6-EXT-06] Compute-Driven Hierarchical Z-Buffer Downsampler
+
+**Systems Touched:** M4.5 GPU-driven pipeline, Hi-Z occlusion culling.
+
+**How It Works:** Generates Hi-Z mip chain levels in fewer dispatches using subgroup max operations to reduce across the local workgroup before writing each mip level, instead of one dispatch per mip.
+
+**Caveat, stated plainly:** the update's sample shader only actually resolves mip levels 0 and 1 within the subgroup reduction — extending it cleanly to 4+ levels needs either multiple subgroup-reduction passes or a workgroup shared-memory reduction, not shown. Treat the snippet below as the pattern, not a drop-in complete implementation.
+
+```glsl
+// Downsamples 2x2 depth texels into hzbMipLevels[0], then subgroup-reduces to mip 1.
+// Extending past mip 1 requires an additional shared-memory or subgroup pass per level — not shown here.
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(set=0, binding=0) uniform sampler2D srcDepth;
+layout(set=0, binding=1, r32f) writeonly uniform image2D hzbMipLevels[4];
+void main() {
+    ivec2 id = ivec2(gl_GlobalInvocationID.xy);
+    vec2 uv = (vec2(id*2)+0.5) / textureSize(srcDepth,0);
+    float maxZ = max(max(textureLod(srcDepth,uv,0).r, textureLodOffset(srcDepth,uv,0,ivec2(1,0)).r),
+                      max(textureLodOffset(srcDepth,uv,0,ivec2(0,1)).r, textureLodOffset(srcDepth,uv,0,ivec2(1,1)).r));
+    imageStore(hzbMipLevels[0], id, vec4(maxZ));
+    float sgMax = subgroupMax(maxZ);
+    if (subgroupElect()) imageStore(hzbMipLevels[1], id>>1, vec4(sgMax));
+}
+```
+
+**Player-Facing Impact:** Slightly cheaper occlusion culling; more headroom for the dense structural/horde geometry M3/M5 already ask for.
+
+
+#### [M5.4-EXT-08] Closed-Ecosystem Continuum-Fluid Horde Density Field
+
+**Systems Touched:** M1 spatial hash, M5.4 AI director, M4 procedural streaming.
+
+**How It Works:** Hordes fully outside the player's active radius are dropped from individual EnTT entities/Jolt bodies down to a coarse 2D density grid, advected with a simple diffusion step (`∂ρ/∂t = D∇²ρ + S_spawn − S_decay`) instead of simulating every zombie. When a density field crosses back into the active radius, the chunk seed (SplitMix64) reconstructs individual zombies deterministically. This is a real and appropriately-scoped technique — background/off-screen abstraction of large populations is standard practice for open-world games with big roaming crowds (broadly the same idea as "unloaded NPC" systems in other open-world titles), and it directly targets your stated 3,000-zombies-5km-away memory/CPU problem.
+
+**Player-Facing Impact:** Distant hordes still drift and grow/shrink over time instead of freezing, without the game paying full simulation cost for zombies you can't see.
+
+
+#### [M3-EXT-09] Async Structural Fatigue Continuum Accumulator
+
+*(Renumbered from the update's `[M3-EXT-08]` — that ID already belongs to your existing Palmgren-Miner fatigue struct definition.)*
+
+**Systems Touched:** M3 structural graph, `[M5.4-EXT-08]` horde continuum field, `StructuralFatigue` (canonical struct — no new fatigue variable created, per your existing dedup rule).
+
+**How It Works:** The counterpart to `[M5.4-EXT-08]`: hibernated/off-screen buildings under sustained siege pressure accumulate fatigue on a coarse per-region basis (reading the same `StructuralFatigue` fields, just updated at a lower tick rate and coarser spatial resolution while hibernated) rather than freezing structural state entirely while unloaded.
+
+**Player-Facing Impact:** A settlement you leave under siege can still be meaningfully more damaged when you return, without simulating every wall's stress every frame while you're away.
+
+
+#### [M1-EXT-12] Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
+
+**Systems Touched:** M1 MSDF font pipeline, `[M4.5-EXT-07]` texture synthesizer, Runtime Virtual Texture pages.
+
+**How It Works:** Rasterizes novel text (procedurally generated signage, or M13 SLM-generated text if you keep that system) into MSDF glyph pages on the fly via `VK_EXT_host_image_copy`, rather than requiring every possible string pre-baked into a font atlas.
+
+**Conditional note:** this only earns its place if you keep some form of runtime-generated text (dynamic signage, mission text). If you cut or shelve M13's text-generation features, this has no consumer and should wait.
+
+**Player-Facing Impact:** Signage/UI text can be generated at runtime instead of only from a fixed pre-authored string table.
+
+
+#### [M1-EXT-29] Double-Precision Authoritative Transform with Float Upload Cast
+
+##### Systems Touched
+Every consumer of M1's SoA Transform component — skinning, indirect draw,
+persistent-mapped staging upload (M1-EXT-05) — and directly feeds M2.6's
+origin-rebase plan.
+
+##### Math
+`Position_gpu = float3(Position_authority - Origin_current)`
+where `Position_authority` is `dvec3` and `Origin_current` is the active
+rebase anchor (world origin or camera-relative anchor, per M2.6's
+threshold policy).
+
+##### How It Works
+`Transform.Position` is authored and stored as `glm::dvec3` at the
+ECS/authority level — this is the single source of truth for world
+position. Once per frame, immediately before the persistent-mapped
+staging ring buffer upload (M1-EXT-05) already declared in M1, subtract
+the current origin/camera anchor from the double-precision position and
+cast the result to `glm::vec3` for the GPU-facing SoA array. No other
+system (skinning, indirect draw, culling) ever sees the double directly
+— they consume the already-cast float buffer, unchanged from how M1
+already declared them.
+
+##### Reference Implementation
+```cpp
+// Called once per frame per entity batch, immediately before staging upload.
+// Origin is the active M2.6 rebase anchor; Position is the dvec3 authority value.
+glm::vec3 CastPositionForGPU(const glm::dvec3& position, const glm::dvec3& origin) {
+    return glm::vec3(position - origin); // safe: difference is small post-rebase
+}
+```
+
+##### Player-Facing Impact
+World position never loses precision far from the origin, and the
+already-planned M2.6 rebase becomes a threshold-tuning pass instead of a
+rewrite of every GPU upload path that currently assumes float.
+
+
+#### [M1-EXT-30] Parent-Child Transform Hierarchy with Dirty-Flag Propagation
+
+##### Systems Touched
+Weapon/hand sockets (M2.7), camera-to-head attachment (this patch's
+M1-EXT-31), M9 vehicle-mounted turrets/parts, any future backpack/gear
+attachment.
+
+##### Math
+`WorldMatrix_child = WorldMatrix_parent · LocalMatrix_child`, recomputed
+only when `Dirty(child) ∨ Dirty(parent)`.
+
+##### How It Works
+Adds a `Parent{ entt::entity }` component and a cached `WorldMatrix`
+component. A per-frame dirty list collects any entity whose local
+transform changed or whose parent's `WorldMatrix` changed this frame.
+The list is processed in parent-before-child order (a shallow
+topological sort via `entt::registry::sort`, since hierarchies in this
+game are shallow — weapon→hand→body, camera→head, part→vehicle) so a
+child never reads a stale parent matrix. Untouched subtrees are skipped
+entirely.
+
+##### Reference Implementation
+```cpp
+struct Parent { entt::entity value{entt::null}; };
+struct WorldMatrix { glm::mat4 value{1.0f}; bool dirty{true}; };
+
+void PropagateDirty(entt::registry& registry, entt::entity e) {
+    auto& wm = registry.get<WorldMatrix>(e);
+    wm.dirty = true;
+    // Mark all direct children dirty too (children store their own Parent link;
+    // a reverse lookup or cached child-list keeps this O(children), not O(N)).
+}
+
+void RecomputeWorldMatrices(entt::registry& registry) {
+    // Sort so parents are processed before children (shallow depth in this game).
+    registry.sort<WorldMatrix>([&](entt::entity lhs, entt::entity rhs) {
+        return Depth(registry, lhs) < Depth(registry, rhs);
+    });
+    registry.view<WorldMatrix>().each([&](entt::entity e, WorldMatrix& wm) {
+        if (!wm.dirty) return;
+        if (auto* p = registry.try_get<Parent>(e); p && registry.valid(p->value)) {
+            wm.value = registry.get<WorldMatrix>(p->value).value * LocalMatrixOf(registry, e);
+        } else {
+            wm.value = LocalMatrixOf(registry, e);
+        }
+        wm.dirty = false;
+    });
+}
+```
+
+##### Player-Facing Impact
+Weapons stay glued to hands, cameras stay glued to heads, and vehicle
+parts stay glued to vehicles — without a redesign when M2.7/M9 need it.
+
+
+#### [M1-EXT-31] Procedural Spring-Damper Camera Rig
+
+##### Systems Touched
+First/third-person camera (M2.7), stamina/exertion system, builds
+directly on [M1-EXT-30]'s hierarchy.
+
+##### Math
+Semi-implicit (symplectic) Euler damped spring — velocity updates
+first, then position:
+`v ← v + (-k·x - c·v)·dt`
+`x ← x + v·dt`
+(Reversing this order is a known integration bug that makes the spring
+feel mushy/lose energy incorrectly — verified against standard
+semi-implicit Euler ordering.)
+
+##### How It Works
+The camera is parented (via M1-EXT-30) to a "virtual head bone" entity.
+Each tick, a target offset is computed from player velocity magnitude
+and current stamina/exertion value; the spring-damper integrates the
+camera's *actual* local offset toward that target. Zero animation
+authoring — it's a formula reacting to physics state.
+
+##### Reference Implementation
+```cpp
+struct CameraSpring { glm::vec3 offset{0}; glm::vec3 velocity{0}; float k{40.0f}; float c{8.0f}; };
+
+void UpdateCameraSpring(CameraSpring& spring, const glm::vec3& targetOffset, float dt) {
+    glm::vec3 x = spring.offset - targetOffset;
+    spring.velocity += (-spring.k * x - spring.c * spring.velocity) * dt; // velocity first
+    spring.offset += spring.velocity * dt;                               // then position
+}
+```
+
+##### Player-Facing Impact
+Head-bob/sway that scales with how hard the character is pushing itself
+— the "grounded, weighty" feel referenced against Dying Light — with no
+hand-keyed animation.
+
+
+#### [M1-EXT-32] RayBatchQuery Parallel Raycast Primitive
+
+##### Systems Touched
+Future parkour ledge-detection, AI perception (M5.3), sound occlusion
+(this patch's M1-EXT-33). NOTE: this is an engine-side wrapper — Jolt
+Physics (arriving M2) does not provide a native multi-ray batch call;
+its collector pattern batches multiple *hits along one ray*, not
+multiple independent rays. Confirmed against Jolt's own docs.
+
+##### Math
+`Results[i] = NarrowPhaseQuery.CastRay(Origins[i], Dirs[i], MaxDist[i])`
+for `i` in `[0, N)`, resolved in parallel.
+
+##### How It Works
+A struct-of-arrays holds N independent ray requests. `Resolve()` fans
+these out across an enkiTS parallel-for, each worker calling Jolt's
+single-ray `NarrowPhaseQuery::CastRay` for its slice, using the existing
+Fiber Yield Hook (M0-EXT-07) so a large batch never stalls a whole OS
+thread. This mirrors what Techland's own engine team built on top of
+their raycast primitive for Dying Light's ledge detection — Jolt gives
+you the single-ray primitive, this wrapper gives you the batching.
+
+##### Reference Implementation
+```cpp
+struct RayBatchQuery {
+    std::vector<glm::vec3> origins, dirs;
+    std::vector<float> maxDist;
+    std::vector<RayHitResult> results; // sized to match on Resolve()
+};
+
+void ResolveBatch(RayBatchQuery& batch, JPH::NarrowPhaseQuery& query, enki::TaskScheduler& scheduler) {
+    batch.results.resize(batch.origins.size());
+    enki::TaskSet task(static_cast<uint32_t>(batch.origins.size()),
+        [&](enki::TaskSetPartition range, uint32_t) {
+            for (uint32_t i = range.start; i < range.end; ++i) {
+                JPH::RRayCast ray{ ToJPH(batch.origins[i]), ToJPH(batch.dirs[i]) * batch.maxDist[i] };
+                JPH::RayCastResult hit;
+                bool had = query.CastRay(ray, hit);
+                batch.results[i] = had ? FromJPH(hit) : RayHitResult::Miss();
+            }
+        });
+    scheduler.AddTaskSetToPipe(&task);
+    scheduler.WaitforTask(&task);
+}
+```
+
+##### Player-Facing Impact
+Parkour/ledge detection and AI sightlines stay cheap even when many
+checks fire in the same frame, instead of each system hand-rolling its
+own slow per-ray loop.
+
+
+#### [M1-EXT-33] SpatialHash-Driven Sound Occlusion Query
+
+##### Systems Touched
+Reuses [M1-EXT-32] (RayBatchQuery) and M1's existing SpatialHash;
+declared now so M6 (audio, several milestones out) consumes this
+instead of building a second spatial system.
+
+##### Math
+`Audible(listener, source) = ¬Hit(RayBatchQuery(source→listener)) ∧ Distance(source, listener) ≤ HearingRadius`
+
+##### How It Works
+A hearing check for a noise event is just a RayBatchQuery between the
+source and every listener returned by `SpatialHash::QueryRadius` around
+that source — reusing the exact batching primitive from M1-EXT-32
+rather than a bespoke audio-occlusion system.
+
+##### Reference Implementation
+```cpp
+std::vector<entt::entity> QueryAudibleListeners(
+    const glm::vec3& sourcePos, float hearingRadius,
+    SpatialHash& hash, JPH::NarrowPhaseQuery& physQuery, enki::TaskScheduler& scheduler) {
+
+    auto candidates = hash.QueryRadius(sourcePos, hearingRadius);
+    RayBatchQuery batch;
+    for (auto e : candidates) {
+        batch.origins.push_back(sourcePos);
+        batch.dirs.push_back(glm::normalize(GetPosition(e) - sourcePos));
+        batch.maxDist.push_back(glm::distance(GetPosition(e), sourcePos));
+    }
+    ResolveBatch(batch, physQuery, scheduler);
+
+    std::vector<entt::entity> audible;
+    for (size_t i = 0; i < candidates.size(); ++i)
+        if (!batch.results[i].hadHit) audible.push_back(candidates[i]);
+    return audible;
+}
+```
+
+##### Player-Facing Impact
+Hiding behind a wall or around a corner actually blocks sound the way it
+blocks a raycast — the Zomboid-style hearing/visibility realism you
+asked for, using infrastructure this doc already declares.
+
+#### [M1-EXT-34] Procedurally-Generated Localization/Accessibility String-Table Pipeline
+
+##### Systems Touched
+M1's existing MSDF font pipeline (no rendering-path change needed) and
+M13's MiniCPM5-1B integration, pulled forward as an offline content-gen
+tool rather than waiting for M13's own milestone.
+
+##### Math
+
+Generation invariant: `string[key, locale] = SLM.gen(seed, locale)` runs ONLY at build/content-gen time, never per-tick — `Generate(key)` is constant across all runtime ticks for a given locale.
+
+##### How It Works
+All player-facing strings (subtitles, UI, colorblind-mode labels) route
+through a string-table keyed by ID. The table's *content* is generated
+OFFLINE, at build/content-generation time — never per-tick — by running
+MiniCPM5-1B over a small set of seed templates, using the same
+`enable_thinking=False` + fixed `temperature=0.7`/`top_p=0.95` discipline
+already locked in for M13. This keeps the zero-hand-authored-content rule
+intact while producing real text instead of placeholders. The MSDF
+pipeline renders whatever the table resolves to, unchanged.
+
+##### Reference Implementation
+```cpp
+// Offline tool, not runtime code:
+// for each seed template in localization_seeds.json:
+//   call MiniCPM5-1B (enable_thinking=False, temperature=0.7, top_p=0.95)
+//   write generated variant into strings_<locale>.json keyed by string ID
+```
+
+##### Player-Facing Impact
+Subtitles, UI text, and accessibility labels exist in real, varied form
+without hand-authoring a single line.
+
+
+#### [M1-EXT-35] EventBus Telemetry Tap with Consent Gate
+
+##### Systems Touched
+The (future) EventBus (M2) — a lightweight tap added now so meaningful
+gameplay events (death, horde-encounter size, resource-scarcity moment)
+post to a ring buffer, gated by explicit player consent.
+
+##### Math
+
+Write gated: `write ⟺ g_telemetryConsentGranted`; ring buffer capacity `C`, oldest dropped on overflow. Nothing recorded without explicit opt-in.
+
+##### How It Works
+A boot-time consent flag must be true before the tap writes anything.
+When enabled, events post to a bounded ring buffer for later
+(batched, offline) consumption by [M1-EXT-36].
+
+##### Reference Implementation
+```cpp
+struct TelemetryEvent { uint32_t eventType; float value; uint64_t tick; };
+bool g_telemetryConsentGranted = false; // set only via explicit settings toggle
+
+void PostTelemetryEvent(RingBuffer<TelemetryEvent>& buffer, TelemetryEvent evt) {
+    if (!g_telemetryConsentGranted) return;
+    buffer.Push(evt);
+}
+```
+
+##### Player-Facing Impact
+Nothing leaves the machine or gets recorded without an explicit opt-in.
+
+
+#### [M1-EXT-36] Offline MiniCPM5-1B Difficulty Director Pass
+
+##### Systems Touched
+Consumes [M1-EXT-35]'s telemetry ring buffer; adjusts existing
+data-driven spawn-density/loot-scarcity curves. NEVER touches gameplay
+code directly — only the config values that already exist.
+
+##### Math
+
+Batch cadence `≥ N` in-game hours (not per-tick); output writes `spawn_density.json` / `loot_scarcity.json` config deltas only — never gameplay code.
+
+##### How It Works
+Batched every few in-game hours (not per-tick), MiniCPM5-1B reasons over
+aggregated telemetry and proposes adjustments to existing tunable
+curves. This is what actually makes "no difficulty sliders, one tuned
+experience" true rather than aspirational, using infrastructure this doc
+already spec's for M13.
+
+##### Reference Implementation
+```cpp
+// Offline/background batch job, not per-tick:
+// aggregate TelemetryEvent buffer over N in-game hours ->
+// prompt MiniCPM5-1B (enable_thinking=False, temperature=0.7, top_p=0.95) with
+// aggregated stats -> parse suggested curve deltas -> write to existing
+// spawn_density.json / loot_scarcity.json config, never to code.
+```
+
+##### Player-Facing Impact
+Difficulty actually adapts to how the player is really doing, without a
+visible slider and without the model ever writing code.
+
+> **Verified model config (2026-07-14):** `openbmb/MiniCPM5-1B`'s
+> `config.json` was pulled from Hugging Face and confirmed. It is a GQA
+> Llama architecture — `hidden_size=1536`, `num_attention_heads=16`,
+> `head_dim=128`, `num_key_value_heads=2` (8:1 GQA), `intermediate_size=4608`,
+> `num_hidden_layers=24`, `vocab_size=130560`, `max_position_embeddings=131072`,
+> bf16. The earlier "(16 heads × 128 = 2048 ≠ 1536, so inconsistent)" worry
+> was wrong: under GQA the query-head count need not divide `hidden_size` by
+> `head_dim` in the vanilla-MHA sense — 16 × 128 = 2048 query dims with KV
+> collapsed to 2 heads is a normal GQA layout. These passes may cite the
+> numbers directly; no blocking question remains.
+
+
+#### [M1-EXT-37] Offline MiniCPM5-1B Zombie Archetype Behavior Synthesis
+
+##### Systems Touched
+Feeds M5.1's already-planned procedural zombie variation. Offline
+content-gen only — zero runtime inference cost, zero hand-authored
+scripts.
+
+##### Math
+
+`params[archetype] = SLM.gen(seed)` produced OFFLINE and consumed at runtime as plain JSON data; zero runtime inference cost, zero hand-authored behavior trees.
+
+##### How It Works
+MiniCPM5-1B synthesizes behavior-tree parameter sets / utility-AI weight
+tables per zombie archetype at content-generation time, consumed as data
+by M5.1's runtime systems exactly like any other procedurally-generated
+config.
+
+##### Reference Implementation
+```cpp
+// Offline tool:
+// for each archetype seed -> MiniCPM5-1B generates a parameter table
+// (aggression weight, wander radius, group-cohesion factor, etc.) ->
+// written to archetype_<name>.json, consumed at runtime as plain data.
+```
+
+##### Player-Facing Impact
+Varied, expressive zombie behavior without a scripting VM and without
+hand-authored behavior trees.
+
+
+#### [M1-EXT-38] ModWritable Allowlist Flag on MetaRegistry Registration
+
+##### Systems Touched
+Closes the gap the existing doc already flags as deferred in the Dev
+Inspector section (MetaRegistry.cpp).
+
+##### Math
+
+Mod-editability predicate: `writable_by_mod(field) ⟺ prop("ModWritable") = true`; every registered field defaults to non-writable unless explicitly flagged.
+
+##### How It Works
+Adds an explicit `ModWritable: bool` flag to each component's existing
+`entt::meta` registration call, rather than leaving every registered
+field implicitly editable.
+
+##### Reference Implementation
+```cpp
+// In MetaRegistry.cpp, alongside the existing registration calls:
+entt::meta<Transform>().data<&Transform::position>("position"_hs)
+    .prop("ModWritable"_hs, false); // explicit allowlist, not implicit open access
+```
+
+##### Player-Facing Impact
+Mods can't rewrite fields like StableId and desync a save — closes a gap
+the doc itself already called out as unresolved.
+
+
+### M.2 — Rejected or deferred (reasoning logged, not silently dropped)
+
+* **Volume-preserving muscle deformation shader, FFT-driven audio lip sync, heat-shimmer refraction pass, split-screen HZB reprojection cache** — all technically real techniques, all pure visual polish with zero effect on whether the game is playable or fun, each adding a nontrivial shader/compute pass to maintain. The split-screen item specifically only matters *at all* if local split-screen co-op is in scope — it isn't mentioned as a requirement anywhere else in this doc. **Recommendation:** revisit all four post-M13, once core gameplay loops (M0–M9) are actually running and there's a game to polish.
+* **STUN/TURN NAT-traversal gateway, built from scratch** — the underlying need (WAN co-op through arbitrary home routers) is real, but hand-rolling ICE/STUN/TURN negotiation is itself a multi-week networking project independent of everything else in this doc. **Recommendation:** use an existing library that already implements this (e.g. GameNetworkingSockets, which bundles ICE) rather than a bespoke implementation — this is a case where NIH costs you weeks for no gameplay benefit.
+* **Local SLM (MiniCPM5-1B) output directly mutating spawn migration targets, price inflation, and "cognitive hallucination" rendering effects on a 30-second loop** — this is the update's biggest single item, and the one most worth pausing on. It's not that the idea is impossible; it's that wiring an LLM's output directly into core simulation state (horde pathing, economy, screen effects) makes bugs non-reproducible — if a zombie horde does something wrong, you won't know if it's your pathing code or the model's output, and you can't easily write a deterministic test for it. It also competes for VRAM with your renderer on a single RTX 2070 Super, and M13 already carries this idea in the base doc — this update just re-describes it, it doesn't add new information. **Recommendation:** keep it scoped exactly as M13 already has it (flavor text/lore/signage, one-way output, no feedback into core sim state) until M0–M12 are solid; the current v72 M13 section already avoids the "SLM controls gameplay" trap this update reintroduces, so no change made here.
+
+### M.3 — v73 follow-up: formalizing the two M.2 recommendations with real reference implementations
+
+Both M.2 items above ended in a "do it this way instead" recommendation rather than a flat rejection: use an existing NAT-traversal library rather than hand-rolling one, and keep the SLM's output surface locked to read-only flavor text. This section turns those two recommendations into concrete, buildable entries.
+
+**ID collision check performed before adding these:** `M12-EXT-06` is unused — clear. `M13-EXT-11` is **not** — that ID already belongs to *Hardware Backend Auto-Detection & Async Compute Queue Isolation*, defined earlier in M13's Extended Systems Library. The SLM entry below is renumbered to `[M13-EXT-14]` (the next free M13-EXT slot after the existing `[M13-EXT-13]`), following the doc's existing renumber-on-collision convention rather than overwriting the existing definition.
+
+
+#### [M12-EXT-06] GameNetworkingSockets P2P WAN Transport Bridge
+
+**Systems Touched:** `network_manager.cpp` (WAN path interception), `packet_factory.cpp` (packet routing bifurcation).
+
+**Math:** None. No algebraic transforms are introduced to raw packets — NAT punchthrough, keep-alives, and symmetric/cone traversal metrics stay fully encapsulated inside Valve's MIT-licensed GameNetworkingSockets (GNS), per the M.2 recommendation against hand-rolling this.
+
+**How It Works:** Integrates GNS to replace the raw ENet socket pipeline exclusively for connections routing outside the local network topology; LAN traffic keeps using the existing lightweight ENet path. The network tick isolates and intercepts WAN-bound connections — if a socket's target is flagged `is_wan`, the raw ENet execution block is bypassed and packet serialization maps straight to GNS stream descriptors via non-blocking async calls.
+
+```cpp
+// wan_transport.h — GNS bridge for STUN/TURN traversal
+#pragma once
+#include <steam/gamenetworkingsockets.h>
+#include <steam/isteamnetworkingsockets.h>
+#include <cassert>
+
+class WANTransport {
+public:
+    static WANTransport& Get() { static WANTransport instance; return instance; }
+
+    // One-liner init using GNS's default open STUN/TURN ICE server configuration
+    bool Init() { return GameNetworkingSockets_Init(nullptr, nullptr); }
+
+    void Poll() { if (auto* sockets = SteamNetworkingSockets()) sockets->RunCallbacks(); }
+
+    // Connects via GNS routing (natively handles symmetric/cone NAT topology variations)
+    HSteamNetConnection ConnectTo(const char* identityStr) {
+        assert(identityStr != nullptr);
+        SteamNetworkIdentity identity;
+        if (!identity.ParseString(identityStr)) return k_HSteamNetConnection_Invalid;
+        return SteamNetworkingSockets()->ConnectP2PCustomSignaling(nullptr, &identity, 0, nullptr);
+    }
+};
+```
+
+**Architecture Flags & Required Touchpoints:** The M12 baseline assumes a unified `ENetHost` across all topologies. Two touchpoints swap transport cleanly:
+
+* **Flag 1** (`network_manager.cpp`, main host service tick): wherever `enet_host_service` is processed, branch — if the target's `connection.is_wan` is true, skip ENet and call `WANTransport::Get().Poll()` instead.
+* **Flag 2** (`packet_factory.cpp`, packet serialization loop): if a packet's destination resolves to a WAN peer, redirect the compiled payload through `SteamNetworkingSockets()->SendMessageToConnection()` instead of the ENet buffer path.
+
+**Exit Criteria:** Two clients behind separate residential NAT routers (not on the same LAN) establish a reliable peer connection and sustain an uninterrupted 10-minute co-op session with no manual port-forwarding.
+
+
+#### [M13-EXT-14] SLM Simulation Isolation & Hardening Pass
+
+*(Renumbered from the update's proposed `M13-EXT-11` — that ID already belongs to the existing Hardware Backend Auto-Detection entry.)*
+
+**Systems Touched:** `slm_types.h` (structural data constraints), `ai_director_pacing.cpp` (horde migration decoupling), `vendor_economy_core.cpp` (price-matrix decoupling).
+
+**Math:** None added to generative output. Simulation variables stay mapped exclusively to the engine's existing deterministic state equations (baseline vendor pricing, horde migration), which the SLM never touches:
+
+$$\text{Price}*{\text{final}} = \text{Price}*{\text{baseline}} \cdot \text{InflationModifier}_{MV=PQ}$$
+
+**How It Works:** Formalizes the M.2 recommendation as an audit/lockdown pass rather than a new capability. Every generator entry point is audited so SLM output is confined to a read-only role — descriptive lore commentary, text signage, and UI/VO subtitle strings, attached as flavor labels to events the deterministic engine already decided. Nothing generative ever reaches pricing, spawn vectors, or render-pass state. The alternative from the update (mapping SLM output to dynamic pricing, render tags, or spawn-cell vectors) is explicitly rejected, consistent with M.2 above.
+
+```cpp
+// slm_types.h — hardened read-only output surface
+#pragma once
+#include <string>
+
+struct SLMActionOutput {
+    // READ-ONLY LORE, TEXT SIGNAGE, AND STRING OVERRIDES ONLY
+    std::string terminal_log_override;   // custom signage/terminal text
+    std::string environmental_lore_str;  // dynamic text for world notes/inspectables
+    std::string vo_subtitle_hint;        // audio-VO subtitle annotation overlay
+
+    // GUARDRAIL: no pricing floats, no spawn vectors, no active render passes.
+};
+```
+
+**Audit Changelog:**
+
+|Entry|Original (drift-vulnerable)|Rewritten (flavor-only)|Reason|
+|-|-|-|-|
+|M13-04|SLM set vendor `price_multiplier` from generated text|Replaced with an `environmental_lore_str` expressing economic panic; prices stay on the deterministic supply/demand engine|Mutated sim economics via unvalidated generative output|
+|M13-11|SLM picked `hallucination_render_tag` to switch post-process passes|Replaced with standard UI screen-glitch overlays driven by the deterministic sleep-debt gradient loop|Let generative text alter the render graph|
+|M13-EXT-02|SLM set horde `migration_cells` target vectors|Replaced with static world-terminal flavor text; AI Director tracking loop untouched|Let generative text override pathfinding/spawning|
+
+**Exit Criteria:**
+
+```bash
+grep -rn "SLMActionOutput" ./src/ \
+  | grep -vE "(ui_manager|terminal_render|audio_vo|slm_types\.h)"
+```
+
+Exit status 0 — zero matches outside text/UI display and audio-VO subtitle code.
