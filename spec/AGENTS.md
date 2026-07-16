@@ -1,6 +1,7 @@
 # AGENTS.md — ZombieEngine Spec Navigation
 
-> Read this FIRST when working on the ZombieEngine spec. This file tells you HOW to load context efficiently. Treat context as a finite resource (Anthropic context-engineering: smallest high-signal set).
+> File map only. **The binding rules live in `.hermes.md`** (auto-loaded every session) — that is
+> the single master; do not duplicate rules here. This file tells you HOW to load context efficiently.
 
 ## How to find anything
 1. Open `llms.txt` — the canonical index. It lists every milestone file with its EXT-block count.
