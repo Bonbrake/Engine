@@ -539,7 +539,10 @@
       "[M8-EXT-14]",
       "[M8-EXT-15]",
       "[M11-EXT-64]",
-      "[M5-EXT-60]"
+      "[M5-EXT-60]",
+      "[M8-EXT-60]",
+      "[M8-EXT-59]",
+      "[M12-EXT-39]"
     ],
     "depended_by": [
       "[M8-EXT-14]"
@@ -559,7 +562,7 @@
       "[M8-EXT-51]"
     ],
     "depended_by": [],
-    "line": 1294,
+    "line": 1302,
     "anchor": "m8-ext-54"
   },
   {
@@ -572,7 +575,7 @@
       "[M8-EXT-15]"
     ],
     "depended_by": [],
-    "line": 1321,
+    "line": 1329,
     "anchor": "m8-ext-55"
   },
   {
@@ -584,7 +587,7 @@
       "[M8-EXT-03]"
     ],
     "depended_by": [],
-    "line": 1346,
+    "line": 1354,
     "anchor": "m8-ext-56"
   },
   {
@@ -597,7 +600,7 @@
       "[M1-EXT-36]"
     ],
     "depended_by": [],
-    "line": 1378,
+    "line": 1386,
     "anchor": "m8-ext-57"
   },
   {
@@ -609,7 +612,7 @@
       "[M8-EXT-01]"
     ],
     "depended_by": [],
-    "line": 1405,
+    "line": 1413,
     "anchor": "m8-ext-58"
   },
   {
@@ -625,7 +628,7 @@
       "[M8-EXT-29]"
     ],
     "depended_by": [],
-    "line": 1432,
+    "line": 1440,
     "anchor": "m8-ext-59"
   },
   {
@@ -639,7 +642,7 @@
       "[M8-EXT-59]"
     ],
     "depended_by": [],
-    "line": 1457,
+    "line": 1465,
     "anchor": "m8-ext-60"
   },
   {
@@ -658,7 +661,7 @@
       "[M8-EXT-15]",
       "[M8-EXT-60]"
     ],
-    "line": 1482,
+    "line": 1490,
     "anchor": "m8-ext-61"
   },
   {
@@ -673,7 +676,7 @@
       "[M8-EXT-53]"
     ],
     "depended_by": [],
-    "line": 1509,
+    "line": 1517,
     "anchor": "m8-ext-62"
   },
   {
@@ -687,7 +690,7 @@
       "[M4-EXT-39]"
     ],
     "depended_by": [],
-    "line": 1534,
+    "line": 1542,
     "anchor": "m8-ext-63"
   },
   {
@@ -701,7 +704,7 @@
       "[M4-EXT-32]"
     ],
     "depended_by": [],
-    "line": 1559,
+    "line": 1567,
     "anchor": "m8-ext-64"
   },
   {
@@ -716,7 +719,7 @@
       "[M8-EXT-62]"
     ],
     "depended_by": [],
-    "line": 1584,
+    "line": 1592,
     "anchor": "m8-ext-65"
   },
   {
@@ -735,7 +738,7 @@
       "[M9-EXT-34]"
     ],
     "depended_by": [],
-    "line": 1611,
+    "line": 1619,
     "anchor": "m8-ext-66"
   },
   {
@@ -749,7 +752,21 @@
       "[M12-EXT-37]"
     ],
     "depended_by": [],
-    "line": 1639,
+    "line": 1647,
     "anchor": "m8-ext-67"
+  },
+  {
+    "id": "M8-EXT-68",
+    "title": "Systems Touched",
+    "cluster": "B",
+    "depends_on": [
+      "[M5-EXT-11]",
+      "[M8-EXT-16]",
+      "[M12-EXT-34]",
+      "[M8-EXT-53]"
+    ],
+    "depended_by": [],
+    "line": 1678,
+    "anchor": "m8-ext-68"
   }
 ]
