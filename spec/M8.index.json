@@ -737,5 +737,19 @@
     "depended_by": [],
     "line": 1611,
     "anchor": "m8-ext-66"
+  },
+  {
+    "id": "M8-EXT-67",
+    "title": "Systems Touched",
+    "cluster": "B",
+    "depends_on": [
+      "[M8-EXT-01]",
+      "[M4-EXT-33]",
+      "[M12-EXT-38]",
+      "[M12-EXT-37]"
+    ],
+    "depended_by": [],
+    "line": 1639,
+    "anchor": "m8-ext-67"
   }
 ]

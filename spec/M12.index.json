@@ -331,5 +331,36 @@
     ],
     "line": 766,
     "anchor": "m12-ext-38"
+  },
+  {
+    "id": "M12-EXT-39",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M8-EXT-32]",
+      "[M5-EXT-10]",
+      "[M7-EXT-20]",
+      "[M4-EXT-101]",
+      "[M8-EXT-51]"
+    ],
+    "depended_by": [
+      "[M12-EXT-37]"
+    ],
+    "line": 797,
+    "anchor": "m12-ext-39"
+  },
+  {
+    "id": "M12-EXT-40",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M8-EXT-56]",
+      "[M8-EXT-53]",
+      "[M12-EXT-26]",
+      "[M8-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 828,
+    "anchor": "m12-ext-40"
   }
 ]
