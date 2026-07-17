@@ -1,0 +1,7 @@
+name: web-universal-free
+version: 1.0.0
+description: "Free web search + extract with NO API key. Search via DuckDuckGo (ddgs package); extract via keyless urllib HTML->markdown. Zero credentials required."
+author: NousResearch
+kind: backend
+provides_web_providers:
+  - universal_free
