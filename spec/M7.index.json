@@ -216,7 +216,8 @@
     "cluster": "C",
     "depends_on": [
       "[M7-EXT-07]",
-      "[M4-EXT-34]"
+      "[M4-EXT-34]",
+      "[M8-EXT-60]"
     ],
     "depended_by": [
       "[M7-EXT-21]",
@@ -233,7 +234,8 @@
     "depends_on": [
       "[M7-EXT-07]",
       "[M7-EXT-20]",
-      "[M4-EXT-34]"
+      "[M4-EXT-34]",
+      "[M8-EXT-60]"
     ],
     "depended_by": [
       "[M4-EXT-101]",
@@ -248,7 +250,8 @@
     "cluster": "C",
     "depends_on": [
       "[M7-EXT-21]",
-      "[M4-EXT-34]"
+      "[M4-EXT-34]",
+      "[M8-EXT-60]"
     ],
     "depended_by": [
       "[M4-EXT-101]",

@@ -25,4 +25,4 @@
 - After ANY structural edit, run a mechanical verifier (real line evidence): 0 duplicate defs, 0 dangling refs, 0 orphan bodies, code fences balanced. Do not declare done on a thrown script or a summary.
 
 ## Total scope
-694 EXT design blocks across the milestone + appendix files (grep-verified 2026-07-17; spec split into per-milestone M0–M13 + M4.5 + M6.5). Vulkan 1.4 + 100% procedural + modding engine.
+762 EXT design blocks total (715 milestone-owned M-blocks across M0–M13 + M4.5 + M6.5 + 47 in APPENDICES: 21 M + 22 K + 4 L), grep-verified 2026-07-17. Vulkan 1.4 + 100% procedural + modding engine.
