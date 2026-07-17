@@ -259,5 +259,21 @@
     ],
     "line": 640,
     "anchor": "m7-ext-22"
+  },
+  {
+    "id": "M7-EXT-23",
+    "title": "Systems Touched",
+    "cluster": "C",
+    "depends_on": [
+      "[M7-EXT-20]",
+      "[M7-EXT-21]",
+      "[M8-EXT-60]"
+    ],
+    "depended_by": [
+      "[M8-EXT-16]",
+      "[M11-EXT-65]"
+    ],
+    "line": 671,
+    "anchor": "m7-ext-23"
   }
 ]
