@@ -82,7 +82,7 @@
     "cluster": null,
     "depends_on": [
       "[M11-EXT-08]",
-      "[M5.4-EXT-04]",
+      "[M5-EXT-10]",
       "[M5-EXT-49]"
     ],
     "depended_by": [],
