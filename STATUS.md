@@ -171,3 +171,15 @@ Open items: [A] M1 mega-file extraction (gated, blocked by mid-line concatenatio
 [C] 4 duplicate merges (M0-EXT-24/41, M0-EXT-25/40, M5-EXT-22/52, M5-EXT-17/09-11),
 [D] naming-scheme rename (user wants it; gated big refactor).
 Spec consolidation + 25 gaps + audits ALL DONE and committed on `spec/m0-parity-reformat`.
+
+## Session close — 2026-07-17 (doc-only bookkeeping correction)
+- Corrected stale EXT-block counts in `STATUS.md`, `spec/AGENTS.md`, `spec/llms.txt`: real
+  total is **762** (715 milestone M-blocks + 47 in APPENDICES: 21 M + 22 K + 4 L), not the
+  prior "694"/"627". Per-file counts in `llms.txt` reconciled to actual `#### [ID]` headers
+  (verifier-enforced `ext_blocks` frontmatter already matched).
+- Fixed M0-EXT07/08/10 open-item wording in STATUS.md: grep across `src/` confirms these are
+  **spec-only** blocks with no code declaration at all (prior "declared, not wired" was wrong).
+  No code changed, nothing to remove.
+- `scripts/verify_m0_parity.py` re-run: all 16 milestone files OK (EXIT 0). APPENDICES.md is
+  correctly excluded (different block format — no frontmatter / `#####` subsections / sidecar).
+- No code/build change this session. Build NOT re-run; prior artifacts present under `build/`.
