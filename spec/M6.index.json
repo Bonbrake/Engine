@@ -1,247 +1,247 @@
 [
   {
     "id": "M6-EXT-01",
-    "title": "Acoustic Doppler-Shift Pitch Modulator",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M6-EXT-01]"
     ],
     "depended_by": [],
-    "line": 58,
-    "anchor": "MM6-EXT-01"
+    "line": 69,
+    "anchor": "m6-ext-01"
   },
   {
     "id": "M6-EXT-02",
-    "title": "Footstep Impact Acoustic Resonance",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M6-EXT-02]"
     ],
     "depended_by": [],
-    "line": 88,
-    "anchor": "MM6-EXT-02"
+    "line": 98,
+    "anchor": "m6-ext-02"
   },
   {
     "id": "M6-EXT-03",
-    "title": "Acoustic Echo-Location Decoy Sound Mirroring",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M6-EXT-03]"
     ],
     "depended_by": [],
-    "line": 116,
-    "anchor": "MM6-EXT-03"
+    "line": 125,
+    "anchor": "m6-ext-03"
   },
   {
     "id": "M6-EXT-04",
-    "title": "Voxelized Acoustic Propagation Portal Weaver",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M6-EXT-04]"
     ],
     "depended_by": [],
-    "line": 144,
-    "anchor": "MM6-EXT-04"
+    "line": 152,
+    "anchor": "m6-ext-04"
   },
   {
     "id": "M6-EXT-05",
-    "title": "Audio Voice Prioritization Matrix Allocation Weight Culler",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M6-EXT-05]"
     ],
     "depended_by": [],
-    "line": 173,
-    "anchor": "MM6-EXT-05"
+    "line": 179,
+    "anchor": "m6-ext-05"
   },
   {
     "id": "M6-EXT-06",
-    "title": "Variable-Rate Audio Emitter Execution Cadence Stagger Matrix",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M6-EXT-06]",
       "[M6-EXT-05]"
     ],
     "depended_by": [],
-    "line": 201,
-    "anchor": "MM6-EXT-06"
+    "line": 204,
+    "anchor": "m6-ext-06"
   },
   {
     "id": "M6-EXT-07",
-    "title": "Material-Indexed Velvet-Noise Late Reverb",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M6-EXT-07]",
       "[M6-EXT-04]"
     ],
     "depended_by": [],
-    "line": 236,
-    "anchor": "MM6-EXT-07"
+    "line": 233,
+    "anchor": "m6-ext-07"
   },
   {
     "id": "M6-EXT-08",
-    "title": "Ray-Traced Acoustic Diffraction Node Topology Cache",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M6-EXT-08]"
     ],
     "depended_by": [],
-    "line": 274,
-    "anchor": "MM6-EXT-08"
+    "line": 258,
+    "anchor": "m6-ext-08"
   },
   {
     "id": "M6-EXT-09",
-    "title": "Velvet-Noise Late Reverb Interleaved Mixing Buffer",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M6-EXT-09]"
     ],
     "depended_by": [],
-    "line": 293,
-    "anchor": "MM6-EXT-09"
+    "line": 283,
+    "anchor": "m6-ext-09"
   },
   {
     "id": "M6-EXT-10",
-    "title": "Acoustic Convection Wave Refraction Filter",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M6-EXT-10]"
     ],
     "depended_by": [],
-    "line": 312,
-    "anchor": "MM6-EXT-10"
+    "line": 308,
+    "anchor": "m6-ext-10"
   },
   {
     "id": "M6-EXT-11",
-    "title": "Voxel-Cone Acoustic Occlusion & Material Absorption",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M6-EXT-11]"
     ],
     "depended_by": [],
-    "line": 331,
-    "anchor": "MM6-EXT-11"
+    "line": 333,
+    "anchor": "m6-ext-11"
   },
   {
     "id": "M6-EXT-12",
-    "title": "Convolution-Reverb from Voxel Occlusion",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M6-EXT-12]",
       "[M4-EXT-14]"
     ],
     "depended_by": [],
-    "line": 345,
-    "anchor": "MM6-EXT-12"
+    "line": 358,
+    "anchor": "m6-ext-12"
   },
   {
     "id": "M6-EXT-13",
-    "title": "Hardware-Accelerated Audio",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M6-EXT-13]"
     ],
     "depended_by": [],
-    "line": 412,
-    "anchor": "MM6-EXT-13"
+    "line": 383,
+    "anchor": "m6-ext-13"
   },
   {
     "id": "M6-EXT-14",
-    "title": "Audio Occlusion / Propagation",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M6-EXT-14]"
     ],
     "depended_by": [],
-    "line": 430,
-    "anchor": "MM6-EXT-14"
+    "line": 411,
+    "anchor": "m6-ext-14"
   },
   {
     "id": "M6-EXT-15",
-    "title": "Procedural Audio / VFX Params",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M6-EXT-15]"
     ],
     "depended_by": [],
-    "line": 451,
-    "anchor": "MM6-EXT-15"
+    "line": 436,
+    "anchor": "m6-ext-15"
   },
   {
     "id": "M6-EXT-16",
-    "title": "HRTF Spatial Audio",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M6-EXT-16]"
     ],
     "depended_by": [],
-    "line": 472,
-    "anchor": "MM6-EXT-16"
+    "line": 461,
+    "anchor": "m6-ext-16"
   },
   {
     "id": "M6-EXT-17",
-    "title": "Occlusion/Obstruction Model",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M6-EXT-17]"
     ],
     "depended_by": [],
-    "line": 491,
-    "anchor": "MM6-EXT-17"
+    "line": 486,
+    "anchor": "m6-ext-17"
   },
   {
     "id": "M6-EXT-18",
-    "title": "Dynamic Music & Stinger System",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M6-EXT-18]"
     ],
     "depended_by": [],
-    "line": 510,
-    "anchor": "MM6-EXT-18"
+    "line": 511,
+    "anchor": "m6-ext-18"
   },
   {
     "id": "M6-EXT-19",
-    "title": "Blood & Gore Decals",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M6-EXT-19]"
     ],
     "depended_by": [],
-    "line": 530,
-    "anchor": "MM6-EXT-19"
+    "line": 539,
+    "anchor": "m6-ext-19"
   },
   {
     "id": "M6-EXT-20",
-    "title": "Impact & Sparks VFX",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M6-EXT-20]"
     ],
     "depended_by": [],
-    "line": 549,
-    "anchor": "MM6-EXT-20"
+    "line": 564,
+    "anchor": "m6-ext-20"
   },
   {
     "id": "M6-EXT-21",
-    "title": "Weather Particle VFX (rain/snow)",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M6-EXT-21]"
     ],
     "depended_by": [],
-    "line": 568,
-    "anchor": "MM6-EXT-21"
+    "line": 589,
+    "anchor": "m6-ext-21"
   },
   {
     "id": "M6-EXT-22",
-    "title": "Death/ Dissolve VFX",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M6-EXT-22]"
     ],
     "depended_by": [],
-    "line": 587,
-    "anchor": "MM6-EXT-22"
+    "line": 614,
+    "anchor": "m6-ext-22"
   }
 ]

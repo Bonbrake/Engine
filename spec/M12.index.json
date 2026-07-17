@@ -1,170 +1,303 @@
 [
   {
     "id": "M12-EXT-01",
-    "title": "Bitstream Delta-Encoded Network Serialization Packet Encoder",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M12-EXT-01]",
       "[M2-EXT-51]",
       "[M2-EXT-53]"
     ],
     "depended_by": [],
-    "line": 47,
-    "anchor": "MM12-EXT-01"
+    "line": 58,
+    "anchor": "m12-ext-01"
   },
   {
     "id": "M12-EXT-02",
-    "title": "Bitmask Packet Loss Sliding Window Acknowledgement Register",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M12-EXT-02]"
     ],
     "depended_by": [],
-    "line": 75,
-    "anchor": "MM12-EXT-02"
+    "line": 83,
+    "anchor": "m12-ext-02"
   },
   {
     "id": "M12-EXT-04",
-    "title": "Local Network-Relevancy Grid Culling Filter",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M12-EXT-04]",
       "[M12-EXT-01]"
     ],
     "depended_by": [],
-    "line": 91,
-    "anchor": "MM12-EXT-04"
+    "line": 108,
+    "anchor": "m12-ext-04"
   },
   {
     "id": "M12-EXT-07",
-    "title": "Network Clock Sync & Tick-Drift Compensator",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M12-EXT-07]"
     ],
     "depended_by": [],
-    "line": 148,
-    "anchor": "MM12-EXT-07"
+    "line": 133,
+    "anchor": "m12-ext-07"
   },
   {
     "id": "M12-EXT-12",
-    "title": "Interest Management for Spatial Audio",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M12-EXT-12]"
     ],
     "depended_by": [],
-    "line": 169,
-    "anchor": "MM12-EXT-12"
+    "line": 161,
+    "anchor": "m12-ext-12"
   },
   {
     "id": "M12-EXT-13",
-    "title": "Interest-Management Spatial Hash (Net Culling)",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M12-EXT-13]"
     ],
     "depended_by": [],
-    "line": 193,
-    "anchor": "MM12-EXT-13"
+    "line": 186,
+    "anchor": "m12-ext-13"
   },
   {
     "id": "M12-EXT-14",
-    "title": "Networking / Netcode Transport",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M12-EXT-14]"
     ],
     "depended_by": [],
-    "line": 213,
-    "anchor": "MM12-EXT-14"
+    "line": 211,
+    "anchor": "m12-ext-14"
   },
   {
     "id": "M12-EXT-15",
-    "title": "Voice Chat / Push-To-Talk",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M12-EXT-15]"
     ],
     "depended_by": [],
-    "line": 229,
-    "anchor": "MM12-EXT-15"
+    "line": 236,
+    "anchor": "m12-ext-15"
   },
   {
     "id": "M12-EXT-16",
-    "title": "Anti-Cheat / Server Authority",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M12-EXT-16]"
     ],
     "depended_by": [],
-    "line": 246,
-    "anchor": "MM12-EXT-16"
+    "line": 264,
+    "anchor": "m12-ext-16"
   },
   {
     "id": "M12-EXT-17",
-    "title": "Co-op Determinism Guard",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M12-EXT-17]"
     ],
     "depended_by": [],
-    "line": 262,
-    "anchor": "MM12-EXT-17"
+    "line": 289,
+    "anchor": "m12-ext-17"
   },
   {
     "id": "M12-EXT-18",
-    "title": "Matchmaking / Lobby / Session",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M12-EXT-18]"
     ],
     "depended_by": [],
-    "line": 278,
-    "anchor": "MM12-EXT-18"
+    "line": 314,
+    "anchor": "m12-ext-18"
   },
   {
     "id": "M12-EXT-19",
-    "title": "Lobby / Session Integrity",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M12-EXT-19]"
     ],
     "depended_by": [],
-    "line": 299,
-    "anchor": "MM12-EXT-19"
+    "line": 339,
+    "anchor": "m12-ext-19"
   },
   {
     "id": "M12-EXT-20",
-    "title": "Entity Interpolation",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "D",
     "depends_on": [
       "[M12-EXT-20]"
     ],
     "depended_by": [],
-    "line": 321,
-    "anchor": "MM12-EXT-20"
+    "line": 367,
+    "anchor": "m12-ext-20"
   },
   {
     "id": "M12-EXT-21",
-    "title": "Lag Compensation",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "D",
     "depends_on": [
       "[M12-EXT-21]"
     ],
     "depended_by": [],
-    "line": 340,
-    "anchor": "MM12-EXT-21"
+    "line": 392,
+    "anchor": "m12-ext-21"
   },
   {
     "id": "M12-EXT-22",
-    "title": "Dedicated Server Model",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "D",
     "depends_on": [
       "[M12-EXT-22]"
     ],
     "depended_by": [],
-    "line": 359,
-    "anchor": "MM12-EXT-22"
+    "line": 417,
+    "anchor": "m12-ext-22"
+  },
+  {
+    "id": "M12-EXT-26",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M10-EXT-24]"
+    ],
+    "depended_by": [],
+    "line": 442,
+    "anchor": "m12-ext-26"
+  },
+  {
+    "id": "M12-EXT-27",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M8-EXT-32]",
+      "[M8-EXT-16]"
+    ],
+    "depended_by": [],
+    "line": 467,
+    "anchor": "m12-ext-27"
+  },
+  {
+    "id": "M12-EXT-28",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 492,
+    "anchor": "m12-ext-28"
+  },
+  {
+    "id": "M12-EXT-29",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M4-EXT-32]",
+      "[M13-EXT-54]"
+    ],
+    "depended_by": [],
+    "line": 519,
+    "anchor": "m12-ext-29"
+  },
+  {
+    "id": "M12-EXT-30",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 546,
+    "anchor": "m12-ext-30"
+  },
+  {
+    "id": "M12-EXT-31",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M12-EXT-22]",
+      "[M13-EXT-57]"
+    ],
+    "depended_by": [],
+    "line": 571,
+    "anchor": "m12-ext-31"
+  },
+  {
+    "id": "M12-EXT-32",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M4-EXT-32]",
+      "[M8-EXT-16]",
+      "[M8-EXT-14]",
+      "[M8-EXT-15]",
+      "[M8-EXT-53]"
+    ],
+    "depended_by": [],
+    "line": 596,
+    "anchor": "m12-ext-32"
+  },
+  {
+    "id": "M12-EXT-33",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M8-EXT-57]",
+      "[M8-EXT-53]",
+      "[M12-EXT-32]",
+      "[M11-EXT-60]"
+    ],
+    "depended_by": [],
+    "line": 623,
+    "anchor": "m12-ext-33"
+  },
+  {
+    "id": "M12-EXT-34",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M1-EXT-36]"
+    ],
+    "depended_by": [],
+    "line": 652,
+    "anchor": "m12-ext-34"
+  },
+  {
+    "id": "M12-EXT-35",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M8-EXT-60]",
+      "[M8-EXT-59]",
+      "[M8-EXT-57]",
+      "[M5-EXT-63]",
+      "[M12-EXT-34]"
+    ],
+    "depended_by": [],
+    "line": 679,
+    "anchor": "m12-ext-35"
+  },
+  {
+    "id": "M12-EXT-36",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M12-EXT-35]",
+      "[M8-EXT-60]",
+      "[M4-EXT-39]"
+    ],
+    "depended_by": [],
+    "line": 710,
+    "anchor": "m12-ext-36"
   }
 ]

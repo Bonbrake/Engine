@@ -16,7 +16,7 @@ Exit 0 = PASS, 1 = FAIL. Prints a compact report.
 """
 import re, sys, collections, os
 
-DEFAULT = r"C:\ZombieEngine\MASTER_PLAN_ENDLESS_QUARANTINE.md"
+DEFAULT = r"C:\ZombieEngine\spec\M0.md"  # spec was split into per-milestone files; point at the gold-standard file by default. For full-corpus audit, prefer scripts/verify_m0_parity.py.
 
 HDR = re.compile(r'^#{1,6}\s+`?\[((?:M?\d[\d.]*|K|L)-EXT-\d+)\]`?')
 REF = re.compile(r'\[((?:M?\d[\d.]*|K|L)-EXT-\d+)\]')

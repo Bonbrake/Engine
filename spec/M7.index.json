@@ -1,213 +1,213 @@
 [
   {
     "id": "M7-EXT-01",
-    "title": "The Corpse-Pile Flattening Engine (Dynamic Static Hulls)",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M7-EXT-01]",
       "[M2-EXT-02]"
     ],
     "depended_by": [],
-    "line": 55,
-    "anchor": "MM7-EXT-01"
+    "line": 66,
+    "anchor": "m7-ext-01"
   },
   {
     "id": "M7-EXT-02",
-    "title": "Electrochemical Oxidation Vector Blending (Structural Time-Lapse)",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M7-EXT-02]"
     ],
     "depended_by": [],
-    "line": 90,
-    "anchor": "MM7-EXT-02"
+    "line": 97,
+    "anchor": "m7-ext-02"
   },
   {
     "id": "M7-EXT-03",
-    "title": "Submerged Corpse Buoyancy Re-Activation",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M7-EXT-03]"
     ],
     "depended_by": [],
-    "line": 123,
-    "anchor": "MM7-EXT-03"
+    "line": 128,
+    "anchor": "m7-ext-03"
   },
   {
     "id": "M7-EXT-04",
-    "title": "Soft-Body Cloth, Tethered Rot-Cloth & Cosserat-Rod Vegetation (Jolt 5.6.0 Soft-Body Unlock)",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M7-EXT-04]"
     ],
     "depended_by": [],
-    "line": 158,
-    "anchor": "MM7-EXT-04"
+    "line": 157,
+    "anchor": "m7-ext-04"
   },
   {
     "id": "M7-EXT-05",
-    "title": "Perishable Item Decay & Cook-Safety Integral (Food Spoilage & Cooking)",
+    "title": "Systems Touched",
     "cluster": null,
     "depends_on": [
       "[M7-EXT-05]",
       "[M8-EXT-03]"
     ],
     "depended_by": [],
-    "line": 231,
-    "anchor": "MM7-EXT-05"
+    "line": 186,
+    "anchor": "m7-ext-05"
   },
   {
     "id": "M7-EXT-06",
-    "title": "Player-Facing Save Slot & Autosave UI Layer",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M7-EXT-06]"
     ],
     "depended_by": [],
-    "line": 271,
-    "anchor": "MM7-EXT-06"
+    "line": 219,
+    "anchor": "m7-ext-06"
   },
   {
     "id": "M7-EXT-07",
-    "title": "Hierarchical Delta-State Persistence (Procedural Seed-Diff Engine)",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M7-EXT-07]"
     ],
     "depended_by": [],
-    "line": 299,
-    "anchor": "MM7-EXT-07"
+    "line": 244,
+    "anchor": "m7-ext-07"
   },
   {
     "id": "M7-EXT-08",
-    "title": "Zstandard Custom Dictionary Static Compiler",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M7-EXT-08]"
     ],
     "depended_by": [],
-    "line": 315,
-    "anchor": "MM7-EXT-08"
+    "line": 269,
+    "anchor": "m7-ext-08"
   },
   {
     "id": "M7-EXT-09",
-    "title": "Atomic File-Swap Append-Only State Transaction Logger",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M7-EXT-09]"
     ],
     "depended_by": [],
-    "line": 363,
-    "anchor": "MM7-EXT-09"
+    "line": 294,
+    "anchor": "m7-ext-09"
   },
   {
     "id": "M7-EXT-10",
-    "title": "Binary Save Format Structural Schema Migrator",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M7-EXT-10]"
     ],
     "depended_by": [],
-    "line": 383,
-    "anchor": "MM7-EXT-10"
+    "line": 319,
+    "anchor": "m7-ext-10"
   },
   {
     "id": "M7-EXT-11",
-    "title": "Zstd Save-Compression & Streaming Store",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M7-EXT-11]"
     ],
     "depended_by": [],
-    "line": 404,
-    "anchor": "MM7-EXT-11"
+    "line": 347,
+    "anchor": "m7-ext-11"
   },
   {
     "id": "M7-EXT-12",
-    "title": "Save Compression (zstd)",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M7-EXT-12]"
     ],
     "depended_by": [],
-    "line": 424,
-    "anchor": "MM7-EXT-12"
+    "line": 372,
+    "anchor": "m7-ext-12"
   },
   {
     "id": "M7-EXT-13",
-    "title": "Asset Checksum Integrity",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M7-EXT-13]"
     ],
     "depended_by": [],
-    "line": 440,
-    "anchor": "MM7-EXT-13"
+    "line": 397,
+    "anchor": "m7-ext-13"
   },
   {
     "id": "M7-EXT-14",
-    "title": "Telemetry Tap + Consent Gate",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M7-EXT-14]"
     ],
     "depended_by": [],
-    "line": 458,
-    "anchor": "MM7-EXT-14"
+    "line": 425,
+    "anchor": "m7-ext-14"
   },
   {
     "id": "M7-EXT-15",
-    "title": "Localization / Accessibility String-Table",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M7-EXT-15]"
     ],
     "depended_by": [],
-    "line": 474,
-    "anchor": "MM7-EXT-15"
+    "line": 450,
+    "anchor": "m7-ext-15"
   },
   {
     "id": "M7-EXT-16",
-    "title": "Save Corruption Recovery",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M7-EXT-16]"
     ],
     "depended_by": [],
-    "line": 491,
-    "anchor": "MM7-EXT-16"
+    "line": 478,
+    "anchor": "m7-ext-16"
   },
   {
     "id": "M7-EXT-17",
-    "title": "Replay / Demo Record",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M7-EXT-17]"
     ],
     "depended_by": [],
-    "line": 512,
-    "anchor": "MM7-EXT-17"
+    "line": 503,
+    "anchor": "m7-ext-17"
   },
   {
     "id": "M7-EXT-18",
-    "title": "Save Encryption & Anti-Edit",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M7-EXT-18]"
     ],
     "depended_by": [],
-    "line": 533,
-    "anchor": "MM7-EXT-18"
+    "line": 528,
+    "anchor": "m7-ext-18"
   },
   {
     "id": "M7-EXT-19",
-    "title": "Backward-Save Compatibility",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "C",
     "depends_on": [
       "[M7-EXT-19]"
     ],
     "depended_by": [],
-    "line": 552,
-    "anchor": "MM7-EXT-19"
+    "line": 553,
+    "anchor": "m7-ext-19"
   }
 ]

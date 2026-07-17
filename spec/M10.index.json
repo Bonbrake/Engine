@@ -1,54 +1,54 @@
 [
   {
     "id": "M10-EXT-01",
-    "title": "Hydraulic-Head Flux Solver for Saint-Venant Flooding **[MATH DONE]",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-01]"
     ],
     "depended_by": [],
-    "line": 60,
-    "anchor": "MM10-EXT-01"
+    "line": 71,
+    "anchor": "m10-ext-01"
   },
   {
     "id": "M10-EXT-02",
-    "title": "Keplerian Cosmic Orbitals & Synchronized Shadow Vectors",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-02]"
     ],
     "depended_by": [],
-    "line": 116,
-    "anchor": "MM10-EXT-02"
+    "line": 100,
+    "anchor": "m10-ext-02"
   },
   {
     "id": "M10-EXT-03",
-    "title": "Bruneton-Nishita Atmospheric Scattering & SH Ambient Fill",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-03]",
       "[M10-EXT-02]",
       "[M10-EXT-05]"
     ],
     "depended_by": [],
-    "line": 153,
-    "anchor": "MM10-EXT-03"
+    "line": 129,
+    "anchor": "m10-ext-03"
   },
   {
     "id": "M10-EXT-04",
-    "title": "Cryospheric Frost Nucleation & Snow Accumulation",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-04]"
     ],
     "depended_by": [],
-    "line": 188,
-    "anchor": "MM10-EXT-04"
+    "line": 158,
+    "anchor": "m10-ext-04"
   },
   {
     "id": "M10-EXT-05",
-    "title": "Navier-Stokes Meteorological Wind & Barometric Fronts",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-05]",
       "[M6.5-EXT-11]",
@@ -56,228 +56,250 @@
       "[M10-EXT-03]"
     ],
     "depended_by": [],
-    "line": 218,
-    "anchor": "MM10-EXT-05"
+    "line": 185,
+    "anchor": "m10-ext-05"
   },
   {
     "id": "M10-EXT-06",
-    "title": "Phenological Chlorophyll Cycles & Seasonal Canopy Thinning",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-06]"
     ],
     "depended_by": [],
-    "line": 257,
-    "anchor": "MM10-EXT-06"
+    "line": 212,
+    "anchor": "m10-ext-06"
   },
   {
     "id": "M10-EXT-11",
-    "title": "Volumetric Cloud & Participating-Medium Scattering",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-11]",
       "[M4-EXT-18]"
     ],
     "depended_by": [],
-    "line": 273,
-    "anchor": "MM10-EXT-11"
+    "line": 237,
+    "anchor": "m10-ext-11"
   },
   {
     "id": "M10-EXT-12",
-    "title": "HUD / UI Widgets",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-12]"
     ],
     "depended_by": [],
-    "line": 329,
-    "anchor": "MM10-EXT-12"
+    "line": 262,
+    "anchor": "m10-ext-12"
   },
   {
     "id": "M10-EXT-13",
-    "title": "Console / Command System",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "A",
     "depends_on": [
       "[M10-EXT-13]"
     ],
     "depended_by": [],
-    "line": 345,
-    "anchor": "MM10-EXT-13"
+    "line": 287,
+    "anchor": "m10-ext-13"
   },
   {
     "id": "M10-EXT-14",
-    "title": "Screenshot / Photo Mode",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-14]"
     ],
     "depended_by": [],
-    "line": 363,
-    "anchor": "MM10-EXT-14"
+    "line": 315,
+    "anchor": "m10-ext-14"
   },
   {
     "id": "M10-EXT-15",
-    "title": "Build / Packaging / Installer",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-15]"
     ],
     "depended_by": [],
-    "line": 379,
-    "anchor": "MM10-EXT-15"
+    "line": 340,
+    "anchor": "m10-ext-15"
   },
   {
     "id": "M10-EXT-16",
-    "title": "Determinism CI Gate",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-16]"
     ],
     "depended_by": [],
-    "line": 395,
-    "anchor": "MM10-EXT-16"
+    "line": 365,
+    "anchor": "m10-ext-16"
   },
   {
     "id": "M10-EXT-17",
-    "title": "Spec↔Code Drift Checker",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-17]"
     ],
     "depended_by": [],
-    "line": 411,
-    "anchor": "MM10-EXT-17"
+    "line": 390,
+    "anchor": "m10-ext-17"
   },
   {
     "id": "M10-EXT-18",
-    "title": "Generation Debug Tooling (preview + seed explorer)",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-18]"
     ],
     "depended_by": [],
-    "line": 427,
-    "anchor": "MM10-EXT-18"
+    "line": 415,
+    "anchor": "m10-ext-18"
   },
   {
     "id": "M10-EXT-19",
-    "title": "Mod-Package / Workshop Tooling",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-19]"
     ],
     "depended_by": [],
-    "line": 443,
-    "anchor": "MM10-EXT-19"
+    "line": 440,
+    "anchor": "m10-ext-19"
   },
   {
     "id": "M10-EXT-20",
-    "title": "Generation Benchmark Suite",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-20]"
     ],
     "depended_by": [],
-    "line": 459,
-    "anchor": "MM10-EXT-20"
+    "line": 465,
+    "anchor": "m10-ext-20"
   },
   {
     "id": "M10-EXT-21",
-    "title": "HDR Swapchain Output Encoding",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-21]"
     ],
     "depended_by": [],
-    "line": 475,
-    "anchor": "MM10-EXT-21"
+    "line": 490,
+    "anchor": "m10-ext-21"
   },
   {
     "id": "M10-EXT-22",
-    "title": "Tutorials / Contextual Hints",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-22]"
     ],
     "depended_by": [],
-    "line": 491,
-    "anchor": "MM10-EXT-22"
+    "line": 515,
+    "anchor": "m10-ext-22"
   },
   {
     "id": "M10-EXT-23",
-    "title": "Subtitles / Dialogue Display",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-23]"
     ],
     "depended_by": [],
-    "line": 512,
-    "anchor": "MM10-EXT-23"
+    "line": 540,
+    "anchor": "m10-ext-23"
   },
   {
     "id": "M10-EXT-24",
-    "title": "Minimap / Compass / Objective Tracker",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-24]"
     ],
     "depended_by": [],
-    "line": 533,
-    "anchor": "MM10-EXT-24"
+    "line": 565,
+    "anchor": "m10-ext-24"
   },
   {
     "id": "M10-EXT-25",
-    "title": "Achievements / Steam Integration",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-25]"
     ],
     "depended_by": [],
-    "line": 554,
-    "anchor": "MM10-EXT-25"
+    "line": 590,
+    "anchor": "m10-ext-25"
   },
   {
     "id": "M10-EXT-26",
-    "title": "Pause / Time-Scale System",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-26]"
     ],
     "depended_by": [],
-    "line": 575,
-    "anchor": "MM10-EXT-26"
+    "line": 615,
+    "anchor": "m10-ext-26"
   },
   {
     "id": "M10-EXT-27",
-    "title": "Lightning & Storm VFX",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-27]"
     ],
     "depended_by": [],
-    "line": 596,
-    "anchor": "MM10-EXT-27"
+    "line": 640,
+    "anchor": "m10-ext-27"
   },
   {
     "id": "M10-EXT-28",
-    "title": "Wind & Vegetation Sway",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-28]"
     ],
     "depended_by": [],
-    "line": 615,
-    "anchor": "MM10-EXT-28"
+    "line": 665,
+    "anchor": "m10-ext-28"
   },
   {
     "id": "M10-EXT-29",
-    "title": "Sky & Cloud Rendering",
-    "cluster": null,
+    "title": "Systems Touched",
+    "cluster": "B",
     "depends_on": [
       "[M10-EXT-29]"
     ],
     "depended_by": [],
-    "line": 634,
-    "anchor": "MM10-EXT-29"
+    "line": 690,
+    "anchor": "m10-ext-29"
+  },
+  {
+    "id": "M10-EXT-30",
+    "title": "Systems Touched",
+    "cluster": "B",
+    "depends_on": [
+      "[M10-EXT-24]"
+    ],
+    "depended_by": [],
+    "line": 715,
+    "anchor": "m10-ext-30"
+  },
+  {
+    "id": "M10-EXT-31",
+    "title": "Systems Touched",
+    "cluster": "B",
+    "depends_on": [
+      "[M4-EXT-50]"
+    ],
+    "depended_by": [],
+    "line": 740,
+    "anchor": "m10-ext-31"
   }
 ]

@@ -77,12 +77,11 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 ---
 
 ## Last Verified Build
-- Branch: `m2/physics-destruction`  
-- Last commit: `66af99e` — [M2.6] Phase 1: Transform double-precision (dvec3/dquat) - close B2  
-- Headless CI: **PASS** (`HEADLESS CI SMOKE TEST: SUCCESS`)
-- ZombieEngineTests: **PASS** (12 cases / 61 assertions; [M2.6] 2 cases / 14 assertions; [M1 bridge] 3 cases via `Test_RenderBridge.cpp`)
-- Build: `cmake --build --config Debug` EXIT=0
-- Windowed smoke test: **PASS** (2026-07-11, RTX 2070 Super)
+- Branch: `spec/m0-parity-reformat`  (NOTE: this section was stale — it cited `m2/physics-destruction` / commit `66af99e`; refreshed 2026-07-17)
+- Spec corpus: **694 EXT blocks** across M0–M13 + M4.5 + M6.5 (grep-verified 2026-07-17)
+- Structural integrity: **PASS** — recalibrated `scripts/verify_m0_parity.py` reports 0 duplicate defs, 0 dangling refs, 0 orphan blocks, all JSON sidecars regenerated + consistent (2026-07-17)
+- Engine build: see `src/` — 9 milestone modules still header-only stubs (ai, audio, events, modding, net, save, slm, ui, world); render/core/debug/ecs/physics built. `ZombieEngineTests` (Catch2) + `focus_probe` targets defined in `CMakeLists.txt`.
+- Last headless/windowed run: prior pass recorded on branch `m2/physics-destruction`; re-run required on current branch before claiming build-green.
 - GPU: NVIDIA GeForce RTX 2070 SUPER
 
 ## Capability Tier (RTX 2070 Super)
