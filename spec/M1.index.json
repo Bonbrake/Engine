@@ -15,10 +15,12 @@
     "title": "Generational Resource Table Pointer Validator",
     "cluster": "A",
     "depends_on": [
-      "[M1-EXT-02]"
+      "[M1-EXT-02]",
+      "[M1-EXT-01]",
+      "[M1-EXT-06]"
     ],
     "depended_by": [],
-    "line": 69,
+    "line": 78,
     "anchor": "M1-EXT-02"
   },
   {
@@ -29,7 +31,7 @@
       "[M1-EXT-03]"
     ],
     "depended_by": [],
-    "line": 79,
+    "line": 97,
     "anchor": "M1-EXT-03"
   },
   {
@@ -40,7 +42,7 @@
       "[M1-EXT-04]"
     ],
     "depended_by": [],
-    "line": 89,
+    "line": 116,
     "anchor": "M1-EXT-04"
   },
   {
@@ -51,7 +53,7 @@
       "[M1-EXT-05]"
     ],
     "depended_by": [],
-    "line": 99,
+    "line": 135,
     "anchor": "M1-EXT-05"
   },
   {
@@ -62,7 +64,7 @@
       "[M1-EXT-06]"
     ],
     "depended_by": [],
-    "line": 109,
+    "line": 154,
     "anchor": "M1-EXT-06"
   },
   {
@@ -73,7 +75,7 @@
       "[M1-EXT-07]"
     ],
     "depended_by": [],
-    "line": 120,
+    "line": 174,
     "anchor": "M1-EXT-07"
   },
   {
@@ -81,10 +83,12 @@
     "title": "Dynamic Spatial Hash Cell Quadtree Subdivision Splitter",
     "cluster": "A",
     "depends_on": [
-      "[M1-EXT-08]"
+      "[M1-EXT-08]",
+      "[M1-EXT-01]",
+      "[M1-EXT-06]"
     ],
     "depended_by": [],
-    "line": 131,
+    "line": 194,
     "anchor": "M1-EXT-08"
   },
   {
@@ -95,7 +99,7 @@
       "[M1-EXT-09]"
     ],
     "depended_by": [],
-    "line": 138,
+    "line": 211,
     "anchor": "M1-EXT-09"
   },
   {
@@ -106,7 +110,7 @@
       "[M1-EXT-10]"
     ],
     "depended_by": [],
-    "line": 149,
+    "line": 231,
     "anchor": "M1-EXT-10"
   },
   {
@@ -114,406 +118,569 @@
     "title": "Compute-to-Indirect-Draw Execution Barrier",
     "cluster": "A",
     "depends_on": [
-      "[M1-EXT-11]"
+      "[M1-EXT-11]",
+      "[M1-EXT-10]"
     ],
     "depended_by": [],
-    "line": 166,
+    "line": 252,
     "anchor": "M1-EXT-11"
   },
   {
     "id": "M1-EXT-12",
     "title": "Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-12]",
       "[M1-EXT-30]",
       "[M1-EXT-31]",
+      "[M1-EXT-30]",
       "[M1-EXT-32]",
       "[M1-EXT-33]",
+      "[M1-EXT-32]",
       "[M1-EXT-34]",
       "[M1-EXT-35]",
       "[M1-EXT-36]",
-      "[M1-EXT-37]",
+      "[M1-EXT-36]",
+      "[M1-EXT-35]",
       "[M1-EXT-38]",
-      "[M13-EXT-13]",
-      "[M13-EXT-14]"
+      "[M13-EXT-14]",
+      "[M13-EXT-13]"
     ],
     "depended_by": [],
-    "line": 184,
+    "line": 273,
     "anchor": "M1-EXT-12"
   },
   {
     "id": "M1-EXT-13",
     "title": "Render-Graph Barrier Topological Sorter",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-13]"
+      "[M1-EXT-13]",
+      "[M1-EXT-12]",
+      "[M1-EXT-41]",
+      "[M1-EXT-41]"
     ],
     "depended_by": [],
-    "line": 423,
+    "line": 450,
     "anchor": "M1-EXT-13"
   },
   {
     "id": "M1-EXT-15",
     "title": "GPU Query Pool Timestamp Profiler",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-15]"
     ],
     "depended_by": [],
-    "line": 429,
+    "line": 466,
     "anchor": "M1-EXT-15"
   },
   {
     "id": "M1-EXT-16",
     "title": "SoA Cache-Line Padding",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-16]"
     ],
     "depended_by": [],
-    "line": 446,
+    "line": 487,
     "anchor": "M1-EXT-16"
   },
   {
     "id": "M1-EXT-17",
     "title": "Deterministic Secondary Command-Buffer Merger",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-17]"
+      "[M1-EXT-17]",
+      "[M1-EXT-13]",
+      "[M1-EXT-13]"
     ],
     "depended_by": [],
-    "line": 463,
+    "line": 508,
     "anchor": "M1-EXT-17"
   },
   {
     "id": "M1-EXT-18",
     "title": "Material-Batched Mesh-Pass Rendering",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-18]"
     ],
     "depended_by": [],
-    "line": 480,
+    "line": 529,
     "anchor": "M1-EXT-18"
   },
   {
     "id": "M1-EXT-19",
     "title": "SoA Layout for Hot Components",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-19]"
     ],
     "depended_by": [],
-    "line": 497,
+    "line": 550,
     "anchor": "M1-EXT-19"
   },
   {
     "id": "M1-EXT-20",
     "title": "EnTT Group-Backed Hot-Component Storage",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-20]"
     ],
     "depended_by": [],
-    "line": 514,
+    "line": 571,
     "anchor": "M1-EXT-20"
   },
   {
     "id": "M1-EXT-21",
     "title": "Buffer Device Address for Skinned-Mesh Animation Data",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-21]"
+      "[M1-EXT-21]",
+      "[M1-EXT-10]"
     ],
     "depended_by": [],
-    "line": 531,
+    "line": 592,
     "anchor": "M1-EXT-21"
   },
   {
     "id": "M1-EXT-22",
     "title": "CVar System (ImGui-Backed)",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-22]"
+      "[M1-EXT-22]",
+      "[M1-EXT-10]",
+      "[M1-EXT-11]"
     ],
     "depended_by": [],
-    "line": 548,
+    "line": 613,
     "anchor": "M1-EXT-22"
   },
   {
     "id": "M1-EXT-23",
     "title": "Timeline Semaphores for Multi-Queue Sync",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-01]",
       "[M1-EXT-23]",
+      "[M1-EXT-16]",
       "[M2-EXT-53]"
     ],
     "depended_by": [],
-    "line": 565,
+    "line": 634,
     "anchor": "M1-EXT-23"
   },
   {
     "id": "M1-EXT-24",
     "title": "Multi-Threaded Secondary Command Buffer Recording",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-24]"
     ],
     "depended_by": [],
-    "line": 644,
+    "line": 696,
     "anchor": "M1-EXT-24"
   },
   {
     "id": "M1-EXT-25",
     "title": "Descriptor Update Templates for Per-Frame Bindless Writes",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-25]"
     ],
     "depended_by": [],
-    "line": 661,
+    "line": 717,
     "anchor": "M1-EXT-25"
   },
   {
     "id": "M1-EXT-26",
     "title": "Chunk-Boundary Spatial-Hash Transfer",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-26]"
+      "[M1-EXT-26]",
+      "[M1-EXT-11]"
     ],
     "depended_by": [],
-    "line": 678,
+    "line": 738,
     "anchor": "M1-EXT-26"
   },
   {
     "id": "M1-EXT-27",
     "title": "Uniform-Grid Spatial Hash Broad-Phase",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-27]"
+      "[M1-EXT-27]",
+      "[M1-EXT-01]"
     ],
     "depended_by": [],
-    "line": 695,
+    "line": 759,
     "anchor": "M1-EXT-27"
   },
   {
     "id": "M1-EXT-28",
     "title": "GPU Software Occlusion Rasterizer (HZB Feeder)",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-28]"
+      "[M1-EXT-28]",
+      "[M1-EXT-01]"
     ],
     "depended_by": [],
-    "line": 712,
+    "line": 780,
     "anchor": "M1-EXT-28"
+  },
+  {
+    "id": "M1-EXT-29",
+    "title": "Parent-Child Hierarchy",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-29]",
+      "[M1-EXT-41]"
+    ],
+    "depended_by": [],
+    "line": 801,
+    "anchor": "M1-EXT-29"
+  },
+  {
+    "id": "M1-EXT-30",
+    "title": "EnTTCache Narrow Coverage",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-30]",
+      "[M1-EXT-42]"
+    ],
+    "depended_by": [],
+    "line": 809,
+    "anchor": "M1-EXT-30"
+  },
+  {
+    "id": "M1-EXT-31",
+    "title": "Action Map / ActionState Layer",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-31]",
+      "[M1-EXT-43]"
+    ],
+    "depended_by": [],
+    "line": 817,
+    "anchor": "M1-EXT-31"
+  },
+  {
+    "id": "M1-EXT-32",
+    "title": "Procedural Camera Rig",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-32]",
+      "[M1-EXT-44]"
+    ],
+    "depended_by": [],
+    "line": 825,
+    "anchor": "M1-EXT-32"
+  },
+  {
+    "id": "M1-EXT-33",
+    "title": "Input-Rebinding Persistence",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-33]",
+      "[M1-EXT-45]"
+    ],
+    "depended_by": [],
+    "line": 833,
+    "anchor": "M1-EXT-33"
+  },
+  {
+    "id": "M1-EXT-34",
+    "title": "M1 Exit Criteria Don't Reflect Reality",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-34]",
+      "[M1-EXT-46]"
+    ],
+    "depended_by": [],
+    "line": 841,
+    "anchor": "M1-EXT-34"
+  },
+  {
+    "id": "M1-EXT-35",
+    "title": "EntityFactory Unknown-Component Warning",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-35]",
+      "[M1-EXT-47]"
+    ],
+    "depended_by": [],
+    "line": 849,
+    "anchor": "M1-EXT-35"
+  },
+  {
+    "id": "M1-EXT-36",
+    "title": "Generational Table Headroom Check",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-36]",
+      "[M1-EXT-48]"
+    ],
+    "depended_by": [],
+    "line": 857,
+    "anchor": "M1-EXT-36"
+  },
+  {
+    "id": "M1-EXT-37",
+    "title": "EnTTCache Round-Trip Test",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-37]",
+      "[M1-EXT-49]"
+    ],
+    "depended_by": [],
+    "line": 865,
+    "anchor": "M1-EXT-37"
+  },
+  {
+    "id": "M1-EXT-38",
+    "title": "Action Map Persistence Format",
+    "cluster": "A",
+    "depends_on": [
+      "[M1-EXT-38]",
+      "[M1-EXT-50]"
+    ],
+    "depended_by": [],
+    "line": 873,
+    "anchor": "M1-EXT-38"
   },
   {
     "id": "M1-EXT-39",
     "title": "SpatialHash Query Has No Gameplay Consumer",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-39]"
+      "[M1-EXT-39]",
+      "[M1-EXT-40]",
+      "[M1-EXT-28]"
     ],
     "depended_by": [],
-    "line": 729,
+    "line": 881,
     "anchor": "M1-EXT-39"
   },
   {
     "id": "M1-EXT-40",
     "title": "No Batched Raycast (RayBatchQuery)",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-40]"
     ],
     "depended_by": [],
-    "line": 746,
+    "line": 903,
     "anchor": "M1-EXT-40"
   },
   {
     "id": "M1-EXT-41",
     "title": "Parent-Child Hierarchy",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-41]"
+      "[M1-EXT-41]",
+      "[M1-EXT-13]",
+      "[M1-EXT-12]"
     ],
     "depended_by": [],
-    "line": 763,
+    "line": 925,
     "anchor": "M1-EXT-41"
   },
   {
     "id": "M1-EXT-42",
     "title": "EnTTCache Narrow Coverage",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-42]"
     ],
     "depended_by": [],
-    "line": 780,
+    "line": 947,
     "anchor": "M1-EXT-42"
   },
   {
     "id": "M1-EXT-43",
     "title": "Action Map / ActionState Layer",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-43]"
     ],
     "depended_by": [],
-    "line": 797,
+    "line": 969,
     "anchor": "M1-EXT-43"
   },
   {
     "id": "M1-EXT-44",
     "title": "Procedural Camera Rig",
-    "cluster": "B",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-44]"
     ],
     "depended_by": [],
-    "line": 814,
+    "line": 991,
     "anchor": "M1-EXT-44"
   },
   {
     "id": "M1-EXT-45",
     "title": "Input-Rebinding Persistence",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-45]"
     ],
     "depended_by": [],
-    "line": 832,
+    "line": 1013,
     "anchor": "M1-EXT-45"
   },
   {
     "id": "M1-EXT-46",
     "title": "M1 Exit Criteria Don't Reflect Reality",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-46]"
     ],
     "depended_by": [],
-    "line": 849,
+    "line": 1035,
     "anchor": "M1-EXT-46"
   },
   {
     "id": "M1-EXT-47",
     "title": "EntityFactory Unknown-Component Warning",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-47]"
     ],
     "depended_by": [],
-    "line": 866,
+    "line": 1057,
     "anchor": "M1-EXT-47"
   },
   {
     "id": "M1-EXT-48",
     "title": "Generational Table Headroom Check",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-48]"
     ],
     "depended_by": [],
-    "line": 885,
+    "line": 1079,
     "anchor": "M1-EXT-48"
   },
   {
     "id": "M1-EXT-49",
     "title": "EnTTCache Round-Trip Test",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-49]"
+      "[M1-EXT-49]",
+      "[M1-EXT-16]"
     ],
     "depended_by": [],
-    "line": 904,
+    "line": 1101,
     "anchor": "M1-EXT-49"
   },
   {
     "id": "M1-EXT-50",
     "title": "Action Map Persistence Format",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
-      "[M1-EXT-50]"
+      "[M1-EXT-50]",
+      "[M1-EXT-45]"
     ],
     "depended_by": [],
-    "line": 923,
+    "line": 1123,
     "anchor": "M1-EXT-50"
   },
   {
     "id": "M1-EXT-51",
     "title": "GPU Memory Budget & Defrag",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-51]"
     ],
     "depended_by": [],
-    "line": 942,
+    "line": 1145,
     "anchor": "M1-EXT-51"
   },
   {
     "id": "M1-EXT-52",
     "title": "Shader Variant/Permutation Manager",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
       "[M1-EXT-52]"
     ],
     "depended_by": [],
-    "line": 959,
+    "line": 1167,
     "anchor": "M1-EXT-52"
   },
   {
     "id": "M1-EXT-53",
     "title": "(provisional) Chunk Boundary Entity Transfer Queue",
-    "cluster": "D",
+    "cluster": "A",
     "depends_on": [
-      "[M0-EXT-13]",
-      "[M0-EXT-54]",
-      "[M1-EXT-06]",
-      "[M1-EXT-26]",
-      "[M1-EXT-27]",
-      "[M1-EXT-28]",
       "[M1-EXT-53]",
-      "[M10-EXT-02]",
-      "[M10-EXT-03]",
-      "[M10-EXT-11]",
-      "[M12-EXT-01]",
-      "[M12-EXT-13]",
-      "[M13-EXT-54]",
-      "[M2-EXT-51]",
-      "[M2-EXT-53]",
-      "[M2.8-EXT-10]",
-      "[M3-EXT-11]",
-      "[M3-EXT-36]",
-      "[M4-EXT-02]",
-      "[M4-EXT-08]",
-      "[M4-EXT-25]",
-      "[M4-EXT-87]",
-      "[M4-EXT-89]",
+      "[M1-EXT-06]",
       "[M4.5-EXT-13]",
-      "[M4.5-EXT-24]",
-      "[M4.5-EXT-26]",
-      "[M4.5-EXT-31]",
-      "[M5-EXT-29]",
+      "[M6.5-EXT-08]",
+      "[M6.5-EXT-08]",
+      "[M13-EXT-54]",
       "[M5-EXT-32]",
       "[M5-EXT-33]",
-      "[M5-EXT-38]",
-      "[M5-EXT-53]",
-      "[M6-EXT-11]",
-      "[M6-EXT-12]",
-      "[M6.5-EXT-08]",
-      "[M6.5-EXT-13]",
-      "[M8-EXT-32]",
-      "[M8-EXT-33]",
+      "[M5-EXT-29]",
+      "[M5-EXT-29]",
+      "[M3-EXT-36]",
+      "[M0-EXT-54]",
+      "[M4-EXT-87]",
+      "[M4-EXT-87]",
+      "[M4-EXT-87]",
+      "[M4-EXT-87]",
+      "[M2.8-EXT-10]",
+      "[M2-EXT-53]",
+      "[M2-EXT-53]",
+      "[M2-EXT-51]",
+      "[M2-EXT-53]",
+      "[M4.5-EXT-24]",
       "[M9-EXT-04]",
+      "[M9-EXT-19]",
       "[M9-EXT-12]",
       "[M9-EXT-15]",
-      "[M9-EXT-19]",
-      "[M9-EXT-22]"
+      "[M1-EXT-27]",
+      "[M1-EXT-06]",
+      "[M1-EXT-26]",
+      "[M3-EXT-11]",
+      "[M5-EXT-53]",
+      "[M1-EXT-28]",
+      "[M4.5-EXT-31]",
+      "[M5-EXT-38]",
+      "[M5-EXT-32]",
+      "[M9-EXT-22]",
+      "[M4.5-EXT-26]",
+      "[M4-EXT-02]",
+      "[M6.5-EXT-13]",
+      "[M4.5-EXT-26]",
+      "[M1-EXT-27]",
+      "[M10-EXT-11]",
+      "[M10-EXT-02]",
+      "[M10-EXT-03]",
+      "[M10-EXT-02]",
+      "[M3-EXT-11]",
+      "[M1-EXT-27]",
+      "[M1-EXT-27]",
+      "[M1-EXT-27]",
+      "[M8-EXT-33]",
+      "[M8-EXT-32]",
+      "[M4-EXT-08]",
+      "[M8-EXT-32]",
+      "[M12-EXT-13]",
+      "[M1-EXT-27]",
+      "[M12-EXT-01]",
+      "[M1-EXT-26]",
+      "[M6-EXT-12]",
+      "[M6-EXT-11]",
+      "[M4-EXT-89]",
+      "[M4-EXT-25]",
+      "[M4.5-EXT-26]",
+      "[M0-EXT-13]",
+      "[M5-EXT-53]",
+      "[M1-EXT-27]"
     ],
     "depended_by": [],
-    "line": 974,
+    "line": 1189,
     "anchor": "M1-EXT-53"
   }
 ]
