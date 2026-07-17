@@ -205,7 +205,7 @@
     "cluster": "D",
     "depends_on": [
       "[M4-EXT-32]",
-      "[M13-EXT-54]"
+      "[M13-EXT-55]"
     ],
     "depended_by": [],
     "line": 519,
@@ -362,5 +362,49 @@
     "depended_by": [],
     "line": 828,
     "anchor": "m12-ext-40"
+  },
+  {
+    "id": "M12-EXT-41",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M12-EXT-26]",
+      "[M12-EXT-40]",
+      "[M13-EXT-60]"
+    ],
+    "depended_by": [],
+    "line": 858,
+    "anchor": "m12-ext-41"
+  },
+  {
+    "id": "M12-EXT-42",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M2-EXT-64]",
+      "[M4-EXT-34]",
+      "[M5-EXT-10]",
+      "[M10-EXT-31]"
+    ],
+    "depended_by": [],
+    "line": 888,
+    "anchor": "m12-ext-42"
+  },
+  {
+    "id": "M12-EXT-43",
+    "title": "Systems Touched",
+    "cluster": "D",
+    "depends_on": [
+      "[M12-EXT-41]",
+      "[M12-EXT-42]",
+      "[M4-EXT-101]",
+      "[M7-EXT-20]",
+      "[M8-EXT-29]",
+      "[M8-EXT-58]",
+      "[M13-EXT-55]"
+    ],
+    "depended_by": [],
+    "line": 918,
+    "anchor": "m12-ext-43"
   }
 ]
