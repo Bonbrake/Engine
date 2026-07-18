@@ -841,7 +841,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 2753,
+    "line": 2748,
     "anchor": "m5-ext-87"
   },
   {
@@ -850,7 +850,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 2783,
+    "line": 2778,
     "anchor": "m5-ext-88"
   },
   {
@@ -859,7 +859,16 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 2813,
+    "line": 2808,
     "anchor": "m5-ext-89"
+  },
+  {
+    "id": "M5-EXT-90",
+    "title": "Confidence-Gated Stealth Strikes",
+    "cluster": "B",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 2837,
+    "anchor": "m5-ext-90"
   }
 ]

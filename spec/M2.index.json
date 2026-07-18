@@ -958,7 +958,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3193,
+    "line": 3192,
     "anchor": "m2-ext-102"
   },
   {
@@ -967,7 +967,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3230,
+    "line": 3228,
     "anchor": "m2-ext-103"
   },
   {
@@ -976,7 +976,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3264,
+    "line": 3262,
     "anchor": "m2-ext-104"
   },
   {
@@ -985,7 +985,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3308,
+    "line": 3306,
     "anchor": "m2-ext-105"
   },
   {
@@ -994,7 +994,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3350,
+    "line": 3348,
     "anchor": "m2-ext-106"
   },
   {
@@ -1003,7 +1003,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3390,
+    "line": 3388,
     "anchor": "m2-ext-107"
   },
   {
@@ -1012,7 +1012,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3433,
+    "line": 3431,
     "anchor": "m2-ext-108"
   },
   {
@@ -1021,7 +1021,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3469,
+    "line": 3467,
     "anchor": "m2-ext-109"
   },
   {
@@ -1030,7 +1030,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3506,
+    "line": 3504,
     "anchor": "m2-ext-110"
   },
   {
@@ -1039,7 +1039,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3557,
+    "line": 3555,
     "anchor": "m2-ext-111"
   },
   {
@@ -1048,7 +1048,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3607,
+    "line": 3605,
     "anchor": "m2-ext-112"
   },
   {
@@ -1057,7 +1057,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3642,
+    "line": 3640,
     "anchor": "m2-ext-113"
   },
   {
@@ -1066,7 +1066,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3676,
+    "line": 3674,
     "anchor": "m2-ext-114"
   },
   {
@@ -1075,7 +1075,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3712,
+    "line": 3709,
     "anchor": "m2-ext-115"
   },
   {
@@ -1084,7 +1084,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3750,
+    "line": 3746,
     "anchor": "m2-ext-116"
   },
   {
@@ -1093,7 +1093,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3788,
+    "line": 3783,
     "anchor": "m2-ext-117"
   },
   {
@@ -1102,7 +1102,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3825,
+    "line": 3819,
     "anchor": "m2-ext-118"
   },
   {
@@ -1111,7 +1111,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3863,
+    "line": 3856,
     "anchor": "m2-ext-119"
   },
   {
@@ -1120,7 +1120,7 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3900,
+    "line": 3892,
     "anchor": "m2-ext-120"
   },
   {
@@ -1129,7 +1129,61 @@
     "cluster": "B",
     "depends_on": [],
     "depended_by": [],
-    "line": 3937,
+    "line": 3928,
     "anchor": "m2-ext-121"
+  },
+  {
+    "id": "M2-EXT-122",
+    "title": "Cover Stability Sway Damper",
+    "cluster": "B",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 3964,
+    "anchor": "m2-ext-122"
+  },
+  {
+    "id": "M2-EXT-123",
+    "title": "Roll-Down Shutter / Window Cover",
+    "cluster": "B",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 4018,
+    "anchor": "m2-ext-123"
+  },
+  {
+    "id": "M2-EXT-124",
+    "title": "Sleep-Deprivation Hallucination Drift",
+    "cluster": "B",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 4053,
+    "anchor": "m2-ext-124"
+  },
+  {
+    "id": "M2-EXT-125",
+    "title": "Drowning & Underwater O2",
+    "cluster": "B",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 4103,
+    "anchor": "m2-ext-125"
+  },
+  {
+    "id": "M2-EXT-126",
+    "title": "Electric Fence (Base Defense)",
+    "cluster": "B",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 4138,
+    "anchor": "m2-ext-126"
+  },
+  {
+    "id": "M2-EXT-127",
+    "title": "Disease / Infection Contagion Spread",
+    "cluster": "B",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 4182,
+    "anchor": "m2-ext-127"
   }
 ]
