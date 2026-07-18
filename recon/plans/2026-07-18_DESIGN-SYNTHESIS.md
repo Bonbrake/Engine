@@ -6,35 +6,42 @@
 
 ---
 
-## 1. Horde Night Cadence & Escalation
+## 1. Horde Dynamics — Dynamic Open-World Migration (No Fixed Cycle)
 
 ### Research Summary
 | Source | Key Finding |
 |--------|-------------|
-| 7DTD Blood Moon | Every 7 in-game days; ignores spawn budget; sprints at players; destroys blocks; scales with "game stage" (player progression) |
-| SoD2 Plague Hearts | Dormant → Stirred → Awakened stages; triggered by Screamer screams + nearby kills; awakened hearts spawn periodic hordes |
-| 7DTD v1.0 community | Early day 7 hordes unbalanced; players need protection mechanisms (ammo, traps, safe zones) |
+| 7DTD Blood Moon | Every 7 days; forced routing, sprinting, block destruction; scales with game stage — **predictable, exploitable** |
+| SoD2 Plague Hearts | Dormant → Stirred → Awakened; triggered by Screamer screams + nearby kills; awakened hearts spawn periodic hordes to empty buildings — **emergent, location-based** |
+| Urban Strife | Screamers emit screams alerting all zombies in expanded radius; single Screamer converts passive horde to pursuit in 2 turns — **alert propagation, not timer** |
 
-### Recommendation: **Telegraphing Tiered Horde System**
+### Recommendation: **Dynamic Open-World Horde Migration**
 
-**Baseline Cadence:** Every 7 in-game days ("Blood Moon" / "Horde Night") — hard-coded, not configurable by players in vanilla. Configurable via world settings for private servers.
+**No fixed calendar. No "day 7."** Horde threat emerges continuously from world state:
 
-**Three Escalation Layers:**
+- **Wandering Horde Entities** — persistent horde groups that migrate across the map, drawn by emergent signals
+- **Attraction Signals** (additive, no schedule):
+  - Player noise (M5-EXT-14 hearing-cone radius, M11-EXT-64/65 stealth-approach)
+  - Scent trails (M5-EXT-65 pheromone) — fresh kills, blood, player camps
+  - Screamer-type alerts (M5-EXT-64 sleeper) — single scream propagates through horde network
+  - Faction combat nearby — gunfire/explosions act as dinner bells
+  - Time-of-day + weather — night/rain increases horde boldness and detection range
+- **Escalation = Probability Stack** — each active signal increases horde aggression tier probability:
+  - **Idle** (baseline): hordes wander, scavenge, ignore players beyond detection
+  - **Scout** (1–2 signals): perimeter probes, audio/visual tells (howls, silhouettes on ridge)
+  - **Siege** (3+ signals): directed movement, structure testing, coordinated pressure
+  - **Breach** (sustained Siege + player in structure): interior infiltration, window/door focus
 
-| Layer | Trigger | Behavior | Design Purpose |
-|-------|---------|----------|----------------|
-| **Drift** (M8-EXT-67) | Continuous | Slow world-state drift: horde size +1–2% per in-game day | Baseline pressure; no forced engagement |
-| **Blood Moon** | Day 7, 14, 21... | Forced-routing: all horde AI ignores other targets, paths directly to nearest player hub; spawn budget suspended | Predictable crisis rhythm; base defense gameplay |
-| **Plague Heart** (M5-EXT-64/65) | Player awakens heart (kills/screamer) | Awakened heart spawns periodic directed hordes to nearest unclaimed building/outpost | Player-driven escalation; rewards clearing hearts |
+**Sanctuary Mechanic (Player Hub Protection):** Claimed player-founded bases (M8-EXT-53) emit low-level deterrent field — reduces wandering-horde pathing weight by 60% within 100m. Does NOT prevent Siege/Breach if player generates strong signals inside. No day-7 shield — protection is behavioral, not temporal.
 
-**Protection for Player Hubs (per constraint):** Player-founded faction bases (M8-EXT-53) and claimed outposts get **hard cap** on horde size during Blood Moon (max 50% of normal spawn). Heart-directed hordes target UNCLAIMED structures first.
-
-**Math (Horde Size):**
+**Horde Size Math (Emergent):**
 ```
-base_spawn = 8 + (game_day // 7) * 4 + (player_average_level * 1.5)
-blood_moon_spawn = base_spawn * (1 + difficulty_multiplier)
-heart_spawn = min(base_spawn // 2, 12)  // smaller, targeted
+base_density = zone_base + (days_survived * 0.1) + (player_level * 0.5)
+signal_bonus = sum(active_signal_strength)  // noise, scent, screamers, combat
+horde_size = base_density * (1 + signal_bonus * 0.3)  // capped by zone max
 ```
+
+**Why:** 7DTD's fixed Blood Moon is exploitable (players cheese day 6). SoD2's Plague Hearts prove emergent, location-based escalation works. Urban Strife proves alert propagation > central command. Dynamic migration = always-on tension, no calendar-gaming, horde feels like a living ecosystem.
 
 ---
 

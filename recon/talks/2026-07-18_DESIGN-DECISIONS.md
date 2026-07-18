@@ -1,16 +1,34 @@
 # Design Decisions — ZombieEngine Core Systems
 
-## Decision 1: Horde Cadence → Telegraphing Tiered Horde System
+## Decision 1: Horde Dynamics → Dynamic Open-World Migration (No Fixed Cycle)
 
-**Problem:** How often do horde nights occur? How does alignment express in gameplay?
+**Problem:** How do hordes threaten players without a predictable calendar? How does alignment express in gameplay?
 
-**Solution:** 7-day baseline cycle with 3 telegraphing layers:
-- **Day 1-5 (Drift):** Slow world-state change (faction patrols, resource migration, zombie density creep)
-- **Day 6 (Scout):** Audio/visual tells — distant howls, scout zombies probing perimeter, radio chatter spikes
-- **Day 7 (Siege → Breach):** Full horde night. Two phases: Siege (wave pressure, structure testing) → Breach (interior infiltration if perimeter fails)
-- **Sanctuary Mechanic:** Player-founded hubs (M8-EXT-53) emit "Sanctuary" field — horde AI deprioritizes during Drift/Scout, full pressure only on Breach. Protects player investment without trivializing threat.
+**Solution:** **Dynamic Open-World Horde Migration** — no fixed day-7 cycle. Horde threat emerges continuously from world state:
 
-**Why:** 7DTD Blood Moon (predictable, exploitable) + SoD2 Plague Hearts (emergent, location-based) → tiered telegraphing solves both. Alignment (Dual-Axis Fame/Infamy) modulates Scout intensity: high Infamy = earlier/more scouts; high Fame = militia callouts.
+- **Wandering Horde Entities** — persistent groups that migrate across the map, drawn by emergent signals
+- **Attraction Signals** (additive, no schedule):
+  - Player noise (M5-EXT-14 hearing-cone, M11-EXT-64/65 stealth-approach)
+  - Scent trails (M5-EXT-65 pheromone) — fresh kills, blood, camps
+  - Screamer alerts (M5-EXT-64 sleeper) — single scream propagates through network
+  - Faction combat nearby — gunfire/explosions as dinner bells
+  - Time-of-day + weather — night/rain increases boldness/detection
+- **Escalation = Probability Stack** — each signal increases aggression tier:
+  - **Idle** (baseline): hordes wander, scavenge, ignore distant players
+  - **Scout** (1–2 signals): perimeter probes, audio/visual tells
+  - **Siege** (3+ signals): directed movement, structure testing
+  - **Breach** (sustained Siege + player in structure): interior infiltration
+
+**Sanctuary Mechanic:** Claimed player bases (M8-EXT-53) emit deterrent field — reduces wandering-horde pathing weight 60% within 100m. Does NOT prevent Siege/Breach if player generates strong signals inside. Protection is behavioral, not temporal.
+
+**Horde Size Math (Emergent):**
+```
+base_density = zone_base + (days_survived * 0.1) + (player_level * 0.5)
+signal_bonus = sum(active_signal_strength)
+horde_size = base_density * (1 + signal_bonus * 0.3)  // capped by zone max
+```
+
+**Why:** 7DTD's fixed Blood Moon is exploitable (cheese day 6). SoD2's Plague Hearts prove emergent, location-based escalation works. Urban Strife proves alert propagation > central command. Dynamic migration = always-on tension, no calendar-gaming, horde feels like living ecosystem.
 
 ---
 
