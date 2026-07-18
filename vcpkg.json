@@ -2,37 +2,91 @@
   "name": "zombie-engine",
   "version": "0.1.0",
   "dependencies": [
-    "catch2",
-    "cxxopts",
-    "enkits",
-    "entt",
-    "fastgltf",
+    {
+      "name": "catch2",
+      "version>=": "3.15.2"
+    },
+    {
+      "name": "cxxopts",
+      "version>=": "3.3.1"
+    },
+    {
+      "name": "enkits",
+      "version>=": "1.12"
+    },
+    {
+      "name": "entt",
+      "version>=": "3.16.0"
+    },
+    {
+      "name": "fastgltf",
+      "version>=": "0.9.0"
+    },
     "glm",
     {
       "name": "imgui",
-      "features": ["sdl3-binding", "vulkan-binding", "freetype"]
+      "features": [
+        "sdl3-binding",
+        "vulkan-binding",
+        "freetype"
+      ],
+      "version>=": "1.92.8"
     },
     {
       "name": "joltphysics",
-      "features": ["cross-platform-deterministic", "debugrenderer"]
+      "features": [
+        "cross-platform-deterministic",
+        "debugrenderer"
+      ],
+      "version>=": "5.6.0"
     },
     {
       "name": "msdfgen",
       "default-features": false,
-      "features": ["extensions"]
+      "features": [
+        "extensions"
+      ],
+      "version>=": "1.13"
     },
-    "nlohmann-json",
+    {
+      "name": "nlohmann-json",
+      "version>=": "3.12.0"
+    },
     {
       "name": "sdl3",
-      "features": ["vulkan"]
+      "features": [
+        "vulkan"
+      ],
+      "version>=": "3.4.12"
     },
-    "spdlog",
+    {
+      "name": "spdlog",
+      "version>=": "1.17.0"
+    },
     "stb",
-    "vk-bootstrap",
-    "volk",
-    "vulkan-memory-allocator",
-    "shaderc",
-    "spirv-reflect",
-    "tracy"
+    {
+      "name": "vk-bootstrap",
+      "version>=": "1.4.356"
+    },
+    {
+      "name": "volk",
+      "version>=": "1.4.356"
+    },
+    {
+      "name": "vulkan-memory-allocator",
+      "version>=": "3.4.0"
+    },
+    {
+      "name": "shaderc",
+      "version>=": "2026.3"
+    },
+    {
+      "name": "spirv-reflect",
+      "version>=": "1.4.356"
+    },
+    {
+      "name": "tracy",
+      "version>=": "0.13.1"
+    }
   ]
 }
