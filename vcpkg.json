@@ -30,9 +30,9 @@
     {
       "name": "imgui",
       "features": [
+        "freetype",
         "sdl3-binding",
-        "vulkan-binding",
-        "freetype"
+        "vulkan-binding"
       ],
       "version>=": "1.92.8"
     },
@@ -64,16 +64,28 @@
       "version>=": "3.4.12"
     },
     {
+      "name": "shaderc",
+      "version>=": "2026.2"
+    },
+    {
       "name": "spdlog",
       "version>=": "1.17.0"
     },
     {
+      "name": "spirv-reflect",
+      "version>=": "1.4.350.1"
+    },
+    {
       "name": "stb",
-      "version>=": "2024.08.10"
+      "version>=": "2024-07-29#1"
+    },
+    {
+      "name": "tracy",
+      "version>=": "0.13.1"
     },
     {
       "name": "vk-bootstrap",
-      "version>=": "1.4.356"
+      "version>=": "1.4.350"
     },
     {
       "name": "volk",
@@ -82,18 +94,6 @@
     {
       "name": "vulkan-memory-allocator",
       "version>=": "3.4.0"
-    },
-    {
-      "name": "shaderc",
-      "version>=": "2026.3"
-    },
-    {
-      "name": "spirv-reflect",
-      "version>=": "1.4.350.1"
-    },
-    {
-      "name": "tracy",
-      "version>=": "0.13.1"
     }
   ]
 }
