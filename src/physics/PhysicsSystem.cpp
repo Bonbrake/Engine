@@ -183,6 +183,30 @@ bool PhysicsSystem::CachedRayCast(const glm::vec3& start, const glm::vec3& end, 
     return hasHit;
 }
 
+// [M1-EXT-40] RayBatchQuery - packs N independent rays into one narrow-phase pass.
+// Jolt's CastRay is single-ray; this facade removes the N-call overhead for AI hearing/visibility LOS.
+// Mirrors the proven 5-param NarrowPhaseQuery::CastRay call used by CachedRayCast (no ShapeFilter).
+bool PhysicsSystem::CastRayBatch(RayBatch& batch,
+                                 const JPH::BroadPhaseLayerFilter& bpFilter,
+                                 const JPH::ObjectLayerFilter&    objFilter,
+                                 const JPH::BodyFilter&           bodyFilter)
+{
+    if (!physicsSystem_) return false;
+
+    auto& npq = physicsSystem_->GetNarrowPhaseQuery();
+    const size_t n = batch.rays.size();
+    bool anyHit = false;
+
+    for (size_t i = 0; i < n; ++i) {
+        if (i >= batch.hits.size()) break;   // caller under-allocated: hard stop, not a silent partial result
+        JPH::RayCastResult& hit = batch.hits[i];
+        hit.Reset();                          // mFraction = 1 + eps (Jolt sentinel for miss)
+        if (npq.CastRay(batch.rays[i], hit, bpFilter, objFilter, bodyFilter))
+            anyHit = true;
+    }
+    return anyHit;
+}
+
 // [M2-EXT-01] Async Collision Baking Task
 class AsyncCollisionBaker : public enki::ITaskSet {
 public:

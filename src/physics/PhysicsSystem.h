@@ -11,6 +11,8 @@
 #include <Jolt/Physics/Body/BodyInterface.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
+#include <Jolt/Physics/Collision/RayCast.h>
+#include <Jolt/Physics/Collision/CastResult.h>
 #include <Jolt/Physics/Body/BodyActivationListener.h>
 #include <Jolt/Physics/EPhysicsUpdateError.h>
 #include <entt/entt.hpp>
@@ -147,6 +149,14 @@ struct BodyActivationEvent {
     bool isActivated;
 };
 
+// [M1-EXT-40] RayBatchQuery - packs N independent world-space rays into one struct and runs
+// them against Jolt's narrow-phase query (Jolt has no native N-ray batch primitive).
+// At namespace scope (not nested in PhysicsSystem) so callers use physics::RayBatch directly.
+struct RayBatch {
+    std::vector<JPH::RRayCast>      rays;  // caller-owned origins + directions
+    std::vector<JPH::RayCastResult> hits;  // caller must pre-size == rays.size(); un-hit entries keep mFraction = 1+eps
+};
+
 class PhysicsSystem {
 public:
     static void initializeGlobal();
@@ -169,6 +179,15 @@ public:
 
     // [M2-EXT-03] Cached narrow-phase raycast. Thread-safe for concurrent AI readers.
     bool CachedRayCast(const glm::vec3& start, const glm::vec3& end, JPH::RayCastResult& outHit);
+
+    // [M1-EXT-40] RayBatchQuery - facade over Jolt's single-ray CastRay (struct at namespace scope: physics::RayBatch).
+    // Casts batch.rays.size() independent rays. Fills batch.hits (caller must pre-size to rays.size()).
+    // Returns true if at least one ray hit. Per-ray results are independent (no multi-hit-per-ray).
+    // NOTE: matches Jolt's single-hit NarrowPhaseQuery::CastRay (5 params, no ShapeFilter).
+    bool CastRayBatch(RayBatch& batch,
+                      const JPH::BroadPhaseLayerFilter& bpFilter  = {},
+                      const JPH::ObjectLayerFilter&    objFilter  = {},
+                      const JPH::BodyFilter&           bodyFilter = {});
 
     // [M2-EXT-01] Enqueue an async collision bake and swap task
     void QueueAsyncCollisionSwap(JPH::BodyID bodyId, const std::vector<glm::vec3>& vertices, const std::vector<uint32_t>& indices, JPH::ShapeRefC proxyShape);

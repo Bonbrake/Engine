@@ -9,6 +9,7 @@ namespace core {
 std::shared_ptr<spdlog::logger> Logger::logger_;
 
 void Logger::init() {
+    if (logger_) return;  // idempotent: spdlog::register_logger throws on duplicate name "ENGINE"
     spdlog::init_thread_pool(8192, 1);
 
     auto stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
