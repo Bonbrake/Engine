@@ -33,6 +33,7 @@ public:
 private:
     void create();
     void cleanup();
+    void createTonemapResources();
 
     Device* device_ = nullptr;
     SDL_Window* window_ = nullptr;
@@ -65,6 +66,29 @@ private:
     FramePacing framePacing_;
 
     std::string pendingDumpPath_; // non-empty => capture this frame to PNG (one-shot)
+
+    // [M4.5-EXT-33] AgX HDR tonemapper resources
+    VkFormat hdrFormat_ = VK_FORMAT_R16G16B16A16_SFLOAT; // HDR scene render target
+    struct HdrFrame { VkImage image = VK_NULL_HANDLE; VmaAllocation allocation = VK_NULL_HANDLE; VkImageView view = VK_NULL_HANDLE; };
+    std::vector<HdrFrame> hdrFrames_;                     // one HDR target per swapchain image
+
+    VkPipelineLayout tonemapPipelineLayout_ = VK_NULL_HANDLE;
+    VkPipeline tonemapPipeline_ = VK_NULL_HANDLE;
+    std::vector<VkDescriptorSetLayout> tonemapSetLayouts_;
+
+    // Descriptor buffer for tonemap pass (engine uses VK_EXT_descriptor_buffer)
+    VkBuffer tonemapDescBuffer_ = VK_NULL_HANDLE;
+    VmaAllocation tonemapDescAlloc_ = VK_NULL_HANDLE;
+    void* tonemapDescMapped_ = nullptr;
+    VkDeviceAddress tonemapDescAddress_ = 0;
+    VkDeviceSize tonemapDescOffset_ = 0;
+
+    // Exposure UBO (tiny buffer, CPU-mapped, one float per frame)
+    VkBuffer exposureUBO_ = VK_NULL_HANDLE;
+    VmaAllocation exposureAlloc_ = VK_NULL_HANDLE;
+    void* exposureMapped_ = nullptr;
+
+    VkSampler tonemapSampler_ = VK_NULL_HANDLE;
 };
 
 } // namespace render
