@@ -14,6 +14,7 @@ struct Config {
     bool flyCamera = false;   // [M2.6 Phase 2] enable debug fly-camera (dev)
     int crashFrame = -1;
     int quitFrame = -1;
+    float exposure = 1.0f;   // [M4.5-EXT-33] AgX tonemapper exposure multiplier
     std::string settingsPath = "settings.json";
     // Frame-dump tool (windowed --dev only; headless has no swapchain to capture).
     std::string dumpFramePath;   // empty => disabled

@@ -28,6 +28,7 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         int cl_dumpFrameAt = -1;
         std::string cl_scriptInput;
         std::string cl_dumpState;
+        float cl_exposure = 1.0f;
 
         options.add_options()
             ("headless", "Run without display", cxxopts::value<bool>(cl_headless))
@@ -42,6 +43,7 @@ void Config::parseCommandLine(int argc, char* argv[]) {
             ("dump-frame-at", "Render-call index at which to dump the frame", cxxopts::value<int>(cl_dumpFrameAt)->default_value("-1"))
             ("script-input", "Scripted-input text file (headless self-verify)", cxxopts::value<std::string>(cl_scriptInput)->default_value(""))
             ("dump-state", "Per-frame FlyCamera pose JSON output path", cxxopts::value<std::string>(cl_dumpState)->default_value(""))
+            ("exposure", "AgX tonemapper exposure multiplier", cxxopts::value<float>(cl_exposure)->default_value("1.0"))
             ("settings", "Path to settings.json", cxxopts::value<std::string>(cl_settingsPath)->default_value("settings.json"))
             ("h,help", "Print usage");
 
@@ -69,6 +71,7 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         if (result.count("dump-frame-at")) { dumpFrameAt = cl_dumpFrameAt; overriddenFields.insert("dumpFrameAt"); }
         if (result.count("script-input")) { scriptInput = cl_scriptInput; overriddenFields.insert("scriptInput"); }
         if (result.count("dump-state")) { dumpState = cl_dumpState; overriddenFields.insert("dumpState"); }
+        if (result.count("exposure")) { exposure = cl_exposure; overriddenFields.insert("exposure"); }
 
     } catch (const cxxopts::exceptions::exception& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;
@@ -92,6 +95,7 @@ void Config::loadSettings() {
             if (j.contains("quitFrame") && !overriddenFields.count("quitFrame")) quitFrame = j["quitFrame"].get<int>();
             if (j.contains("scriptInput") && !overriddenFields.count("scriptInput")) scriptInput = j["scriptInput"].get<std::string>();
             if (j.contains("dumpState") && !overriddenFields.count("dumpState")) dumpState = j["dumpState"].get<std::string>();
+            if (j.contains("exposure") && !overriddenFields.count("exposure")) exposure = j["exposure"].get<float>();
             std::cout << "Loaded settings from " << settingsPath << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Failed to parse settings.json: " << e.what() << std::endl;

@@ -76,7 +76,7 @@ file(GLOB_RECURSE INC_FILES "src/*.h")
 list(APPEND SRC_FILES "src/debug/imgui_impl_vulkan.cpp")
 
 # Compile shaders
-set(SHADERS simple.vert simple.frag simple_mesh.vert cull.comp depth_pyramid.comp)
+set(SHADERS simple.vert simple.frag simple_mesh.vert cull.comp depth_pyramid.comp tonemap.vert tonemap.frag)
 set(SPV_FILES "")
 foreach(SHADER ${SHADERS})
     set(INPUT "${CMAKE_SOURCE_DIR}/shaders/${SHADER}")
