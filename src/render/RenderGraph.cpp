@@ -2,6 +2,7 @@
 #include "HazardValidator.h"
 #include <queue>
 #include <algorithm>
+#include <exception>
 #include <volk.h>
 #include "../core/Logger.h"
 #include "../core/JobSystem.h"
@@ -195,6 +196,7 @@ void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, Device* device, Command
         VkCommandBuffer* outCmd;
 
         void ExecuteRange(enki::TaskSetPartition range, uint32_t threadnum) override {
+            try {
             if (!pass->executeCallback) return;
 
             VkCommandPool threadPool = poolMatrix->GetPool(frameIndex, threadnum);
@@ -236,6 +238,11 @@ void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, Device* device, Command
             vkBeginCommandBuffer(*outCmd, &beginInfo);
             pass->executeCallback(*outCmd);
             vkEndCommandBuffer(*outCmd);
+            } catch (const std::exception& e) {
+                LOG_ERROR("[M0-EXT-25] RenderGraph PassTask threw std::exception: {} - pass dropped.", e.what());
+            } catch (...) {
+                LOG_CRITICAL("[M0-EXT-25] RenderGraph PassTask threw non-std exception - pass dropped.");
+            }
         }
     };
 

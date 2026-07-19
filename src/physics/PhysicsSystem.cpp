@@ -13,6 +13,7 @@
 #include <glm/glm.hpp>
 #include "PhysicsDebugRenderer.h"
 #include "../events/EventBus.h"
+#include <exception>
 
 // Jolt uses right-handed Y-up — matches spec.
 // JPH_CROSS_PLATFORM_DETERMINISTIC and JPH_DOUBLE_PRECISION enforced by CMake defines.
@@ -189,6 +190,7 @@ public:
         : sys_(sys), bodyId_(bid), vertices_(std::move(verts)), indices_(std::move(idx)) {}
 
     void ExecuteRange(enki::TaskSetPartition range, uint32_t threadnum) override {
+        try {
         if (vertices_.empty() || indices_.empty()) return;
 
         // Cook the mesh offline
@@ -217,6 +219,11 @@ public:
         // Push to pending swaps
         std::lock_guard lock(sys_->pendingSwapsMutex_);
         sys_->pendingSwaps_.push_back({bodyId_, cookedShape});
+        } catch (const std::exception& e) {
+            LOG_ERROR("[M0-EXT-25] AsyncCollisionBaker threw std::exception: {} - bake skipped.", e.what());
+        } catch (...) {
+            LOG_CRITICAL("[M0-EXT-25] AsyncCollisionBaker threw non-std exception - bake skipped.");
+        }
     }
 
 private:

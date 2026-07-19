@@ -13,6 +13,7 @@
 #include "../events/EventBus.h"
 #include "../ecs/Destructible.h"
 #include "CVarSystem.h"
+#include <exception>
 
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
@@ -423,7 +424,13 @@ void Engine::mainLoop() {
                     entt::entity target;
                     SpscSweeperTask(ecs::ECSContext* e, entt::entity t) : ecs(e), target(t) {}
                     void ExecuteRange(enki::TaskSetPartition range, uint32_t threadnum) override {
+                        try {
                         ecs->GetWorkerQueue(threadnum).PushMutation(target, 1);
+                        } catch (const std::exception& e) {
+                            LOG_ERROR("[M0-EXT-25] enkiTS SpscSweeperTask threw std::exception: {} - contained.", e.what());
+                        } catch (...) {
+                            LOG_CRITICAL("[M0-EXT-25] enkiTS SpscSweeperTask threw non-std exception - contained.");
+                        }
                     }
                 };
                 SpscSweeperTask* task = new SpscSweeperTask(ecsContext_.get(), target);
