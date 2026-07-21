@@ -1,8 +1,8 @@
 #include "EntityFactory.h"
 #include "Components.h"
-#include "debug/MetaRegistry.h"
-#include "core/PRNG.h"
-#include "core/Logger.h"
+#include "ze/debug/MetaRegistry.h"
+#include "ze/core/PRNG.h"
+#include "ze/core/Logger.h"
 #include <fstream>
 
 namespace ecs {

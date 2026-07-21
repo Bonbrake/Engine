@@ -1,5 +1,5 @@
 #include "MaterialSystem.h"
-#include "core/Logger.h"
+#include "ze/core/Logger.h"
 
 namespace render {
 

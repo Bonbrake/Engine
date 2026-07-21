@@ -1,5 +1,5 @@
 #include "AssetManager.h"
-#include "core/Logger.h"
+#include "ze/core/Logger.h"
 #include <fastgltf/core.hpp>
 #include <fastgltf/tools.hpp>
 #include <fastgltf/glm_element_traits.hpp>

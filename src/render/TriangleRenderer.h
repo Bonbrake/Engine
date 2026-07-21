@@ -3,8 +3,8 @@
 #include <vk_mem_alloc.h>
 #include <vector>
 #include "AssetTypes.h"
-#include "core/ThreadArena.h"   // BumpArena (frameArena_)
-#include "ecs/GenerationalTable.h"  // ecs::Handle
+#include "ze/core/ThreadArena.h"   // BumpArena (frameArena_)
+#include "ze/ecs/GenerationalTable.h"  // ecs::Handle
 
 namespace ecs { class ECSContext; }
 namespace render {

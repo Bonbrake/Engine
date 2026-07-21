@@ -1,6 +1,6 @@
-#include "core/Config.h"
-#include "core/Engine.h"
-#include "core/Logger.h"
+#include "ze/core/Config.h"
+#include "ze/core/Engine.h"
+#include "ze/core/Logger.h"
 #include <iostream>
 #include <exception>
 

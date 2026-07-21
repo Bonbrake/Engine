@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/Input.h"
+#include "ze/core/Input.h"
 #include <glm/glm.hpp>
 
 namespace debug {

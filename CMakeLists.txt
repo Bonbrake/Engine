@@ -72,7 +72,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_program(GLSLC glslc REQUIRED)
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
-file(GLOB_RECURSE INC_FILES "src/*.h")
+file(GLOB_RECURSE INC_FILES "include/**/*.h" "include/**/*.hpp")
 list(APPEND SRC_FILES "src/debug/imgui_impl_vulkan.cpp")
 
 # Compile shaders
@@ -92,7 +92,7 @@ foreach(SHADER ${SHADERS})
 endforeach()
 
 add_executable(ZombieEngine ${SRC_FILES} ${INC_FILES} ${SPV_FILES})
-target_include_directories(ZombieEngine PRIVATE src)
+target_include_directories(ZombieEngine PRIVATE include)
 target_compile_definitions(ZombieEngine PRIVATE ENGINE_DEV_TOOLS)
 
 target_link_libraries(ZombieEngine PRIVATE
@@ -120,7 +120,7 @@ target_link_libraries(ZombieEngine PRIVATE
 # Exercises the production SDL_GetKeyboardState path across a minimize/restore
 # cycle — the alt-tab bug class unit tests can't cover.
 add_executable(focus_probe archive/phase1_verify/focus_probe.cpp)
-target_include_directories(focus_probe PRIVATE src)
+target_include_directories(focus_probe PRIVATE include)
 target_link_libraries(focus_probe PRIVATE
     SDL3::SDL3
 )
@@ -134,7 +134,7 @@ endif()
 
 # Tests
 enable_testing()
-file(GLOB_RECURSE TEST_SRC_FILES "src/tests/*.cpp")
+file(GLOB_RECURSE TEST_SRC_FILES "tests/unit/*.cpp")
 if(TEST_SRC_FILES)
     add_executable(ZombieEngineTests ${TEST_SRC_FILES})
     
@@ -143,7 +143,7 @@ if(TEST_SRC_FILES)
     list(REMOVE_ITEM SRC_FILES "${CMAKE_SOURCE_DIR}/src/main.cpp")
     
     target_sources(ZombieEngineTests PRIVATE ${SRC_FILES})
-    target_include_directories(ZombieEngineTests PRIVATE src ${STB_INCLUDE_DIR})
+    target_include_directories(ZombieEngineTests PRIVATE include ${STB_INCLUDE_DIR})
     
     target_link_libraries(ZombieEngineTests PRIVATE
         SDL3::SDL3

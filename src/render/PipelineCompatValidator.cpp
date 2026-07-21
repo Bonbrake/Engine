@@ -4,8 +4,8 @@
 // against the VkPipelineLayoutCreateInfo at pipeline creation time.
 // Called from debug/dev PipelineBuilder paths; no-op in release builds.
 
-#include "render/PipelineCompatValidator.h"
-#include "core/Logger.h"
+#include "ze/render/PipelineCompatValidator.h"
+#include "ze/core/Logger.h"
 
 #define SPIRV_REFLECT_USE_SYSTEM_SPIRV_H
 #include <spirv_reflect.h>

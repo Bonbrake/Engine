@@ -3,8 +3,8 @@
 #include <glm/glm.hpp>
 #include <SDL3/SDL.h>
 
-#include "core/Input.h"
-#include "debug/FlyCamera.h"
+#include "ze/core/Input.h"
+#include "ze/debug/FlyCamera.h"
 
 // [M0-EXT-15] Fly-camera input regression tests.
 // Proof that the camera responds to *held* key state (the continuous

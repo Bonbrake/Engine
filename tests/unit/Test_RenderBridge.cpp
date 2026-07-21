@@ -5,8 +5,8 @@
 #include <glm/gtc/quaternion.hpp>
 #include <entt/entt.hpp>
 
-#include "ecs/Components.h"
-#include "render/TriangleRenderer.h"
+#include "ze/ecs/Components.h"
+#include "ze/render/TriangleRenderer.h"
 
 // [M1:EXIT-1] GPU-free proof of the camera-relative MVP math that the ECS->render
 // bridge relies on. This is the math that M2.6 Phase 2 could only probe with a

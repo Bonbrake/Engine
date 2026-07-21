@@ -6,9 +6,9 @@
 #include <nlohmann/json.hpp>
 #include <entt/entt.hpp>
 
-#include "ecs/Components.h"
-#include "physics/PhysicsSystem.h"
-#include "debug/MetaRegistry.h"
+#include "ze/ecs/Components.h"
+#include "ze/physics/PhysicsSystem.h"
+#include "ze/debug/MetaRegistry.h"
 
 // [M2.6] Phase 1 precision regression tests.
 // Proof that B2 (silent double->float truncation on world-space Transform) is gone:

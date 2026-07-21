@@ -1,4 +1,4 @@
-#include "debug/FlyCamera.h"
+#include "ze/debug/FlyCamera.h"
 
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>

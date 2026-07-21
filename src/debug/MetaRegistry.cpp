@@ -4,7 +4,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include "../ecs/Components.h"
 #include "../ecs/Destructible.h"
-#include "core/Logger.h"
+#include "ze/core/Logger.h"
 
 namespace debug {
 

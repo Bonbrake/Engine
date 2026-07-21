@@ -7,8 +7,8 @@
 #include <Jolt/Physics/Collision/RayCast.h>
 #include <Jolt/Physics/Collision/CastResult.h>
 
-#include "physics/PhysicsSystem.h"
-#include "core/Logger.h"
+#include "ze/physics/PhysicsSystem.h"
+#include "ze/core/Logger.h"
 
 // [M1-EXT-40] RayBatchQuery primitive - packs N independent world-space rays into one
 // narrow-phase pass (Jolt has no native N-ray batch; it only does per-ray or multi-hit-per-ray).

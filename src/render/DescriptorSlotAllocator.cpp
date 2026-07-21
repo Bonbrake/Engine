@@ -2,8 +2,8 @@
 //
 // Implementation — bitmask free-list with round-robin page hinting.
 
-#include "render/DescriptorSlotAllocator.h"
-#include "core/Logger.h"
+#include "ze/render/DescriptorSlotAllocator.h"
+#include "ze/core/Logger.h"
 
 namespace render {
 
