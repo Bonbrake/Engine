@@ -852,6 +852,29 @@ M0-EXT-08 "Bindless Storage Handle Page Allocator" enables the id Tech 7 pattern
 
 ---
 
+### 2.5 Gap-Fill: Milestones With No Research Coverage
+
+The following milestones had ZERO paper-to-block mappings. These are the largest gaps in the plan.
+
+#### M1 Core Engine/Survival → Experience-Driven Adaptation (Paper 8)
+**M1-EXT-01 SpatialHash and M1-EXT-08 Dynamic Spatial Hash Quad-tree**: Paper 8's behavioral telemetry loop tracks player state every 30 seconds. ZE's spatial hash (used by audio, physics, AI, loot) IS the telemetry backbone. Tag each cell in the spatial hash with activity metrics: zombie kills in cell, time spent in cell, loot gathered from cell. The AI Director queries this for event selection (M5-EXT-10). This connects two currently separate subsystems — the spatial hash goes from "dumb grid" to "gameplay sensor grid."
+**M1-EXT-06 EnTT archetype mutation queue**: DDA papers show that adaptation requires per-player-state tracking. M1-EXT-06's component mutation queue should include a player-state component (health 0-100, resource stockpile 0-100, threat-level 0-100) that the AI Director reads as input. The current spec doesn't expose player state as a component — it's implicit in the survival numbers.
+
+#### M10 Environment/Atmosphere → Weather + Ecoclimate (Papers 29, 36, 43-44)
+**M10-EXT-03 Bruneton-Nishita Atmosphere**: This block replaces the previous atmospheric model. Apply the Hosek-Wilkie correction from Paper 29: Bruneton-Nishita is more accurate than Preetham but still fails below 2° solar elevation (polar twilight). ZE must layer a post-process blue-hour correction that darkens the horizon band and shifts hue toward deep blue when sun <2°.
+**M10-EXT-05 Navier-Stokes Weather**: Papers 43-44's weather model runs on 50-100m grid cells for real-time use. ZE's version is baked to 2D weather maps not runtime 3D N-S solve. The baking pipeline: run offline N-S simulation on the 1km² grid (takes ~2 minutes per day), save wind/pressure/temperature to 2D float textures. Runtime samples these textures based on in-game time. This avoids shipping a N-S solver.
+**M10-EXT-06 Phenological Cycles**: Paper 36 Ecoclimates provides the formula: chlorophyll transitions depend on cumulative growing-degree-days (base 10°C) and photoperiod (day length from M10-EXT-02). Implement as a compute shader that updates all tree instances every 100 game-seconds, not per frame. Each tree computes its own canopy density/color based on local elevation and soil type from M4-EXT-17 Edaphic soil grid.
+
+#### M12 Multiplayer/Netcode → Save Serialization + Tension Space (Papers 2, 21, 27)
+**M12-EXT-01 Bitstream Delta Encoding**: Paper 21's save serialization lesson (static vs dynamic data separation) applies directly to network serialization. Entities have static properties (modelID, spawnPosition) that never change mid-session — send once. Dynamic properties (position, health, inventory) change at 10-30Hz — send these as bit-packed delta frames against the last-known state. The same "separate static from dynamic before compression" rule applies.
+**M12-EXT-17 Co-op Determinism**: Paper 27's finding — networked dynamic response produces non-deterministic physics divergence. For ZE co-op (non-competitive), the solution is simpler than rollback: the HOST runs authoritative physics, sends entity position+velocity at 10Hz, and clients interpolate. The tension model from Paper 2 applies to shared narrative events — if one player experiences a zombie breach while the other is looting, the tension states diverge. M12-EXT-17 must include a "tension sync" packet that aligns director state across clients every 30 seconds.
+
+#### M13 Endgame → Mission Director + Rumor Network (Papers 8, 37)
+**M13-EXT-01 Procedural Mission Director**: Paper 8's Experience-Driven Adaptation prescribes the director's event selection loop. The block currently has no algorithm. The director selects missions from a weighted pool based on: (1) settlement needs (% food deficit, % medical criticality), (2) faction standing (trade route threats), (3) player engagement (time since last base defense). Each mission type has a "cooldown" preventing repeats within 5 in-game days.
+**M13-EXT-06 Survivor Rumor Network**: Paper 37's Bayesian belief propagation applies here. NPCs have a "knowledge of world state" Beta distribution. When a survivor tells another about an event (horde sighting, loot location), the belief propagates with trust-weighted influence. Rumor quality decays with distance (3 hops max) and time (50% belief loss per day). The block should use a gossip protocol: each survivor periodically (every 1-4 game-hours) picks a random conversation partner and exchanges the highest-confidence rumor they have.
+
+---
+
 ## 3. Design Pillars (Evidence-Based)
 
 ### Pillar 1: The AI Director Creates Drama, Not Difficulty
