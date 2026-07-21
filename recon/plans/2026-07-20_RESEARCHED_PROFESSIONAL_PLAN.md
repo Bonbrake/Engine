@@ -184,68 +184,79 @@ The three immutable pillars remain:
 
 **ZE mapping**: Papers 39/40 → M10/M11 atmosphere/cine-AI; Paper 41 → M3 texture pipeline; Paper 42 → M3 ballistics; Papers 43/44 → M10 weather + M6 audio; Paper 45 → M11 quest; Paper 46 → M4 vegetation; Paper 47 → M3 BRDF material; Paper 48 → M4.5 geom cache; Paper 49/50 → M4.5 upscaler/renderer.
 
-### 2.3 Game Analysis Cross-Game Truths [X]
+### 2.3 Game Analysis Cross-Game Truths [X/S]
 
 | Truth | Evidence | ZE Application |
 |-------|----------|----------------|
-| Scheduled pressure beats random difficulty | 7DTD Blood Moon, RimWorld storyteller | AI Director event pool with customizable cadence |
-| Character attachment is the engine of consequence | State of Decay 2 roster, Project Zomboid | Memorable persistent settlements/NPCs |
-| Emergent story beats authored narrative | RimWorld, Dwarf Fortress | Systemic triggers only; no forced cutscene paths |
-| The world must remember you | DayZ reset flaw, SoD2 legacy | Persistent buildings, NPCs, territory |
-| Difficulty should scale to assets, not level | 7DTD game stage, RimWorld wealth | Threat scales from base strength and map knowledge |
-| Crafting must be knowledge-based | 7DTD magazine, PZ skill grind | Unlock by doing/documenting, not RNG or time sink |
-| Survival is interlocking systems | PZ moodles, DayZ disease | Cross-system dependency graph, not isolated bars |
-| Movement must be fun first | Dying Light 2 | Core locomotion before traversal complexity |
-| The director system creates replayability | RimWorld storyteller | Dramatic event weighting, not random loot tables |
-| Technical polish beats feature count | DayZ, 7DTD alpha history | Ship fewer interacting systems cleanly |
+| Scheduled pressure beats random difficulty | [X] 7DTD Blood Moon; RimWorld storyteller [X] | AI Director event pool with customizable cadence |
+| Character attachment is the engine of consequence | [X] State of Decay 2 roster; Project Zomboid [X] | Memorable persistent settlements/NPCs |
+| Emergent story beats authored narrative | [S] Game Developer: RimWorld/Dwarf Fortress named "story generators" because fun comes from seeing non-scripted stories [cache: www.gamedeveloper.com-407891ff9f.md, article: rimworld-dwarf-fortress-and-procedurally-generated-story-telling] | Systemic triggers only; no forced cutscene paths |
+| The world must remember you | [X] DayZ reset flaw; SoD2 legacy [X] | Persistent buildings, NPCs, territory |
+| Difficulty should scale to assets, not level | [X] 7DTD game stage; RimWorld wealth [X] | Threat scales from base strength and map knowledge |
+| Crafting must be knowledge-based | [X] 7DTD magazine; PZ skill grind [X] | Unlock by doing/documenting, not RNG or time sink |
+| Survival is interlocking systems | [X] PZ moodles; DayZ disease [X] | Cross-system dependency graph, not isolated bars |
+| Movement must be fun first | [X] Dying Light 2 [X] | Core locomotion before traversal complexity |
+| The director system creates replayability | [X] RimWorld storyteller [X] | Dramatic event weighting, not random loot tables |
+| Technical polish beats feature count | [X] DayZ, 7DTD alpha history [X] | Ship fewer interacting systems cleanly |
 
-**Source status**: [X] each game name is a primary source citation; gameplay footage/postmortem extraction required to verify claim wording.
+**Source status**: [S] = 1 cache-backed claim; [X] = 9 claims needing gameplay footage/postmortem extraction. Exact cache URLs and article URLs are named inline.
 
 ### 2.4 Professional Studio and Indie Engine Case Studies [X]
 
 #### Big studios and engine efforts
 
-1. id Tech 7/8 — id Software
-   **Primary source**: SIGGRAPH Advances talk, DOOM/Eternal graphics study
-   **Lesson**: bindless-first design reduces CPU overhead; clustered compute shading over traditional G-Buffer
+1. id Tech 7/8 — id Software [S]
+   **Primary source**: cached Wikipedia id Tech 7 extract
+   **Evidence**: "On PC, id Tech 7 supports Vulkan rendering only." and "engine developer Axel Gneiting says the engine doesn't have a 'main thread'; everything is implemented as jobs." [cache: en.wikipedia.org-271a622a84.md]
+   **Lesson**: bindless-first design reduces CPU overhead; jobified architecture without a main thread; clustered compute shading over traditional G-Buffer
+   **Gap**: full architectural diagram set still needs SIGGRAPH Advances PDF extraction
 
-2. Decima Engine — Guerrilla / Sony
+2. Decima Engine — Guerrilla / Sony [X]
    **Primary source**: Horizon Zero Dawn/Frozen West public talks, SIGGRAPH coverage
    **Lesson**: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
+   **Gap**: no extracted Decima-specific figure/text yet; Horizon GDC talk fetch failed 404 in live retrieval
 
 3. UE5 Nanite + Lumen — Epic Games [S]
-   **Primary source**: cached UE5 public docs (Nanite, Lumen, World Partition, Mass Entity, PCG confirmed in fetched docs)
-   **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content
+   **Primary source**: cached UE5 public docs + Karis Nanite SIGGRAPH PDF cache
+   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html, advances.realtimerendering.com-c818a353d9.md]
+   **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
 
-4. Frostbite — DICE / EA
-   **Primary source**: GDC Vault “Frostbite” talks (cached index confirmed)
-   **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid
+4. Frostbite — DICE / EA [S]
+   **Primary source**: cached GDC Vault index + SlideShare index
+   **Evidence**: cached GDC Vault index shows Frostbite rendering sessions. cached SlideShare index shows "Five Rendering Ideas from Battlefield 3 & Need For Speed: The Run by Electronic Arts / DICE" and "Frostbite on Mobile byElectronic Arts / DICE". [cache: www.gdcvault.com-8042576d17.md, www.slideshare.net-889de28ff4.md]
+   **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid; mobile-aware rendering stack
 
-5. Unity DOTS + HDRP — Unity Technologies
-   **Primary source**: Unity public blog/DOTS samples (official documentation)
+5. Unity DOTS + HDRP — Unity Technologies [X]
+   **Primary source**: Unity public blog/DOTS samples
    **Lesson**: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation
+   **Gap**: Unity-Technologies/EntityComponentSystemExamples returned 404 in live retrieval; alternate sample repo needed
 
 #### Indie and small-team custom-engine efforts
 
-1. Lethal Company — Zeekerss
+1. Lethal Company — Zeekerss [X]
    **Primary source**: public devlog and release postmortem coverage
    **Lesson**: single-session scope discipline; emergent horror from minimal systems; community rumor system as content multiplier
+   **Gap**: no devlog/postmortem extract yet; direct fetch needed
 
-2. Valheim — Iron Gate Studio
+2. Valheim — Iron Gate Studio [X]
    **Primary source**: public developer Q&A and postmortem coverage
-   **Lesson**: biome gating with clear visual language; disciplined scale over feature count; network model designed for drop-in/drop-out
+   **Lesson**: biome gating with clear visual language; disciplined scale over feature count; network architecture designed for drop-in/drop-out
+   **Gap**: no public postmortem extract yet; direct fetch needed
 
-3. Noita — Nolla Games
+3. Noita — Nolla Games [X]
    **Primary source**: public developer blog and postmortem videos
    **Lesson**: simulation-first worldview with pixel-accurate interaction; every system mutable; failure-state as narrative
+   **Gap**: devblog/postmortem video extract pending
 
-4. Vintage Story — Tyron / Lone-dev model
+4. Vintage Story — Tyron / Lone-dev model [X]
    **Primary source**: official site, GitHub, wiki; long-term solo active-development history
    **Lesson**: solo active-development longevity over a decade; voxel/terrain hybrid with finite survival loop; deep modding fidelity as retention mechanism
+   **Gap**: GitHub/wiki extract pending
 
-5. Keep Talking and Nobody Explodes — Steel Crate Games
+5. Keep Talking and Nobody Explodes — Steel Crate Games [X]
    **Primary source**: public postmortems and developer talks
    **Lesson**: small-team release discipline; documentation-as-UX; scoped to one mechanic and extended through community content
+   **Gap**: postmortem/talk extract pending
 
 ### 2.5 Engine Architecture Patterns [S/X]
 
@@ -506,26 +517,30 @@ Purpose: extract durable patterns for ZE from how shipped engines were built.
 ### Big studios
 
 1. id Tech 7/8 — id Software [S]
-   **Primary source**: Wikipedia cached extract + SIGGRAPH Advances talk
-   **Evidence**: cached Wikipedia extract quotes engine developer Axel Gneiting: engine has no "main thread"; everything is implemented as jobs.
-   **Lesson**: bindless-first design reduces CPU overhead; clustered compute shading; visibility buffer over traditional G-Buffer
+   **Primary source**: cached Wikipedia id Tech 7 extract
+   **Evidence**: "On PC, id Tech 7 supports Vulkan rendering only." and "engine developer Axel Gneiting says the engine doesn't have a 'main thread'; everything is implemented as jobs." [cache: en.wikipedia.org-271a622a84.md]
+   **Lesson**: bindless-first design reduces CPU overhead; jobified architecture without a main thread; clustered compute shading over traditional G-Buffer
    **Gap**: full architectural diagram set still needs SIGGRAPH Advances PDF extraction
 
-2. Decima Engine — Guerrilla / Sony
-   **Primary source**: Horizon public talks, SIGGRAPH coverage
+2. Decima Engine — Guerrilla / Sony [X]
+   **Primary source**: Horizon Zero Dawn/Frozen West public talks, SIGGRAPH coverage
    **Lesson**: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
+   **Gap**: no extracted Decima-specific figure/text yet; Horizon GDC talk fetch failed 404 in live retrieval
 
 3. UE5 Nanite + Lumen — Epic Games [S]
-   **Primary source**: cached UE5 public docs (Nanite, Lumen, World Partition, Mass Entity, PCG confirmed in fetched docs)
+   **Primary source**: cached UE5 public docs + Karis Nanite SIGGRAPH PDF cache
+   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html, advances.realtimerendering.com-c818a353d9.md]
    **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
 
-4. Frostbite — DICE / EA
-   **Primary source**: GDC Vault Frostbite talks (cached index confirmed)
-   **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid
+4. Frostbite — DICE / EA [S]
+   **Primary source**: cached GDC Vault index + SlideShare index
+   **Evidence**: cached GDC Vault index shows Frostbite rendering sessions. cached SlideShare index shows "Five Rendering Ideas from Battlefield 3 & Need For Speed: The Run by Electronic Arts / DICE" and "Frostbite on Mobile byElectronic Arts / DICE". [cache: www.gdcvault.com-8042576d17.md, www.slideshare.net-889de28ff4.md]
+   **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid; mobile-aware rendering stack
 
-5. Unity DOTS + HDRP — Unity Technologies
-   **Primary source**: Unity public blog/DOTS samples (official documentation)
+5. Unity DOTS + HDRP — Unity Technologies [X]
+   **Primary source**: Unity public blog/DOTS samples
    **Lesson**: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation
+   **Gap**: Unity-Technologies/EntityComponentSystemExamples returned 404 in live retrieval; alternate sample repo needed
 
 ### Indie and small-team custom-engine efforts
 
