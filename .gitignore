@@ -4,7 +4,16 @@
 # Build outputs
 # ============================================================
 build/
+build-*/
 _bld*.bat
+_bld*.log
+_cdb*.txt
+_cfg*.log
+cmake-build-*/
+out/
+x64/
+Release/
+Debug/
 *.exe
 *.obj
 *.pdb
@@ -15,11 +24,6 @@ _bld*.bat
 *.so
 *.dylib
 *.a
-cmake-build-*/
-out/
-x64/
-Release/
-Debug/
 
 # ============================================================
 # IDE / Editor
@@ -35,7 +39,6 @@ Debug/
 *.opendb
 *.opensdf
 *.sdf
-Debug/
 __pycache__/
 *.pyc
 *.pyo
@@ -56,6 +59,16 @@ archive/
 # ============================================================
 vcpkg_installed/
 vcpkg-manifest-install.log
+
+# ============================================================
+# Runtime artifacts
+# ============================================================
+engine.log
+imgui.ini
+logs/
+pipeline_cache.bin
+val*.log
+Testing/
 
 # ============================================================
 # OS files
