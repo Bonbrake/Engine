@@ -714,12 +714,74 @@ This backlog is executable. Each item names an exact primary source or action tr
 
 ## A. Pass 4 — task-to-paper mapping audit
 
-Audit rule: every T-01..T-70 must cite at least one paper ID from 01..50.
-Result: T-01..T-70 are all present; one row is a header-only line, not a task.
-Parsed task rows with paper tokens: 51.
-Paper IDs seen in task rows: 1..50 inclusive, count = 50.
-Rows without a detectable paper token: 1 (the header row: "| Task ID | Milestone | Paper(s) | Actionable Task | Deliverable |").
-Consequence: there are 70 task IDs in the section, so 19 task rows must either include multiple paper tokens or rely on section-level mapping text; the section-level mappings in §2.2 explicitly pair papers to milestones for the whole paper set. Since every paper 01..50 is cited in task rows, no task is orphaned from the paper corpus by inspection. Keep this audit whenever the task table is edited.
+Audited task rows: 70 across §2.7 + §2.9. Exact parser was run on both tables.
+Result:
+- §2.7 T-01..T-50: 50 rows. Parsed paper citations: 1..50 inclusive. Missing papers in this section: none. Every paper 01..50 has exactly one task row here.
+- §2.9 T-51..T-70: 20 rows. Parsed paper citations: {1, 4, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 21, 22, 26, 36, 45, 46}. Missing papers in this section: {2, 3, 5, 6, 7, 8, 17, 20, 23, 24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44, 47, 48, 49, 50} — count = 32.
+- Combined across both sections: every paper 01..50 has at least one task in the document. The earlier committed audit’s claim of “0 missing” in T-51..T-70 was incorrect; that claim is retracted here.
+
+Paper-to-task mapping:
+- P01: T-01, T-51
+- P02: T-02
+- P03: T-03
+- P04: T-04, T-52
+- P05: T-05
+- P06: T-06
+- P07: T-07
+- P08: T-08
+- P09: T-09, T-66
+- P10: T-10, T-53
+- P11: T-11, T-59
+- P12: T-12, T-54, T-56
+- P13: T-13, T-57
+- P14: T-14, T-58
+- P15: T-15, T-60
+- P16: T-16, T-55, T-61
+- P17: T-17
+- P18: T-18, T-62
+- P19: T-19, T-63
+- P20: T-20
+- P21: T-21, T-64
+- P22: T-22, T-65
+- P23: T-23
+- P24: T-24
+- P25: T-25
+- P26: T-26, T-67
+- P27: T-27
+- P28: T-28
+- P29: T-29
+- P30: T-30
+- P31: T-31
+- P32: T-32
+- P33: T-33
+- P34: T-34
+- P35: T-35
+- P36: T-36, T-69
+- P37: T-37
+- P38: T-38
+- P39: T-39
+- P40: T-40
+- P41: T-41
+- P42: T-42
+- P43: T-43
+- P44: T-44
+- P45: T-45, T-68
+- P46: T-46, T-70
+- P47: T-47
+- P48: T-48
+- P49: T-49
+- P50: T-50
+
+Task-to-paper mapping:
+- T-01: P01; T-02: P02; T-03: P03; T-04: P04; T-05: P05; T-06: P06; T-07: P07; T-08: P08; T-09: P09; T-10: P10
+- T-11: P11; T-12: P12; T-13: P13; T-14: P14; T-15: P15; T-16: P16; T-17: P17; T-18: P18; T-19: P19; T-20: P20
+- T-21: P21; T-22: P22; T-23: P23; T-24: P24; T-25: P25; T-26: P26; T-27: P27; T-28: P28; T-29: P29; T-30: P30
+- T-31: P31; T-32: P32; T-33: P33; T-34: P34; T-35: P35; T-36: P36; T-37: P37; T-38: P38; T-39: P39; T-40: P40
+- T-41: P41; T-42: P42; T-43: P43; T-44: P44; T-45: P45; T-46: P46; T-47: P47; T-48: P48; T-49: P49; T-50: P50
+- T-51: P01; T-52: P04; T-53: P10; T-54: P12; T-55: P16; T-56: P12; T-57: P13; T-58: P14; T-59: P11; T-60: P15
+- T-61: P16; T-62: P18; T-63: P19; T-64: P21; T-65: P22; T-66: P09; T-67: P26; T-68: P45; T-69: P36; T-70: P46
+
+Verified conclusion: 70 tasks, 50 papers, full coverage of papers 01..50 across the full task set. The T-51..T-70 section adds abstract-derived extensions without re-citing every paper individually; §2.2 carries the missing paper-to-milestone mapping at the lesson level.
 
 ## B. Pass 5 — EXT ID collision audit
 
