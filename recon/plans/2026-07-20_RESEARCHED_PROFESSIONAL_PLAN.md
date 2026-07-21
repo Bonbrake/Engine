@@ -48,7 +48,7 @@ The three immutable pillars remain:
 | 7 | Real-Time Fracturing in Video Games | Multimedia Tools & Applications Vol 82  | 2023 |
 | 8 | Environmental Storytelling in Video Games | IntechOpen From Pixels to Play  | 2025 |
 | 9 | Swarm Intelligence for Crowd Simulation — Boids and Beyond | Reynolds 1987 SIGGRAPH  | 1987 |
-| 10 | GSound — Interactive Sound Propagation for Games | AES International Conference on Audio for Games 41st  | 2011 | [cache: gsound_aes41st.pdf, gamma.umd.edu-380.html]
+| 10 | GSound — Interactive Sound Propagation for Games | AES International Conference on Audio for Games 41st  | 2011 | [cache: gsound_aes41st.pdf, gsound_gamma_umd.html]
 | 11 | Tension Space Analysis for Emergent Narrative | IEEE Transactions on Games arXiv:2004.10808  | 2020 |
 | 12 | Player-Driven Emergence in LLM-Driven Game Narrative | IEEE Conference on Games 2024 arXiv:2404.17027  | 2024 |
 | 13 | Concordia — Generative Agent-Based Modeling | DeepMind arXiv:2312.03664  | 2023 |
