@@ -476,6 +476,11 @@ void TriangleRenderer::createPipelines(Device* device, VkFormat colorFormat) {
     VkComputePipelineCreateInfo computeInfo{VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
     computeInfo.stage = cullStage;
     computeInfo.layout = cullPipelineLayout;
+    // [M4.5-EXT-33] Compute pipeline binds descriptors via the descriptor buffer,
+    // so it MUST carry the descriptor-buffer flag (VUID 08600/08117).
+    if (device->getCapabilities().descriptorBuffer) {
+        computeInfo.flags |= VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT;
+    }
     vkCreateComputePipelines(device->getLogicalDevice(), VK_NULL_HANDLE, 1, &computeInfo, nullptr, &cullPipeline);
     vkDestroyShaderModule(device->getLogicalDevice(), cullModule, nullptr);
 }
@@ -489,8 +494,13 @@ void TriangleRenderer::init(Device* device, VkFormat colorFormat) {
     VkQueryPoolCreateInfo queryPoolInfo{VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO};
     queryPoolInfo.queryType = VK_QUERY_TYPE_OCCLUSION;
     queryPoolInfo.queryCount = 100;
+    // [M4.5-EXT-33] RESET_BIT enables vkCmdResetQueryPool at the start of each draw frame.
+    // Requires VK_KHR_maintenance9 (enabled via device extensions).
+    queryPoolInfo.flags = VK_QUERY_POOL_CREATE_RESET_BIT_KHR;
     for (int i = 0; i < 3; i++) {
         vkCreateQueryPool(device->getLogicalDevice(), &queryPoolInfo, nullptr, &occlusionPools[i]);
+        // Initial reset: the first read of this pool happens before any vkCmdResetQueryPool.
+        vkResetQueryPool(device->getLogicalDevice(), occlusionPools[i], 0, 100);
     }
 }
 

@@ -154,6 +154,11 @@ PipelineLayoutData PipelineBuilder::buildLayouts(const std::vector<std::vector<u
 
 std::vector<VkPipeline> PipelineBuilder::buildPipelines(std::vector<VkGraphicsPipelineCreateInfo>& pipelineInfos, Device* device) {
     if (pipelineInfos.empty()) return {};
+    if (device->getCapabilities().descriptorBuffer) {
+        for (auto& info : pipelineInfos) {
+            info.flags |= VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT;
+        }
+    }
     
     // Set up derivative flags if there's more than one pipeline
     if (pipelineInfos.size() > 1) {

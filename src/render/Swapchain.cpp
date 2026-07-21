@@ -55,9 +55,14 @@ void Swapchain::create() {
     vkb::SwapchainBuilder swapchainBuilder{device_->getVkbDevice()};
     
     auto vkb_swapchain_ret = swapchainBuilder
-        .use_default_format_selection()
+        .set_desired_format({VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR})
         .set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR)
-        .add_image_usage_flags(VK_IMAGE_USAGE_TRANSFER_SRC_BIT)
+        // Explicit usage: color attachment (AgX tonemap + ImGui) + transfer for readback/dump.
+        // Avoids use_default_format_selection() overriding usage with VK_IMAGE_USAGE_STORAGE_BIT
+        // on B8G8R8A8_SRGB (VUID-VkSwapchainCreateInfoKHR-imageFormat-01778), unsupported here.
+        .set_image_usage_flags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                               VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+                               VK_IMAGE_USAGE_TRANSFER_DST_BIT)
         .build();
 
     if (!vkb_swapchain_ret) {
@@ -370,6 +375,11 @@ void Swapchain::createTonemapResources() {
         VkGraphicsPipelineCreateInfo gpInfo{};
         gpInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
         gpInfo.pNext = &renderInfo;
+        // [M4.5-EXT-33] This pipeline binds descriptors via the descriptor buffer,
+        // so it MUST be created with the descriptor-buffer flag (VUID 08600/08117).
+        if (device_->getCapabilities().descriptorBuffer) {
+            gpInfo.flags |= VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT;
+        }
         gpInfo.stageCount = 2;
         gpInfo.pStages = stages;
         gpInfo.pVertexInputState = &vi;
@@ -500,13 +510,13 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
         size_t passCount = prevNames.size();
         if (passCount > 0) {
             std::vector<uint64_t> queryData(render::RenderGraph::MAX_PASSES * 4, 0);
-            
+
             VkResult res = vkGetQueryPoolResults(
                 device_->getLogicalDevice(), device_->getQueryPool(),
                 prevFrame * render::RenderGraph::MAX_PASSES * 2, static_cast<uint32_t>(passCount * 2),
                 queryData.size() * sizeof(uint64_t), queryData.data(),
                 2 * sizeof(uint64_t), VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WITH_AVAILABILITY_BIT);
-                
+
             if (res == VK_SUCCESS) {
                 lastFrameTimings_.clear();
                 for (size_t p = 0; p < passCount; ++p) {
@@ -531,8 +541,12 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     vkBeginCommandBuffer(cmd, &beginInfo);
 
+    // [M4.5-EXT-33] Reset this frame's timestamp query range.
+    // Works because the pool was created with VK_QUERY_POOL_CREATE_RESET_BIT_KHR.
     if (device_->getCapabilities().queryTimestamps) {
-        vkCmdResetQueryPool(cmd, device_->getQueryPool(), imageIndex * render::RenderGraph::MAX_PASSES * 2, render::RenderGraph::MAX_PASSES * 2);
+        vkCmdResetQueryPool(cmd, device_->getQueryPool(),
+            imageIndex * render::RenderGraph::MAX_PASSES * 2,
+            render::RenderGraph::MAX_PASSES * 2);
     }
 
     renderGraph_.Clear();

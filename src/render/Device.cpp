@@ -60,13 +60,27 @@ void Device::selectPhysicalDevice(VulkanContext* context) {
     features12.timelineSemaphore = VK_TRUE;
     features12.bufferDeviceAddress = VK_TRUE;
     features12.drawIndirectCount = VK_TRUE;
+    // [M4.5-EXT-33] hostQueryReset lets us vkResetQueryPool() at creation so the
+    // timestamp query pool starts initialized (VUID-vkGetQueryPoolResults-None-09401).
+    features12.hostQueryReset = VK_TRUE;
+
+    // Core feature: wireframe pipeline (VK_POLYGON_MODE_LINE) needs fillModeNonSolid.
+    // Universal core feature — safe to require.
+    VkPhysicalDeviceFeatures coreFeatures{};
+    coreFeatures.fillModeNonSolid = VK_TRUE;
 
     selector.set_required_features_12(features12)
             .set_required_features_13(features13)
             .set_required_features_14(features14)
+            .set_required_features(coreFeatures)
             .add_required_extension(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
 
-    selector.add_required_extension(VK_EXT_MEMORY_BUDGET_EXTENSION_NAME);
+        selector.add_required_extension(VK_EXT_MEMORY_BUDGET_EXTENSION_NAME);
+        // VK_EXT_graphics_pipeline_library depends on VK_KHR_pipeline_library
+        selector.add_required_extension(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME);
+        // VK_KHR_maintenance9 provides VK_QUERY_POOL_CREATE_RESET_BIT_KHR for
+        // vkCmdResetQueryPool in the command buffer (per-frame query reset).
+        selector.add_required_extension(VK_KHR_MAINTENANCE_9_EXTENSION_NAME);
 
     // mesh shaders, rt pipeline, descriptor buffer, unified image layouts, shader object
     
@@ -116,8 +130,11 @@ void Device::createLogicalDevice() {
     features12.bufferDeviceAddress = VK_TRUE;
     features12.drawIndirectCount = VK_TRUE;
 
-    features13.pNext = &features12;
-    void** pNextChain = &features12.pNext;
+    // NOTE: vkb::DeviceBuilder already injects the Vulkan 1.2/1.3/1.4 feature
+    // structs into the pNext chain (from selector.set_required_features_*).
+    // Do NOT re-chain features12/features13 here — that caused duplicate
+    // sType errors (VUID-VkDeviceCreateInfo-sType-unique). Only the EXT
+    // feature structs below are chained manually.
 
     vkb::DeviceBuilder deviceBuilder{vkbDevice_.physical_device};
 
@@ -135,6 +152,7 @@ void Device::createLogicalDevice() {
     // DeviceBuilder has no add_extension API — extensions flow through the PhysicalDevice selection.
     // We only need to chain the feature structs here if the extension was actually enabled.
     VkPhysicalDeviceDescriptorBufferFeaturesEXT descBufferFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_BUFFER_FEATURES_EXT};
+    void** pNextChain = &descBufferFeatures.pNext;
     if (supportsDescBuffer && !core::Config::get().forceTier0) {
         descBufferFeatures.descriptorBuffer = VK_TRUE;
         *pNextChain = &descBufferFeatures;
@@ -188,7 +206,7 @@ void Device::createLogicalDevice() {
         pNextChain = &nvConfigFeatures.pNext;
     }
 
-    deviceBuilder.add_pNext(&features13);
+    deviceBuilder.add_pNext(&descBufferFeatures);
     
     // Check capabilities here and enable features
     checkCapabilities();
@@ -248,19 +266,26 @@ void Device::createLogicalDevice() {
     }
 
     if (caps_.queryTimestamps) {
-        VkQueryPoolCreateInfo queryPoolInfo = {};
-        queryPoolInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO;
-        queryPoolInfo.queryType = VK_QUERY_TYPE_TIMESTAMP;
-        // RenderGraph::MAX_PASSES (16) * 2 queries per pass * 3 max frames in flight = 96
-        queryPoolInfo.queryCount = 16 * 2 * 3; 
+            VkQueryPoolCreateInfo queryPoolInfo = {};
+            queryPoolInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO;
+            queryPoolInfo.queryType = VK_QUERY_TYPE_TIMESTAMP;
+            // VK_QUERY_POOL_CREATE_RESET_BIT_KHR enables vkCmdResetQueryPool() per frame
+            // (requires VK_KHR_maintenance9 extension, enabled in selectPhysicalDevice).
+            queryPoolInfo.flags = VK_QUERY_POOL_CREATE_RESET_BIT_KHR;
+            // RenderGraph::MAX_PASSES (16) * 2 queries per pass * 3 max frames in flight = 96
+            queryPoolInfo.queryCount = 16 * 2 * 3;
 
-        if (vkCreateQueryPool(vkbDevice_.device, &queryPoolInfo, nullptr, &queryPool_) != VK_SUCCESS) {
-            LOG_WARN("Failed to create timestamp query pool despite capability being reported.");
-            caps_.queryTimestamps = false;
-        } else {
-            LOG_INFO("Created timestamp query pool with capacity {}", queryPoolInfo.queryCount);
-            setDebugObjectName(VK_OBJECT_TYPE_QUERY_POOL, (uint64_t)queryPool_, "Timestamp Query Pool");
-        }
+            if (vkCreateQueryPool(vkbDevice_.device, &queryPoolInfo, nullptr, &queryPool_) != VK_SUCCESS) {
+                LOG_WARN("Failed to create timestamp query pool despite capability being reported.");
+                caps_.queryTimestamps = false;
+            } else {
+                LOG_INFO("Created timestamp query pool with capacity {}", queryPoolInfo.queryCount);
+                setDebugObjectName(VK_OBJECT_TYPE_QUERY_POOL, (uint64_t)queryPool_, "Timestamp Query Pool");
+                // [M4.5-EXT-33] Initial creation-time reset ensures the first read
+                // of any query sees initialized state. Per-frame vkCmdResetQueryPool
+                // (enabled by VK_QUERY_POOL_CREATE_RESET_BIT_KHR) handles subsequent cycles.
+                vkResetQueryPool(vkbDevice_.device, queryPool_, 0, queryPoolInfo.queryCount);
+            }
     }
 
     if (graphicsQueue_) {

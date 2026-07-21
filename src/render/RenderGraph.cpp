@@ -209,6 +209,7 @@ void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, Device* device, Command
             vkAllocateCommandBuffers(device->getLogicalDevice(), &allocInfo, outCmd);
 
             VkCommandBufferInheritanceRenderingInfo inheritanceRenderingInfo = { VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO };
+            inheritanceRenderingInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
             
             std::vector<VkFormat> colorFormats;
             for (const auto& att : pass->colorAttachments) {
@@ -222,6 +223,7 @@ void RenderGraph::CompileAndExecute(VkCommandBuffer cmd, Device* device, Command
             }
 
             VkCommandBufferInheritanceInfo inheritanceInfo = { VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO };
+            inheritanceInfo.pNext = &inheritanceRenderingInfo;
             bool isDynamicRendering = !pass->isCompute && (!pass->colorAttachments.empty() || pass->depthAttachment.view != VK_NULL_HANDLE);
             
             if (isDynamicRendering) {
