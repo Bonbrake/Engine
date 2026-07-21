@@ -250,15 +250,15 @@ shipped systems; ZE will subset these rather than re-solve solved problems.
 
 | Decision ID | Question | New Answer | Evidence Source | Milestone |
 |-------------|----------|------------|-----------------|-----------|
-| E81 | Horde trigger | AI Director event, not calendar timer | Paper 11 / L4D pacing | M3-M5 |
-| E10 | Tech unlock | Discovery-gated schematics | Paper 3 / Subnautica | M2 |
-| E59 | Building freedom | Structural-integrity freeform | Paper 7 / 7DTD | M8 |
-| E48 | Co-op sync | Authority with CRDT resolution | E12 E51 / netsync literature | M12 |
-| E16 | Main quest | Director arc with world triggers | Paper 11 / L4D | M11 |
-| E55 | Server persistence | Dedicated save-anywhere | DayZ migration lessons / Paper 18 | M12 |
-| E77 | Materials | 5-tier with fracture response | Paper 7 | M8 |
-| E91 | Zombie types | Region-biased dynamic allocation | Paper 9 / Project Zomboid | M5 |
-| E92 | Corpse permanence | Decomposition-to-fertilizer loop | Paper 18 / The Forest as-model | M5 |
+| E81 | Horde behavior | Scent/fear diffusion + horde formation state machine | Paper 9 / L4D pacing / spec M5 | M5 |
+| E10 | Physics interaction | Jolt 5.6 XPBD joints + IPC barrier for penetration-free contact | Paper 25 / Paper 24 / spec M2/M3 | M2/M3 |
+| E59 | Destruction pipeline | Prefractured small objects + prefractured+tall-cell large structures | Paper 7 / Paper 26 / spec M3/M9 | M3 |
+| E48 | Co-op sync | Authority server with CRDT resolution for replicated inventories/placements | E12 E51 / netsync literature / spec M12 | M12 |
+| E16 | Quest gating | World-state parameterized quest templates validated before serving | Paper 45 / spec M11 | M11 |
+| E55 | Persistence format | SoA entity tables + delta compression + schema versioning | DayZ migration lessons / Paper 18 / spec M7 | M7 |
+| E77 | Materials | 5-tier with fracture response and constraint compliance by material | Paper 7 / spec M8 | M8 |
+| E91 | Zombie archetypes | Region-biased dynamic allocation with scent/fear routing | Paper 9 / Project Zomboid / spec M5 | M5 |
+| E92 | Body persistence | Decomposition-to-fertilizer loop with save-state serialization | Paper 18 / The Forest as-model / spec M7 | M7 |
 
 ## 5. Milestone Map
 
