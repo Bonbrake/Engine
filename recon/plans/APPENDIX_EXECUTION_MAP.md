@@ -1,7 +1,7 @@
 # Appendix Execution Map
 > Version: 2026-07-21
 > Source: spec/APPENDICES.md parsed on disk
-> Block count: 82 total EXT blocks
+> Block count: 51 unique provisional EXT IDs
 > Blocks with reference implementation: 24
 > Blocks with explicit MATH DONE marker: 0
 > Rule: all new IDs are provisional; verify against live milestone files before merge
