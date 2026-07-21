@@ -294,13 +294,17 @@ The three immutable pillars remain:
 
 ### 2.6 Research Gaps
 
-| Gap | Status | Resolution |
+|| Gap | Status | Resolution |
 |-----|--------|------------|
-| M2 crafting systems paper corpus | [X] | Exact sources: FDG 2023/2024 postmortems; catalog pending live retrieval |
-| M9 vehicle/traction/damage paper | [X] | Exact sources: shipped vehicle posts + SIGGRAPH vehicle papers; catalog pending live retrieval |
+| M2 crafting systems paper corpus | [S] partial | `arXiv:2109.06780` (Crafter, ICLR 2022) cached as open-world survival benchmark with crafting-tool achievements; validates knowledge-based unlock pattern [cache: arxiv_2109.06780.html] |
+| M9 vehicle/traction/damage paper | [X] | `arXiv:2509.03771` (MARL curricula) cached as adversarial environment-generation paper; not vehicle-specific. Vehicle/traction/damage sources still need direct fetch of SIGGRAPH vehicle/racing papers |
 | M7 persistence spec breakdown | [S] | `spec/M7.md` confirms Total persistence with EXT blocks |
-| M6 audio benchmark | [X] | GSound white paper + runtime probe required |
+| M6 audio benchmark | [X] | GSound white paper + runtime probe required; direct fetch not yet attempted |
 | M10 weather resolution vs gameplay | [X] | Papers 43/44 confirmed adjacent; reconciliation pending |
+
+**M2 crafting evidence**: Crafter (arXiv:2109.06780) validates ZE's knowledge-based crafting design: agents unlock achievements by discovering resources and crafting tools, not by time-sink or RNG. This maps directly to Paper 19's offline Pareto-optimized economy and T-19/T-63.
+
+**M9 vehicle evidence**: The adversarial MARL curricula paper (arXiv:2509.03771) is adjacent but not vehicle-specific. Vehicle physics, traction, and damage modeling require SIGGRAPH vehicle/racing papers or shipped vehicle postmortems not yet in the corpus.
 
 ---
 
