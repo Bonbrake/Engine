@@ -655,180 +655,175 @@ A comprehensive 416-line study of three AAA engine architectures was conducted, 
   4. **Virtual shadow maps** — Single 16384 squared sparse shadow texture per light. Per-frame visibility bitmask of needed tiles. Only renders tiles that are newly needed or invalidated. Persistent tile cache across frames.
   5. **Software rasterizer + doubly-deferred shading** — Clusters under 64 pixels switch from hardware to compute-shader rasterizer. Doubly-deferred shading groups visible pixels by material ID per 16x16 tile, evaluating each material once per tile.
 
-Each entry ties a specific paper finding directly to an EXT block with concrete implementation detail. All findings below have been fact-checked across three challenge passes.
+Each entry ties a specific paper finding directly to an EXT block with concrete implementation detail. Findings below are labeled by source quality: [S] = directly sourced from deep-study text, [E] = engineered ZE reasoning, [X] = unsourced/needs verification.
 
-#### Paper 8: Experience-Driven Adaptation → M1-EXT-01, M5-EXT-10
-**Event-driven tension clock** — NOT timer-based. enkiTS has no latency guarantees, so wall-clock phases desync from player experience. Phase transitions trigger on gameplay events:
-- CALM → RISING: Player triggers noise event (gunshot, generator, vehicle engine).
-- RISING → CRISIS: Zombie discovers player.
-- CRISIS → RECOVERY: Player escapes or eliminates all threats.
-Director becomes an "event response multiplier" — after a gunshot, multiply spawn density by 3× for 60 seconds. **PASS 3 VERIFIED**: Stacked event multipliers must cap at 9× (three 3× events overlapping) to prevent density explosion. Release event multipliers are additive via "tension area" so overlapping zones scale correctly — one zone at 3×, two zones at 6× — not 9× per-zone. After the loudest event's timer expires, density recoils linearly over 10 seconds (not instantly), avoiding zombie-pop cliff-drop.
-**PASS 4 addition**: Recoil rate must couple to live-active-actor count. If active corpse count exceeds despawn budget, force aggressive LOD culling or early decay during recoil to protect the 6GB VRAM budget on RTX 2070S. Otherwise multi-horde nights spike VRAM from lingering ragdoll meshes.
+#### Paper 8: Experience-Driven Adaptation → M1-EXT-01, M5-EXT-10 [S+S+E]
+- **Event-driven tension clock** — NOT timer-based. Phase transitions trigger on gameplay events: CALM → RISING on noise event (gunshot, generator, vehicle engine); RISING → CRISIS when zombie discovers player; CRISIS → RECOVERY when player escapes or eliminates all threats. [S: source corpus event-driven description]
+- Director acts as an "event response multiplier": after gunshot, spawn density ×3 for 60s. Overlaps stack. [E: multiplier concept from source, specific 3×/60s from source corpus discussion]
+- After loudest timer expires, density recoils over 10s linear ramp — avoids zombie-pop cliff-drop. [S: linear recoil mechanism in source corpus]
+- **ZE extension**: Recoil rate must couple to live-active-actor count. If active corpses exceed VRAM despawn budget, force aggressive LOD culling or early decay during recoil. Multi-horde nights linger ragdolls and spike memory. [E: cross-block dependency from Pass 4; 6GB VRAM from user config]
 
-#### Paper 6: Concordia GM Architecture → M5-EXT-06
-- **Rules engine, not LLM-mediated GM validation**: An on-device LLM cannot sustain sub-20ms inference for 25+ NPCs at 60fps. Build a traits-based action validator: each action has preconditions (has_item, in_range, faction_standing ≥ X) checked via flat table lookup. LLM fluff generation runs as a non-blocking async job with 2-frame budget.
-- **No utility maximization**: NPCs act on weighted drives (survival, community, fear, curiosity), not a single survival score.
-- **Three parallel spaces**: Physical (position, resources, health), Social (trust, reputation), Digital (radio, map knowledge). Behavior emerges from interactions, not a behavior tree.
+#### Paper 6: Concordia GM Architecture → M5-EXT-06 [S+S+S]
+- **Rules engine, not LLM-mediated validation for 25+ NPCs at 60fps**: Traits-based action validator — flat table lookup for preconditions (has_item, in_range, faction_standing ≥ X). LLM fluff generation async with 2-frame budget. [S: Concordia architecture pattern]
+- **No utility maximization**: NPCs act on weighted drives (survival, community, fear, curiosity) — not single survival score. [S: Concordia design principle]
+- **Three parallel spaces**: Physical (position, resources, health), Social (trust, reputation), Digital (radio, map knowledge). Behavior emerges from interactions. [S: Concordia architecture]
 
-#### Paper 10: GSound Audio Propagation → M6-EXT-14
-- **Dedicated sparse audio-voxel grid at 2m resolution**, not the render grid. Store one uint8-per-voxel (air, solid, porous, water). Render grid construction jobs downsample to this as a cheap post-job.
-- **Frequency-band attenuation**: Split cone probes into low (20-250Hz), mid (250-4000Hz), high (4000-20000Hz). Low frequencies diffract more: occlusion_strength[bass] *= 0.3.
-- **Edge diffraction as angle-based heuristic**: Rather than precomputed edge visibility graphs, compute diffraction factor: `diffractionFactor = 1 - exp(-3 * subsolarAngle)`.
-- **Performance budget defined in microseconds, not per-emitter counts**: 70μs/frame total budget (3% of 2ms audio frame). Each listener/emitter pair consumes 9 voxel-grid lookups × 0.1μs = ~0.9μs. Budget allows ~77 simultaneous listener-emitter pairs at 60fps. Co-op with 4 players × 16 nearby emitters ≈ 64 pairs, within budget. **PASS 3 VERIFIED**: The original "+ per-listener" assumption held — budget is frame-time-based, not count-based.
-  **PASS 4 addition**: The 0.1μs/lookup assumes cache-hot dense reads. On a 36 km² open world at 2m resolution the sparse grid's working set exceeds L2 during streaming, dropping probe latency to ~1.2μs at tile-boundary transitions. Use a ring-buffer LRU for sparse tiles to bound memory bandwidth; cap probe count per frame to a hard tile-load budget. Accept a small pop at cell edges.
+#### Paper 10: GSound Audio Propagation → M6-EXT-14 [S+S+E+X]
+- **Dedicated sparse audio-voxel grid**: Separate from render grid. One uint8-per-voxel (air, solid, porous, water). Render grid construction downsamples to this as post-job. [S: core GSound architecture]
+- **Frequency-band attenuation**: Split cone probes into low (20-250Hz), mid (250-4000Hz), high (4000-20000Hz). Low frequencies diffract more — occlusion strength reduced per band. [S: GSound band splitting]
+- **Edge diffraction as angle heuristic**: `diffractionFactor = 1 - exp(-3 * subsolarAngle)` rather than precomputed visibility graphs. [S: source corpus specific formula]
+- **Budget assumptions [X — source does not provide exact μs budget]**: The deep-study corpus states runtime geometric propagation is the fundamental deployment barrier — each frame traces thousands of rays from source to listener, prohibitively expensive for many dynamic emitters. No specific microsecond budget is sourced. ZE must instrument actual probe latency and tune tile-load budget empirically.
+- **Pass 4 risk identified**: Sparse grid working set may exceed L2 at 2m resolution on 36km² open world. Implement ring-buffer LRU for sparse tiles, cap probe count per frame. [E: cache-miss extrapolation from source]
 
-#### Paper 22: GEEvo + SoD2 Economy → M7 Economy Blocks
-- **Evolve economy parameters once per game version** (ship a baked Pareto-optimized table). Per-save apply seeded ±5% mutation per parameter — NOT full-spectrum evolution per save (breaks day-1 ratios). **PASS 3: Per-save ±5% offset must be stored in the save file header**, not recomputed from the seed at load time — otherwise save re-ordering changes the economy.
-  **PASS 4 addition**: Store offsets as a typed map keyed by parameter name, not positional index. When a game update adds/removes/reorders economy parameters in the baked Pareto table, old saves must diff against a versioned schema manifest and discard unknown keys instead of applying them blindly. Positional offsets corrupt wrong resources on schema change.
-- **Constant drain, not balance**: Consumption grows with settlement size. Never "solved."
-- **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one.
+#### Paper 22: GEEvo + SoD2 Economy → M7 Economy Blocks [S+S+E]
+- **Evolve parameters once per game version** — ship baked Pareto-optimized table. Per-save apply seeded per-parameter variation, NOT full evolution per save. [S: GEEvo evolution-once approach]
+- **Offset storage in save header [E, verified architecture]**: Per-save variation MUST live in save file header, keyed by parameter name (not positional index), with versioned schema manifest. Positional offsets corrupt wrong resources when baked table changes between versions. [E: named-map requirement from Pass 4]
+- **Constant drain, never balance**: Consumption grows with settlement size — economy is never solved, only tuned. [S: SoD2 pattern]
+- **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one. [S: source corpus]
 
-#### Paper 21: Save Serialization (SC2) → M7-EXT-07, M7-EXT-08
-- **Field-level SoA** — store each component table as a flat array. Use a type-erased ComponentSerializer<T> template that reads table pointer + element count + sizeof(T). Zero manual serialization per entity type.
-- Separate static properties (position, type) from dynamic (health, inventory) BEFORE compression. Static = single blob per entity. Dynamic = instance-major delta frames.
-- Train Zstd dictionary on instance-major delta frames, not raw AoS snapshots.
+#### Paper 21: Save Serialization (SC2) → M7-EXT-07, M7-EXT-08 [S+S+E]
+- **Field-level SoA**: Each component table as flat array. Type-erased ComponentSerializer<T> reads table pointer + element count + sizeof(T). [S: SC2 approach]
+- **Static/dynamic split before compression**: Static properties as single blob per entity. Dynamic properties as instance-major delta frames. [S: source corpus]
+- **Zstd dictionary trained on instance-major delta frames**, not raw AoS snapshots. [S: source corpus]
+- **Compressed size reference [X]**: Source corpus cites example dataset sizes. These are instance-specific, not universal — do not use as ZE budget without empirical measurement on actual ZE entity tables.
 
-#### Paper 25: Modulith Modding → M11-EXT-17, M11-EXT-20, M11-EXT-21
-- **DAG-based topological sort for dep resolution** (not SAT/npm-semver — NP-complete, 4K+ lines). Store dep as semver_range(min, max) in TOML manifest. Reject cycles via Kahn's algorithm in <200 lines C++.
-  **PASS 3 addition**: Kahn's algorithm detects cycles only — it does NOT find the "best" version when a mod satisfies multiple ranges. ZE needs a two-pass loader: pass 1 = Kahn's for cycle detection; pass 2 = custom linear resolver for version conflicts (pick highest compatible version for each unresolved range).
-  **PASS 4 addition**: The greedy "pick highest per range" resolver is not globally optimal. Mod A allows lib [1.0–1.2], mod B allows lib [1.3–2.0], mod C requires lib [1.1–1.4] — greedy picks 1.2 for A and 1.4 for B, breaking C. Replace with interval-intersection pass: merge all unresolved ranges into a global constraint set, then select a single version that satisfies all.
-- **Capability-based sandbox**: Each mod declares files/systems needed. Enforced at load time.
-- **Hot-module batching**: Batch cross-module calls for mods that are actually hot. Track which mods appear in the call chain.
+#### Paper 25: Modulith Modding → M11-EXT-17, M11-EXT-20, M11-EXT-21 [S+E+E]
+- **DAG-based topological sort**: Kahn's algorithm detects cycles in <200 lines C++. Store dependencies as semver_range(min, max). [S: Modulith/source corpus]
+- **Two-pass loader**: Pass 1 = Kahn's for cycle detection. Pass 2 = interval-intersection resolver. Greedy "pick highest per range" is NOT globally optimal — merging all unresolved ranges into a global constraint set prevents silent installs that break at runtime. [E: Pass 4 algorithmic correction]
+- **Capability-based sandbox**: Each mod declares files/systems needed. Enforced at load time. [S: Modulith pattern]
+- **Hot-module batching**: Track which mods appear in hot call chains; batch cross-module calls. [S: Modulith pattern]
 
-#### Paper 27: Interactive Dynamic Response → M5-EXT-31, M5-EXT-36
-- **Physics LOD**: Only 3 nearest zombies get full active-ragdoll simulation. Medium-range (15-40m) use pre-baked animation overrides. Far-range skip entirely.
-  **PASS 3 addition**: Active ragdoll must SWITCH OFF on death — a dead zombie shouldn't run physics simulation at all. Switch to pre-baked death animation after PD controller confirms pose convergence (torso angle <5° from settled state). Other-tier dead zombies use no physics at all.
-  **PASS 4 addition**: The <5° angle check fails under external constraint wedging (collapsing buildings, explosions, tall-cell water flood forces holding torso contorted). Add a secondary gate: 0.5s of root-motion velocity below 0.05 m/s regardless of angle forces switch-off. Otherwise dead zombies in horde-night destruction starve the 3-slot close-tier budget indefinitely.
-- **Hit priority stack**: Accumulate impulse vectors for simultaneous hits (shotgun, shrapnel). Circular buffer of last N hits, summed composite response.
-- enkiTS job graph: one active-ragdoll job per close zombie (max 3), one pre-baked override per medium batch, skip for far range.
+#### Paper 27: Interactive Dynamic Response → M5-EXT-31, M5-EXT-36 [S+E+E]
+- **Physics LOD tier design [S+E]**: Nearest zombies get full active-ragdoll. Medium-range use pre-baked overrides. Far-range skip. Number of tiers and distance bands are ZE design decisions to tune during implementation — source corpus specifies the LOD principle only, not exact distances.
+- **Active ragdoll switches off on death [E]**: Dead zombies must not run physics. Switch to pre-baked death animation after pose convergence. Dead zombies in other tiers use no physics. [E: Pass 3 addition, follows source principle]
+- **Death detection fallback [E]**: Angle convergence alone fails when external constraints wedge the torso. Add secondary gate: 0.5s root-motion below 0.05 m/s regardless of angle forces switch-off. Prevents 3-slot close-tier starvation during horde-night destruction. [E: Pass 4 addition, no source]
+- **Hit priority stack**: Accumulate impulse vectors for simultaneous hits (shotgun, shrapnel). Circular buffer of last N hits summed. [S: source corpus]
+- **enkiTS constraint**: Cannot create/destroy task groups per-frame. PD LOD tiers must be conditional branches inside ONE persistent task group. Split into two persistent tasks gated by double-buffer counter for close-tier vs. all-distant — far-tier stays independent. [E: Pass 4 from enkiTS constraint]
 
-#### Paper 28: Fire Simulation → M3-EXT-01, M3-EXT-04
-- **Per-object material properties**: Each destructible object needs ignition temperature, heat capacity, fuel load, structural integrity loss rate. Without metadata: either everything burns or nothing burns.
-- **Vorticity strength scales with cell size**: `vorticity_strength = base_value * (cell_size / 0.5m)`. Single tunable base across all grid resolutions. Base = 0.8 for standard, 0.4 for smoldering, 1.2 for explosive.
-  **PASS 3 addition**: Clamp vorticity strength to minimum 0.05 — below this, no visible swirl effect. WM proxy: `vorticity_strength = clamp(base_value * (cell_size / 0.5m), 0.05f, 2.0f)`. Upper clamp prevents explosion-style spinning at large cell sizes.
-  **PASS 4 addition**: Decouple fire cell size from tall-cell water's topology. When water merges/shallow-splits visual layers during floods, fire cell effective size can double or halve mid-simulation, causing a step-change in vorticity. Server/client grid topology divergence breaks determinism. Use a fixed simulation resolution for fire with a fractional-blend factor, not raw cell_size.
-- **Blackbody color**: Hottest is blue-white. Use physics-based motion with artistic color ramps.
+#### Paper 28: Fire Simulation → M3-EXT-01, M3-EXT-04 [S+E+E]
+- **Per-object material metadata required**: Ignition temperature, heat capacity, fuel load, structural integrity loss rate. Without metadata: either everything burns or nothing burns. [S: source corpus]
+- **Vorticity scaling**: `vorticity_strength = base_value * (cell_size / reference_size)`. Base values: 0.8 standard, 0.4 smoldering, 1.2 explosive. [E: formula from source description; reference_size is ZE tuning parameter]
+- **Clamp: minimum prevents invisible swirl, maximum prevents explosion-style spinning**. [E: Pass 3 addition, no specific bounds sourced]
+- **Decouple fire cell size from water topology [E, Pass 4]**: Tall-cell water merges/shallow-splits visual layers during floods. Raw cell_size coupling causes step-change vorticity and breaks determinism when server/client grid diverges. Use fixed fire simulation resolution with fractional-blend factor. [E: Pass 4]
+- **Blackbody color**: Hottest is blue-white. Physics-based motion with artistic color ramps. [S: source corpus]
 
-#### Paper 29: Preetham / Hosek-Wilkie → M3-EXT-12, M3-EXT-24
-- **Replace Preetham entirely with Hosek-Wilkie**: Preetham has 7 failure modes (low-sun banding, turbidity saturation, missing ozone, twilight gradients, no cloud integration, single-scattering, negative RGB). Hosek-Wilkie fixes all seven for <2% more compute.
-- **Two compute passes**: (1) Sky dome → 256×128 cubemap, regenerate when time-of-day changes >1°. (2) Aerial fog pass uses G-buffer depth + extinction/scattering coefficients. Only interact through inscattering color from sky horizon angle.
-- **Cubemap threshold caching**: Interpolate between cached cubemap frames in the pixel shader, not recompute per-degree change.
+#### Paper 29: Preetham / Hosek-Wilkie → M3-EXT-12, M3-EXT-24 [S+E+E]
+- **Replace Preetham entirely with Hosek-Wilkie**: Source corpus lists 7 Preetham failure modes (low-sun banding, turbidity saturation, missing ozone, twilight gradients, no cloud integration, single-scattering, negative RGB). Hosek-Wilkie addresses these for modest additional compute. [S: source corpus 7-mode list]
+- **Two compute passes**: (1) Sky dome → 256×128 cubemap, regenerate on time-of-day delta. (2) Aerial fog pass with G-buffer depth + extinction/scattering coefficients. Only interact through inscattering color from sky horizon angle. [E: ZE implementation from source principle]
+- **Cubemap threshold caching**: Interpolate between cached frames in pixel shader rather than recomputing per-degree threshold. [E: ZE design pattern]
 
-#### Paper 30: DeepMimic → M5-EXT-31
-- **PD controller LOD tiers**: Player-interacting zombies at 120Hz/8iter. Close zombies at 60Hz/4iter. Distant at 30Hz/2iter.
-  **PASS 3 addition**: enkiTS cannot create/destroy task groups per-frame — the LOD tiers must be conditional branches inside ONE persistent task group. Use a single enkiTS task that processes all three tiers in sequence via ignoreIfZeroed counters, not three separate tasks (kills determinism mode).
-  **PASS 4 addition**: Sequential ignoreIfZeroed ordering breaks latency isolation. When close tier overruns due to simultaneous debris contacts, far-tier updates at 30Hz/2iter are delayed or skipped. Split into two persistent tasks gated by a manual double-buffer counter: one for close-tier, one for all-distant. Keeps far-tier timing independent without dynamic group creation.
-- **Velocity-dependent PD gains**: Slow movement needs high stiffness (rapid correction). Fast movement needs lower stiffness (avoid instabilities). This is the most important tuning knob — absent from current spec.
-- **Phase function**: Store animation timestamp at impact. Advance through animation at 0.5x during ragdoll, blend back at 100% when recovered. Handles mid-stride, mid-climb, mid-punch hits.
+#### Paper 30: DeepMimic → M5-EXT-31 [S+E+E]
+- **PD controller tiers [E+E]**: Source corpus describes LOD tiers needed but does not specify Hz or iteration counts. ZE must tune these empirically — chosen tiers must satisfy PD convergence at minimum viable cost.
+- **Velocity-dependent PD gains**: Slow movement needs higher stiffness. Fast movement needs lower stiffness to avoid instabilities. Most important tuning knob per source corpus. [S: source corpus]
+- **Phase function**: Store animation timestamp at impact. Advance at reduced rate during ragdoll, blend back at full rate when recovered. [S: source corpus]
+- **enkiTS constraint**: No dynamic task group creation. LOD tiers must be conditional branches inside persistent task. [S: enkiTS constraint]
 
-#### M0-EXT-16 ENGINE_DETERMINISM_MODE (CORRECTED Pass 2)
-- **Spin-wait sync after each enkiTS WaitForTask group**: Sample high-precision timer, compute stage consumption, inject CPU spin-loop for remaining budget.
-  **PASS 3 addition**: Spin loop must have a HARD CEILING of 2× the stage budget. If physics overruns by more than 2× the normal stage, spin cannot fix it — mark the frame non-deterministic and advance. Unbounded spin causes watchdog SDS (System Display Service) kills that look like freezes.
-  **PASS 4 addition**: Scale the hard ceiling dynamically based on actual core availability, not a static multiplier. Measure `GetActiveProcessorCount` at frame start; if OS services have stolen 30-50% of cores (Windows Update, AV, WMI), the nominal stage budget is already invalid. Use a grace factor proportional to available physical cores — otherwise thread-stealing triggers false non-determinism flags and ghost frames from unrecoverable indirect draws.
-#### Paper 15: Minecraft Pathfinding → M5-EXT-01
-- **Flat uint16 grid for A\*** with SIMD-friendly layout: stores traversal cost, height, flags, parent index per voxel tile. 64-bit SIMD loads.
-- **Octile heuristic**: Allows 45° diagonal movement, reduces node expansion by 23% over Manhattan.
-- **Path recompute at 10-tick intervals**: Faster wastes CPU, slower makes zombies hesitate at corners.
-- **Bit-set nav grid**: 24x smaller than full graph. 4×4×4 voxel tile = one uint64 bit field. A* operates directly on the bitset.
+#### M0-EXT-16 ENGINE_DETERMINISM_MODE [E+E+E]
+- **Spin-wait after WaitForTask**: Sample timer, inject CPU spin for remaining budget. [E: determinism technique]
+- **Hard ceiling 2× stage budget**: If overrun exceeds 2×, mark frame non-deterministic and advance. Unbounded spin causes watchdog SDS kills. [E: Windows behavior]
+- **Dynamic grace factor**: Measure GetActiveProcessorCount at frame start. Scale ceiling proportional to available cores — thread-stealing triggers false non-determinism flags. [E: Windows optimization]
 
-#### Paper 11: Real-Time Fracturing → M3-EXT-05
-- **Modal analysis primary**: 33 fragments from 32 vibration modes at 0.16ms. Blend with Poisson-disk seeding above force threshold to modulate fragment count. `num_fragments = min(33, 8 + force * modal_density_factor)`.
-- **Visual warning cues**: Progressive crack textures before fracture. Players hate random collapse without warning.
-- **First 8-16 modes for real-time**, 32 modes for hero objects.
 
-#### Paper 13: Boids → M8-EXT-20
-- **Spatial partition (quadtree at 32³ cells)** instead of per-boid leader election. Each cell computes centroid velocity; all boids steer toward cell centroid. No hierarchy churn. O(n) per cell.
-- **Perception radius capped at 15m** even for flocks >200.
-- **Random perturbation on collision avoidance**: Prevents hover-lock when forces sum near-zero.
+#### Paper 15: Minecraft Pathfinding → M5-EXT-01 [S+S+S+E]
+- **Flat uint16 grid for A\*** with SIMD-friendly layout: stores traversal cost, height, flags, parent index per voxel tile. 64-bit SIMD loads. [S: source corpus]
+- **Octile heuristic**: Allows 45° diagonal movement, reduces node expansion by 23% over Manhattan. [S: source corpus]
+- **Bit-set nav grid**: 24x smaller than full graph. 4×4×4 voxel tile = one uint64 bit field. A* operates directly on bitset. [S: source corpus]
+- **Path recompute interval [E]**: Source corpus discusses periodic recompute but does not specify 10-tick interval. This is a ZE tuning parameter.
 
-#### Paper 17: Rigid-IPC → M3 Physics
-- **Fixed depth threshold** (depth > 0.01m) instead of sorting all Jolt contacts. Jolt provides penetration depth; one branch per contact, zero sort. Catches the worst ~10% without O(n log n).
+#### Paper 11: Real-Time Fracturing → M3-EXT-05 [S+S+S]
+- **Modal analysis primary**: Source corpus identifies 33 fragments from 32 vibration modes at 0.16ms. Blend with Poisson-disk seeding above force threshold to modulate fragment count. `num_fragments = min(33, 8 + force * modal_density_factor)`. [S: subagent summary + source corpus principle]
+- **Visual warning cues**: Progressive crack textures before fracture. Players hate random collapse without warning. [S: source corpus]
+- **First 8-16 modes for real-time**, 32 modes for hero objects. [S: source corpus]
+- **Symmetry artifacts from eigenvalue tie-breaking**: Modal analysis produces symmetric fragment patterns for symmetric impacts — add jitter or Poisson-disk offset for visual variety. [S: subagent summary]
 
-#### Paper 18: XPBD → M3 Physics (CORRECTED Pass 2)
-- **Symmetric Gauss-Seidel** (normal + friction together per constraint) instead of alternating passes. Costs ~15% more per iteration but converges in same iteration count. Replace two-pass solver with single-pass combined compliance matrix.
+#### Paper 13: Boids → M8-EXT-20 [S+S+E]
+- **Spatial partition (quadtree at 32³ cells)** instead of per-boid leader election. Each cell computes centroid velocity; all boids steer toward cell centroid. No hierarchy churn. O(n) per cell. [S: source corpus]
+- **Perception radius capped at 15m** even for flocks >200. [S: source corpus]
+- **Random perturbation on collision avoidance**: Prevents hover-lock when forces sum near-zero. [S: source corpus]
+- **Consolidation failure at scale [S]**: Flocks >200 boids spontaneously split according to source corpus. O(n²) without spatial partitioning caps boid count on consoles.
 
-#### Paper 20: Tall Cell Water → M4 Water
-- **Flat arrays for top 32 visual layers**: Tall cell pointer indirection costs 30% bandwidth. Use flat for visual layers, tall cells only for deep water.
-- **Water decoupled at 60Hz** even if physics runs at 30Hz. At 30Hz, numerical diffusion loses 3.2%/frame vs 0.8% at 60Hz.
-- **Incremental height-bucket sort**: Pre-sort columns at init. Only re-classify ~5% of columns per frame (~3K elements) where surface crossed a bucket boundary. Avoid O(n log n) full sort every tick.
+#### Paper 17: Rigid-IPC → M3 Physics [S]
+- **Fixed depth threshold** (depth > 0.01m) instead of sorting all Jolt contacts. Jolt provides penetration depth; one branch per contact, zero sort. Catches worst ~10% without O(n log n). [S: source corpus]
 
-#### Paper 16: CoD Infinite Warfare Z-Binning → M0-EXT-08
-- **Logarithmic-exponential hybrid**: First 16 bins use 1.5× multiplier (fine near), last 16 use 3× (coarse far). Avoids degenerate 2-bin resolution at distance.
-- Piecewise formula: `if (z < Z_mid) bin = floor(log_{1.5}(z/near)); else bin = 16 + floor(log_3(z / Z_mid))`.
+#### Paper 18: XPBD → M3 Physics (CORRECTED Pass 2) [S+E]
+- **Symmetric Gauss-Seidel** (normal + friction together per constraint) instead of alternating passes. Costs ~15% more per iteration but converges in same iteration count. [S: source corpus]
+- Replace two-pass solver with single-pass combined compliance matrix. [E: ZE implementation]
 
-#### M0-EXT-16 ENGINE_DETERMINISM_MODE (CORRECTED Pass 2)
-- **Spin-wait sync after each enkiTS WaitForTask group**: Sample high-precision timer, compute stage consumption, inject CPU spin-loop for remaining budget.
-  **PASS 3 addition**: Spin loop must have a HARD CEILING of 2× the stage budget. If physics overruns by more than 2× the normal stage, spin cannot fix it — mark the frame non-deterministic and advance. Unbounded spin causes watchdog SDS (System Display Service) kills that look like freezes.
-- **Log deviation**: If stage consumed MORE than budget, frame is non-deterministic — report failure, don't enforce fixed delta.
-- Deterministic PCG seed per save. Deterministic NPC RNG with session-seeded stream. enkiTS has no fiber support.
+#### Paper 20: Tall Cell Water → M4 Water [S+E+E]
+- **Flat arrays for top 32 visual layers**: Tall cell pointer indirection costs 30% bandwidth. Use flat for visual layers, tall cells only for deep water. [S: source corpus]
+- **Water decoupled at 60Hz** even if physics runs at 30Hz. At 30Hz, numerical diffusion loses 3.2%/frame vs 0.8% at 60Hz. [S: source corpus]
+- **Incremental height-bucket sort**: Pre-sort columns at init. Only re-classify ~5% of columns per frame (~3K elements) where surface crossed bucket boundary. Avoid O(n log n) full sort every tick. [S: source corpus]
+- **Warp divergence reduces GPU utilization from 85%→52%** per source corpus note — tail of the tall-cell pipeline is the bottleneck for GPU-bound scenes. [S: source corpus]
 
-#### Paper 31: Compressed Meshlet Rendering → M4-EXT-02
-- **Laced wire encoding**: Irregular triangles (corners, isolated) break the ~1-reference-per-triangle ideal, causing 30-40% overhead from edge swaps and restarts in generalized strips. Branching in the mesh shader decoder is expensive on GPU SIMD. Pre-process meshlets to minimize irregular triangle ratio.
-- **Vertex quantization per-meshlet**: Armadillo needed 11 bits, David needed 16 bits. Per-meshlet bounding-box quantization adds 12 floats metadata per meshlet. For scenes with millions of meshlets this pollutes the constant cache. Use per-meshlet offset+scale stored in a structured buffer, not push constants.
-- **Amplification shader scaling limit**: Mesh shader hardware has limited slots for task/mesh shader waves. Each task group generates 0-4 mesh shader instances, creating unpredictable launch patterns. ZE must cap meshlet density per tile to avoid amplification shader dispatch becoming the bottleneck.
-- **External wire duplication**: 15-25% extra vertex data from duplicated boundary vertices between adjacent meshlets. For streaming scenarios both copies must be resident simultaneously.
+#### Paper 16: CoD Infinite Warfare Z-Binning → M0-EXT-08 [E+E]
+- **Logarithmic-exponential hybrid [X]**: Source corpus mentions this concept but does not provide exact bin counts or coefficients. The specific formula (1.5× fine near, 3× coarse far, 16 bins each) is a ZE implementation variant.
+- `if (z < Z_mid) bin = floor(log_{1.5}(z/near)); else bin = 16 + floor(log_3(z / Z_mid))`. [E: formula is ZE design, not cited from source]
 
-#### Paper 32: Nanite Virtual Geometry → M0-EXT-08, M4-EXT-02
-- **Temporal fill instead of third-pass full-resolve**: After two occlusion passes, unclassified pixels copy visibility from previous frame via motion-vector lookup. Clamped to 16-frame decay. Avoids camera-cut full-resolve cost spike.
-- **Deep-study addition**: The Hierarchical-Z-Buffer is view-independent — it pre-computes error assuming worst-case viewing angle. On high-curvature surfaces (rounded car bodies, spherical props), the DAG cut produces inconsistent detail distribution: over-tessellating curved regions while under-tessellating flat regions at the same screen coverage. ZE must bake per-surface curvature into the error metric at build time, not rely on view-independent world-space pixel error alone.
-- **Alpha-tested meshes excluded from cluster rasterizer**: Route through separate forward pass.
-- **128-triangle cluster constraint**: Pre-process source meshes to ensure clean boundaries.
+#### Paper 31: Compressed Meshlet Rendering → M4-EXT-02 [S+S+S+E]
+- **Laced wire encoding overhead**: Irregular triangles cause 30-40% overhead from edge swaps and restarts. Branching in mesh-shader decoder expensive on GPU SIMD. Pre-process meshlets to minimise irregular triangle ratio. [S: source corpus]
+- **Per-meshlet vertex quantisation**: Armadillo 11 bits, David 16 bits. Per-meshlet bbox quantisation adds 12 floats metadata per meshlet. Use structured buffer for offset+scale, not push constants. [S: source corpus with specific model names]
+- **Amplification shader dispatch limit**: Task groups generate 0-4 mesh-shader waves unpredictably. ZE must cap meshlet density per tile. [S: source corpus]
+- **External wire duplication**: 15-25% extra vertex data from duplicated boundary vertices between adjacent meshlets. Both copies resident in streaming scenarios. [E: percentage from source corpus]
 
-#### Paper 33: GPU-Driven Pipeline → M0-EXT-08
-- **Group by stable hierarchy ID** (asset path hash + LOD band), not per-frame meshID/materialID. LOD-band only changes at distance thresholds, not every frame.
-- **Separate packed-buffer for virtual texturing page IDs** (8-bit per pixel, only for surfaces using VT). Avoids 96-bit G-buffer entry bloat.
-- **Explicit MultiDrawIndexedIndirect** with 64-triangle clusters, not triangle strips (non-deterministic).
+#### Paper 32: Nanite Virtual Geometry → M0-EXT-08, M4-EXT-02 [S+E+S+S]
+- **Temporal fill instead of third-pass**: After two occlusion passes, unclassified pixels copy visibility from previous frame via motion-vector lookup, clamped to 16-frame decay. [S: source corpus]
+- **HZB view-independence issue**: HZB pre-computes error assuming worst-case viewing angle. On high-curvature surfaces, DAG cut produces inconsistent detail. ZE must bake per-surface curvature into error metric at build time. [S: source corpus; build-time curvature is ZE implementation]
+- **Alpha-tested meshes excluded from cluster rasterizer**: Route through separate forward pass. [S: source corpus]
+- **128-triangle cluster constraint**: Pre-process source meshes for clean boundaries. [S: source corpus]
 
-#### Paper 34: Quadric Error Metrics → M4-EXT-02
-- **Fixed-point QEM accumulators** (Q8.24, int32_t quadric_fixed[10]) instead of double-precision. ~5 decimal digits sufficient for 95% simplification. Re-normalize every 50K collapses by right-shifting.
-- **Non-manifold detection**: Reject contractions that join disconnected regions.
-- **Boundary edge tagging**: Tag boundary edges with synthetic constraint planes before decimation.
+#### Paper 33: GPU-Driven Pipeline → M0-EXT-08 [E+E+E]
+- **Group by stable hierarchy ID** (asset path hash + LOD band), not per-frame meshID/materialID. [E: ZE design pattern]
+- **Separate packed-buffer for virtual texturing page IDs**: 8-bit per pixel, only VT surfaces — avoids 96-bit G-buffer bloat. [E: ZE design pattern]
+- **Explicit MultiDrawIndexedIndirect** with 64-triangle clusters, not triangle strips. [E: cluster size recommendation]
 
-#### Paper 37: Bayesian Reputation → M8-EXT-53
-- **Faction-specific priors**: Raiders α=5, β=20 (suspicious). Traders α=15, β=5 (trusting).
-- **Temporal evidence decay**: Every 1000 ticks: `new_α = max(α/2, 1); new_β = max(β/2, 1)`. This is O(1), preserves Beta conjugacy, smoothly forgets old evidence. (CORRECTED from exponential decay which breaks conjugacy.)
-- **Propagation limit**: Max 5 hops, max 50 NPCs updated per action. Full propagation on 200 NPCs = ~40,000 updates per player action.
-- **Hierarchical Bayesian**: Faction-level prior + NPC-level posterior.
+#### Paper 34: Quadric Error Metrics → M4-EXT-02 [E+S+S]
+- **Fixed-point Q8.24 accumulators** instead of double. Renormalise every 50K collapses. [E: precision choice]
+- **Non-manifold detection**: Reject contractions joining disconnected regions. [S: standard QEM practice]
+- **Boundary edge tagging**: Synthetic constraint planes before decimation. [S: standard QEM practice]
 
-#### Paper 38: Faction Dynamics → M8-EXT-53, M8-EXT-62
-- **Dependency hash CRC per quest**: 64-bit signature XORed from affected entity IDs. Re-validation dispatches only matched quests. Avoids O(n_quests × n_NPCs) per update.
-- **Smooth disposition interpolation** for combat/dialog. Hard thresholds only for story-critical faction locks.
-- **Batch reputation updates** into single per-frame delta-pass.
+#### Paper 37: Bayesian Reputation → M8-EXT-53 [E+S+S+S]
+- **Faction-specific priors**: Raiders α=5, β=20. Traders α=15, β=5. [E: example values; tune empirically]
+- **Temporal evidence decay [S]**: Every 1000 ticks: `new_α = max(α/2, 1); new_β = max(β/2, 1)`. O(1), preserves Beta conjugacy. Corrected from exponential decay which breaks conjugacy.
+- **Propagation limit [E]**: Max 5 hops, max 50 NPCs updated per action. Exact limits are ZE tuning parameters.
+- **Hierarchical Bayesian**: Faction-level prior, NPC-level posterior. [S: source corpus]
 
-#### Paper 39: Neural Texture Compression → M0 Rendering
-- **Single neural atlas texture** (4096×4096, up to 64 hero materials decoded by one global MLP with atlas UV + material-ID as input). Avoids per-material weight sets competing for descriptor heap.
-- Use neural compression only for static hero assets, not procedural materials.
-- **Mip decode cost awareness**: Lower mips cost same compute as full-res in MLP decoder.
+#### Paper 38: Faction Dynamics → M8-EXT-53, M8-EXT-62 [E+E+E]
+- **Quest dependency hash CRC**: 64-bit signature XORed from affected entity IDs — re-validation dispatches only matched quests. [E: ZE design pattern]
+- **Smooth disposition interpolation** for combat/dialog. Hard thresholds only for story-critical locks. [E: ZE design decision]
+- **Batch reputation updates** into single per-frame delta-pass. [E: ZE performance pattern]
 
-#### Paper 42: Ballistic Trajectories → M3 Combat (Verified Pass 3)
-- **Quadratic drag above Mach 0.8** (muzzle velocity >800 m/s). Linear drag introduces systematic aim error for snipers.
-- **Newton's method for target lead** (3-5 iterations, ~0.01ms each). 100 shooters × 5 × 0.01ms = 0.5ms budget.
-- **Firing-solution cache ONLY for stationary targets** (velocity < 0.5 m/s). All moving targets recompute each frame — zombie direction changes every ~200ms; 50ms cache misses by ~2m at 50m range. Use 5-iteration default budget with 10-iteration headroom for extreme trajectories.
-  **PASS 4 addition**: ZE's cell-based weather varies wind/temperature/density per 100m cell. A 500m sniper shot crossing multiple cells sees 5-8% mid-flight drag changes, yielding 20-40cm systematic miss at 500m in rain/wind. Integrate weather-cell drag as a piecewise correction term in the closed-form solution, or invalidate cache if target-to-shooter vector crosses a weather-cell boundary with density difference > threshold.
+#### Paper 39: Neural Texture Compression → M0 Rendering [E+E+S]
+- **Single neural atlas** with material-ID input. [E: atlas concept from source; exact 4096 size not sourced]
+- **Mip decode cost**: Lower mips cost same compute as full-res in MLP decoder per source corpus note. [S: source corpus]
 
-#### Paper 45: Branching Quests → M11 Narrative
-- **Offline pre-generation** (10-30s GA convergence is too slow for runtime). Pre-generate quest pools.
-- **DOT-format automated verification**: Simulate all leaf paths against world state. Only deploy quests with <5% dead ends. No human curation bottleneck.
-- Branch cap: B=3 choices × N=6 decision points max. Validate statistically (10% sample) beyond that.
+#### Paper 42: Ballistic Trajectories → M3 Combat [E+E+E+E]
+- **Quadratic drag above Mach 0.8** (muzzle velocity >800 m/s). Linear drag produces aim error for snipers. [E: threshold from source corpus brief mention]
+- **Newton's method target lead**: 3-5 iterations. Per-iteration cost not benchmarked on ZE hardware. [E: source cites approximate 0.01ms — verify with actual CPU profile]
+- **Stationary-target cache only**: Moving targets recompute each frame. [E: threshold is ZE design decision; 0.5 m/s stale threshold unsourced]
+- **Weather-cell drag coupling [E, Pass 4]**: Cell-based weather varies wind/temperature per 100m. Cross-cell shots need piecewise drag correction or cache invalidation at weather boundaries.
 
-#### Paper 47: VRS Ray Tracing → M0 RT Pipeline
-- **Fixed 8×8 VRS tile grid** (not adaptive placement requiring full-res G-buffer analysis at ~0.3ms). Grid artifact on curved surfaces imperceptible at 1080p+ with TAA.
-- Coarse rate (2×2) for roughness > 0.3 via material ID lookup. Zero additional passes.
-- Batch rays by shading rate before dispatch: never mix rates in same wave.
+#### Paper 45: Branching Quests → M11 Narrative [S+E+E]
+- **Offline pre-generation**: 10-30s GA convergence cited as runtime-infeasible. [S: source corpus timing]
+- **DOT-format automated verification**: Simulate all leaf paths. Deploy only low-dead-end-rate quests. [S: source corpus]
+- **Branch/decision caps [X]**: Source corpus does not specify B=3, N=6. These are ZE tuning parameters — derive from quest complexity budgets during implementation.
 
-#### Paper 48: Geometry Caches → M0 Streaming
-- **Double-buffer for all caches** (2× cost). Single 3rd buffer slot reassigned each frame to largest screen-area object.
-- **Pre-load within 300m radius**: Total cached geometry memory = all objects within 300m radius (~200-500MB). Don't wait for 5-second read-ahead.
-- **Local-space quantization with per-chunk bbox offset** for >200m objects (16-bit quant fails at close range).
+#### Paper 47: VRS Ray Tracing → M0 RT Pipeline [S+E]
+- **8×8 fixed VRS tile grid** preferred on AMD; NVIDIA uses 16×16. Adaptive placement requires ~0.3ms full-res G-buffer analysis per source corpus note. Grid artifact on curved surfaces imperceptible at 1080p+ with TAA. [S: source corpus with tile specifics]
+- Coarse 2×2 rate for roughness > 0.3 via material ID. Zero extra passes. [E: roughness threshold — verify per ZE material range]
 
-#### Paper 49: Radiance Caching → M0 RT Pipeline
-- **Render-grid LOD 3 for radiance (~0.8m)** + separate coarse grid at LOD 5 for audio. Share the same page table, different resolution residency. NOT same grid — that forces resolution compromise.
-- Fine per-pixel + coarse global must blend consistently.
+#### Paper 48: Geometry Caches → M0 RT [S+E+E]
+- **5-second read-ahead** and **>1MB chunk requirement** for sequential disk access. [S: source corpus]
+- **Local-space quantisation** with per-chunk bbox offset for objects >200m. [S: source corpus]
+- **[X] Specific memory budgets** (300MB, 1.5-3GB, 30-60%) are extrapolated. Do not use as ZE budget without profiling actual Alembic sizes on NVMe.
 
-#### Paper 50: Engine Architecture → M0 Engine Core
-- **Singleton limit 3** (Input, FrameAllocator, Device). Everything else injected via explicit dependency.
-- **ECS L1 miss rate <10%**: Trigger CI warning at >10%, not compile error. Profile during 10,000+ entity stress test.
-- **Inheritance depth warning, not static_assert**: Add `static_assert_inheritance_depth<Base, Derived, Max=3>` that compiles to warning-only with `#pragma ZE_ALLOW_DEEP_HIERARCHY` opt-in for justified cases.
+#### Paper 49: Radiance Caching → M0 RT [E+S]
+- **Separate grids**: LOD 3 radiance (~0.8m) plus LOD 5 audio. Share page table, different residency. [E: ZE design; LOD levels not in source]
+- Blending between fine/coarse must be consistent at boundaries. [S: source corpus]
+
+#### Paper 50: Engine Architecture → M0 Engine Core [S+E+E]
+- **Singleton limit 3**: Input, FrameAllocator, Device. [S: deep-study source]
+- **ECS L1 miss rate <10%**: CI warning above 10%, not compile error. [E: threshold and CI policy are ZE choices; source corpus says <10% is achievable]
+- **Inheritance depth warning, not static_assert**: `static_assert_inheritance_depth<Base, Derived, Max=3>` with `#pragma ZE_ALLOW_DEEP_HIERARCHY`. [E: ZE implementation pattern]
 
 ---
 
