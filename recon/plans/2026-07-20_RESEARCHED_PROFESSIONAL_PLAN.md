@@ -663,6 +663,7 @@ Each entry ties a specific paper finding directly to an EXT block with concrete 
 - RISING → CRISIS: Zombie discovers player.
 - CRISIS → RECOVERY: Player escapes or eliminates all threats.
 Director becomes an "event response multiplier" — after a gunshot, multiply spawn density by 3× for 60 seconds. **PASS 3 VERIFIED**: Stacked event multipliers must cap at 9× (three 3× events overlapping) to prevent density explosion. Release event multipliers are additive via "tension area" so overlapping zones scale correctly — one zone at 3×, two zones at 6× — not 9× per-zone. After the loudest event's timer expires, density recoils linearly over 10 seconds (not instantly), avoiding zombie-pop cliff-drop.
+**PASS 4 addition**: Recoil rate must couple to live-active-actor count. If active corpse count exceeds despawn budget, force aggressive LOD culling or early decay during recoil to protect the 6GB VRAM budget on RTX 2070S. Otherwise multi-horde nights spike VRAM from lingering ragdoll meshes.
 
 #### Paper 6: Concordia GM Architecture → M5-EXT-06
 - **Rules engine, not LLM-mediated GM validation**: An on-device LLM cannot sustain sub-20ms inference for 25+ NPCs at 60fps. Build a traits-based action validator: each action has preconditions (has_item, in_range, faction_standing ≥ X) checked via flat table lookup. LLM fluff generation runs as a non-blocking async job with 2-frame budget.
@@ -674,9 +675,11 @@ Director becomes an "event response multiplier" — after a gunshot, multiply sp
 - **Frequency-band attenuation**: Split cone probes into low (20-250Hz), mid (250-4000Hz), high (4000-20000Hz). Low frequencies diffract more: occlusion_strength[bass] *= 0.3.
 - **Edge diffraction as angle-based heuristic**: Rather than precomputed edge visibility graphs, compute diffraction factor: `diffractionFactor = 1 - exp(-3 * subsolarAngle)`.
 - **Performance budget defined in microseconds, not per-emitter counts**: 70μs/frame total budget (3% of 2ms audio frame). Each listener/emitter pair consumes 9 voxel-grid lookups × 0.1μs = ~0.9μs. Budget allows ~77 simultaneous listener-emitter pairs at 60fps. Co-op with 4 players × 16 nearby emitters ≈ 64 pairs, within budget. **PASS 3 VERIFIED**: The original "+ per-listener" assumption held — budget is frame-time-based, not count-based.
+  **PASS 4 addition**: The 0.1μs/lookup assumes cache-hot dense reads. On a 36 km² open world at 2m resolution the sparse grid's working set exceeds L2 during streaming, dropping probe latency to ~1.2μs at tile-boundary transitions. Use a ring-buffer LRU for sparse tiles to bound memory bandwidth; cap probe count per frame to a hard tile-load budget. Accept a small pop at cell edges.
 
 #### Paper 22: GEEvo + SoD2 Economy → M7 Economy Blocks
 - **Evolve economy parameters once per game version** (ship a baked Pareto-optimized table). Per-save apply seeded ±5% mutation per parameter — NOT full-spectrum evolution per save (breaks day-1 ratios). **PASS 3: Per-save ±5% offset must be stored in the save file header**, not recomputed from the seed at load time — otherwise save re-ordering changes the economy.
+  **PASS 4 addition**: Store offsets as a typed map keyed by parameter name, not positional index. When a game update adds/removes/reorders economy parameters in the baked Pareto table, old saves must diff against a versioned schema manifest and discard unknown keys instead of applying them blindly. Positional offsets corrupt wrong resources on schema change.
 - **Constant drain, not balance**: Consumption grows with settlement size. Never "solved."
 - **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one.
 
@@ -688,12 +691,14 @@ Director becomes an "event response multiplier" — after a gunshot, multiply sp
 #### Paper 25: Modulith Modding → M11-EXT-17, M11-EXT-20, M11-EXT-21
 - **DAG-based topological sort for dep resolution** (not SAT/npm-semver — NP-complete, 4K+ lines). Store dep as semver_range(min, max) in TOML manifest. Reject cycles via Kahn's algorithm in <200 lines C++.
   **PASS 3 addition**: Kahn's algorithm detects cycles only — it does NOT find the "best" version when a mod satisfies multiple ranges. ZE needs a two-pass loader: pass 1 = Kahn's for cycle detection; pass 2 = custom linear resolver for version conflicts (pick highest compatible version for each unresolved range).
+  **PASS 4 addition**: The greedy "pick highest per range" resolver is not globally optimal. Mod A allows lib [1.0–1.2], mod B allows lib [1.3–2.0], mod C requires lib [1.1–1.4] — greedy picks 1.2 for A and 1.4 for B, breaking C. Replace with interval-intersection pass: merge all unresolved ranges into a global constraint set, then select a single version that satisfies all.
 - **Capability-based sandbox**: Each mod declares files/systems needed. Enforced at load time.
 - **Hot-module batching**: Batch cross-module calls for mods that are actually hot. Track which mods appear in the call chain.
 
 #### Paper 27: Interactive Dynamic Response → M5-EXT-31, M5-EXT-36
 - **Physics LOD**: Only 3 nearest zombies get full active-ragdoll simulation. Medium-range (15-40m) use pre-baked animation overrides. Far-range skip entirely.
   **PASS 3 addition**: Active ragdoll must SWITCH OFF on death — a dead zombie shouldn't run physics simulation at all. Switch to pre-baked death animation after PD controller confirms pose convergence (torso angle <5° from settled state). Other-tier dead zombies use no physics at all.
+  **PASS 4 addition**: The <5° angle check fails under external constraint wedging (collapsing buildings, explosions, tall-cell water flood forces holding torso contorted). Add a secondary gate: 0.5s of root-motion velocity below 0.05 m/s regardless of angle forces switch-off. Otherwise dead zombies in horde-night destruction starve the 3-slot close-tier budget indefinitely.
 - **Hit priority stack**: Accumulate impulse vectors for simultaneous hits (shotgun, shrapnel). Circular buffer of last N hits, summed composite response.
 - enkiTS job graph: one active-ragdoll job per close zombie (max 3), one pre-baked override per medium batch, skip for far range.
 
@@ -701,6 +706,7 @@ Director becomes an "event response multiplier" — after a gunshot, multiply sp
 - **Per-object material properties**: Each destructible object needs ignition temperature, heat capacity, fuel load, structural integrity loss rate. Without metadata: either everything burns or nothing burns.
 - **Vorticity strength scales with cell size**: `vorticity_strength = base_value * (cell_size / 0.5m)`. Single tunable base across all grid resolutions. Base = 0.8 for standard, 0.4 for smoldering, 1.2 for explosive.
   **PASS 3 addition**: Clamp vorticity strength to minimum 0.05 — below this, no visible swirl effect. WM proxy: `vorticity_strength = clamp(base_value * (cell_size / 0.5m), 0.05f, 2.0f)`. Upper clamp prevents explosion-style spinning at large cell sizes.
+  **PASS 4 addition**: Decouple fire cell size from tall-cell water's topology. When water merges/shallow-splits visual layers during floods, fire cell effective size can double or halve mid-simulation, causing a step-change in vorticity. Server/client grid topology divergence breaks determinism. Use a fixed simulation resolution for fire with a fractional-blend factor, not raw cell_size.
 - **Blackbody color**: Hottest is blue-white. Use physics-based motion with artistic color ramps.
 
 #### Paper 29: Preetham / Hosek-Wilkie → M3-EXT-12, M3-EXT-24
@@ -711,9 +717,14 @@ Director becomes an "event response multiplier" — after a gunshot, multiply sp
 #### Paper 30: DeepMimic → M5-EXT-31
 - **PD controller LOD tiers**: Player-interacting zombies at 120Hz/8iter. Close zombies at 60Hz/4iter. Distant at 30Hz/2iter.
   **PASS 3 addition**: enkiTS cannot create/destroy task groups per-frame — the LOD tiers must be conditional branches inside ONE persistent task group. Use a single enkiTS task that processes all three tiers in sequence via ignoreIfZeroed counters, not three separate tasks (kills determinism mode).
+  **PASS 4 addition**: Sequential ignoreIfZeroed ordering breaks latency isolation. When close tier overruns due to simultaneous debris contacts, far-tier updates at 30Hz/2iter are delayed or skipped. Split into two persistent tasks gated by a manual double-buffer counter: one for close-tier, one for all-distant. Keeps far-tier timing independent without dynamic group creation.
 - **Velocity-dependent PD gains**: Slow movement needs high stiffness (rapid correction). Fast movement needs lower stiffness (avoid instabilities). This is the most important tuning knob — absent from current spec.
 - **Phase function**: Store animation timestamp at impact. Advance through animation at 0.5x during ragdoll, blend back at 100% when recovered. Handles mid-stride, mid-climb, mid-punch hits.
 
+#### M0-EXT-16 ENGINE_DETERMINISM_MODE (CORRECTED Pass 2)
+- **Spin-wait sync after each enkiTS WaitForTask group**: Sample high-precision timer, compute stage consumption, inject CPU spin-loop for remaining budget.
+  **PASS 3 addition**: Spin loop must have a HARD CEILING of 2× the stage budget. If physics overruns by more than 2× the normal stage, spin cannot fix it — mark the frame non-deterministic and advance. Unbounded spin causes watchdog SDS (System Display Service) kills that look like freezes.
+  **PASS 4 addition**: Scale the hard ceiling dynamically based on actual core availability, not a static multiplier. Measure `GetActiveProcessorCount` at frame start; if OS services have stolen 30-50% of cores (Windows Update, AV, WMI), the nominal stage budget is already invalid. Use a grace factor proportional to available physical cores — otherwise thread-stealing triggers false non-determinism flags and ghost frames from unrecoverable indirect draws.
 #### Paper 15: Minecraft Pathfinding → M5-EXT-01
 - **Flat uint16 grid for A\*** with SIMD-friendly layout: stores traversal cost, height, flags, parent index per voxel tile. 64-bit SIMD loads.
 - **Octile heuristic**: Allows 45° diagonal movement, reduces node expansion by 23% over Manhattan.
@@ -786,6 +797,7 @@ Director becomes an "event response multiplier" — after a gunshot, multiply sp
 - **Quadratic drag above Mach 0.8** (muzzle velocity >800 m/s). Linear drag introduces systematic aim error for snipers.
 - **Newton's method for target lead** (3-5 iterations, ~0.01ms each). 100 shooters × 5 × 0.01ms = 0.5ms budget.
 - **Firing-solution cache ONLY for stationary targets** (velocity < 0.5 m/s). All moving targets recompute each frame — zombie direction changes every ~200ms; 50ms cache misses by ~2m at 50m range. Use 5-iteration default budget with 10-iteration headroom for extreme trajectories.
+  **PASS 4 addition**: ZE's cell-based weather varies wind/temperature/density per 100m cell. A 500m sniper shot crossing multiple cells sees 5-8% mid-flight drag changes, yielding 20-40cm systematic miss at 500m in rain/wind. Integrate weather-cell drag as a piecewise correction term in the closed-form solution, or invalidate cache if target-to-shooter vector crosses a weather-cell boundary with density difference > threshold.
 
 #### Paper 45: Branching Quests → M11 Narrative
 - **Offline pre-generation** (10-30s GA convergence is too slow for runtime). Pre-generate quest pools.
