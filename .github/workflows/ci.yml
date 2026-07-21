@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ 'spec/*', 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ninja
+        uses: lukka/get-cmake@v3
+        with:
+          cmakeVersion: '3.27.x'
+          ninjaVersion: '1.11.x'
+
+      - name: Bootstrap vcpkg
+        shell: bash
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git C:/vcpkg
+          C:/vcpkg/bootstrap-vcpkg.bat -disableMetrics
+
+      - name: Configure
+        shell: bash
+        run: cmake -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+      - name: Build
+        shell: bash
+        run: cmake --build build --parallel 4
+
+      - name: Run tests
+        shell: bash
+        run: |
+          cd C:/ZombieEngine/build
+          ./ZombieEngineTests.exe
+
+      - name: Headless smoke
+        shell: bash
+        run: |
+          cd C:/ZombieEngine
+          ./build/ZombieEngine.exe --headless --quit-frame 1
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: binaries
+          path: |
+            build/ZombieEngine.exe
+            build/ZombieEngineTests.exe
+          retention-days: 7

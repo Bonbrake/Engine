@@ -1,80 +1,46 @@
-# ZombieEngine — .gitignore
-
-# ============================================================
 # Build outputs
-# ============================================================
 build/
-build-*/
-_bld*.bat
-_bld*.log
-_cdb*.txt
-_cfg*.log
-cmake-build-*/
-out/
-x64/
-Release/
-Debug/
+build-asan/
 *.exe
+*.dll
+*.lib
 *.obj
 *.pdb
 *.ilk
-*.exp
-*.lib
-*.dll
-*.so
-*.dylib
-*.a
+*.log
+*.spv
 
-# ============================================================
-# IDE / Editor
-# ============================================================
+# IDE
 .vs/
 .vscode/
-.idea/
-*.sln
-*.suo
 *.user
-*.vcxproj*
-*.db
-*.opendb
-*.opensdf
-*.sdf
-__pycache__/
-*.pyc
-*.pyo
+*.suo
 
-# ============================================================
-# Hermes agent artifacts
-# ============================================================
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# Dependencies
+vcpkg_installed/
+vcpkg_installed/
+vcpkg/buildtrees/
+vcpkg/downloads/
+custom-triplets/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Agent runtime/scratch
 .hermes/
 .hermis/
 
-# ============================================================
-# Planning / Recon (generated during dev sessions)
-# ============================================================
-archive/
-
-# ============================================================
-# vcpkg
-# ============================================================
-vcpkg_installed/
-vcpkg-manifest-install.log
-
-# ============================================================
-# Runtime artifacts
-# ============================================================
-engine.log
-imgui.ini
+# Logs/scratch blobs
+*.log
 logs/
 pipeline_cache.bin
-val*.log
-Testing/
 
-# ============================================================
-# OS files
-# ============================================================
-Thumbs.db
-.DS_Store
-*.swp
-*.swo
-*~
+# Runtime junk that should not be versioned
+archive/runtime_junk/
