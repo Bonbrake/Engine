@@ -762,8 +762,15 @@ Director becomes an "event response multiplier" — after a gunshot, multiply sp
 - **Log deviation**: If stage consumed MORE than budget, frame is non-deterministic — report failure, don't enforce fixed delta.
 - Deterministic PCG seed per save. Deterministic NPC RNG with session-seeded stream. enkiTS has no fiber support.
 
+#### Paper 31: Compressed Meshlet Rendering → M4-EXT-02
+- **Laced wire encoding**: Irregular triangles (corners, isolated) break the ~1-reference-per-triangle ideal, causing 30-40% overhead from edge swaps and restarts in generalized strips. Branching in the mesh shader decoder is expensive on GPU SIMD. Pre-process meshlets to minimize irregular triangle ratio.
+- **Vertex quantization per-meshlet**: Armadillo needed 11 bits, David needed 16 bits. Per-meshlet bounding-box quantization adds 12 floats metadata per meshlet. For scenes with millions of meshlets this pollutes the constant cache. Use per-meshlet offset+scale stored in a structured buffer, not push constants.
+- **Amplification shader scaling limit**: Mesh shader hardware has limited slots for task/mesh shader waves. Each task group generates 0-4 mesh shader instances, creating unpredictable launch patterns. ZE must cap meshlet density per tile to avoid amplification shader dispatch becoming the bottleneck.
+- **External wire duplication**: 15-25% extra vertex data from duplicated boundary vertices between adjacent meshlets. For streaming scenarios both copies must be resident simultaneously.
+
 #### Paper 32: Nanite Virtual Geometry → M0-EXT-08, M4-EXT-02
 - **Temporal fill instead of third-pass full-resolve**: After two occlusion passes, unclassified pixels copy visibility from previous frame via motion-vector lookup. Clamped to 16-frame decay. Avoids camera-cut full-resolve cost spike.
+- **Deep-study addition**: The Hierarchical-Z-Buffer is view-independent — it pre-computes error assuming worst-case viewing angle. On high-curvature surfaces (rounded car bodies, spherical props), the DAG cut produces inconsistent detail distribution: over-tessellating curved regions while under-tessellating flat regions at the same screen coverage. ZE must bake per-surface curvature into the error metric at build time, not rely on view-independent world-space pixel error alone.
 - **Alpha-tested meshes excluded from cluster rasterizer**: Route through separate forward pass.
 - **128-triangle cluster constraint**: Pre-process source meshes to ensure clean boundaries.
 
@@ -846,7 +853,6 @@ The following milestones had ZERO paper-to-block mappings. These are the largest
 **M13-EXT-01 Procedural Mission Director**: Weighted pool based on (1) settlement needs, (2) faction standing, (3) player engagement. Each mission type has cooldown (5 in-game days between repeats).
 **M13-EXT-06 Survivor Rumor Network**: Bayesian belief propagation with gossip protocol. Each survivor periodically (every 1-4 game-hours) picks a random conversation partner and exchanges highest-confidence rumor. Rumor quality decays with distance (3 hops) and time (50% loss per day).
 
----
 ---
 
 ## 3. Design Pillars (Evidence-Based)
