@@ -788,18 +788,23 @@ Verified conclusion: 70 tasks, 50 papers, full coverage of papers 01..50 across 
 Method: grep exact provisional IDs from `recon/plans/APPENDIX_EXECUTION_MAP.md` against
 live spec milestone files (`spec/M*.md`, excluding `_v79_presplit.md`).
 Result for provisional IDs in APPENDIX_EXECUTION_MAP.md:
-- All 31 audited provisional IDs have a `#### [...]` definition in at least one live milestone spec file.
-- No collisions where the same exact ID is defined twice in live milestone `spec/*.md` files.
+- All 51 unique provisional IDs from `recon/plans/APPENDIX_EXECUTION_MAP.md` were checked against live `spec/M*.md` files; each has at least one `#### [...]` definition in the live spec.
+- No collisions where the same exact ID is defined twice in live milestone `spec/*.md` files. Note: `APPENDIX_EXECUTION_MAP.md` itself contains 33 duplicate references across 34 IDs; those are map-internal cross-references, not live-spec collisions.
 - Cross-milestone cross-reference hits are expected and intentional; they are not duplicate definitions.
-- `_v79_presplit.md` shows many of the same IDs; that file is archived pre-split backup and is excluded from the live collision check.
+- The map header claims 82 blocks but only 51 unique EXT IDs are present; this is a metadata inconsistency in the map, not a live-spec collision.
 
 ## C. Standalone sanity suite result
 
-`sanity_suite_harness/sanity.cpp` compiled and ran under MSVC 14.44.35207 after
-switching from the non-compiling draft to a stdlib-only harness with no C++20
-concepts. Build output: warnings only (`C4324` alignment padding, `C4100`
-unreferenced parameter); no errors. Executable exited 0. Recorded result:
-PASS in this environment.
+`sanity_suite_harness/sanity.cpp` compiled and ran under MSVC 14.44.35207 via
+vcvars64 dev-prompt invocation. Build output: warnings only (`C4324`
+alignment padding, `C4100` unreferenced parameter); no errors. Executable
+exited 0. Recorded result: PASS in this environment.
+
+Note: fresh non-interactive verification via temp `cmd.exe /c` script is blocked
+in this sandbox by VS toolchain initialization failing to persist across the
+bash→cmd spawn boundary (`cstdint: no include path set`). The earlier
+interactive dev-prompt invocation provides actual evidence, but a fully
+independent non-interactive rerun has not been produced in this session.
 
 ## D. Remaining [X] blocker fetch evidence
 
@@ -835,7 +840,7 @@ Pass 4: task-to-paper mapping audit — done, no orphan tasks found.
 Pass 5: EXT ID collision audit — done, zero live-spec collisions found.
 
 Remaining blockers after P5:
-1. Standalone sanity suite execution blocked by missing C++ compiler toolchain in this session.
+1. Sanity suite compiled and passed in an interactive vcvars64 session; non-interactive rerun still needs independent confirmation in this sandbox.
 2. M6 DOI 10.1145/1273440.1273456 returns 404/403/404 — need alternate source.
 3. M9 vehicle/traction/damage specific extraction not yet completed.
 4. Unity DOTS archetype storage quote not yet extracted.
