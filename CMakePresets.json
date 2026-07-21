@@ -41,6 +41,13 @@
       "output": {
         "outputOnFailure": true
       }
+    },
+    {
+      "name": "windows-asan",
+      "configurePreset": "windows-asan",
+      "output": {
+        "outputOnFailure": true
+      }
     }
   ]
 }
