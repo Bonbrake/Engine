@@ -39,56 +39,56 @@ The three immutable pillars remain:
 
 | # | Paper | Venue / Source | Year |
 |---|-------|----------------|------|
-| 1 | PCG in Games Survey with LLM Integration | arXiv:2410.15644 / AIIDE 2024 | 2024 |
-| 2 | Generative Agents: Interactive Simulacra of Human Behavior | arXiv:2304.03442 | 2023 |
-| 3 | Procedural Generation and Rendering of Large-Scale Open-World Environments | CalPoly Master's Thesis | 2016 |
-| 4 | Aokana: GPU-Driven Voxel Rendering for Open World Games | arXiv:2505.02017 / ACM PACMCGIT | 2025 |
-| 5 | This Action Will Have Consequences — Player Agency | gamestudies.org/1901/articles/stang | 2019 |
-| 6 | Dynamic Difficulty Adjustment: Systematic Literature Review | Multimedia Tools & Applications Vol 83 | 2024 |
-| 7 | Real-Time Fracturing in Video Games | Multimedia Tools & Applications Vol 82 | 2023 |
-| 8 | Environmental Storytelling in Video Games | IntechOpen From Pixels to Play | 2025 |
-| 9 | Swarm Intelligence for Crowd Simulation — Boids and Beyond | Reynolds 1987 SIGGRAPH | 1987 |
-| 10 | GSound — Interactive Sound Propagation for Games | UNC Chapel Hill | 2011 |
-| 11 | Tension Space Analysis for Emergent Narrative | IEEE Transactions on Games arXiv:2004.10808 | 2020 |
-| 12 | Player-Driven Emergence in LLM-Driven Game Narrative | IEEE Conference on Games 2024 arXiv:2404.17027 | 2024 |
-| 13 | Concordia — Generative Agent-Based Modeling | DeepMind arXiv:2312.03664 | 2023 |
-| 14 | Survey on LLM-Based Game Agents | ACM Computing Surveys 2025 arXiv:2404.02039 | 2024 |
-| 15 | Closing the Loop — Systematic Review of Experience-Driven Game Adaptation | arXiv:2505.01351 | 2025 |
-| 16 | Agents' Room — Narrative Generation through Multi-step Collaboration | ICLR 2025 arXiv:2410.02603 | 2024 |
-| 17 | Procedural Animation and Parkour | Bournemouth MSc Thesis 2024 | 2024 |
-| 18 | Save Game Serialization — Carefully Structured Compression | arXiv:2410.08659 | 2024 |
-| 19 | Game Economy Balancing with Evolutionary Algorithms | IEEE CEC 2024 arXiv:2404.18574 | 2024 |
-| 20 | Removing the HUD — Impact of Non-Diegetic Elements on Immersion | ACM CHI PLAY 2015 DOI 10.1145/2793107.2793120 | 2015 |
-| 21 | Modular Quest Generation — CONAN | arXiv:1808.06217 / Entertainment Computing 2021 | 2021 |
-| 22 | Modulith — A Game Engine Made for Modding | ACM FDG 2023 DOI 10.1145/3582437.3582486 | 2023 |
-| 23 | Techniques for Building Aim Assist in Console Shooters | GDC Vault 2013 | 2013 |
-| 24 | Intersection-Free Rigid Body Dynamics | ACM TOG DOI 10.1145/3450626.3459802 | 2021 |
-| 25 | XPBD — Position-Based Simulation of Compliant Constrained Dynamics | SCA 2016 | 2016 |
-| 26 | Breaking Good — Fracture Modes for Realtime Destruction | ACM TOG DOI 10.1145/3549540 arXiv:2111.05249 | 2023 |
-| 27 | Real-Time Eulerian Water Simulation Using a Restricted Tall Cell Grid | SIGGRAPH 2011 DOI 10.1145/2010324.1964977 | 2011 |
-| 28 | Interactive Dynamic Response for Games | SIGGRAPH Sandbox 2007 DOI 10.1145/1274940.1274944 | 2007 |
-| 29 | Physically Based Modeling and Animation of Fire | SIGGRAPH 2002 DOI 10.1145/566570.566643 | 2002 |
-| 30 | End-to-End Compressed Meshlet Rendering | Eurographics 2024 DOI 10.1111/cgf.15002 | 2024 |
-| 31 | Nanite Virtual Geometry — A Deep Dive | SIGGRAPH 2021 Advances | 2021 |
-| 32 | GPU-Driven Rendering Pipelines | SIGGRAPH 2015 Advances | 2015 |
-| 33 | Surface Simplification Using Quadric Error Metrics | SIGGRAPH 1997 DOI 10.1145/258734.258849 | 1997 |
-| 34 | Temporally Stable Joint Neural Denoising and Supersampling | HPG 2022 PACMCGIT DOI 10.1145/3543870 | 2022 |
-| 35 | DeepMimic — Physics-Based Character Skills via RL | SIGGRAPH 2018 arXiv:1804.02717 DOI 10.1145/3213779 | 2018 |
-| 36 | Ecoclimates — Climate-Response Modeling of Vegetation | ACM TOG 41(4) SIGGRAPH 2022 DOI 10.1145/3528223.3530146 | 2022 |
-| 37 | Rethinking NPC Intelligence — Bayesian Reputation System | ACM MIG 2014 DOI 10.1145/2668084.2668091 | 2014 |
-| 38 | Navigating Faction Systems for Believable NPCs | ACM FDG 2024 DOI 10.1145/3649921.3650012 | 2024 |
-| 39 | A Practical Analytic Model for Daylight | SIGGRAPH 1999 DOI 10.1145/311535.311545 | 1999 |
-| 40 | Cine-AI — Automated Game Cutscenes in the Style of Human Directors | ACM CHI PLAY 2022 arXiv:2208.05701 DOI 10.1145/3549486 | 2022 |
-| 41 | Random-Access Neural Compression of Material Textures | SIGGRAPH 2023 arXiv:2305.17105 DOI 10.1145/3592407 | 2023 |
-| 42 | Analytical Ballistic Trajectories with Approximately Linear Drag | IJCTT 2014 DOI 10.1155/2014/463489 | 2014 |
-| 43 | Fast Urban Weather Simulation | ACM TOG 36(2) DOI 10.1145/2999534 [X] | 2017 |
-| 44 | Fast Weather Simulation for Inverse Procedural Design of Urban Models | ACM TOG 36(2) DOI 10.1145/2999534 [X] | 2017 |
-| 45 | Procedural Generation of Branching Quests for Games | Entertainment Computing 43 DOI 10.1016/j.entcom.2022.100491 | 2022 |
-| 46 | Realistic Modeling and Rendering of Plant Ecosystems | SIGGRAPH 1998 DOI 10.1145/280814.280898 | 1998 |
-| 47 | Neural Layered BRDFs | SIGGRAPH 2022 DOI 10.1145/3528233.3530732 | 2022 |
-| 48 | Real-Time Geometry Caches for Alembic Streaming | SIGGRAPH 2014 Crytek | 2014 |
-| 49 | Improving Ray Tracing Performance with Variable Rate Shading | CGVC 2021 DOI 10.2312/cgvc.20211319 | 2021 |
-| 50 | Real-Time Rendering of Glossy Reflections with Two-Level Radiance Caching | SIGGRAPH Asia 2023 DOI 10.1145/3610543.3626167 | 2023 |
+| 1 | PCG in Games Survey with LLM Integration | arXiv:2410.15644 / AIIDE 2024  | 2024 |
+| 2 | Generative Agents: Interactive Simulacra of Human Behavior | arXiv:2304.03442  | 2023 |
+| 3 | Procedural Generation and Rendering of Large-Scale Open-World Environments | CalPoly Master's Thesis  | 2016 |
+| 4 | Aokana: GPU-Driven Voxel Rendering for Open World Games | arXiv:2505.02017 / ACM PACMCGIT  | 2025 |
+| 5 | This Action Will Have Consequences — Player Agency | gamestudies.org/1901/articles/stang  | 2019 |
+| 6 | Dynamic Difficulty Adjustment: Systematic Literature Review | Multimedia Tools & Applications Vol 83  | 2024 |
+| 7 | Real-Time Fracturing in Video Games | Multimedia Tools & Applications Vol 82  | 2023 |
+| 8 | Environmental Storytelling in Video Games | IntechOpen From Pixels to Play  | 2025 |
+| 9 | Swarm Intelligence for Crowd Simulation — Boids and Beyond | Reynolds 1987 SIGGRAPH  | 1987 |
+| 10 | GSound — Interactive Sound Propagation for Games | UNC Chapel Hill  | 2011 |
+| 11 | Tension Space Analysis for Emergent Narrative | IEEE Transactions on Games arXiv:2004.10808  | 2020 |
+| 12 | Player-Driven Emergence in LLM-Driven Game Narrative | IEEE Conference on Games 2024 arXiv:2404.17027  | 2024 |
+| 13 | Concordia — Generative Agent-Based Modeling | DeepMind arXiv:2312.03664  | 2023 |
+| 14 | Survey on LLM-Based Game Agents | ACM Computing Surveys 2025 arXiv:2404.02039  | 2024 |
+| 15 | Closing the Loop — Systematic Review of Experience-Driven Game Adaptation | arXiv:2505.01351  | 2025 |
+| 16 | Agents' Room — Narrative Generation through Multi-step Collaboration | ICLR 2025 arXiv:2410.02603  | 2024 |
+| 17 | Procedural Animation and Parkour | Bournemouth MSc Thesis 2024  | 2024 |
+| 18 | Save Game Serialization — Carefully Structured Compression | arXiv:2410.08659  | 2024 |
+| 19 | Game Economy Balancing with Evolutionary Algorithms | IEEE CEC 2024 arXiv:2404.18574  | 2024 |
+| 20 | Removing the HUD — Impact of Non-Diegetic Elements on Immersion | ACM CHI PLAY 2015 DOI 10.1145/2793107.2793120 [X]  | 2015 |
+| 21 | Modular Quest Generation — CONAN | arXiv:1808.06217 / Entertainment Computing 2021  | 2021 |
+| 22 | Modulith — A Game Engine Made for Modding | ACM FDG 2023 DOI 10.1145/3582437.3582486  | 2023 |
+| 23 | Techniques for Building Aim Assist in Console Shooters | GDC Vault 2013  | 2013 |
+| 24 | Intersection-Free Rigid Body Dynamics | ACM TOG DOI 10.1145/3450626.3459802 [X]  | 2021 |
+| 25 | XPBD — Position-Based Simulation of Compliant Constrained Dynamics | SCA 2016  | 2016 |
+| 26 | Breaking Good — Fracture Modes for Realtime Destruction | ACM TOG DOI 10.1145/3549540 [X] arXiv:2111.05249  | 2023 |
+| 27 | Real-Time Eulerian Water Simulation Using a Restricted Tall Cell Grid | SIGGRAPH 2011 DOI 10.1145/2010324.1964977 [X]  | 2011 |
+| 28 | Interactive Dynamic Response for Games | SIGGRAPH Sandbox 2007 DOI 10.1145/1274940.1274944 [X]  | 2007 |
+| 29 | Physically Based Modeling and Animation of Fire | SIGGRAPH 2002 DOI 10.1145/566570.566643 [X]  | 2002 |
+| 30 | End-to-End Compressed Meshlet Rendering | Eurographics 2024 DOI 10.1111/cgf.15002  | 2024 |
+| 31 | Nanite Virtual Geometry — A Deep Dive | SIGGRAPH 2021 Advances  | 2021 |
+| 32 | GPU-Driven Rendering Pipelines | SIGGRAPH 2015 Advances  | 2015 |
+| 33 | Surface Simplification Using Quadric Error Metrics | SIGGRAPH 1997 DOI 10.1145/258734.258849 [X]  | 1997 |
+| 34 | Temporally Stable Joint Neural Denoising and Supersampling | HPG 2022 PACMCGIT DOI 10.1145/3543870 [X]  | 2022 |
+| 35 | DeepMimic — Physics-Based Character Skills via RL | SIGGRAPH 2018 arXiv:1804.02717 DOI 10.1145/3213779 [X]  | 2018 |
+| 36 | Ecoclimates — Climate-Response Modeling of Vegetation | ACM TOG 41(4) SIGGRAPH 2022 DOI 10.1145/3528223.3530146 [X]  | 2022 |
+| 37 | Rethinking NPC Intelligence — Bayesian Reputation System | ACM MIG 2014 DOI 10.1145/2668084.2668091 [X]  | 2014 |
+| 38 | Navigating Faction Systems for Believable NPCs | ACM FDG 2024 DOI 10.1145/3649921.3650012 [X]  | 2024 |
+| 39 | A Practical Analytic Model for Daylight | SIGGRAPH 1999 DOI 10.1145/311535.311545 [X]  | 1999 |
+| 40 | Cine-AI — Automated Game Cutscenes in the Style of Human Directors | ACM CHI PLAY 2022 arXiv:2208.05701 DOI 10.1145/3549486  | 2022 |
+| 41 | Random-Access Neural Compression of Material Textures | SIGGRAPH 2023 arXiv:2305.17105 DOI 10.1145/3592407 [X]  | 2023 |
+| 42 | Analytical Ballistic Trajectories with Approximately Linear Drag | IJCTT 2014 DOI 10.1155/2014/463489 [X]  | 2014 |
+| 43 | Fast Urban Weather Simulation | ACM TOG 36(2) DOI 10.1145/2999534 [X] [X]  | 2017 |
+| 44 | Fast Weather Simulation for Inverse Procedural Design of Urban Models | ACM TOG 36(2) DOI 10.1145/2999534 [X] [X]  | 2017 |
+| 45 | Procedural Generation of Branching Quests for Games | Entertainment Computing 43 DOI 10.1016/j.entcom.2022.100491 [X]  | 2022 |
+| 46 | Realistic Modeling and Rendering of Plant Ecosystems | SIGGRAPH 1998 DOI 10.1145/280814.280898 [X]  | 1998 |
+| 47 | Neural Layered BRDFs | SIGGRAPH 2022 DOI 10.1145/3528233.3530732 [X]  | 2022 |
+| 48 | Real-Time Geometry Caches for Alembic Streaming | SIGGRAPH 2014 Crytek  | 2014 |
+| 49 | Improving Ray Tracing Performance with Variable Rate Shading | CGVC 2021 DOI 10.2312/cgvc.20211319 [X]  | 2021 |
+| 50 | Real-Time Rendering of Glossy Reflections with Two-Level Radiance Caching | SIGGRAPH Asia 2023 DOI 10.1145/3610543.3626167  | 2023 |
 
 ### 2.2 Selected Lessons and Block Mapping
 
