@@ -11,44 +11,55 @@ defaults. The spec is the source of truth; the code follows it.
 ## Status
 
 See [`STATUS.md`](STATUS.md) — the durable, session-independent record of where the
-project actually stands. **Read it first** on any fresh session. Binding agent rules
-and repo navigation live in [`.hermes.md`](.hermes.md).
+project actually stands. **Read it first** on any fresh session. Repo navigation
+and agent workflow rules are described in [`.hermes.md`](.hermes.md).
 
 ## Repository layout
 
 | Path | Contents |
 |------|----------|
 | `src/` | Engine source — one subdir per module: `core`, `ecs`, `render`, `physics`, `ai`, `audio`, `modding`, `net`, `save`, `slm`, `ui`, `world`, `debug`, `events` |
-| `shaders/` | GLSL → SPIR-V shader sources (HLSL + DXC toolchain) |
+| `shaders/` | GLSL → SPIR-V shader sources |
 | `assets/` | Runtime assets (models, textures) |
-| `tests/`, `src/tests/` | Automated tests (Catch2 / doctest, ctest) |
-| `scripts/` | Build / spec / verify tooling (incl. `verify_m0_parity.py`) |
+| `tests/` | Automated tests (Catch2 / ctest) |
+| `scripts/` | Build / spec / verify tooling |
 | `tools/` | Project tooling |
 | `spec/` | Per-milestone split spec working set + `llms.txt` index — **the live source of truth** |
-| `recon/` | Threat Interactive research + `ti_debug.py` design-by-contract debug gate (see below) |
-| `docs/` | (archived) Design docs & audits — now in [`archive/docs/`](archive/docs/) |
-| `archive/` | Archived milestones, audits, and runtime junk |
+| `recon/` | Research plans, audits, and professionalization plans |
+| `recon/plans/2026-07-20_RESEARCHED_PROFESSIONAL_PLAN.md` | Research-backed plan: 50 papers, 6 reference games, 3 engine architectures, milestone map, verification gates |
+| `docs/` | Live build, verification, architecture, and research docs |
+| `docs/build.md` | Local build instructions |
+| `docs/verify/verify.md` | Verification checklist |
+| `docs/research/engine_architecture_lessons.md` | id Tech / Decima / UE5 architecture lessons |
+| `archive/` | Archived milestones, audits, and historical backups |
 | `build/`, `build-asan/` | Out-of-source build trees (gitignored) |
 | `vcpkg_installed/` | vcpkg dependencies (gitignored) |
-| `custom-ports/`, `custom-triplets/` | vcpkg port/triplet overrides |
 
 ## Build
 
-Dependencies are managed via **vcpkg manifest mode** (`vcpkg.json`). Configure and
-build out-of-source:
+Dependencies are managed via **vcpkg**. Configure and build out-of-source with the
+canonical build script:
 
 ```sh
-cmake -S . -B build
-cmake --build build --config Debug --target ZombieEngine
+cmd.exe /c "C:\ZombieEngine\scripts\build_ze.cmd"
 ```
 
-- **ASAN tree:** `build-asan` (`CMAKE_BUILD_TYPE=Release`, `ENGINE_SANITIZE=ASAN`).
-- **Shader toolchain:** HLSL + DXC → SPIR-V. No GLSL-via-glslang side path.
-- **Profiler:** Tracy (RenderDoc-capturable at M0).
+This builds the default `Debug` target. Use a separate build directory for ASan:
+
+```sh
+mkdir build-asan && cd build-asan
+cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DENGINE_SANITIZE=ASAN -DCMAKE_BUILD_TYPE=Release
+cmake --build . --parallel 4
+```
+
+Key facts:
+- Runtime target is **Windows 11 / MSVC v14.44 / Ninja**
+- Vulkan 1.4 via volk + vk-bootstrap
+- Primary test target: `build/tests/ZombieEngineTests.exe`
 
 ## Verify the spec
 
-After any spec change, the milestone spec must pass the mechanical verifier:
+After any spec change, run the mechanical verifier:
 
 ```sh
 python scripts/verify_m0_parity.py
@@ -57,32 +68,8 @@ python scripts/verify_m0_parity.py
 Block counts, anchor integrity, ascending EXT-ID order, and code-fence balance must
 all be clean before a change is called done.
 
-## TI research & debug tooling (`recon/`)
-
-`recon/` holds the Threat Interactive (TI) rendering research and the contract-debug
-gate that keeps the plan honest:
-
-- **`ti_debug.py`** — parse-from-prose design-by-contract gate. Verifies every
-  `COVERED` / `PARTIAL` claim in the plan is backed by a real spec block, flags bogus
-  GAP targets, and detects proposal collisions. JSON-first (agent-consumable) with
-  `--human`, `--jsonl`, `--claim`, `--kind`, `--gha`, and a built-in `--selftest`.
-- **`PLAN_threat_interactive_gospel_2026-07-16.md`** — the canonical TI rendering
-  rules (gospel, not suggestions).
-- **`PLAN_gap_fill_ext_proposals_2026-07-16.md`** — proposed new EXT blocks to close
-  gaps the TI research surfaced.
-- **`pull_ti_transcripts.py`**, **`analyze_transcripts.py`** — TI YouTube transcript
-  pipeline (`recon/transcripts/`).
-
-Run the gate after any plan edit:
-
-```sh
-python recon/ti_debug.py          # JSON (piped) or human view (TTY)
-python recon/ti_debug.py --selftest
-```
-
 ## Contributing / agents
 
-`.hermes.md` defines the milestone-gated workflow and repo hygiene rules. In short:
-never commit `build/` or `vcpkg_installed/`; update `STATUS.md` before ending a
-session that changes milestone state; milestone spec files are read-only to the agent
-except inside explicitly-approved plan batches.
+Milestone spec files are read-only to automation except inside explicitly-approved
+plan batches. Update `STATUS.md` before ending a session that changes milestone
+state. Never commit `build/`, `build-asan/`, `vcpkg_installed/`, or `logs/`.
