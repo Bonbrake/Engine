@@ -80,7 +80,7 @@ The three immutable pillars remain:
 
 | 34 | Temporally Stable Joint Neural Denoising and Supersampling | HPG 2022 PACMCGIT DOI 10.1145/3543870 [S] Temporally Stable Real-Time Joint Neural Denoising and Supersampling  | 2022 | [cache: crossref_10.1145_3543870.json]
 
-| 35 | DeepMimic — Physics-Based Character Skills via RL | SIGGRAPH 2018 arXiv:1804.02717 DOI 10.1145/3213779 [S] ACM SIGGRAPH 2018 Appy Hour  | 2018 | [cache: crossref_10.1145_3213779.json]
+| 35 | DeepMimic — Physics-Based Character Skills via RL | SIGGRAPH 2018 arXiv:1804.02717 DOI 10.1145/3213779 [S] ACM SIGGRAPH 2018 Appy Hour  | 2018 | [cache: arxiv_1804.02717.html]
 
 | 36 | Ecoclimates — Climate-Response Modeling of Vegetation | ACM TOG 41(4) SIGGRAPH 2022 DOI 10.1145/3528223.3530146 [S] Ecoclimates  | 2022 | [cache: crossref_10.1145_3528223.3530146.json]
 
@@ -237,7 +237,7 @@ The three immutable pillars remain:
 
 3. UE5 Nanite + Lumen — Epic Games [X]
    **Primary source**: cached UE5 public docs index + Karis Nanite SIGGRAPH PDF cache
-   **Evidence**: cached UE5 docs index is an Angular app shell; exact Nanite/Lumen/World Partition/PCG/Mass Entity wording was not extracted from cache. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; exact token extraction pending), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
+   **Evidence**: cached UE5 docs index is an Angular app shell; exact Nanite/Lumen/World Partition/PCG/Mass Entity wording was not extracted from cache. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app shell; exact token extraction pending), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
    **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
    **Gap**: Need to fetch actual UE5 docs page content with working JS extraction or alternate source
 
@@ -291,7 +291,7 @@ The three immutable pillars remain:
 || bloat-free debug/editor overlay | [S] | Cached imgui README confirms "Bloat-free Graphical User interface for C++ with minimal dependencies." [cache: ocornut_imgui.html] Validates M1 debug/editor layer. |
 || mod signature-scanning compatibility approach | [X] | Cached UE4SS repo page exists, but exact README quote for signature-scanning/mod compatibility was not extracted from the cache. [cache: ue4ss.html] Validation target: M7 mod plan. |
 || Vulkan 1.4 bindless evolution beyond VK_EXT_descriptor_indexing | [X] title-derived | Cached docs.vulkan.org spec confirms Vulkan 1.4 roadmap text, but exact descriptor-heap/new-bindless wording not extracted in plan [target: docs.vulkan.org roadmap 2024/2026 + VK_EXT_descriptor_indexing update notes]. |
-|| world partition replaces scene streaming | [X] | Cached UE5 docs index shows Nanite/Lumen/World Partition/PCG/Mass Entity tokens, but the cached page is an Angular app shell and exact wording was not extracted. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html, advances.realtimerendering.com-c818a353d9.md] Validation target: ZE chunk streaming subset strategy. |
+|| world partition replaces scene streaming | [X] | Cached UE5 docs index shows Nanite/Lumen/World Partition/PCG/Mass Entity tokens, but the cached page is an Angular app shell and exact wording was not extracted. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app shell; exact token extraction pending), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)] Validation target: ZE chunk streaming subset strategy. |
 
 ### 2.6 Research Gaps
 
@@ -651,7 +651,7 @@ Purpose: extract durable patterns for ZE from how shipped engines were built.
 
 3. UE5 Nanite + Lumen — Epic Games [X]
    **Primary source**: cached UE5 public docs index + Karis Nanite SIGGRAPH PDF cache
-   **Evidence**: cached UE5 docs index is an Angular app shell; exact Nanite/Lumen/World Partition/PCG/Mass Entity wording was not extracted from cache. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; exact token extraction pending), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
+   **Evidence**: cached UE5 docs index is an Angular app shell; exact Nanite/Lumen/World Partition/PCG/Mass Entity wording was not extracted from cache. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app shell; exact token extraction pending), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
    **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
    **Gap**: Need to fetch actual UE5 docs page content with working JS extraction or alternate source
 
