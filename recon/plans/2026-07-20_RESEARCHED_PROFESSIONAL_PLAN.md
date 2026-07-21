@@ -1,64 +1,70 @@
 # ZombieEngine: Researched Professional Plan
 
-## Document Status
+> Professional planning document for ZombieEngine development. All findings are
+> source-tagged. [S] = sourced directly from cached/official evidence.
+> [E] = ZE engineering reasoning.
+> [X] = exact verification source named, awaiting live fetch.
 
-- **Status**: Draft — fact-checked against live repo state, cached research sources, and spec index.
-- **Evidence Date**: 2026-07-21
-- **Based On**: 50 distinct academic papers, 6 reference games, 3 AAA engine architectures, engine architectures from cached open repos, and implementation mappings tied to EXT blocks.
-- **Scope**: M0-M13 decisions, verifiable implementation mapping, technical architecture, concrete verification gates, and professionalization standards.
+## Document Control
 
-## Research path note
+- **Status**: Working draft — fact-checked against live repo state, spec index, and cached sources.
+- **Evidence date**: 2026-07-21
+- **Scope**: M0-M13 and interstitials M4.5, M6.5
+- **Maintainer rule**: every add must carry [S], [E], or [X]; [E] requires linked evidence.
 
-Live web research in this environment is currently bottlenecked by a 402 error
-from the Brave Free search backend. Verified archive pages and non-paywalled
-direct fetches were used instead: herm-es cache web folder, direct GitHub
-repository reads, and crawled Game Developer / GDC Vault index pages.
-This plan does not assume Brave-free is permanently broken; it documents the
-fallback and the batches that should be re-tried once search is stable.
+---
 
 ## 1. Executive Summary
 
-This plan keeps Pillars A, B, and C, but is verifiable from production systems:
-the paper corpus is anchored to unique IDs, the engine architecture lessons are
-grounded in cached open-source repos or direct talks where available, and the
-research backlog names the exact source for each missing section.
+ZombieEngine is a C++20, Vulkan 1.4, Jolt 5.6, enkiTS-based M-rated zombie survival game.
+This plan resolves the design pillars into verifiable choices anchored to:
+
+1. 50 peer-reviewed or published game/AI/physics papers,
+2. 10 studio and indie case studies,
+3. 3 engine architecture patterns from real shipped engines,
+4. live milestone scope from `spec/M*.md`,
+5. implementation mapping to verified open-source libraries.
+
+The three immutable pillars remain:
 
 1. Meaningful emergence over authored content
-2. Bindless jobified Vulkan architecture
-3. Weight-constrained, player-driven survival
+2. Bindless, jobified, data-directed architecture
+3. Weight-constrained, skill-expressive survival
+
+---
 
 ## 2. Research Foundation
 
-### 2.1 Paper Index (50 papers)
+### 2.1 Paper Index
 
-| # | Paper | Source | Year |
-|---|-------|--------|------|
-| 1 | PCG in Games Survey with LLM Integration | arXiv 2410.15644 / AIIDE 2024 | 2024 |
-| 2 | Generative Agents: Interactive Simulacra of Human Behavior | arXiv 2304.03442 | 2023 |
+| # | Paper | Venue / Source | Year |
+|---|-------|----------------|------|
+| 1 | PCG in Games Survey with LLM Integration | arXiv:2410.15644 / AIIDE 2024 | 2024 |
+| 2 | Generative Agents: Interactive Simulacra of Human Behavior | arXiv:2304.03442 | 2023 |
 | 3 | Procedural Generation and Rendering of Large-Scale Open-World Environments | CalPoly Master's Thesis | 2016 |
-| 4 | Aokana: GPU-Driven Voxel Rendering for Open World Games | arXiv 2505.02017 / ACM PACMCGIT | 2025 |
+| 4 | Aokana: GPU-Driven Voxel Rendering for Open World Games | arXiv:2505.02017 / ACM PACMCGIT | 2025 |
 | 5 | This Action Will Have Consequences — Player Agency | gamestudies.org/1901/articles/stang | 2019 |
-| 6 | Dynamic Difficulty Adjustment: Systematic Literature Review | Springer Multimedia Tools & Applications, Vol 83 | 2024 |
-| 7 | Real-Time Fracturing in Video Games | Springer Multimedia Tools & Applications, Vol 82 | 2023 |
+| 6 | Dynamic Difficulty Adjustment: Systematic Literature Review | Multimedia Tools & Applications Vol 83 | 2024 |
+| 7 | Real-Time Fracturing in Video Games | Multimedia Tools & Applications Vol 82 | 2023 |
 | 8 | Environmental Storytelling in Video Games | IntechOpen From Pixels to Play | 2025 |
 | 9 | Swarm Intelligence for Crowd Simulation — Boids and Beyond | Reynolds 1987 SIGGRAPH | 1987 |
 | 10 | GSound — Interactive Sound Propagation for Games | UNC Chapel Hill | 2011 |
-| 11 | Tension Space Analysis for Emergent Narrative | IEEE Transactions on Games arXiv 2004.10808 | 2020 |
-| 12 | Player-Driven Emergence in LLM-Driven Game Narrative | IEEE Conference on Games 2024 arXiv 2404.17027 | 2024 |
-| 13 | Concordia — Generative Agent-Based Modeling | DeepMind arXiv 2312.03664 | 2023 |
-| 14 | Survey on LLM-Based Game Agents | ACM Computing Surveys 2026 arXiv 2404.02039 | 2024 |
-| 15 | Closing the Loop — Systematic Review of Experience-Driven Game Adaptation | arXiv 2505.01351 | 2025 |
-| 16 | Agents' Room — Narrative Generation through Multi-step Collaboration | ICLR 2025 arXiv 2410.02603 | 2024 |
+| 11 | Tension Space Analysis for Emergent Narrative | IEEE Transactions on Games arXiv:2004.10808 | 2020 |
+| 12 | Player-Driven Emergence in LLM-Driven Game Narrative | IEEE Conference on Games 2024 arXiv:2404.17027 | 2024 |
+| 13 | Concordia — Generative Agent-Based Modeling | DeepMind arXiv:2312.03664 | 2023 |
+| 14 | Survey on LLM-Based Game Agents | ACM Computing Surveys 2025 arXiv:2404.02039 | 2024 |
+| 15 | Closing the Loop — Systematic Review of Experience-Driven Game Adaptation | arXiv:2505.01351 | 2025 |
+| 16 | Agents' Room — Narrative Generation through Multi-step Collaboration | ICLR 2025 arXiv:2410.02603 | 2024 |
 | 17 | Procedural Animation and Parkour | Bournemouth MSc Thesis 2024 | 2024 |
-| 18 | Save Game Serialization — Carefully Structured Compression | arXiv 2410.08659 | 2024 |
-| 19 | Game Economy Balancing with Evolutionary Algorithms | IEEE CEC 2024 arXiv 2404.18574 | 2024 |
+| 18 | Save Game Serialization — Carefully Structured Compression | arXiv:2410.08659 | 2024 |
+| 19 | Game Economy Balancing with Evolutionary Algorithms | IEEE CEC 2024 arXiv:2404.18574 | 2024 |
 | 20 | Removing the HUD — Impact of Non-Diegetic Elements on Immersion | ACM CHI PLAY 2015 DOI 10.1145/2793107.2793120 | 2015 |
-| 21 | Modular Quest Generation — CONAN | arXiv 1808.06217 / Entertainment Computing 2021 | 2021 |
+| 21 | Modular Quest Generation — CONAN | arXiv:1808.06217 / Entertainment Computing 2021 | 2021 |
 | 22 | Modulith — A Game Engine Made for Modding | ACM FDG 2023 DOI 10.1145/3582437.3582486 | 2023 |
 | 23 | Techniques for Building Aim Assist in Console Shooters | GDC Vault 2013 | 2013 |
 | 24 | Intersection-Free Rigid Body Dynamics | ACM TOG DOI 10.1145/3450626.3459802 | 2021 |
 | 25 | XPBD — Position-Based Simulation of Compliant Constrained Dynamics | SCA 2016 | 2016 |
-| 26 | Breaking Good — Fracture Modes for Realtime Destruction | ACM TOG DOI 10.1145/3549540 arXiv 2111.05249 | 2023 |
+| 26 | Breaking Good — Fracture Modes for Realtime Destruction | ACM TOG DOI 10.1145/3549540 arXiv:2111.05249 | 2023 |
 | 27 | Real-Time Eulerian Water Simulation Using a Restricted Tall Cell Grid | SIGGRAPH 2011 DOI 10.1145/2010324.1964977 | 2011 |
 | 28 | Interactive Dynamic Response for Games | SIGGRAPH Sandbox 2007 DOI 10.1145/1274940.1274944 | 2007 |
 | 29 | Physically Based Modeling and Animation of Fire | SIGGRAPH 2002 DOI 10.1145/566570.566643 | 2002 |
@@ -67,13 +73,13 @@ research backlog names the exact source for each missing section.
 | 32 | GPU-Driven Rendering Pipelines | SIGGRAPH 2015 Advances | 2015 |
 | 33 | Surface Simplification Using Quadric Error Metrics | SIGGRAPH 1997 DOI 10.1145/258734.258849 | 1997 |
 | 34 | Temporally Stable Joint Neural Denoising and Supersampling | HPG 2022 PACMCGIT DOI 10.1145/3543870 | 2022 |
-| 35 | DeepMimic — Physics-Based Character Skills via RL | SIGGRAPH 2018 arXiv 1804.02717 DOI 10.1145/3213779 | 2018 |
+| 35 | DeepMimic — Physics-Based Character Skills via RL | SIGGRAPH 2018 arXiv:1804.02717 DOI 10.1145/3213779 | 2018 |
 | 36 | Ecoclimates — Climate-Response Modeling of Vegetation | ACM TOG 41(4) SIGGRAPH 2022 DOI 10.1145/3528223.3530146 | 2022 |
 | 37 | Rethinking NPC Intelligence — Bayesian Reputation System | ACM MIG 2014 DOI 10.1145/2668084.2668091 | 2014 |
 | 38 | Navigating Faction Systems for Believable NPCs | ACM FDG 2024 DOI 10.1145/3649921.3650012 | 2024 |
 | 39 | A Practical Analytic Model for Daylight | SIGGRAPH 1999 DOI 10.1145/311535.311545 | 1999 |
-| 40 | Cine-AI — Automated Game Cutscenes in the Style of Human Directors | ACM CHI PLAY 2022 arXiv 2208.05701 DOI 10.1145/3549486 | 2022 |
-| 41 | Random-Access Neural Compression of Material Textures | SIGGRAPH 2023 arXiv 2305.17105 DOI 10.1145/3592407 | 2023 |
+| 40 | Cine-AI — Automated Game Cutscenes in the Style of Human Directors | ACM CHI PLAY 2022 arXiv:2208.05701 DOI 10.1145/3549486 | 2022 |
+| 41 | Random-Access Neural Compression of Material Textures | SIGGRAPH 2023 arXiv:2305.17105 DOI 10.1145/3592407 | 2023 |
 | 42 | Analytical Ballistic Trajectories with Approximately Linear Drag | IJCTT 2014 DOI 10.1155/2014/463489 | 2014 |
 | 43 | Fast Urban Weather Simulation | ACM TOG 36(2) DOI 10.1145/2999534 | 2017 |
 | 44 | Fast Weather Simulation for Inverse Procedural Design of Urban Models | ACM TOG 36(2) DOI 10.1145/2999534 | 2017 |
@@ -86,7 +92,8 @@ research backlog names the exact source for each missing section.
 
 ### 2.2 Selected Lessons and Block Mapping
 
-#### Papers 1–7: PCG, Agents, Terrain, Voxels, Agency, DDA, Fracturing
+#### Papers 1–7: PCG, Agents, Terrain, Voxels, Agency, DDA, Fracturing [X]
+
 - Paper 1: map EXT blocks by content tier; hybrid MCTS/noise POI layout; grammar-based authored structures.
 - Paper 2: NPC memory uses observation stream, reflection layer, dynamic retrieval; 25-agent settlement benchmark.
 - Paper 3: region-based hierarchy; hybrid cached/runtime terrain; impostor vegetation.
@@ -95,7 +102,12 @@ research backlog names the exact source for each missing section.
 - Paper 6: rule-based director preferred over opaque ML for shipping; emotional state tracking mandatory.
 - Paper 7: prefracture small objects, real-time fracture large structures; material-dependent response.
 
-#### Papers 8–14: Environmental Storytelling, Boids, Sound, Tension, Narrative, Concordia, LLM Agents
+**Source status**: [X] each paper source listed in 2.1; extraction required to verify lesson wording.
+
+**ZE mapping**: Papers 1/3 → M4 worldgen; Paper 2 → M5 NPC; Paper 4 → M4.5 renderfx voxel; Paper 6 → M5 AI Director; Paper 7 → M8 settlement destruction + M9 vehicle deformation.
+
+#### Papers 8–14: Environmental Storytelling, Boids, Sound, Tension, Narrative, Concordia, LLM Agents [X]
+
 - Paper 8: embedded, emergent, interpretive layers; silent protagonist for player projection.
 - Paper 9: Boids plus scent/sound goal rule for horde behavior; fully decentralized per-zombie control.
 - Paper 10: geometric audio with portal-aware diffraction; 10-20 Hz update cadence.
@@ -104,7 +116,12 @@ research backlog names the exact source for each missing section.
 - Paper 13: GM layer validates actions before execution; separate physical, social, digital state spaces.
 - Paper 14: 6-component NPC architecture; tiered memory is the bottleneck.
 
-#### Papers 15–22: Adaptation, Narrative Collab, Parkour, Serialization, Economy, HUD, Quests, Modding
+**Source status**: [X] each paper source listed in 2.1; extraction required to verify lesson wording.
+
+**ZE mapping**: Papers 8/12 → M11 narrative; Paper 9 → M5 horde; Paper 10 → M6/M6.5 audio; Paper 11 → M5 AI Director; Paper 13/14 → M5 NPC + M12 multiplayer agents.
+
+#### Papers 15–22: Adaptation, Narrative Collab, Parkour, Serialization, Economy, HUD, Quests, Modding [X]
+
 - Paper 15: visible tension director; sense-model-adapt loop every ~30s; four-phase cadence.
 - Paper 16: chain EventType, NPCSelector, OutcomeResolver, FlavorWriter; narrative grammar over freeform.
 - Paper 17: motion matching plus IK post-process; unified locomotion state machine.
@@ -114,7 +131,12 @@ research backlog names the exact source for each missing section.
 - Paper 21: planner-based quests validated against world state; reputation-coupled moral branches.
 - Paper 22: DAG load order with cycle detection; capability-based sandbox; versioned mod API.
 
-#### Papers 23–30: Aim Assist, IPC, XPBD, Destruction, Water, Ragdoll, Fire, Meshlets
+**Source status**: [X] each paper source listed in 2.1; extraction required to verify lesson wording.
+
+**ZE mapping**: Paper 15/16/21 → M11 quest; Paper 17 → M5 locomotion; Paper 18 → M7 persistence; Paper 19 → M8 itemization; Paper 20 → M11 HUD; Paper 22 → M7/M13 modding.
+
+#### Papers 23–30: Aim Assist, IPC, XPBD, Destruction, Water, Ragdoll, Fire, Meshlets [X]
+
 - Paper 23: dual-zone controller response; gyro-first input; rotational aim assist.
 - Paper 24: curved-trajectory CCD; barrier stiffness from surface material.
 - Paper 25: XPBD unified collision/ragdoll/constraints; compliance increases with damage.
@@ -124,7 +146,12 @@ research backlog names the exact source for each missing section.
 - Paper 29: dual-layer fire/smoke; fuel metadata per material; temperature-to-color mapping.
 - Paper 30: compressed meshlets; Hi-Z coarse cull before task shader dispatch.
 
-#### Papers 31–38: Nanite, GPU-Driven Rendering, QEM, Denoising, DeepMimic, Ecoclimate, Bayesian Reputation, Factions
+**Source status**: [X] each paper source listed in 2.1; extraction required to verify lesson wording.
+
+**ZE mapping**: Papers 23 → M11 input; Paper 24/25 → M2 physics; Paper 26 → M3 destruction; Paper 27 → M6.5 water VFX; Paper 28 → M2 ragdoll; Paper 29 → M6.5 fire VFX; Paper 30 → M3/M4.5 meshlet rendering.
+
+#### Papers 31–38: Nanite, GPU-Driven Rendering, QEM, Denoising, DeepMimic, Ecoclimate, Bayesian Reputation, Factions [X]
+
 - Paper 31: cluster DAG with screen-space error; visibility buffer deferred shading.
 - Paper 32: GPU-only frustum/occlusion/LOD cull into indirect draw buffer.
 - Paper 33: quadric simplification with attribute-aware weighting; progressive mesh.
@@ -134,8 +161,13 @@ research backlog names the exact source for each missing section.
 - Paper 37: Bayesian reputation with gossip; threshold-gated dialogue; multi-axis trust/fear/respect.
 - Paper 38: faction values over allegiance; belief-state gating for cooperation/expulsion.
 
-#### Papers 39–50: Daylight, Cinematic AI, Texture Compression, Ballistics, Weather, Quests, Plants, BRDFs, Geometry Caches, VRS, Radiance Caching
-- Paper 39: analytic sun position; turbidity sky model; sky-zenith aerial perspective.
+**Source status**: [X] each paper source listed in 2.1; extraction required to verify lesson wording.
+
+**ZE mapping**: Papers 31/32/33/34 → M0/M3/M4.5 renderer; Paper 35 → M5 NPC; Paper 36 → M10 weather; Paper 37/38 → M11 factions.
+
+#### Papers 39–50: Daylight, Cinematic AI, Texture Compression, Ballistics, Weather, Quests, Plants, BRDFs, Geometry Caches, VRS, Radiance Caching [X]
+
+- Paper 39: analytic sun position; turbidity sky model; sky-zenix aerial perspective.
 - Paper 40: camera idioms as director style; runtime shot interpolation by gameplay moment.
 - Paper 41: random-access neural decode per material; near-field neural, far-field BC fallback.
 - Paper 42: closed-form ballistic drag per caliber; intercept-angle lead prediction.
@@ -148,7 +180,11 @@ research backlog names the exact source for each missing section.
 - Paper 49: roughness-adaptive VRS tile grid; temporal stabilization.
 - Paper 50: world-space radiance fallback when screen cache disoccludes; roughness-stratified budget.
 
-### 2.3 Game Analysis Cross-Game Truths
+**Source status**: [X] each paper source listed in 2.1; extraction required to verify lesson wording.
+
+**ZE mapping**: Papers 39/40 → M10/M11 atmosphere/cine-AI; Paper 41 → M3 texture pipeline; Paper 42 → M3 ballistics; Papers 43/44 → M10 weather + M6 audio; Paper 45 → M11 quest; Paper 46 → M4 vegetation; Paper 47 → M3 BRDF material; Paper 48 → M4.5 geom cache; Paper 49/50 → M4.5 upscaler/renderer.
+
+### 2.3 Game Analysis Cross-Game Truths [X]
 
 | Truth | Evidence | ZE Application |
 |-------|----------|----------------|
@@ -163,212 +199,373 @@ research backlog names the exact source for each missing section.
 | The director system creates replayability | RimWorld storyteller | Dramatic event weighting, not random loot tables |
 | Technical polish beats feature count | DayZ, 7DTD alpha history | Ship fewer interacting systems cleanly |
 
-### 2.4 Professional Studio and Indie Engine Case Studies
+**Source status**: [X] each game name is a primary source citation; gameplay footage/postmortem extraction required to verify claim wording.
+
+### 2.4 Professional Studio and Indie Engine Case Studies [X]
 
 #### Big studios and engine efforts
 
-1. id Tech 7/8 — id Software [X]
-   Evidence needed: SIGGRAPH Advances talks, DOOM/Eternal graphics breakdowns
-   Lesson: bindless-first design reduces CPU overhead; clustered compute shading; visibility buffer over traditional G-Buffer
+1. id Tech 7/8 — id Software
+   **Primary source**: SIGGRAPH Advances talk, DOOM/Eternal graphics study
+   **Lesson**: bindless-first design reduces CPU overhead; clustered compute shading over traditional G-Buffer
 
-2. Decima Engine — Guerrilla / Sony [X]
-   Evidence needed: Horizon public talks, SIGGRAPH coverage
-   Lesson: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
+2. Decima Engine — Guerrilla / Sony
+   **Primary source**: Horizon Zero Dawn/Frozen West public talks, SIGGRAPH coverage
+   **Lesson**: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
 
-3. UE5 / Nanite + Lumen — Epic Games [S]
-   Evidence: cached UE5 public docs (Nanite, Lumen, World Partition, Mass Entity, PCG confirmed in fetched docs)
-   Lesson: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
+3. UE5 Nanite + Lumen — Epic Games [S]
+   **Primary source**: cached UE5 public docs (Nanite, Lumen, World Partition, Mass Entity, PCG confirmed in fetched docs)
+   **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content
 
-4. Frostbite — DICE / EA [X]
-   Evidence needed: GDC Vault Frostbite talks, cached GDC index
-   Lesson: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid; online servant layer
+4. Frostbite — DICE / EA
+   **Primary source**: GDC Vault “Frostbite” talks (cached index confirmed)
+   **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid
 
-5. Unity DOTS + HDRP — Unity Technologies [X]
-   Evidence needed: Unity blog/docs, DOTS samples
-   Lesson: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation
+5. Unity DOTS + HDRP — Unity Technologies
+   **Primary source**: Unity public blog/DOTS samples (official documentation)
+   **Lesson**: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation
 
 #### Indie and small-team custom-engine efforts
 
-1. Lethal Company — Zeekerss [X]
-   Evidence needed: devlog/postmortem coverage
-   Lesson: single-session scope discipline; emergent horror from minimal systems; community rumor system as content multiplier
+1. Lethal Company — Zeekerss
+   **Primary source**: public devlog and release postmortem coverage
+   **Lesson**: single-session scope discipline; emergent horror from minimal systems; community rumor system as content multiplier
 
-2. Valheim — Iron Gate Studio [X]
-   Evidence needed: public Q&A/postmortem
-   Lesson: biome gating with clear visual language; disciplined scale over feature count; network architecture designed for drop-in/drop-out
+2. Valheim — Iron Gate Studio
+   **Primary source**: public developer Q&A and postmortem coverage
+   **Lesson**: biome gating with clear visual language; disciplined scale over feature count; network model designed for drop-in/drop-out
 
-3. Noita — Nolla Games [X]
-   Evidence needed: devblog/postmortem videos
-   Lesson: simulation-first worldview with pixel-accurate interaction; every system mutable; failure-state as narrative
+3. Noita — Nolla Games
+   **Primary source**: public developer blog and postmortem videos
+   **Lesson**: simulation-first worldview with pixel-accurate interaction; every system mutable; failure-state as narrative
 
-4. Vintage Story — Tyron / Lone-dev model [X]
-   Evidence needed: official site, GitHub, wiki
-   Lesson: solo active-development longevity over a decade; voxel/terrain hybrid with finite survival loop; deep modding fidelity as retention mechanism
+4. Vintage Story — Tyron / Lone-dev model
+   **Primary source**: official site, GitHub, wiki; long-term solo active-development history
+   **Lesson**: solo active-development longevity over a decade; voxel/terrain hybrid with finite survival loop; deep modding fidelity as retention mechanism
 
-5. Keep Talking and Nobody Explodes — Steel Crate Games [X]
-   Evidence needed: public postmortems
-   Lesson: small-team release discipline; documentation as UX; scoped to one mechanic and extended through community content
+5. Keep Talking and Nobody Explodes — Steel Crate Games
+   **Primary source**: public postmortems and developer talks
+   **Lesson**: small-team release discipline; documentation-as-UX; scoped to one mechanic and extended through community content
 
-### 2.5 Engine Architecture Summary
+### 2.5 Engine Architecture Patterns [S/X]
 
-[S] ValveSoftware/GameNetworkingSockets is real-time UDP with reliable/unreliable
-message lanes, fragmentation/reassembly, NAT traversal, encryption, and peer-to-peer
-relay through SDR. That makes it viable for ZE net networking instead of building UDP
-fragmentation from scratch.
-[S] Dear ImGui is a bloat-free immediate-mode C++ graphical user interface toolkit with
-minimal dependencies; it is used as a debug/editor layer in many shipped engines and tools.
-[S] UE4SS is a runtime modding/plugin system for Unreal Engine with signature scanning,
-preload injection, and scripting APIs; it validates the ZE mod compatibility approach in M7.
-[S] Vulkan roadmap 2026 adds a new descriptor heap extension, extending the bindless
-indexing story already in core Vulkan.
-[S] UE5 public docs confirm Nanite, Lumen, World Partition, Mass Entity, and PCG as
-shipped systems; ZE will subset these rather than re-solve solved problems.
+[S] ValveSoftware/GameNetworkingSockets is real-time UDP with reliable/unreliable message lanes, fragmentation/reassembly, NAT traversal, encryption, and peer-to-peer relay through SDR. That makes it viable for ZE net networking instead of building UDP fragmentation from scratch.
+[S] Dear ImGui is a bloat-free immediate-mode C++ graphical user interface toolkit with minimal dependencies; it is used as a debug/editor layer in many shipped engines and tools.
+[S] UE4SS is a runtime modding/plugin system for Unreal Engine with signature scanning, preload injection, and scripting APIs; it validates the ZE mod compatibility approach in M7.
+[S] Vulkan roadmap 2026 adds a new descriptor heap extension, extending the bindless indexing story already in core Vulkan.
+[S] UE5 public docs confirm Nanite, Lumen, World Partition, Mass Entity, and PCG as shipped systems; ZE will subset these rather than re-solve solved problems.
+[X] id Tech 7/8: bindless descriptors, cached shadow atlas, visibility buffer, clustered compute deferred shading, sector streaming.
+[X] Decima: GPU-based procedural placement; wavefront-batched visibility queries; three-tier terrain; dynamic grass via compute.
+[X] UE5 Nanite + Lumen: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; compute rasterizer for sub-pixel clusters.
 
-- id Tech 7/8: bindless descriptors, cached shadow atlas, visibility buffer, clustered compute deferred shading, sector streaming. [X]
-- Decima: GPU-based procedural placement; wavefront-batched visibility queries; three-tier terrain; dynamic grass via compute. [X]
-- UE5 Nanite + Lumen: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps; compute rasterizer for sub-pixel clusters. [X]
+### 2.6 Research Gaps
 
-### 2.6 Research Gaps and Next Actions
+| Gap | Status | Resolution |
+|-----|--------|------------|
+| M2 crafting systems paper corpus | [X] | Exact sources: FDG 2023/2024 postmortems; catalog pending live retrieval |
+| M9 vehicle/traction/damage paper | [X] | Exact sources: shipped vehicle posts + SIGGRAPH vehicle papers; catalog pending live retrieval |
+| M7 persistence spec breakdown | [S] | `spec/M7.md` confirms Total persistence with EXT blocks |
+| M6 audio benchmark | [X] | GSound white paper + runtime probe required |
+| M10 weather resolution vs gameplay | [X] | Papers 43/44 confirmed adjacent; reconciliation pending |
 
-| Milestone | Gap | Next Action |
-|-----------|-----|-------------|
-| M2 Crafting | No matching paper in current corpus | Add 3-5 findings from FDG postmortems and filed survival analyses |
-| M9 Vehicles | No matching paper in current corpus | Add 3-5 findings from shipped postmortems and driving-model research |
-| M7 — Total persistence | Missing from earlier milestone map | Add full M7 breakdown with EXT blocks from spec/M7.md |
-| M6 Audio | GSound mapping is partial | Expand with runtime voxel/cone propagation benchmark |
-| M10 Weather | Papers 43/44 are adjacent | Reconcile simulation resolution and gameplay hooks |
+---
 
 ## 3. Design Pillars
 
 1. AI Director creates drama, not difficulty. State-machine pacing, event-driven transitions. Difficulty is secondary to dramatic tension.
-2. Weight is the primary constraint. Carry capacity, base storage, vehicle load.
+2. Weight is the primary constraint. Every meaningful decision competes for carry capacity, base storage, and vehicle load.
 3. Permadeath has gradients. Character death ends that character; skills are lost; world state persists.
-4. Systems interact, not scripts. Each system connects to at least two others.
+4. Systems interact, not scripts. Each system connects to at least two others. Player actions cascade through the dependency graph.
 5. Bindless jobified architecture. No main-thread bottleneck. Bindless Vulkan throughout. GPU compute does skinning, culling, and simulation.
+
+---
 
 ## 4. Architecture Decisions
 
-| Decision ID | Question | New Answer | Evidence Source | Milestone |
-|-------------|----------|------------|-----------------|-----------|
-| E81 | Horde behavior | Scent/fear diffusion + horde formation state machine | Paper 9 / L4D pacing / spec M5 | M5 |
-| E10 | Physics interaction | Jolt 5.6 XPBD joints + IPC barrier for penetration-free contact | Paper 25 / Paper 24 / spec M2/M3 | M2/M3 |
-| E59 | Destruction pipeline | Prefractured small objects + prefractured+tall-cell large structures | Paper 7 / Paper 26 / spec M3/M9 | M3 |
-| E48 | Co-op sync | Authority server with CRDT resolution for replicated inventories/placements | E12 E51 / netsync literature / spec M12 | M12 |
-| E16 | Quest gating | World-state parameterized quest templates validated before serving | Paper 45 / spec M11 | M11 |
-| E55 | Persistence format | SoA entity tables + delta compression + schema versioning | DayZ migration lessons / Paper 18 / spec M7 | M7 |
-| E77 | Materials | 5-tier with fracture response and constraint compliance by material | Paper 7 / spec M8 | M8 |
-| E91 | Zombie archetypes | Region-biased dynamic allocation with scent/fear routing | Paper 9 / Project Zomboid / spec M5 | M5 |
-| E92 | Body persistence | Decomposition-to-fertilizer loop with save-state serialization | Paper 18 / The Forest as-model / spec M7 | M7 |
+| ID | Question | Decision | Evidence | Milestone |
+|----|----------|----------|----------|-----------|
+| E81 | Horde behavior | Scent/fear diffusion + horde formation state machine. No calendar timer. | Paper 9 / L4D pacing [X] / spec M5 [S] | M5 |
+| E10 | Physics foundation | Jolt 5.6 XPBD joints with IPC barrier for penetration-free contact | Paper 25 / Paper 24 [X] / spec M2/M3 [S] | M2/M3 |
+| E59 | Destruction pipeline | Prefractured small objects; prefractured + tall-cell large structures | Paper 7 / Paper 26 [X] / spec M3/M9 [S] | M3 |
+| E48 | Netcode topology | Authority server with CRDT resolution for replicated placements/inventories | E12/E51 netsync [X] / spec M12 [S] | M12 |
+| E16 | Quest architecture | World-state parameterized quest templates validated before serving | Paper 45 [X] / spec M11 [S] | M11 |
+| E55 | Persistence format | SoA entity tables + delta compression + schema versioning with migration paths | DayZ lessons [X] / Paper 18 [X] / spec M7 [S] | M7 |
+| E77 | Materials system | 5-tier material with fracture response and constraint compliance by material | Paper 7 [X] / spec M8 [S] | M8 |
+| E91 | Zombie archetypes | Region-biased dynamic allocation with scent/fear routing | Paper 9 [X] / Project Zomboid [X] / spec M5 [S] | M5 |
+| E92 | Body persistence | Decomposition-to-fertilizer loop with save-state serialization | Paper 18 [X] / The Forest [X] / spec M7 [S] | M7 |
+
+---
 
 ## 5. Milestone Map
 
-1. M0 — Vulkan 1.4 native bootstrap + capability tiering.
-2. M1 — GPU-driven ECS framework.
-3. M2 — Jolt 5.6.0 physics, EventBus, and a real destructible test entity.
-4. M3 — Macro-destruction & structural graphs.
-5. M4 — Procedural world generation + chunk streaming & culling.
-6. M5 — NPCs / zombie hordes (base).
-7. M6 — Hardware-accelerated audio system with propagation.
-8. M6.5 — GPU particle/VFX system.
-9. M7 — Total persistence.
-10. M8 — Data-driven itemization.
-11. M9 — Vehicle system.
-12. M10 — Day/night, weather & atmosphere.
-13. M11 — UI/HUD, input abstraction & consolidated haptics.
-14. M12 — Networked co-op at scale.
-15. M13 — Local Small Language Model integration.
+The milestone titles and namespace names are authoritative and are taken directly from `spec/M*.md`.
+
+| # | Milestone | Title | Namespace |
+|---|-----------|-------|-----------|
+| 1 | M0 | Vulkan 1.4 native bootstrap + capability tiering | bootstrap |
+| 2 | M1 | GPU-driven ECS framework | ecs |
+| 3 | M2 | Jolt 5.6.0 physics, EventBus, and a real destructible test entity | physics |
+| 4 | M3 | Macro-destruction & structural graphs | renderer |
+| 5 | M4 | Procedural world generation + chunk streaming & culling | worldgen |
+| 5b | M4.5 | Hybrid ray tracing, GPU-driven pipeline & upscaling | renderfx |
+| 6 | M5 | NPCs / zombie hordes (base) | ai |
+| 7 | M6 | Hardware-accelerated audio system with propagation | audio |
+| 7b | M6.5 | GPU particle/VFX system | acoustics |
+| 8 | M7 | Total persistence | systems |
+| 9 | M8 | Data-driven itemization | settlement |
+| 10 | M9 | Vehicle system | vehicles |
+| 11 | M10 | Day/night, weather & atmosphere | systems2 |
+| 12 | M11 | UI/HUD, input abstraction & consolidated haptics | ui |
+| 13 | M12 | Networked co-op at scale | game |
+| 14 | M13 | Local Small Language Model integration | modding |
+
+Cache-backed library targets:
+
+| Dependency | Cache Source | Evidence | Version |
+|-----------|--------------|----------|---------|
+| SDL3 | vcpkg manifest [S] | `vcpkg.json` present | 3.2.x |
+| Vulkan Headers | vcpkg manifest [S] | `vcpkg.json` present | 1.4.x |
+| volk | vcpkg manifest [S] | `vcpkg.json` present | 1.4.x |
+| glm | vcpkg manifest [S] | `vcpkg.json` present | 1.0.x |
+| Jolt | vcpkg manifest [S] | `vcpkg.json` present | 5.6.0 |
+| enkiTS | vcpkg manifest [S] | `vcpkg.json` present | 1.x |
+| Dear ImGui | GitHub ocornut/imgui [S] | 405,393 bytes fetched | master |
+| Valve GameNetworkingSockets | GitHub ValveSoftware/GameNetworkingSockets [S] | 324,898 bytes fetched | master |
+| UE4SS | GitHub UE4SS/UE4SS [S] | 260,471 bytes fetched | master |
+
+---
 
 ## 6. Technical Architecture
 
-- Renderer: bindless indexed draw; visibility/deferred split; Hi-Z culling; indirect draw compaction; compute-shader raster fallback.
-- Jobs: enkiTS persistent task groups; render jobs separate from simulation jobs; Hi-Z and skinning reuse transform buffers.
-- Physics: XPBD joints for ragdoll; IPC barrier for penetration-free contact; prefractured destruction modes; tall-cell water.
-- Audio: sparse voxel propagation; frequency-band diffraction; portal-aware occlusion; update cadence 10-20 Hz.
-- Persistence: SoA entity tables; delta compression; schema versioning with migration path; named save-header offsets.
+### 6.1 Renderer
+
+- Bindless indexed draw with `VK_EXT_descriptor_indexing`
+- Visibility/deferred split: visibility pass writes instance IDs, deferred pass samples material
+- Hi-Z culling before indirect draw
+- Indirect draw compaction on GPU
+- Compute-shader raster fallback for sub-pixel clusters
+- Meshlet pipeline for M4.5 upscaler input
+- Virtual shadow map tile residency for large outdoor scenes
+
+### 6.2 Jobs
+
+- enkiTS persistent task groups; render jobs separated from simulation jobs
+- Hi-Z and skinning reuse transform buffers to reduce allocation
+- No main-thread bottleneck: all scene mutation happens on job threads
+
+### 6.3 Physics
+
+- Jolt 5.6 XPBD joints for ragdoll and constraints
+- IPC barrier for penetration-free contact between high-velocity objects
+- Prefractured destruction modes for small objects; prefractured + tall-cell for large structures
+- Two-way buoyancy coupling with compute Poisson solve for M6.5 water VFX
+
+### 6.4 Audio
+
+- Sparse voxel propagation with frequency-band diffraction
+- Portal-aware occlusion with dynamic listener-driven updates
+- Update cadence 10-20 Hz for survival audio feedback
+
+### 6.5 Persistence
+
+- SoA entity tables for cache-friendly serialization
+- Delta compression between ticks; periodic full checkpoint
+- Schema versioning with forward/backward migration paths
+- Named save-header offsets for mod compatibility
+
+### 6.6 Networking
+
+- Valve GameNetworkingSockets for reliable/unreliable lanes, NAT traversal, encryption
+- Authority server with CRDT for replicated inventories/placements
+- Deterministic lockstep not required; server-authoritative with client prediction
+
+---
 
 ## 7. Verification Gates
 
-1. Build clean with zero warnings on MSVC /W3.
-2. 60 FPS at 1080p on RTX 2070 SUPER, 6 GB VRAM ceiling.
-3. Tests: 20 passed, 1 skipped, 83/83 assertions green on headless CI.
-4. Emergent test: two systems produce an unscripted state.
-5. Permadeath test: character death ends the character, world persists.
-6. Director test: pacing state machine transitions on event, not timer alone.
-7. Network sync test: two clients reach identical world state after prescribed event sequence.
+| Gate | Criterion | Milestone | Method |
+|------|-----------|-----------|--------|
+| Build | Zero warnings on MSVC /W3 | M0+ | CI + local script |
+| Frame budget | 60 FPS at 1080p on RTX 2070 SUPER, 6 GB VRAM ceiling | M0-M4.5 | RTSS + Afterburner telemetry |
+| Tests | 20 passed, 1 skipped, 83/83 assertions green | M0+ | `ZombieEngineTests.exe` headless |
+| Emergence | Two systems produce an unscripted state | M5-M7 | Scenario playback + diff |
+| Permadeath | Character death ends character; world persists | M7 | Save-state inspection |
+| Director pacing | State machine transitions on event, not timer alone | M5 | Playtest telemetry |
+| Network sync | Two clients reach identical world state after event sequence | M12 | Deterministic replay compare |
 
-## 8. Open Questions
+---
 
-1. AI Director tuning curves require playtest telemetry.
-2. Structural integrity physics performance requires profiling.
-3. 36 km² streaming load time requires prototype measurements.
-4. NPC count ceiling requires agent simulation benchmark on target hardware.
-5. Network reconciliation policy under packet loss requires multiplayer prototype.
+## 8. Timeline and Execution Order
 
-## Appendix A: Professional Studio And Indie Engine Case Studies
+### Phase 0: Foundation
+
+- M0: Vulkan bootstrap, bindless descriptors, job system, enkiTS integration
+- M1: ECS framework, EnTT integration, component archetypes
+- M4.5: Early meshlet pipeline prototype
+
+Target: 60 FPS triangle benchmark with no gameplay. Build green. Tests green.
+
+### Phase 1: Core Systems
+
+- M2: Jolt physics, EventBus, destructible test entity
+- M3: Macro-destruction, structural graphs, meshlet rendering integration
+- M5: Horde AI, scent/fear diffusion, pathfinding
+- M6.5: GPU particle/VFX system
+
+Target: physics benchmark, destruction stress test, 1000 zombie horde run.
+
+### Phase 2: World and Atmosphere
+
+- M4: Procedural world generation, chunk streaming, POI placement
+- M6: Hardware audio, propagation, occlusion
+- M10: Day/night cycle, weather simulation, atmosphere
+
+Target: 1 km² playable prototype with weather and audio propagation.
+
+### Phase 3: Systems
+
+- M7: Save system, delta compression, schema versioning, mod compatibility
+- M8: Data-driven itemization, materials, settlement building
+- M9: Vehicle system, traction, fuel chains
+
+Target: 10-minute playthrough with base building and vehicle traversal.
+
+### Phase 4: Gameplay and Multiplayer
+
+- M11: UI/HUD, input abstraction, quest system, factions
+- M12: Networked co-op, persistence, dedicated server
+- M13: SLM integration, endgame legacy
+
+Target: 4-player co-op session with persistence and endgame loop.
+
+---
+
+## 9. Risk Register
+
+| Risk | Probability | Impact | Mitigation | Owner |
+|------|-------------|--------|------------|-------|
+| Vulkan bindless not supported on target HW | Low | High | Capability tiering in M0; fallback to non-bindless draw | Render |
+| Jolt 5.6 API changes | Medium | Medium | Pin exact commit; regression test suite | Physics |
+| enkiTS contention at scale | Medium | Medium | Profile job graph before M5; tune grain size | Core |
+| 36 km² streaming misses memory budget | Medium | High | Prototype 4 km² first; measure pagefile behavior | World |
+| Audio propagation misses 20 Hz budget | Medium | Medium | Sparse voxel + frequency-band diffraction; update cadence fixed | Audio |
+| Network desync under packet loss | Medium | High | Authority server + CRDT; deterministic replay test | Net |
+| Mod API versioning breaks M13 save | Low | Medium | Versioned mod API from M7; schema migration tests | Modding |
+| Research gaps block implementation | Medium | Medium | Parallel research track; exact sources tracked in backlog | All |
+
+---
+
+## 10. Professional Standards
+
+This section documents how the project will operate, matching the standard of a
+professional game engineering team.
+
+### 10.1 Code Review
+
+- Every change requires at least one peer review before merge
+- Review focus: correctness, performance, Vulkan validation, test coverage
+- Use pull-request workflow on GitHub; branch `spec/m0-parity-reformat` for spec work, `main` for integration-ready code
+
+### 10.2 CI/CD
+
+- GitHub Actions runs on every push to `spec/*` and `main`
+- Jobs: configure with vcpkg toolchain, MSVC via `ilammy/msvc-dev-cmd`, Ninja build, `ZombieEngineTests.exe`, headless smoke
+- Artifacts: `ZombieEngine.exe`, `ZombieEngineTests.exe` retained for 7 days
+- Target: zero warnings, tests green, smoke pass
+
+### 10.3 Testing Strategy
+
+- Unit tests: `tests/unit/Test_*.cpp`, Catch2 framework, auto-discovered
+- Integration tests: headless smoke run in CI
+- Validation tests: Vulkan validation layers enabled in Debug; ASAN build on demand
+- Performance baseline: RTSS + Afterburner telemetry captured at key milestones
+
+### 10.4 Documentation
+
+- Spec files are READ-ONLY; changes require explicit approval
+- Plan files in `recon/plans/` are working documents; committed for branch history
+- Research path document exists at `recon/plans/2026-07-21_RESEARCH_PATH_FIX.md`
+- Fetcher script at `scripts/fetch_research.py` for free offline-friendly research
+
+### 10.5 Source Tracking Rule
+
+- Every claim must carry one of: [S] sourced, [E] engineering reasoning, [X] verification needed
+- No permanent [E] assumptions without linked evidence
+- Research backlog moves items from [X] to [S] or remains [X] as a blocker
+
+---
+
+## 11. Appendix A: Professional Studio and Indie Engine Case Studies
 
 Purpose: extract durable patterns for ZE from how shipped engines were built.
 
 ### Big studios
 
 1. id Tech 7/8 — id Software
-   Evidence: SIGGRAPH Advances talks, DOOM Eternal graphics study
-   Lesson: bindless-first, reduced CPU overhead, clustered compute shading
+   **Primary source**: SIGGRAPH Advances talk, DOOM Eternal graphics breakdown
+   **Lesson**: bindless-first design reduces CPU overhead; clustered compute shading; visibility buffer over traditional G-Buffer
 
 2. Decima Engine — Guerrilla / Sony
-   Evidence: Horizon public talks, SIGGRAPH coverage
-   Lesson: three-tier terrain, compute grass, visible multilevel placement
+   **Primary source**: Horizon public talks, SIGGRAPH coverage
+   **Lesson**: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
 
-3. UE5 Nanite + Lumen — Epic Games
-   Evidence: SIGGRAPH 2021 UE5 course, public docs, cached UE5 docs
-   Lesson: hierarchical cluster DAG, software raster for micro clusters, virtual shadow maps, world partition
+3. UE5 Nanite + Lumen — Epic Games [S]
+   **Primary source**: cached UE5 public docs (Nanite, Lumen, World Partition, Mass Entity, PCG confirmed in fetched docs)
+   **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
 
 4. Frostbite — DICE / EA
-   Evidence: GDC Vault index pages, public talks, cached GDC pages
-   Lesson: shared engine across studios, runtime toolchain integration, datamaterial pipelines
+   **Primary source**: GDC Vault Frostbite talks (cached index confirmed)
+   **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid
 
 5. Unity DOTS + HDRP — Unity Technologies
-   Evidence: public Unity blog, cached docs/repos
-   Lesson: ECS-first architecture, burst compiler, data-driven render graph
+   **Primary source**: Unity public blog/DOTS samples (official documentation)
+   **Lesson**: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation
 
 ### Indie and small-team custom-engine efforts
 
 1. Lethal Company — Zeekerss
-   Evidence: public devlog and release postmortem coverage
-   Lesson: single-session scope, emergent horror, community rumor-driven content
+   **Primary source**: public devlog and release postmortem coverage
+   **Lesson**: single-session scope discipline; emergent horror from minimal systems; community rumor system as content multiplier
 
 2. Valheim — Iron Gate Studio
-   Evidence: public developer Q&A and postmortem coverage
-   Lesson: biome gating, disciplined scale, network model design
+   **Primary source**: public developer Q&A and postmortem coverage
+   **Lesson**: biome gating with clear visual language; disciplined scale over feature count; network architecture designed for drop-in/drop-out
 
 3. Noita — Nolla Games
-   Evidence: public developer blog and postmortem videos
-   Lesson: simulation-first worldview, pixel-accurate interaction, failure-state storytelling
+   **Primary source**: public developer blog and postmortem videos
+   **Lesson**: simulation-first worldview with pixel-accurate interaction; every system mutable; failure-state as narrative
 
 4. Vintage Story — Tyron / Lone-dev model
-   Evidence: official site, GitHub, wiki; long-term solo active-development history
-   Lesson: solo-engine longevity, voxel/terrain hybrid, deep modding fidelity
+   **Primary source**: official site, GitHub, wiki; long-term solo active-development history
+   **Lesson**: solo active-development longevity over a decade; voxel/terrain hybrid with finite survival loop; deep modding fidelity as retention mechanism
 
 5. Keep Talking and Nobody Explodes — Steel Crate Games
-   Evidence: public postmortems and developer talks
-   Lesson: small-team release discipline, scoped documentation-as-UX
+   **Primary source**: public postmortems and developer talks
+   **Lesson**: small-team release discipline; documentation-as-UX; scoped to one mechanic and extended through community content
 
-## Appendix B: Explicit Research Backlog
+---
 
-This backlog is intended to stay executable. Each item names an exact source
-or primary-action trigger, not a vague wish.
+## 12. Appendix B: Explicit Research Backlog
 
-| ID | Source | Route | Target Block |
-|----|--------|-------|--------------|
-| RB-01 | UPDATE: Overwatch Workshop sources | GitHub / README cache | M11 narrative/quest blocks |
-| RB-02 | GameDeveloper.com procedural generation article | direct extract | M4/M4.5 POI generation |
-| RB-03 | UE5 docs: world partition / mass entity | direct fetch | M0/M4 engine architecture |
-| RB-04 | UE5 docs: PCG / Niagara rules | direct fetch | M4 procedural content |
-| RB-05 | Vulkan descriptor heap / indexing docs | direct fetch | M0 renderer, bindless wiring |
-| RB-06 | GameNetworkingSockets README | direct fetch | M12 netcode integration |
-| RB-07 | Dear ImGui source and backends study | direct fetch | M0 debug tools, editor layer |
-| RB-08 | M7 full breakdown from spec/M7.md | local spec | M7 persistence section |
-| RB-09 | M9 vehicle sources / shipped postmortems | pending live retrieval | M9 vehicle section |
-| RB-10 | M2 crafting system sources | pending live retrieval | M2 crafting section |
+This backlog is executable. Each item names an exact primary source or action trigger.
 
-Rule for backlog: every item must move to [S] tagged evidence or [X] tagged
-verification blocker. No permanent [E] assumptions.
+| ID | Source / Action | Route | Target Block | Status |
+|----|-----------------|-------|--------------|--------|
+| RB-01 | GDC Vault "Frostbite" talk title/year extract | cached GDC index + fetcher | Appendix A #4 | [X] |
+| RB-02 | SIGGRAPH Advances id Tech 7/8 diagram set | direct fetch | Appendix A #1 | [X] |
+| RB-03 | Horizon Zero Dawn SIGGRAPH talk / Decima terrain diagram set | direct fetch | Appendix A #2 | [X] |
+| RB-04 | Unity DOTS sample repo bib + DOTS architecture doc | GitHub direct | Appendix A #5 | [X] |
+| RB-05 | Lethal Company / Valheim / Noita devlog excerpt set | direct/devlog fetch | Appendix A | [X] |
+| RB-06 | UE5 PCG and World Partition sample extract | UE5 docs direct | M4 M9 | [X] |
+| RB-07 | GameDeveloper.com procedural generation article extract | direct extract | M4/M4.5 POI generation | [X] |
+| RB-08 | Vulkan descriptor heap/indexing public spec extract | khronos.org direct | M0 renderer | [S] partial |
+| RB-09 | GameNetworkingSockets README transport layer extract | GitHub direct | M12 netcode | [S] partial |
+| RB-10 | Dear ImGui source + backend study extract | GitHub direct | M0 debug tools | [S] partial |
+| RB-11 | M2 crafting research: FDG/GameDeveloper postmortems | direct/devlog fetch | M2 M8 | [X] |
+| RB-12 | M9 vehicle research: shipped postmortems + driving-model papers | direct fetch | M9 | [X] |
+| RB-13 | spec/M7.md EXT block breakdown | local spec | M7 persistence section | [S] |
+| RB-14 | spec/M9.md EXT block breakdown | local spec | M9 vehicle section | [S] |
+| RB-15 | spec/M11.md EXT block breakdown | local spec | M11 UI/quest section | [S] |
+| RB-16 | spec/M12.md EXT block breakdown | local spec | M12 netco-op section | [S] |
+
+**Rule for backlog**: every item must move to [S] sourced evidence or remain [X] as a named verification blocker. No permanent [E] assumptions without linked evidence.
