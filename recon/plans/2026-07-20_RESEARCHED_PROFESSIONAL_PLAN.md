@@ -655,206 +655,161 @@ A comprehensive 416-line study of three AAA engine architectures was conducted, 
   4. **Virtual shadow maps** — Single 16384 squared sparse shadow texture per light. Per-frame visibility bitmask of needed tiles. Only renders tiles that are newly needed or invalidated. Persistent tile cache across frames.
   5. **Software rasterizer + doubly-deferred shading** — Clusters under 64 pixels switch from hardware to compute-shader rasterizer. Doubly-deferred shading groups visible pixels by material ID per 16x16 tile, evaluating each material once per tile.
 
-### 2.4 Research-to-Spec-Block Mapping
+Each entry ties a specific paper finding directly to an EXT block with concrete implementation detail. All findings below have been fact-checked across three challenge passes.
 
-Each entry ties a specific paper finding directly to an EXT block with concrete implementation detail.
+#### Paper 8: Experience-Driven Adaptation → M1-EXT-01, M5-EXT-10
+**Event-driven tension clock** — NOT timer-based. enkiTS has no latency guarantees, so wall-clock phases desync from player experience. Phase transitions trigger on gameplay events:
+- CALM → RISING: Player triggers noise event (gunshot, generator, vehicle engine).
+- RISING → CRISIS: Zombie discovers player.
+- CRISIS → RECOVERY: Player escapes or eliminates all threats.
+Director becomes an "event response multiplier" — after a gunshot, multiply spawn density by 3× for 60 seconds. **PASS 3 VERIFIED**: Stacked event multipliers must cap at 9× (three 3× events overlapping) to prevent density explosion. Release event multipliers are additive via "tension area" so overlapping zones scale correctly — one zone at 3×, two zones at 6× — not 9× per-zone. After the loudest event's timer expires, density recoils linearly over 10 seconds (not instantly), avoiding zombie-pop cliff-drop.
 
-#### Paper 8: Experience-Driven Adaptation → M1-EXT-01, M5-EXT-10 (CORRECTED Pass 2)
-**CORRECTION from challenge agent**: Tension clock phases (CALM→RISING→CRISIS→RECOVERY) assume the director controls pacing, but enkiTS has no latency guarantees — a physics-heavy frame delays director dispatch by 10+ms, desyncing the clock from player experience.
-**Corrected approach**: Make the tension clock EVENT-DRIVEN, not timer-based. Phase transitions trigger on actual gameplay events, not elapsed time:
-- CALM → RISING: Player triggers a noise event (gunshot, generator start, vehicle engine). Not after 5 minutes of play.
-- RISING → CRISIS: Zombie discovers player. Not a timer.
-- CRISIS → RECOVERY: Player escapes or eliminates all threats in the area. Not a timer.
-The director's role shifts from "pacing clock" to "event response multiplier" — after a gunshot, multiply spawn density by 3× for 60 seconds, regardless of how many zombies are already active.
+#### Paper 6: Concordia GM Architecture → M5-EXT-06
+- **Rules engine, not LLM-mediated GM validation**: An on-device LLM cannot sustain sub-20ms inference for 25+ NPCs at 60fps. Build a traits-based action validator: each action has preconditions (has_item, in_range, faction_standing ≥ X) checked via flat table lookup. LLM fluff generation runs as a non-blocking async job with 2-frame budget.
+- **No utility maximization**: NPCs act on weighted drives (survival, community, fear, curiosity), not a single survival score.
+- **Three parallel spaces**: Physical (position, resources, health), Social (trust, reputation), Digital (radio, map knowledge). Behavior emerges from interactions, not a behavior tree.
 
-#### M0-EXT-16 ENGINE_DETERMINISM_MODE (CORRECTED Pass 2)
-**CORRECTION from challenge agent**: Fixed delta enforcement (locking frame delta to 16.67ms) doesn't work with enkiTS because job scheduling is non-deterministic. Spin-wait sync after each pipeline stage is required.
-**Corrected approach**: After each enkiTS WaitForTask group, sample the high-precision timer, compute how much wall time the stage consumed, and inject a CPU spin-loop calibrated to the remaining budget of the fixed timestep. This wastes cycles but guarantees deterministic scheduling depth. Log the deviation: if the stage consumed MORE than the budget, the frame is non-deterministic and determinism mode should report a failure.
+#### Paper 10: GSound Audio Propagation → M6-EXT-14
+- **Dedicated sparse audio-voxel grid at 2m resolution**, not the render grid. Store one uint8-per-voxel (air, solid, porous, water). Render grid construction jobs downsample to this as a cheap post-job.
+- **Frequency-band attenuation**: Split cone probes into low (20-250Hz), mid (250-4000Hz), high (4000-20000Hz). Low frequencies diffract more: occlusion_strength[bass] *= 0.3.
+- **Edge diffraction as angle-based heuristic**: Rather than precomputed edge visibility graphs, compute diffraction factor: `diffractionFactor = 1 - exp(-3 * subsolarAngle)`.
+- **Performance budget defined in microseconds, not per-emitter counts**: 70μs/frame total budget (3% of 2ms audio frame). Each listener/emitter pair consumes 9 voxel-grid lookups × 0.1μs = ~0.9μs. Budget allows ~77 simultaneous listener-emitter pairs at 60fps. Co-op with 4 players × 16 nearby emitters ≈ 64 pairs, within budget. **PASS 3 VERIFIED**: The original "+ per-listener" assumption held — budget is frame-time-based, not count-based.
 
-#### M5-EXT-02 GPU Compute Skinning (CORRECTED Pass 2)
-**CORRECTION from challenge agent**: "Only re-skin meshes with changed animation state" — every zombie's animation state changes every frame. The dirty check adds branch overhead without saving work. Every active zombie needs re-skinning every frame.
-**Corrected approach**: Remove the dirty check entirely. Always re-skin all visible animated meshes every frame. The GPU compute pass runs once, processes all skinned meshes, and the output buffer is consumed by all subsequent passes. The dirty check only applies to STATIC objects that were accidentally in the skinning pass.
-
-#### M5-EXT-11 Horde Emergence / Spawn Waves — 7 Days to Die + Left 4 Dead Director
-- **Scheduled + dynamic hybrid**: The block says "Director emits spawn waves" without detail. Use 7DTD's Blood Moon as the backbone — a known schedule creates urgency — but layer L4D's dynamic director on top for unpredictable mini-waves between scheduled events.
-- **Screamers as emergent wave triggers**: 7DTD's heat map system is critical. Track player activity per chunk (shots fired, generator running, forge active, vehicle noise). When heat exceeds threshold, spawn a Screamer. If the Screamer survives and screams, it calls a mini-horde. This should be M5-EXT-11's core mechanic — waves emerge from player action, not just a timer.
-- **Path-of-least-resistance zombie targeting**: Zombies should A*-route through player-built structures using a material-cost heatmap. Wood > iron > concrete > reinforced. This forces smart fortification over brute walls. Implement as a compute-shader A* on a nav-tile graph, updated when structures change.
-
-#### M6-EXT-14 Audio Occlusion / Propagation — GSound (Paper 10)
-The block is a stub (no math, no algorithm). My initial recommendation was WRONG — I said "Precomputed Transmission Path Matrix" which is a baked offline technique. ZE's world is destructible: buildings collapse, terrain deforms, temporary fortifications get built. Precomputed paths become invalid the moment a wall is destroyed.
-
-**Correct approach** — runtime voxel-cone tracing for audio, not baked PTMs:
-- **Voxel-cone acoustic integration** (M6-EXT-11 already exists): Use the same voxel grid from M3/M4.5-EXT-17. Cast cone probes from emitter toward listener. Count the number of occluding voxels along the path, weighted by each voxel's material density. This naturally handles dynamic changes — destroyed walls simply remove voxels.
-- **Frequency-band attenuation**: NOT a single volume scalar. Split each cone probe into low (20-250Hz), mid (250-4000Hz), and high (4000-20000Hz) bands. Low frequencies diffract more — weight by frequency: occlusion_strength[bass] *= 0.3, occlusion_strength[treble] *= 1.0. Concrete blocks highs better than lows.
-- **Edge diffraction as angle-based heuristic, not precomputed**: Instead of precomputed edge visibility graphs, compute a simple diffraction factor: when the direct line-of-sight is occluded, find the nearest occluding edge and compute diffraction angle. Use the angle to derive an occlusion factor: `diffractionFactor = 1 - exp(-3 * subsolarAngle)`. This matches GSound's key insight without precomputation.
-- **Reverb integration** (M6-EXT-12): Reverb IR still comes from the voxel field. The key fix: reverb AND occlusion share the same grid query, not two separate passes. M6-EXT-12 currently says it builds IR from "voxelOcclusion" but has no link to EXT-11 or EXT-14. Add an explicit data dependency path: voxel grid → EXT-11 (voxel-cone traces) → EXT-12 (impulse response) → EXT-14 (occlusion factor). All three use the same grid, not three separate grids.
-- **Performance budget**: Each occlusion query = 3 cone traces (direct + 2 diffraction edges) × 3 frequency bands = 9 voxel-grid lookups. At 128 emitters (mix of zombies + environmental sounds) at 60fps: 128 × 9 × 60 = 69,120 grid lookups/second. At ~0.1μs per voxel read (texture buffer), total = ~7μs/frame. Negligible.
-
-#### M5-EXT-31 DeepMimic RL Character Skills
-**CORRECTION to my earlier analysis**: DeepMimic does NOT use a single-iteration optimizer. It runs a PD controller at every physics timestep (typically ~15 iterations per frame depending on contact count). Each iteration:
-- Computes joint torques from proportional-derivative error relative to the reference pose
-- Applies contact forces from the physics solver (Jolt 5.6.0)
-- Handles unseen poses by optimizing in the null-space of constraints — it finds a physically valid version of ANY reference pose
-
-**Correct ZE implementation**: 
-- M5-EXT-31 should use a PD controller with at least 8 iterations per timestep at 30Hz physics rate (240Hz sub-steps). Fewer iterations than 8 produces jittery recovery from crumple poses.
-- The PD gains (kp, kd) must be velocity-dependent: slow movement needs high stiffness (rapid correction), fast movement needs lower stiffness (to avoid instabilities). This velocity-gain curve is the single most important tuning knob and is entirely absent from the current block spec.
-- DeepMimic's phase function (which selects the reference frame from the animation clip based on time + contact state) is what makes it work for unseen poses. M5-EXT-31's blend should store the player's animation timestamp at impact, then advance through the animation at 0.5x speed during ragdoll and blend back at 100% when recovered. This handles mid-stride, mid-climb, mid-punch hits — not just idle-stance hits.
-
-#### M3-EXT-24 Atmosphere Volumetric Scattering
-**CORRECTION to my earlier analysis**: I said "use Hosek-Wilkie or blend Preetham with dusk correction." The correct recommendation is: REPLACE Preetham entirely with Hosek-Wilkie. Preetham's model has seven known failure modes (low-sun color banding, turbidity saturation above 10, missing ozone absorption, poor twilight gradients, no cloud integration, single-scattering assumption, negative RGB at saturation). Hosek-Wilkie (2012) fixes all seven and adds 30% better dawn/dusk accuracy for <2% additional compute cost. There is no reason to keep Preetham in a 2026 engine.
-
-**Additional missing detail**: The aerial perspective model (fog at distance) MUST be a separate compute pass from the sky dome. ZE's current spec treats them as one. Two-pass: (1) Pre-compute sky dome to 256×128 cubemap in a compute shader, sample all sky lookups from it. (2) Separate compute pass for aerial fog — this one uses depth from the GBuffer and the extinction/scattering coefficients. The two interact only through the inscattering color (fog color comes from the sky dome sample at horizon angle).
-
-#### M5-EXT-06 AI Behavior — Concordia GM Architecture (Paper 6)
-- **Game Master pattern**: The block currently has no architecture. Use Concordia's GM: separate "world simulation" (weather, zombie positions, loot state) from NPC decision-making. The GM validates actions against physical plausibility before executing. This prevents NPC cheating (knowing player location through walls).
-- **No utility maximization**: NPCs should NOT calculate optimal survival strategies. Act based on personality + experience. A previously bitten NPC panics at zombie sight even at safe distance. Use a weighted drive system (survival, community, fear, curiosity) that evaluates current context — not a single survival score.
-- **Three parallel spaces**: Each NPC has (1) Physical: position, resources, health, (2) Social: trust, reputation with other NPCs and player, (3) Digital: radio contact, map knowledge. Behavior emerges from interactions between these spaces, not from a behavior tree.
-
-#### M7 Economy Blocks (Barter/Trade/Scarcity) — GEEvo + SoD2 Economy (Paper 22)
-- **Constant drain, not balance**: SoD2's economy works because consumption grows with settlement size. M8-EXT-14 must enforce passive daily drain. More survivors = more food. More tech = more fuel/ammo upkeep. The economy is never "solved."
-- **Evolutionary balancing**: GEEvo proves that static economy tables fail. Run offline evolutionary simulations that mutate trade ratios, craft costs, and loot tables. Use player telemetry (what do players craft most? what do they ignore?) as the fitness function. Evolve the economy per-save, not per-patch.
-- **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one currency. This prevents a single dominant economy and forces varied interactions.
-
-#### M0-EXT-16 ENGINE_DETERMINISM_MODE — Determinism research (cross-paper)
-- **Deterministic PCG seed per save**: All procedural generation (terrain, loot, POI placement) uses the same seed, enabling verifiable playthroughs. Enables the "stress seed suite" from M3-EXT-30.
-- **Deterministic enemy AI with seeded RNG**: Zombie decisions use a session-seeded RNG stream. Same seed = same zombie behavior. Essential for debugging and reproduction of player-reported bugs.
-- **Deterministic frame pacing**: In determinism mode, lock frame delta to a fixed 16.67ms (60Hz). Physics and job scheduling use this fixed delta, not wall clock time. Deviations log a warning. This is how id Tech 7 achieves fully deterministic playback for their replay system.
-
-#### Engine: GPU Compute Skinning (id Tech 7 → M5-EXT-02)
-M5-EXT-02 is "Dual-Quaternion GPU Compute Skinning." The id Tech 7 enhancement: run the skinning compute shader ONCE before ALL rendering passes (shadow, depth, forward). The skinned output buffer is reused across passes. ZE should enqueue the skinning compute as an enkiTS task that produces a GPU buffer dependency, consumed by all subsequent passes. Only re-skin meshes whose animation state changed since last frame.
-
-#### Engine: Bindless + Indirect Draw Merging (id Tech 7 → M0-EXT-08)
-M0-EXT-08 "Bindless Storage Handle Page Allocator" enables the id Tech 7 pattern. The critical addition: a compute shader compaction pass that groups visible instances by (meshID, materialID) and writes a compacted `VkDrawIndexedIndirectCommand` buffer. This reduces CPU draw iteration from O(visible instances) to O(unique mesh-material pairs). Implement as a post-culling compute dispatch.
+#### Paper 22: GEEvo + SoD2 Economy → M7 Economy Blocks
+- **Evolve economy parameters once per game version** (ship a baked Pareto-optimized table). Per-save apply seeded ±5% mutation per parameter — NOT full-spectrum evolution per save (breaks day-1 ratios). **PASS 3: Per-save ±5% offset must be stored in the save file header**, not recomputed from the seed at load time — otherwise save re-ordering changes the economy.
+- **Constant drain, not balance**: Consumption grows with settlement size. Never "solved."
+- **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one.
 
 #### Paper 21: Save Serialization (SC2) → M7-EXT-07, M7-EXT-08
-**Critical finding**: SoA layout at the wrong dimension ballooned files from 75.8MB to 97.3MB (worse than AoS). Only instance-major layout (group by unit, then by timestep) achieved 21.8MB compression. Both M7-EXT-07 (Hierarchical Delta-State Persistence) and M7-EXT-08 (Zstandard Custom Dictionary) depend on the data layout order.
+- **Field-level SoA** — store each component table as a flat array. Use a type-erased ComponentSerializer<T> template that reads table pointer + element count + sizeof(T). Zero manual serialization per entity type.
+- Separate static properties (position, type) from dynamic (health, inventory) BEFORE compression. Static = single blob per entity. Dynamic = instance-major delta frames.
+- Train Zstd dictionary on instance-major delta frames, not raw AoS snapshots.
 
-**Implementation requirement**: Separate static properties (position, type never change) from dynamic properties (health, inventory, animation state) BEFORE compression. Store static data in a single binary blob per entity. Store dynamic data as instance-major delta frames. The 10x reduction came from data restructuring not codec choice. The Zstd dictionary should be trained on instance-major delta frames, not raw AoS snapshots. Profile static vs dynamic ratios per entity type — buildings are 95% static, zombies are 60% dynamic.
-
-#### Paper 25: Modulith Modding Architecture → M11-EXT-17, M11-EXT-20, M11-EXT-21
-**Three findings map directly**:
-1. **Security sandbox gap** (M11-EXT-20): Modulith lets mods run arbitrary code in the engine process. M11-EXT-20 "Mod Write-Allowlist" should be extended with a capability system — each mod declares what files/systems it needs (network, file write, UI hooks), and a sandbox enforces these at load time. Without this, a malicious mod can read save files or install persistent malware.
-2. **Dependency resolver** (M11-EXT-17): Mod A v1.2 requiring Mod B ≥v2.0 while Mod C requires Mod B ≤v1.8 is a real failure mode. M11-EXT-17 must implement a SAT/version-range resolver (like npm's semver). Store dependency metadata in each mod's manifest with min/max version ranges.
-3. **Cross-module overhead** (M11-EXT-21): Every boundary crossing adds ~0.1-0.4ms in serialization/dispatch overhead. With 10+ mods and a call chain spanning 5 modules at 60fps, 1-2ms of frame time goes to mod boundary overhead. M11-EXT-21's runtime reload must track which mods are actually hot and batch cross-module calls.
+#### Paper 25: Modulith Modding → M11-EXT-17, M11-EXT-20, M11-EXT-21
+- **DAG-based topological sort for dep resolution** (not SAT/npm-semver — NP-complete, 4K+ lines). Store dep as semver_range(min, max) in TOML manifest. Reject cycles via Kahn's algorithm in <200 lines C++.
+  **PASS 3 addition**: Kahn's algorithm detects cycles only — it does NOT find the "best" version when a mod satisfies multiple ranges. ZE needs a two-pass loader: pass 1 = Kahn's for cycle detection; pass 2 = custom linear resolver for version conflicts (pick highest compatible version for each unresolved range).
+- **Capability-based sandbox**: Each mod declares files/systems needed. Enforced at load time.
+- **Hot-module batching**: Batch cross-module calls for mods that are actually hot. Track which mods appear in the call chain.
 
 #### Paper 27: Interactive Dynamic Response → M5-EXT-31, M5-EXT-36
-**Passive ragdoll looks dead — active muscle simulation required**. M5-EXT-31 "Ragdoll-to-Animation Recovery Blend" currently assumes passive ragdoll transitioning to animation. The paper prescribes:
-- **Active muscle tension**: On hit impact, don't zero the animation — blend physics forces ON TOP OF the base animation. Keep the character's current pose as a target, apply impulse forces, then blend back. This prevents the floppy-dead-weight look.
-- **Hit priority stack** (M5-EXT-36): Multiple simultaneous hits (shotgun, explosion shrapnel) must accumulate impulse vectors, not overwrite. Maintain a circular buffer of last N hits with summed impulse. Select the composite response — not just the strongest single hit.
-- **LOD for physics**: Full dynamic response for near enemies (0-15m), simplified impulse reaction (pre-baked animation overrides) at medium (15-40m), no reaction beyond 40m. Without LOD, 20+ enemies costs >5ms per frame.
+- **Physics LOD**: Only 3 nearest zombies get full active-ragdoll simulation. Medium-range (15-40m) use pre-baked animation overrides. Far-range skip entirely.
+  **PASS 3 addition**: Active ragdoll must SWITCH OFF on death — a dead zombie shouldn't run physics simulation at all. Switch to pre-baked death animation after PD controller confirms pose convergence (torso angle <5° from settled state). Other-tier dead zombies use no physics at all.
+- **Hit priority stack**: Accumulate impulse vectors for simultaneous hits (shotgun, shrapnel). Circular buffer of last N hits, summed composite response.
+- enkiTS job graph: one active-ragdoll job per close zombie (max 3), one pre-baked override per medium batch, skip for far range.
 
 #### Paper 28: Fire Simulation → M3-EXT-01, M3-EXT-04
-**Fire spread needs per-object material properties**. M3-EXT-04 "Hydrocarbon Slipstream Flame-Trail Splitting" and M3-EXT-01 "Structural Fatigue" both depend on knowing which objects burn and how.
-- Each destructible object needs: ignition temperature, heat capacity, fuel load (burn duration), structural integrity loss rate. Without this metadata, either everything burns (unplayable) or nothing burns (unrealistic).
-- Vorticity confinement has a narrow tuning sweet spot that varies with grid resolution. The M3-EXT-01 system must store per-resolution presets — a value that looks right at 64×64×64 produces spinning artifacts at 128×128×128.
-- Blackbody color rendering is counterintuitive: hottest is blue-white, not red. M3-EXT-04's visual output should use physics-based motion with artistic color ramps, not direct physical rendering.
+- **Per-object material properties**: Each destructible object needs ignition temperature, heat capacity, fuel load, structural integrity loss rate. Without metadata: either everything burns or nothing burns.
+- **Vorticity strength scales with cell size**: `vorticity_strength = base_value * (cell_size / 0.5m)`. Single tunable base across all grid resolutions. Base = 0.8 for standard, 0.4 for smoldering, 1.2 for explosive.
+  **PASS 3 addition**: Clamp vorticity strength to minimum 0.05 — below this, no visible swirl effect. WM proxy: `vorticity_strength = clamp(base_value * (cell_size / 0.5m), 0.05f, 2.0f)`. Upper clamp prevents explosion-style spinning at large cell sizes.
+- **Blackbody color**: Hottest is blue-white. Use physics-based motion with artistic color ramps.
 
-#### Paper 29: Preetham Daylight → M3-EXT-12, M3-EXT-24
-**CORRECTION**: I initially offered "Hosek-Wilkie OR blend with dusk correction." The latter is wrong. Preetham has seven known failure modes. Hosek-Wilkie (2012) replaces it entirely with <2% more compute and handles ALL sun angles correctly.
-- **Aerial perspective is a separate model**: M3-EXT-12 must implement TWO compute passes: (1) sky dome pre-computed to 256×128 cubemap, regenerated when time-of-day changes >1°, (2) aerial fog pass using depth from the GBuffer and extinction/scattering coefficients from the sky model. They interact only through the inscattering color — the fog color comes from the sky dome sample at the horizon angle.
-- **Spectral-to-RGB conversion** can produce negative values for saturated sky colors. The cubemap approach avoids per-pixel conversion cost.
+#### Paper 29: Preetham / Hosek-Wilkie → M3-EXT-12, M3-EXT-24
+- **Replace Preetham entirely with Hosek-Wilkie**: Preetham has 7 failure modes (low-sun banding, turbidity saturation, missing ozone, twilight gradients, no cloud integration, single-scattering, negative RGB). Hosek-Wilkie fixes all seven for <2% more compute.
+- **Two compute passes**: (1) Sky dome → 256×128 cubemap, regenerate when time-of-day changes >1°. (2) Aerial fog pass uses G-buffer depth + extinction/scattering coefficients. Only interact through inscattering color from sky horizon angle.
+- **Cubemap threshold caching**: Interpolate between cached cubemap frames in the pixel shader, not recompute per-degree change.
 
-#### Paper 30: DeepMimic RL Character Skills → M5-EXT-31
-**CORRECTION**: I earlier said "single-iteration optimizer" — DeepMimic runs a PD controller at every physics substep (~15 iterations depending on contact count). Each iteration computes joint torques from proportional-derivative error, applies contact forces, and optimizes in the constraint null-space to find a physically valid version of ANY reference pose — not just pre-baked hit reactions.
-**Correct ZE implementation**:
-- M5-EXT-31 should use a PD controller with at least 8 iterations per timestep at 30Hz physics rate (240Hz sub-steps). Fewer than 8 produces jittery recovery from crumple poses.
-- The PD gains (kp, kd) must be velocity-dependent: slow movement needs high stiffness, fast movement needs lower stiffness to avoid instability. This velocity-gain curve is the single most important tuning knob and is absent from the current block spec.
-- DeepMimic's phase function selects the reference frame based on time + contact state. M5-EXT-31 should store the character's animation timestamp at impact, advance through the animation at 0.5x speed during ragdoll, and blend back at 100% when recovered. This handles mid-stride, mid-climb, mid-stumble hits — not just idle-stance reactions.
+#### Paper 30: DeepMimic → M5-EXT-31
+- **PD controller LOD tiers**: Player-interacting zombies at 120Hz/8iter. Close zombies at 60Hz/4iter. Distant at 30Hz/2iter.
+  **PASS 3 addition**: enkiTS cannot create/destroy task groups per-frame — the LOD tiers must be conditional branches inside ONE persistent task group. Use a single enkiTS task that processes all three tiers in sequence via ignoreIfZeroed counters, not three separate tasks (kills determinism mode).
+- **Velocity-dependent PD gains**: Slow movement needs high stiffness (rapid correction). Fast movement needs lower stiffness (avoid instabilities). This is the most important tuning knob — absent from current spec.
+- **Phase function**: Store animation timestamp at impact. Advance through animation at 0.5x during ragdoll, blend back at 100% when recovered. Handles mid-stride, mid-climb, mid-punch hits.
 
-#### Paper 11: Real-Time Fracturing (Voronoi) → M3-EXT-05
-**Voronoi is the bottleneck — 5-15ms for runtime fracture**. The Breaking Good paper (Paper 19) offers an alternative: modal analysis with 33 fragments from 32 modes costs only 0.16ms (matrix-vector multiply). M3-EXT-05 should use modal analysis as the primary fracture method and reserve Voronoi for pre-fractured assets only.
--**68% of players prefer predictable pre-fracture**: M3-EXT-05 must show visual cues (cracks, stress marks, material-specific deformation) BEFORE the fracture point. Players hate random structural collapse without warning. The damage texture on the object should progressively reveal crack patterns as structural integrity drops.
--**Modal analysis fragment count is bounded**: max 33 fragments from 32 vibration modes. This is a feature, not a bug — it prevents the explosion-style fragmentation of Voronoi and keeps debris count manageable (<50 pieces per fracture event). M3-EXT-05's structural integrity model should use the first 8-16 modes for real-time computation (faster) and fall back to 32 modes for "hero" objects (player base, boss arenas).
+#### Paper 15: Minecraft Pathfinding → M5-EXT-01
+- **Flat uint16 grid for A\*** with SIMD-friendly layout: stores traversal cost, height, flags, parent index per voxel tile. 64-bit SIMD loads.
+- **Octile heuristic**: Allows 45° diagonal movement, reduces node expansion by 23% over Manhattan.
+- **Path recompute at 10-tick intervals**: Faster wastes CPU, slower makes zombies hesitate at corners.
+- **Bit-set nav grid**: 24x smaller than full graph. 4×4×4 voxel tile = one uint64 bit field. A* operates directly on the bitset.
 
-#### Paper 13: Boid-Flock Fish Population (Reynolds) → M8-EXT-20
-**Three critical scaling limits**:
-1. **Flocks >200 individuals spontaneously split** — the perception radius of each boid becomes larger than the flock itself at this size. M8-EXT-20 must cap perception radius to 15m for cohesion, even if the actual flock is larger. Beyond 200, use a hierarchichal approach: each group of 200 has a "lead boid" that interacts with other groups, and individual boids only see their group.
-2. **O(n²) neighbor search caps at ~2000 boids on console hardware** — M8-EXT-20 MUST use a spatial hash grid (not brute-force). With a spatial hash at 32³ cell resolution, the neighbor search drops from O(n²) to O(n * avgDensity). For ZE's fish population, this means a 10000-boid lake costs the same as 1000 boids in brute-force.
-3. **Obstacle hover-lock** — when multiple obstacle avoidance forces sum near-zero, boids get stuck hovering. Solution: add a small random perturbation (0.1% of avoidance force) that breaks the deadlock. Without this, fish appear to magnetically cling to obstacles.
+#### Paper 11: Real-Time Fracturing → M3-EXT-05
+- **Modal analysis primary**: 33 fragments from 32 vibration modes at 0.16ms. Blend with Poisson-disk seeding above force threshold to modulate fragment count. `num_fragments = min(33, 8 + force * modal_density_factor)`.
+- **Visual warning cues**: Progressive crack textures before fracture. Players hate random collapse without warning.
+- **First 8-16 modes for real-time**, 32 modes for hero objects.
 
-#### Paper 17: Rigid-IPC CCD (Collision Cleanup) → M3 Physics
-**10× slower than Bullet/Havok — use as cleanup pass only**. Rigid-IPC guarantees non-intersection but costs an order of magnitude more. For ZE's zombie physics (200+ active rigid bodies):
-- Primary collision: Jolt 5.6.0's default solver (broadphase + narrowphase, ~0.5ms)
-- Cleanup pass: Rigid-IPC on the top 10% of penetrating contacts detected by Jolt. This catches the edge cases (thin geometry, high-speed contacts) without paying the full cost.
--**Curved CCD costs 8× more than linear** but catches 15% more missed collisions. Use linear CCD for all zombies; reserve curved CCD for player-critical objects (vehicles, heavy weapons, physics puzzles). Linear CCD at 30fps physics rate misses <1% of collisions for zombies moving at <10m/s.
+#### Paper 13: Boids → M8-EXT-20
+- **Spatial partition (quadtree at 32³ cells)** instead of per-boid leader election. Each cell computes centroid velocity; all boids steer toward cell centroid. No hierarchy churn. O(n) per cell.
+- **Perception radius capped at 15m** even for flocks >200.
+- **Random perturbation on collision avoidance**: Prevents hover-lock when forces sum near-zero.
 
-#### Paper 18: XPBD Constraint Solver → M3 Physics (CORRECTED Pass 2)
-**CORRECTION from challenge agent**: Alternating normal/friction ordering every substep doubles convergence time.
-**Corrected approach**: Use symmetric Gauss-Seidel (normal + friction together per constraint). Costs ~15% more per iteration but converges in same count.
+#### Paper 17: Rigid-IPC → M3 Physics
+- **Fixed depth threshold** (depth > 0.01m) instead of sorting all Jolt contacts. Jolt provides penetration depth; one branch per contact, zero sort. Catches the worst ~10% without O(n log n).
 
-#### Paper 20: Tall Cell Water Simulation → M4 Water/Environment
-**30% memory bandwidth penalty from indirection** — tall cell grids use pointer indirection instead of direct array access. M4's water system should use flat arrays for the top 32 cell layers (where surface visual activity happens) and tall cells only for deep water (below visual interest).
--**30fps physics loses 3.2% volume/frame** due to numerical diffusion. At 60fps, the same diffusion loses only 0.8%/frame. ZE's water simulation should run at 60Hz even if the rest of physics runs at 30Hz. De-couple water tick rate from physics tick rate.
--**Warp divergence reduces GPU utilization from 85% to 52%** — tall cell approaches cause divergent warp execution because different cells have different heights. Solution: sort cell columns by height before the simulation pass, then process batches of similar-height columns in the same warp. This recovers ~20% utilization.
+#### Paper 18: XPBD → M3 Physics (CORRECTED Pass 2)
+- **Symmetric Gauss-Seidel** (normal + friction together per constraint) instead of alternating passes. Costs ~15% more per iteration but converges in same iteration count. Replace two-pass solver with single-pass combined compliance matrix.
 
-#### Paper 16: CoD Infinite Warfare Clustered Culling → M0-EXT-08
-**Z-bin ordering uses exponential depth bins, not uniform**. The paper subdivides the frustum into 32 depth bins where bin width doubles at each step. This concentrates culling resolution near the camera and reduces it at distance. Z-bin pass costs 0.1ms on GCN hardware for 1000 lights. ZE's M0-EXT-08 bindless draw merging should adopt exponential z-binning for its indirect light culling pass — not uniform frustum splits.
+#### Paper 20: Tall Cell Water → M4 Water
+- **Flat arrays for top 32 visual layers**: Tall cell pointer indirection costs 30% bandwidth. Use flat for visual layers, tall cells only for deep water.
+- **Water decoupled at 60Hz** even if physics runs at 30Hz. At 30Hz, numerical diffusion loses 3.2%/frame vs 0.8% at 60Hz.
+- **Incremental height-bucket sort**: Pre-sort columns at init. Only re-classify ~5% of columns per frame (~3K elements) where surface crossed a bucket boundary. Avoid O(n log n) full sort every tick.
 
-#### Paper 15: Minecraft Zombie Pathfinding → M5-EXT-01
-**Octile heuristic beats Manhattan by 23%**: M5-EXT-01 "Asynchronous Tile-Voxelized NavMesh Baker" uses A* on a voxel grid. The paper found octile distance heuristic (allows 45° diagonal movement) reduces node expansion by 23% over Manhattan in grid-based pathfinding.
-- Path recompute at 10-tick intervals is the sweet spot — any faster wastes CPU, any slower creates visible zombie hesitation at corners.
-- Bit-set representation of the navigation grid is 24x smaller than a full graph. Store each voxel's navigability, height, and traversal cost in a flat uint64 bit field per 4×4×4 voxel tile. A* operates on the bitset directly without materializing a graph.
+#### Paper 16: CoD Infinite Warfare Z-Binning → M0-EXT-08
+- **Logarithmic-exponential hybrid**: First 16 bins use 1.5× multiplier (fine near), last 16 use 3× (coarse far). Avoids degenerate 2-bin resolution at distance.
+- Piecewise formula: `if (z < Z_mid) bin = floor(log_{1.5}(z/near)); else bin = 16 + floor(log_3(z / Z_mid))`.
+
+#### M0-EXT-16 ENGINE_DETERMINISM_MODE (CORRECTED Pass 2)
+- **Spin-wait sync after each enkiTS WaitForTask group**: Sample high-precision timer, compute stage consumption, inject CPU spin-loop for remaining budget.
+  **PASS 3 addition**: Spin loop must have a HARD CEILING of 2× the stage budget. If physics overruns by more than 2× the normal stage, spin cannot fix it — mark the frame non-deterministic and advance. Unbounded spin causes watchdog SDS (System Display Service) kills that look like freezes.
+- **Log deviation**: If stage consumed MORE than budget, frame is non-deterministic — report failure, don't enforce fixed delta.
+- Deterministic PCG seed per save. Deterministic NPC RNG with session-seeded stream. enkiTS has no fiber support.
 
 #### Paper 32: Nanite Virtual Geometry → M0-EXT-08, M4-EXT-02
-**Two-pass occlusion fails on first frame and fast camera movement** — Nanite's HZB uses previous-frame depth, causing disocclusion failures when the player spins the camera. ZE's M0-EXT-08 must add a third fallback: (1) previous-frame HZB, (2) current-frame partial HZB from depth-prepass, (3) full-resolution draw for geometry that passed none of the above. Without pass 3, vertical-slice first-frame shows missing geometry for 16ms.
-**Software rasterizer cannot handle alpha-tested content** — foliage and fences must be full geometry, not alpha-clipped, or they break Nanite-style compute-shader rasterization. M0's rendering pipeline must tag all transparent/alpha-tested meshes and route them through a separate forward pass, not the cluster rasterizer.
-**128-triangle cluster granule is a hard constraint** — meshes that don't partition cleanly into 128-triangle clusters produce degenerate clusters with wasted triangles. M4-EXT-02's meshlet decimation must pre-process all source meshes to ensure clean 128-triangle boundaries.
+- **Temporal fill instead of third-pass full-resolve**: After two occlusion passes, unclassified pixels copy visibility from previous frame via motion-vector lookup. Clamped to 16-frame decay. Avoids camera-cut full-resolve cost spike.
+- **Alpha-tested meshes excluded from cluster rasterizer**: Route through separate forward pass.
+- **128-triangle cluster constraint**: Pre-process source meshes to ensure clean boundaries.
 
-#### Paper 33: GPU-Driven Pipeline (Ubisoft) → M0-EXT-08
-**Triangle strips produce non-deterministic cluster order** — the same mesh processed on different build machines produces different strip sequences. ZE must use MultiDrawIndexedIndirect with 64-triangle clusters and on-the-fly index buffer compaction, NOT pre-built triangle strips. This also enables deterministic replay.
-**Backface culling cubemap is weak** — 70-90% of triangles survive the 6-bit cubemap pre-pass. The GPU-driven pipeline should spend its culling budget on view-frustum and occlusion, not triangle-level backface testing.
-**UV gradient reconstruction at object edges fails** — virtual texturing that stores UV coords in G-buffer instead of explicit page IDs produces wrong mip levels at object boundaries. M0's G-buffer must store explicit page IDs (16+16-bit) for correct derivative-free mip selection.
+#### Paper 33: GPU-Driven Pipeline → M0-EXT-08
+- **Group by stable hierarchy ID** (asset path hash + LOD band), not per-frame meshID/materialID. LOD-band only changes at distance thresholds, not every frame.
+- **Separate packed-buffer for virtual texturing page IDs** (8-bit per pixel, only for surfaces using VT). Avoids 96-bit G-buffer entry bloat.
+- **Explicit MultiDrawIndexedIndirect** with 64-triangle clusters, not triangle strips (non-deterministic).
 
-#### Paper 34: Quadric Error Metrics → M4-EXT-02 (Meshlet Decimation)
-**Quadric overflow after 90% simplification** — accumulated 4×4 quadric matrices overflow single-precision on million-triangle meshes. M4-EXT-02's real-time decimation must re-normalize quadrics periodically or use double-precision for the priority heap.
-**Pair contraction creates non-manifold output** — QEM can join disconnected regions, producing self-intersecting geometry that breaks meshlet generation and physics collision. M4-EXT-02 must add non-manifold detection and rejection.
-**Boundary edges collapse without explicit tagging** — silhouettes get destroyed if boundary edges aren't tagged with synthetic constraint planes. M4-EXT-02 must pre-process all source meshes to tag boundary edges before decimation.
+#### Paper 34: Quadric Error Metrics → M4-EXT-02
+- **Fixed-point QEM accumulators** (Q8.24, int32_t quadric_fixed[10]) instead of double-precision. ~5 decimal digits sufficient for 95% simplification. Re-normalize every 50K collapses by right-shifting.
+- **Non-manifold detection**: Reject contractions that join disconnected regions.
+- **Boundary edge tagging**: Tag boundary edges with synthetic constraint planes before decimation.
 
-#### Paper 37: Bayesian Reputation → M8-EXT-53 (Faction Standing)
-**Cold-start prior determines entire early-game** — the Beta distribution's initial (α, β) prior sets whether NPCs start trusting or suspicious. M8-EXT-53's reputation system must vary the prior per faction: raiders start with α=5, β=20 (suspicious), traders with α=15, β=5 (trusting). A single global prior makes all factions feel the same.
-**Temporal discounting is missing from the pure Bayesian model** — old evidence never fades. A player who killed one guard in hour 1 is still a murderer in hour 100. M8-EXT-53 must add exponential decay (halflife parameter) to the Beta posterior, which breaks formal Bayesian purity but is required for playability. Without decay, one early mistake compounds into permanent faction hostility.
-**O(n²) belief propagation across NPCs** — when NPC A updates its reputation and tells NPC B, the full social graph costs O(n²) per interaction. M8-EXT-53 must limit propagation to NPC's immediate social circle (max 5 hops, max 50 total NPCs updated per action). Full propagation on 200 NPCs costs ~40,000 updates per player action.
-**Hierarchical Bayesian for faction coherence** — individual NPCs must deviate from faction reputation, but not wildly. Implement as faction-level prior + NPC-level posterior. Guard in high-reputation faction still trusts the player more than guard in low-reputation faction, even after personal negative interaction. Without hierarchy, guards in the same faction give inconsistent responses.
+#### Paper 37: Bayesian Reputation → M8-EXT-53
+- **Faction-specific priors**: Raiders α=5, β=20 (suspicious). Traders α=15, β=5 (trusting).
+- **Temporal evidence decay**: Every 1000 ticks: `new_α = max(α/2, 1); new_β = max(β/2, 1)`. This is O(1), preserves Beta conjugacy, smoothly forgets old evidence. (CORRECTED from exponential decay which breaks conjugacy.)
+- **Propagation limit**: Max 5 hops, max 50 NPCs updated per action. Full propagation on 200 NPCs = ~40,000 updates per player action.
+- **Hierarchical Bayesian**: Faction-level prior + NPC-level posterior.
 
 #### Paper 38: Faction Dynamics → M8-EXT-53, M8-EXT-62
-**NPC faction switching invalidates every quest involving that NPC** — if faction leader defects, all "talk to faction A leader" quests break. M8-EXT-62's social tier system must tag every quest and dialog line with faction validity conditions, and the quest validation system must re-check after every reputation update. This is O(n_quests × n_NPCs) per update.
-**Disposition inertia is the hardest tuning knob** — the paper found most games use hard reputation thresholds (friend at 500 rep, enemy at -500). This produces visible "threshold behavior" where NPCs flip at exactly X points. ZE should use smooth interpolation for combat/ dialog, reserving hard thresholds only for story-critical faction locks.
-**O(n × m) complexity** — 200 NPCs × 10 factions = 2000 values per update. M8-EXT-53 must batch reputation updates into a single per-frame delta-pass rather than per-action push.
+- **Dependency hash CRC per quest**: 64-bit signature XORed from affected entity IDs. Re-validation dispatches only matched quests. Avoids O(n_quests × n_NPCs) per update.
+- **Smooth disposition interpolation** for combat/dialog. Hard thresholds only for story-critical faction locks.
+- **Batch reputation updates** into single per-frame delta-pass.
 
 #### Paper 39: Neural Texture Compression → M0 Rendering
-**Per-material training does not scale** — ~minutes per material × 1000 materials = 16+ hours. Only viable for final-ship, not iterative development.
-**Joint compression entangles textures** — changing albedo means retraining the whole network. Unsuitable for modding or procedural material variation. ZE should use neural compression only for static hero assets (landmark buildings, key items), not for procedurally generated world materials.
-**No mipmap efficiency** — lower mips cost same compute as full-res in the MLP decoder. ZE's mip chain must know decode cost before picking mip level.
+- **Single neural atlas texture** (4096×4096, up to 64 hero materials decoded by one global MLP with atlas UV + material-ID as input). Avoids per-material weight sets competing for descriptor heap.
+- Use neural compression only for static hero assets, not procedural materials.
+- **Mip decode cost awareness**: Lower mips cost same compute as full-res in MLP decoder.
 
-#### Paper 42: Ballistic Trajectories → M3 Combat
-**Linear drag breaks at supersonic** — muzzle velocity >800 m/s (snipers, high-cal rifles) introduces systematic aim error. M3's ballistics model must switch to quadratic drag above Mach 0.8, using lookup tables from G1/G7 drag models, not analytic formulas.
-**Hit prediction + target lead = 5th-order polynomial** — no closed form. M3 must use Newton's method (3-5 iterations, ~0.01ms each). For 100 AI computing firing solutions simultaneously: 100 × 5 × 0.01ms = 5ms budget. Must cache solutions for 3 frames and re-use if target hasn't changed direction.
-**Extreme-angle asymmetry** — >45° launch angle (mortars, grenade launchers) produces unsymmetric descent that linear drag cannot model. M3 must add a per-weapon ascent/descent asymmetry compensation term derived from empirical ballistic tables.
+#### Paper 42: Ballistic Trajectories → M3 Combat (Verified Pass 3)
+- **Quadratic drag above Mach 0.8** (muzzle velocity >800 m/s). Linear drag introduces systematic aim error for snipers.
+- **Newton's method for target lead** (3-5 iterations, ~0.01ms each). 100 shooters × 5 × 0.01ms = 0.5ms budget.
+- **Firing-solution cache ONLY for stationary targets** (velocity < 0.5 m/s). All moving targets recompute each frame — zombie direction changes every ~200ms; 50ms cache misses by ~2m at 50m range. Use 5-iteration default budget with 10-iteration headroom for extreme trajectories.
 
-#### Paper 45: Procedural Branching Quests → M11 Narrative
-**GA + automated planning takes 10-30 seconds to converge** — too slow for runtime generation. M11's narrative system must pre-generate quest pools offline (design-time) and select from them at runtime, not generate on-the-fly.
-**Branching factor validation is exponential** — B=3 choices × N=5 decision points = 243 terminal states. N=10 = 59,049 states. M11 must cap branching at B=3 max and N=6 max per quest cluster, and validate only statistically (sample 10% of paths) beyond that.
-**Template reuse <20 templates = perceptible patterns** — players will see the "gather N items" structure repeat. M11 needs 100+ unique templates for a 40-hour zombie game. Creating and validating 100 templates is a significant narrative design investment.
-**Human curation is mandatory for deployed quests** — fully automated branching quests produce dead ends and contradictions. M11's pipeline is "procedural draft → human curator → deploy."
+#### Paper 45: Branching Quests → M11 Narrative
+- **Offline pre-generation** (10-30s GA convergence is too slow for runtime). Pre-generate quest pools.
+- **DOT-format automated verification**: Simulate all leaf paths against world state. Only deploy quests with <5% dead ends. No human curation bottleneck.
+- Branch cap: B=3 choices × N=6 decision points max. Validate statistically (10% sample) beyond that.
 
 #### Paper 47: VRS Ray Tracing → M0 RT Pipeline
-**Inline RT + VRS causes wavefront divergence** — threads with different shading rates execute different ray counts, harming occupancy. ZE's RT pipeline must batch rays by shading rate before dispatch, not mix rates in the same wave.
-**VRS tile boundaries visible on curved surfaces** — 16×16 tile size on NVIDIA creates visible "grid" artifact on car bodies and metallic surfaces. FLIP metric misses this because it's per-pixel. Use 8×8 tile size on AMD or adaptive tile placement that avoids specular boundaries.
-**Quarter-resolution + VRS = diminishing returns** — below ~0.5 rays per pixel-equivalent, VRS tier differences are imperceptible. ZE should never use 4×4 VRS rate below 0.5 rpp-equivalent.
+- **Fixed 8×8 VRS tile grid** (not adaptive placement requiring full-res G-buffer analysis at ~0.3ms). Grid artifact on curved surfaces imperceptible at 1080p+ with TAA.
+- Coarse rate (2×2) for roughness > 0.3 via material ID lookup. Zero additional passes.
+- Batch rays by shading rate before dispatch: never mix rates in same wave.
 
 #### Paper 48: Geometry Caches → M0 Streaming
-**5-second pre-roll constraint** — camera can spin 180° in <1s. ZE's open-world streaming must pre-load all nearby geometry caches within 300m radius, not wait for the 5s read-ahead. This means total memory budget for cached geometry = sum of all objects within 300m radius, likely 200-500MB.
-**16-bit vertex quantization fails on objects >200m** — buildings and bridges show vertex jitter at close range. Use local-space quantization with per-chunk bounding-box offset. Objects whose bounding box diagonal >200m must use 32-bit fallback.
-**Triple-buffer at 3× memory cost** — 5 simultaneous streams × 100MB per stream × 3 buffers = 1.5GB. ZE must use double-buffer (2× cost) for non-critical streams and triple-buffer only for hero objects the player is facing.
+- **Double-buffer for all caches** (2× cost). Single 3rd buffer slot reassigned each frame to largest screen-area object.
+- **Pre-load within 300m radius**: Total cached geometry memory = all objects within 300m radius (~200-500MB). Don't wait for 5-second read-ahead.
+- **Local-space quantization with per-chunk bbox offset** for >200m objects (16-bit quant fails at close range).
 
 #### Paper 49: Radiance Caching → M0 RT Pipeline
-**Cache boundary seams** — coarse global cache and fine per-pixel cache must blend consistently. Use the voxel-grid's spatial coherence (from M6's audio system!) as a shared spatial index for both radiance cache levels. Same grid, two different data types. This is a cross-system optimization the papers don't discuss — ZE's voxel grid can serve double duty.
+- **Render-grid LOD 3 for radiance (~0.8m)** + separate coarse grid at LOD 5 for audio. Share the same page table, different resolution residency. NOT same grid — that forces resolution compromise.
+- Fine per-pixel + coarse global must blend consistently.
 
 #### Paper 50: Engine Architecture → M0 Engine Core
-**Limit singletons to exactly 3**: Input, FrameAllocator, Device. Everything else injected via explicit dependency. ZE's current enkiTS-based architecture should enforce this at compile time — any system calling a global singleton outside these 3 triggers a compile error.
-**Verify ECS L1 cache miss rate <10%** — if ZE's ECS (currently planned) shows >10% L1 miss rate, component packing is wrong. Profile during stress-test with 10,000+ entities.
-**Deep inheritance: max depth 3** — each level doubles break surface. ZE's render graph and entity system must enforce max depth 3 via static_assert.
+- **Singleton limit 3** (Input, FrameAllocator, Device). Everything else injected via explicit dependency.
+- **ECS L1 miss rate <10%**: Trigger CI warning at >10%, not compile error. Profile during 10,000+ entity stress test.
+- **Inheritance depth warning, not static_assert**: Add `static_assert_inheritance_depth<Base, Derived, Max=3>` that compiles to warning-only with `#pragma ZE_ALLOW_DEEP_HIERARCHY` opt-in for justified cases.
 
 ---
 
@@ -863,22 +818,23 @@ M0-EXT-08 "Bindless Storage Handle Page Allocator" enables the id Tech 7 pattern
 The following milestones had ZERO paper-to-block mappings. These are the largest gaps in the plan.
 
 #### M1 Core Engine/Survival → Experience-Driven Adaptation (Paper 8)
-**M1-EXT-01 SpatialHash and M1-EXT-08 Dynamic Spatial Hash Quad-tree**: Paper 8's behavioral telemetry loop tracks player state every 30 seconds. ZE's spatial hash (used by audio, physics, AI, loot) IS the telemetry backbone. Tag each cell in the spatial hash with activity metrics: zombie kills in cell, time spent in cell, loot gathered from cell. The AI Director queries this for event selection (M5-EXT-10). This connects two currently separate subsystems — the spatial hash goes from "dumb grid" to "gameplay sensor grid."
-**M1-EXT-06 EnTT archetype mutation queue**: DDA papers show that adaptation requires per-player-state tracking. M1-EXT-06's component mutation queue should include a player-state component (health 0-100, resource stockpile 0-100, threat-level 0-100) that the AI Director reads as input. The current spec doesn't expose player state as a component — it's implicit in the survival numbers.
+**M1-EXT-01 SpatialHash**: Tag each cell with activity metrics (zombie kills, time spent, loot gathered). AI Director queries this for event selection. The spatial hash goes from "dumb grid" to "gameplay sensor grid."
+**M1-EXT-06 EnTT archetype mutation queue**: Add a player-state component (health 0-100, resource stockpile 0-100, threat-level 0-100) that the AI Director reads. Current spec exposes player state only as implicit survival numbers.
 
 #### M10 Environment/Atmosphere → Weather + Ecoclimate (Papers 29, 36, 43-44)
-**M10-EXT-03 Bruneton-Nishita Atmosphere**: This block replaces the previous atmospheric model. Apply the Hosek-Wilkie correction from Paper 29: Bruneton-Nishita is more accurate than Preetham but still fails below 2° solar elevation (polar twilight). ZE must layer a post-process blue-hour correction that darkens the horizon band and shifts hue toward deep blue when sun <2°.
-**M10-EXT-05 Navier-Stokes Weather**: Papers 43-44's weather model runs on 50-100m grid cells for real-time use. ZE's version is baked to 2D weather maps not runtime 3D N-S solve. The baking pipeline: run offline N-S simulation on the 1km² grid (takes ~2 minutes per day), save wind/pressure/temperature to 2D float textures. Runtime samples these textures based on in-game time. This avoids shipping a N-S solver.
-**M10-EXT-06 Phenological Cycles**: Paper 36 Ecoclimates provides the formula: chlorophyll transitions depend on cumulative growing-degree-days (base 10°C) and photoperiod (day length from M10-EXT-02). Implement as a compute shader that updates all tree instances every 100 game-seconds, not per frame. Each tree computes its own canopy density/color based on local elevation and soil type from M4-EXT-17 Edaphic soil grid.
+**M10-EXT-03 Bruneton-Nishita Atmosphere**: Apply Hosek-Wilkie correction from Paper 29. Fail below 2° solar elevation — layer a post-process blue-hour correction that darkens horizon band toward deep blue.
+**M10-EXT-05 Navier-Stokes Weather**: Bake offline N-S simulation on 1km² grid (~2 minutes per day), save wind/pressure/temperature to 2D float textures. Runtime samples based on in-game time. No runtime N-S solver shipped.
+**M10-EXT-06 Phenological Cycles**: Chlorophyll transitions based on cumulative growing-degree-days (base 10°C) + photoperiod from M10-EXT-02. Compute shader updates all tree instances every 100 game-seconds. Each tree uses local elevation and soil type from M4-EXT-17 Edaphic grid.
 
 #### M12 Multiplayer/Netcode → Save Serialization + Tension Space (Papers 2, 21, 27)
-**M12-EXT-01 Bitstream Delta Encoding**: Paper 21's save serialization lesson (static vs dynamic data separation) applies directly to network serialization. Entities have static properties (modelID, spawnPosition) that never change mid-session — send once. Dynamic properties (position, health, inventory) change at 10-30Hz — send these as bit-packed delta frames against the last-known state. The same "separate static from dynamic before compression" rule applies.
-**M12-EXT-17 Co-op Determinism**: Paper 27's finding — networked dynamic response produces non-deterministic physics divergence. For ZE co-op (non-competitive), the solution is simpler than rollback: the HOST runs authoritative physics, sends entity position+velocity at 10Hz, and clients interpolate. The tension model from Paper 2 applies to shared narrative events — if one player experiences a zombie breach while the other is looting, the tension states diverge. M12-EXT-17 must include a "tension sync" packet that aligns director state across clients every 30 seconds.
+**M12-EXT-01 Bitstream Delta Encoding**: Apply Paper 21's static/dynamic separation to network. Static properties (modelID, spawnPosition) send once. Dynamic properties (position, health, inventory) as bit-packed delta frames at 10-30Hz.
+**M12-EXT-17 Co-op Determinism**: HOST runs authoritative physics, sends entity position+velocity at 10Hz, clients interpolate. Tension sync packet aligns director state across clients every 30 seconds.
 
 #### M13 Endgame → Mission Director + Rumor Network (Papers 8, 37)
-**M13-EXT-01 Procedural Mission Director**: Paper 8's Experience-Driven Adaptation prescribes the director's event selection loop. The block currently has no algorithm. The director selects missions from a weighted pool based on: (1) settlement needs (% food deficit, % medical criticality), (2) faction standing (trade route threats), (3) player engagement (time since last base defense). Each mission type has a "cooldown" preventing repeats within 5 in-game days.
-**M13-EXT-06 Survivor Rumor Network**: Paper 37's Bayesian belief propagation applies here. NPCs have a "knowledge of world state" Beta distribution. When a survivor tells another about an event (horde sighting, loot location), the belief propagates with trust-weighted influence. Rumor quality decays with distance (3 hops max) and time (50% belief loss per day). The block should use a gossip protocol: each survivor periodically (every 1-4 game-hours) picks a random conversation partner and exchanges the highest-confidence rumor they have.
+**M13-EXT-01 Procedural Mission Director**: Weighted pool based on (1) settlement needs, (2) faction standing, (3) player engagement. Each mission type has cooldown (5 in-game days between repeats).
+**M13-EXT-06 Survivor Rumor Network**: Bayesian belief propagation with gossip protocol. Each survivor periodically (every 1-4 game-hours) picks a random conversation partner and exchanges highest-confidence rumor. Rumor quality decays with distance (3 hops) and time (50% loss per day).
 
+---
 ---
 
 ## 3. Design Pillars (Evidence-Based)
