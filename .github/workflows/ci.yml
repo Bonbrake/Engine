@@ -50,6 +50,21 @@ jobs:
           cd '${{ github.workspace }}'
           ./build/ZombieEngine.exe --headless --quit-frame 1
 
+      - name: Run clang-tidy
+        shell: bash
+        run: |
+          choco install llvm -y
+          export PATH="/c/Program Files/LLVM/bin:$PATH"
+          clang-tidy --version
+          cd '${{ github.workspace }}'
+          cmake -B build-tidy -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          cmake --build build-tidy --parallel 4
+          cd '${{ github.workspace }}'
+          find src include tests -name '*.cpp' -o -name '*.h' | sort -u > /tmp/clang_tidy_files.txt
+          while IFS= read -r f; do
+            clang-tidy "$f" -p build-tidy --warnings-as-errors='*' || exit 1
+          done < /tmp/clang_tidy_files.txt
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         if: always()
