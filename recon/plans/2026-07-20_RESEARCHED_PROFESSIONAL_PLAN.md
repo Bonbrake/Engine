@@ -701,6 +701,47 @@ M5-EXT-02 is "Dual-Quaternion GPU Compute Skinning." The id Tech 7 enhancement: 
 #### Engine: Bindless + Indirect Draw Merging (id Tech 7 → M0-EXT-08)
 M0-EXT-08 "Bindless Storage Handle Page Allocator" enables the id Tech 7 pattern. The critical addition: a compute shader compaction pass that groups visible instances by (meshID, materialID) and writes a compacted `VkDrawIndexedIndirectCommand` buffer. This reduces CPU draw iteration from O(visible instances) to O(unique mesh-material pairs). Implement as a post-culling compute dispatch.
 
+#### Paper 21: Save Serialization (SC2) → M7-EXT-07, M7-EXT-08
+**Critical finding**: SoA layout at the wrong dimension ballooned files from 75.8MB to 97.3MB (worse than AoS). Only instance-major layout (group by unit, then by timestep) achieved 21.8MB compression. Both M7-EXT-07 (Hierarchical Delta-State Persistence) and M7-EXT-08 (Zstandard Custom Dictionary) depend on the data layout order.
+
+**Implementation requirement**: Separate static properties (position, type never change) from dynamic properties (health, inventory, animation state) BEFORE compression. Store static data in a single binary blob per entity. Store dynamic data as instance-major delta frames. The 10x reduction came from data restructuring not codec choice. The Zstd dictionary should be trained on instance-major delta frames, not raw AoS snapshots. Profile static vs dynamic ratios per entity type — buildings are 95% static, zombies are 60% dynamic.
+
+#### Paper 25: Modulith Modding Architecture → M11-EXT-17, M11-EXT-20, M11-EXT-21
+**Three findings map directly**:
+1. **Security sandbox gap** (M11-EXT-20): Modulith lets mods run arbitrary code in the engine process. M11-EXT-20 "Mod Write-Allowlist" should be extended with a capability system — each mod declares what files/systems it needs (network, file write, UI hooks), and a sandbox enforces these at load time. Without this, a malicious mod can read save files or install persistent malware.
+2. **Dependency resolver** (M11-EXT-17): Mod A v1.2 requiring Mod B ≥v2.0 while Mod C requires Mod B ≤v1.8 is a real failure mode. M11-EXT-17 must implement a SAT/version-range resolver (like npm's semver). Store dependency metadata in each mod's manifest with min/max version ranges.
+3. **Cross-module overhead** (M11-EXT-21): Every boundary crossing adds ~0.1-0.4ms in serialization/dispatch overhead. With 10+ mods and a call chain spanning 5 modules at 60fps, 1-2ms of frame time goes to mod boundary overhead. M11-EXT-21's runtime reload must track which mods are actually hot and batch cross-module calls.
+
+#### Paper 27: Interactive Dynamic Response → M5-EXT-31, M5-EXT-36
+**Passive ragdoll looks dead — active muscle simulation required**. M5-EXT-31 "Ragdoll-to-Animation Recovery Blend" currently assumes passive ragdoll transitioning to animation. The paper prescribes:
+- **Active muscle tension**: On hit impact, don't zero the animation — blend physics forces ON TOP OF the base animation. Keep the character's current pose as a target, apply impulse forces, then blend back. This prevents the floppy-dead-weight look.
+- **Hit priority stack** (M5-EXT-36): Multiple simultaneous hits (shotgun, explosion shrapnel) must accumulate impulse vectors, not overwrite. Maintain a circular buffer of last N hits with summed impulse. Select the composite response — not just the strongest single hit.
+- **LOD for physics**: Full dynamic response for near enemies (0-15m), simplified impulse reaction (pre-baked animation overrides) at medium (15-40m), no reaction beyond 40m. Without LOD, 20+ enemies costs >5ms per frame.
+
+#### Paper 28: Fire Simulation → M3-EXT-01, M3-EXT-04
+**Fire spread needs per-object material properties**. M3-EXT-04 "Hydrocarbon Slipstream Flame-Trail Splitting" and M3-EXT-01 "Structural Fatigue" both depend on knowing which objects burn and how.
+- Each destructible object needs: ignition temperature, heat capacity, fuel load (burn duration), structural integrity loss rate. Without this metadata, either everything burns (unplayable) or nothing burns (unrealistic).
+- Vorticity confinement has a narrow tuning sweet spot that varies with grid resolution. The M3-EXT-01 system must store per-resolution presets — a value that looks right at 64×64×64 produces spinning artifacts at 128×128×128.
+- Blackbody color rendering is counterintuitive: hottest is blue-white, not red. M3-EXT-04's visual output should use physics-based motion with artistic color ramps, not direct physical rendering.
+
+#### Paper 29: Preetham Daylight → M3-EXT-12, M3-EXT-24
+**Low-sun-angle errors and aerial perspective separation**:
+- Preetham's model breaks below 10° solar elevation. Twilight transitions (blue → orange → purple → dark) are poorly captured. M3-EXT-24 "Atmosphere Volumetric Scattering" should use Hosek-Wilkie as the primary sky model, not Preetham, or blend Preetham with a dusk-specific correction.
+- Aerial perspective (distant objects fading to sky color) is a SEPARATE model from the sky dome, not the same one. M3-EXT-12 "Terrain Rendering" must implement both: one compute pass for the sky dome, another for distance fog. Their parameters interact non-linearly — extinction coefficient changes fade distance AND fade color independently.
+- Preetham's spectral-to-RGB conversion can produce negative values for saturated sky colors. Pre-compute the sky dome into a cubemap and regenerate only when time-of-day changes >1°, not every frame.
+
+#### Paper 30: DeepMimic RL Character Skills → M5-EXT-31
+**Single-frame adaptation for random poses**: DeepMimic's key insight for ZE is that it can adapt ANY reference pose to physical constraints in a single physics timestep. M5-EXT-31 "Ragdoll-to-Animation Recovery Blend" should use a DeepMimic-style single-frame optimizer:
+- On hit, record the current physics state (position, velocity, contact forces)
+- Run a single-iteration physics-aware pose optimizer (PD controller with target pose)
+- Blend the optimized result with the base animation using a time-weighted alpha (1.0 at impact → 0.0 after 500ms)
+- This handles UNSEEN poses — zombie hit while mid-stride, mid-climb, mid-stumble — not just the pre-baked hit-reaction animations the block currently assumes.
+
+#### Paper 15: Minecraft Zombie Pathfinding → M5-EXT-01
+**Octile heuristic beats Manhattan by 23%**: M5-EXT-01 "Asynchronous Tile-Voxelized NavMesh Baker" uses A* on a voxel grid. The paper found octile distance heuristic (allows 45° diagonal movement) reduces node expansion by 23% over Manhattan in grid-based pathfinding.
+- Path recompute at 10-tick intervals is the sweet spot — any faster wastes CPU, any slower creates visible zombie hesitation at corners.
+- Bit-set representation of the navigation grid is 24x smaller than a full graph. Store each voxel's navigability, height, and traversal cost in a flat uint64 bit field per 4×4×4 voxel tile. A* operates on the bitset directly without materializing a graph.
+
 ---
 
 ## 3. Design Pillars (Evidence-Based)
