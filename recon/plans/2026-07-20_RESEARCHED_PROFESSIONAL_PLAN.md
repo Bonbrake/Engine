@@ -285,6 +285,81 @@ The three immutable pillars remain:
 
 ---
 
+### 2.7 Actionable Paper-Derived Tasks [E/S]
+
+Each task below is a discrete implementation or validation work item derived from
+the paper corpus in section 2.1. None duplicate section 2.2 bullets. Tasks are
+formatted as: ID | Milestone | Paper(s) | Actionable Task | Deliverable.
+
+| Task ID | Milestone | Paper(s) | Actionable Task | Deliverable |
+|---------|-----------|----------|-----------------|-------------|
+| T-01 | M4 | Paper 1 | Implement hybrid MCTS/noise POI layout with content-tiered EXT block placement instead of pure noise-based spawning | Working POI placement system with tiered content density |
+| T-02 | M5 | Paper 2 | Build observation stream + reflection layer + dynamic retrieval memory system targeting 25-agent settlement benchmark | NPC memory benchmark passes with 25 agents |
+| T-03 | M4 | Paper 3 | Region-based hierarchy with hybrid cached/runtime terrain and impostor vegetation rendering | Terrain streaming system with impostor LOD |
+| T-04 | M4.5 | Paper 4 | SVDAG compression pipeline with hybrid voxel-plus-mesh and LOD streaming for open-world voxel renderfx | Voxel renderer with compression and streaming |
+| T-05 | M5 | Paper 5 | Design persistent systemic consequence system that avoids false-choice trees; every player choice cascades through dependency graph | Verified choice-consequence trace in scenario tests |
+| T-06 | M5 | Paper 6 | Rule-based AI Director with emotional state tracking; state-machine pacing transitions instead of opaque ML timers | State machine event pacing validated by telemetry |
+| T-07 | M3/M8 | Paper 7 | Prefractured small-object system and real-time fracture for large structures with material-dependent response curves | Destruction benchmark with material-dependent fractures |
+| T-08 | M11 | Paper 8 | Embedded environmental storytelling with three layers: environmental, emergent, interpretive; silent protagonist for player projection | Narrative layer system wired to world state |
+| T-09 | M5 | Paper 9 | Boids plus scent/sound goal rule for horde behavior; fully decentralized per-zombie control without centralized flock manager | Horde benchmark with decentralized scent/sound routing |
+| T-10 | M6/M6.5 | Paper 10 | Geometric audio propagation with portal-aware diffraction and fixed 10-20 Hz update cadence | Audio benchmark within 10-20 Hz propagation budget |
+| T-11 | M5 | Paper 11 | Tension formula as tension = player options minus threat; state-machine pacing transitions instead of timer-only difficulty | Director pacing validated against tension formula |
+| T-12 | M11/M5 | Paper 12 | Runtime telemetry that exposes dead narrative branches; NPC reactions vary by internal emotional state | Telemetry dashboard showing branch dead-ends |
+| T-13 | M5/M12 | Paper 13 | GM layer validates actions before execution; separate physical, social, digital state spaces per character | State-space unit tests for physical/social/digital separation |
+| T-14 | M5 | Paper 14 | 6-component NPC architecture with tiered memory; accept tiered memory bottleneck and optimize allocation | NPC memory profiler with tiered allocation metrics |
+| T-15 | M11 | Paper 15 | Visible tension director with sense-model-adapt loop every ~30s in four-phase cadence | Four-phase cadence validated by playtest telemetry |
+| T-16 | M11 | Paper 16 | Narrative grammar chain: EventType → NPCSelector → OutcomeResolver → FlavorWriter; grammar over freeform generation | Quest runtime with grammar-validated branches |
+| T-17 | M5 | Paper 17 | Motion matching plus IK post-process unified locomotion state machine; validate against parkour traversal scenarios | Locomotion benchmark with parkour traversal |
+| T-18 | M7 | Paper 18 | SoA save layout with delta compression between ticks and periodic full checkpoint; mandatory schema versioning with migration paths | Save/load round-trip tests with version migration |
+| T-19 | M8 | Paper 19 | Offline Pareto-optimized economy balancing; per-save seeded variation, not live evolutionary adjustment | Economy balance script with per-save seeds |
+| T-20 | M11 | Paper 20 | Enforce diegetic HUD only; all information contextual and diegetic; no non-diegetic HUD elements permitted | HUD audit passes with zero non-diegetic elements |
+| T-21 | M11 | Paper 21 | Planner-based quests validated against world state; reputation-coupled moral branches | Quest planner unit tests with reputation gates |
+| T-22 | M7/M13 | Paper 22 | DAG load order with cycle detection; capability-based sandbox; versioned mod API | Mod loader passes cycle detection and sandbox tests |
+| T-23 | M11 | Paper 23 | Dual-zone controller response with gyro-first input and rotational aim assist | Input benchmark with gyro-first and rotational assist |
+| T-24 | M2 | Paper 24 | Curved-trajectory CCD with barrier stiffness derived from surface material | Physics benchmark with material-stiffness barriers |
+| T-25 | M2 | Paper 25 | XPBD unified collision/ragdoll/constraints; compliance increases with damage | Physics benchmark with damage-driven compliance |
+| T-26 | M3 | Paper 26 | Precomputed fracture modes baked at asset build; GPU compute for cracked geometry | Asset bake pipeline with fracture mode database |
+| T-27 | M6.5 | Paper 27 | Tall-cell grid water with two-way buoyancy coupling and compute-shader Poisson solve | Water benchmark with buoyancy and Poisson solve |
+| T-28 | M2 | Paper 28 | Blended active ragdoll with three-state physics modes and deterministic transitions | Ragdoll benchmark with deterministic transitions |
+| T-29 | M6.5 | Paper 29 | Dual-layer fire/smoke with fuel metadata per material and temperature-to-color mapping | Fire VFX benchmark with material fuel metadata |
+| T-30 | M3/M4.5 | Paper 30 | Compressed meshlets with Hi-Z coarse cull before task shader dispatch | Meshlet benchmark with Hi-Z cull and compression |
+| T-31 | M0/M3/M4.5 | Paper 31 | Cluster DAG with screen-space error and visibility buffer deferred shading for M0 renderer | Renderer passes cluster DAG validation |
+| T-32 | M0/M3/M4.5 | Paper 32 | GPU-only frustum/occlusion/LOD cull into indirect draw buffer | Culling benchmark showing GPU indirect draw |
+| T-33 | M3 | Paper 33 | Quadric simplification with attribute-aware weighting and progressive mesh | Mesh simplification pipeline with attribute weights |
+| T-34 | M4.5 | Paper 34 | Single-pass neural denoise+upscale with temporal reprojection and Halton jitter every 8 frames | Upscaler benchmark passing temporal stability tests |
+| T-35 | M5 | Paper 35 | Physics-based skill policy weights gated by health/state tier; validate against paper benchmark | NPC skill benchmark gated by health/state |
+| T-36 | M10 | Paper 36 | Two-timescale weather/ecology coupling with suitability-function placement | Weather-ecology benchmark with two timescales |
+| T-37 | M11 | Paper 37 | Bayesian reputation with gossip, threshold-gated dialogue, and multi-axis trust/fear/respect | Faction reputation system with gossip propagation |
+| T-38 | M11 | Paper 38 | Faction values over allegiance; belief-state gating for cooperation/expulsion | Faction system with belief-state gating tests |
+| T-39 | M10 | Paper 39 | Analytic sun position with turbidity sky model and sky-zenix aerial perspective | Atmosphere benchmark matching analytical sky model |
+| T-40 | M11 | Paper 40 | Camera idioms as director style; runtime shot interpolation by gameplay moment | Cine-AI benchmark with director-style camera |
+| T-41 | M3 | Paper 41 | Random-access neural decode per material with near-field neural and far-field BC fallback | Texture pipeline with dual neural/bc fallback |
+| T-42 | M3 | Paper 42 | Closed-form ballistic drag per caliber with intercept-angle lead prediction | Ballistics benchmark with caliber-specific drag |
+| T-43 | M10 | Paper 43 | City-block weather cells; rain noise masks footsteps; lightning briefly reveals zombies | Weather cells with rain audio masking and lightning reveal |
+| T-44 | M6/M10 | Paper 44 | Wetness/splash audio feedback; temperature affects zombie behavior | Audio-behavior coupling validated by playtest |
+| T-45 | M11 | Paper 45 | World-state parameterized quest templates with offline validation before serving branches | Quest validation passes offline before runtime |
+| T-46 | M4 | Paper 46 | Poisson-disk-with-competition placement and seasonal flora state machine | Vegetation benchmark with competition and season |
+| T-47 | M3 | Paper 47 | Neural layered BRDF atlas with thin-film interference as extra input | Material pipeline with neural BRDF atlas |
+| T-48 | M4.5 | Paper 48 | Bake Alembic to GPU-optimized binary with triple-buffer streaming | Geometry cache benchmark with triple-buffer |
+| T-49 | M4.5 | Paper 49 | Roughness-adaptive VRS tile grid with temporal stabilization | Upscaler benchmark passing VRS stability tests |
+| T-50 | M4.5 | Paper 50 | World-space radiance fallback when screen cache disoccludes; roughness-stratified budget | Reflection benchmark with disocclusion fallback |
+
+### 2.8 Deduplication Verification [E]
+
+The 50 tasks above were checked against the following existing plan content to
+prevent duplication:
+- Section 2.1 Paper Index: no overlap; tasks use paper numbers from index
+- Section 2.2 Selected Lessons and Block Mapping: lessons are one-line summaries; tasks are discrete actionable work items with milestones and deliverables
+- Section 2.3 Game Analysis Cross-Game Truths: cross-game truths are design pillars; tasks are implementation-oriented
+- Section 2.4 Case Studies: case studies are reference architectures; tasks are actionable
+- Section 2.5 Engine Architecture Patterns: patterns are validation claims; tasks are implementation work
+- Section 2.6 Research Gaps: gaps are unresolved items; tasks are resolved as concrete work items
+- Sections 3-9: design pillars, architecture decisions, milestone map, timeline, risk register are planning artifacts; tasks are execution items
+
+Deduplication result: 0 duplicate tasks found against existing plan content.
+
+---
+
 ## 3. Design Pillars
 
 1. AI Director creates drama, not difficulty. State-machine pacing, event-driven transitions. Difficulty is secondary to dramatic tension.
