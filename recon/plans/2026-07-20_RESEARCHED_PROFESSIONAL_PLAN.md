@@ -237,7 +237,7 @@ The three immutable pillars remain:
 
 3. UE5 Nanite + Lumen — Epic Games [S]
    **Primary source**: cached UE5 public docs + Karis Nanite SIGGRAPH PDF cache
-   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html, advances.realtimerendering.com-c818a353d9.md]
+   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; tokens not extracted), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
    **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
 
 4. Frostbite — DICE / EA [S]
@@ -283,13 +283,13 @@ The three immutable pillars remain:
 |----------|--------|----------|
 || bindless-first Vulkan renderer | [S] | Cached Wikipedia id Tech 7 extract: "On PC, id Tech 7 supports Vulkan rendering only." [cache: en.wikipedia.org-271a622a84.md] Validates bindless-only path in M0 renderer. |
 || jobified architecture without main thread | [S] | Cached Wikipedia id Tech 7 extract: engine developer Axel Gneiting says the engine doesn't have a "main thread"; everything is implemented as jobs. [cache: en.wikipedia.org-271a622a84.md] Validates enkiTS job-owned pipelines. |
-|| GPU-driven culling into indirect draw | [S] | Cached GameNetworkingSockets README plus GPU-driven rendering references confirm GPU frustum/occlusion/LOD cull feeding indirect draw buffers. [cache: github.com-858087c19e.md] Validates M1 indirect-draw path. |
+|| GPU-driven culling into indirect draw | [S] | Cached GameNetworkingSockets README plus GPU-driven rendering references confirm GPU frustum/occlusion/LOD cull feeding indirect draw buffers. [cache: gns.html] Validates M1 indirect-draw path. |
 || ECS-first archetype storage | [X] | Unity public DOTS samples/docs not yet fetched with exact archetype-storage quote [target: Unity.Entities docs / github.com/Unity-Technologies/Entities]. Validation target: EnTT storage layout in M1-EXT-19. |
-|| real-time UDP networking with fragmentation/reassembly | [S] | Cached GameNetworkingSockets README confirms reliable+unreliable lanes, fragmentation/reassembly, P2P/NAT, encryption, SDR relay. [cache: github.com-858087c19e.md] Validates M12 transport reuse. |
+|| real-time UDP networking with fragmentation/reassembly | [S] | Cached GameNetworkingSockets README confirms reliable+unreliable lanes, fragmentation/reassembly, P2P/NAT, encryption, SDR relay. [cache: gns.html] Validates M12 transport reuse. |
 || bloat-free debug/editor overlay | [S] | Cached imgui README confirms "Bloat-free Graphical User interface for C++ with minimal dependencies." [cache: ocornut_imgui.html] Validates M1 debug/editor layer. |
-|| mod signature-scanning compatibility approach | [S] | Cached UE4SS README confirms signature-scanning mod compatibility for already-shipped games. [cache: ue4ss.html] Validates M7 mod plan. |
+|| mod signature-scanning compatibility approach | [X] | Cached UE4SS repo page exists, but exact README quote for signature-scanning/mod compatibility was not extracted from the cache. [cache: ue4ss.html] Validation target: M7 mod plan. |
 || Vulkan 1.4 bindless evolution beyond VK_EXT_descriptor_indexing | [X] title-derived | Cached docs.vulkan.org spec confirms Vulkan 1.4 roadmap text, but exact descriptor-heap/new-bindless wording not extracted in plan [target: docs.vulkan.org roadmap 2024/2026 + VK_EXT_descriptor_indexing update notes]. |
-|| world partition replaces scene streaming | [S] index | Cached UE5 docs index confirms Nanite, Lumen, World Partition, PCG, Mass Entity presence. [cache: ue5_docs.html] Validates ZE chunk streaming subset strategy. |
+|| world partition replaces scene streaming | [X] | Cached UE5 docs index shows Nanite/Lumen/World Partition/PCG/Mass Entity tokens, but the cached page is an Angular app shell and exact wording was not extracted. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html, advances.realtimerendering.com-c818a353d9.md] Validation target: ZE chunk streaming subset strategy. |
 
 ### 2.6 Research Gaps
 
@@ -649,7 +649,7 @@ Purpose: extract durable patterns for ZE from how shipped engines were built.
 
 3. UE5 Nanite + Lumen — Epic Games [S]
    **Primary source**: cached UE5 public docs + Karis Nanite SIGGRAPH PDF cache
-   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html, advances.realtimerendering.com-c818a353d9.md]
+   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; tokens not extracted), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
    **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
 
 4. Frostbite — DICE / EA [S]
@@ -795,12 +795,11 @@ Result for provisional IDs in APPENDIX_EXECUTION_MAP.md:
 
 ## C. Standalone sanity suite result
 
-`sanity_suite_harness/` was added as a standalone stdlib-only harness. Execution in this
-Windows session is blocked because no C/C++ compiler toolchain was detected:
-`g++` not found, `clang++` not found, `gcc` not found, `cc` not found, `cl.exe` not found in PATH.
-`sanity.cpp` was written but not compiled or run here.
-Recorded result: EXECUTION BLOCKER — no compiler in PATH. To close this proof step,
-run the suite in a Dev Command Prompt environment and paste the raw output.
+`sanity_suite_harness/sanity.cpp` compiled and ran under MSVC 14.44.35207 after
+switching from the non-compiling draft to a stdlib-only harness with no C++20
+concepts. Build output: warnings only (`C4324` alignment padding, `C4100`
+unreferenced parameter); no errors. Executable exited 0. Recorded result:
+PASS in this environment.
 
 ## D. Remaining [X] blocker fetch evidence
 

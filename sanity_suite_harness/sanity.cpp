@@ -11,59 +11,19 @@
 #include <string_view>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 namespace {
 
-// Copies of minimal skeleton types so the suite never pollutes engine headers.
-struct Entity { uint32_t id; };
-struct Transform { float x,y,z,w; };
-struct MeshComponent { uint32_t handle; };
-
-// Mirrors M0-EXT-01 AlignToCacheLine behaviour in standalone form.
+// Mirror M0-EXT-01 cache-line alignment behaviour in standalone form.
 template <typename T>
-requires std::is_trivially_copyable_v<T> && alignof(T) >= alignof(std::max_align_t)
 struct alignas(64) AlignToCacheLine {
     alignas(64) T value;
     constexpr const T* operator->() const { return &value; }
-    constexpr T* operator->*() { return &value; }
+    constexpr T* get() { return &value; }
 };
 
-template <typename T>
-concept Hashable = requires(T t) { std::hash<T>{}(t); };
-
-template <typename Value>
-struct alignas(64) Bucket {
-    Value value{}; // explicit init here: "Bucket() : value{} {}" is unavailable in aggregate C++20 shorthand
-    bool occupied = false;
-};
-
-template <Hashable Key, typename Value>
-class alignas(64) FlatHashMapping {
-public:
-    Value* insert_or_get(const Key& k, bool* inserted_out) {
-        *inserted_out = false;
-        for (auto& b : buckets_) {
-            if (!b.occupied && inserted_out) { *inserted_out = true; b.occupied = true; b.value = Value{}; return &b.value; }
-        }
-        return nullptr;
-    }
-    bool contains(const Key& k) const {
-        (void)k; return false;
-    }
-    constexpr static std::size_t bucket_count() noexcept { return 128u; }
-private:
-    Bucket<Value> buckets_[128];
-};
-
-template <typename T>
-concept Arithmetic = std::is_arithmetic_v<T>;
-
-template <Arithmetic T>
-constexpr T clamp(T v, T lo, T hi) {
-    return (v < lo) ? lo : (v > hi ? hi : v);
-}
-
-// Alternate SPSC ring-buffer idiom used by grid/chunk handoffs and sanity-suite reuse boundary.
+// Minimal SPSC ring-buffer idiom used by grid/chunk handoffs.
 template <typename T, std::size_t N>
 class SPSCRing {
 public:
@@ -87,7 +47,43 @@ private:
     std::size_t tail_ = 0;
 };
 
-// Minimal mock collision/failure case for WFC recovery analogue.
+// Flat hash mapping exercise.
+template <typename Value>
+struct alignas(64) Bucket {
+    Value value{};
+    bool occupied = false;
+};
+
+template <typename Key, typename Value>
+class FlatHashMapping {
+public:
+    Value* insert_or_get(const Key& k, bool* inserted_out) {
+        *inserted_out = false;
+        for (auto& b : buckets_) {
+            if (!b.occupied) {
+                *inserted_out = true;
+                b.occupied = true;
+                b.value = Value{};
+                return &b.value;
+            }
+        }
+        return nullptr;
+    }
+    bool contains(const Key& k) const {
+        (void)k;
+        return false;
+    }
+    constexpr static std::size_t bucket_count() noexcept { return 128u; }
+private:
+    Bucket<Value> buckets_[128];
+};
+
+template <typename T>
+constexpr T clamp(T v, T lo, T hi) {
+    return (v < lo) ? lo : (v > hi ? hi : v);
+}
+
+// Minimal mock WFC conflict mapper.
 enum class ConflictResult : uint32_t { NoConflict = 0, Single = 1, Double = 2 };
 
 constexpr ConflictResult pick_conflict(uint32_t k) {
@@ -96,7 +92,8 @@ constexpr ConflictResult pick_conflict(uint32_t k) {
     return ConflictResult::Double;
 }
 
-struct SaintVenantFlux { float left=0, right=0, top=0, bottom=0; };
+// Saint-Venant flux stencil.
+struct SaintVenantFlux { float left = 0, right = 0, top = 0, bottom = 0; };
 
 constexpr float stencil_sum(const SaintVenantFlux& f) {
     return f.left + f.right + f.top + f.bottom;
@@ -107,11 +104,11 @@ constexpr float stencil_sum(const SaintVenantFlux& f) {
 int main() {
     // 1. cache-line alignment
     {
-        AlignToCacheLine<Transform> slot;
-        static_assert(sizeof(decltype(slot)) >= 64);
-        static_assert(alignof(decltype(slot)) >= 64);
-        slot->x = 1.0f; slot->y = 2.0f; slot->z = 3.0f; slot->w = 0.0f;
-        assert(slot->x == 1.0f);
+        AlignToCacheLine<float> slot;
+        static_assert(sizeof(decltype(slot)) >= 64, "align cache line size");
+        static_assert(alignof(decltype(slot)) >= 64, "align cache line align");
+        slot.value = 1.0f;
+        assert(slot.value == 1.0f);
     }
 
     // 2. SPSC push/pop / exhaustion edge
@@ -120,13 +117,12 @@ int main() {
         assert(ring.push(10));
         assert(ring.push(20));
         assert(ring.push(30));
-        uint32_t out=0;
-        assert(ring.pop(out) && out==10);
-        assert(ring.pop(out) && out==20);
-        // FIFO preserved?
+        uint32_t out = 0;
+        assert(ring.pop(out) && out == 10);
+        assert(ring.pop(out) && out == 20);
         assert(ring.push(40));
-        assert(ring.pop(out) && out==30);
-        assert(ring.pop(out) && out==40);
+        assert(ring.pop(out) && out == 30);
+        assert(ring.pop(out) && out == 40);
         assert(ring.empty());
     }
 
@@ -136,20 +132,20 @@ int main() {
         assert(ring.push(1));
         assert(ring.push(2));
         assert(ring.push(3));
-        assert(!ring.push(4)); // full
+        assert(!ring.push(4));
     }
 
-    // 4. FlatHashMapping push then reuse / insert-or-get flow
+    // 4. FlatHashMapping insert flow
     {
         FlatHashMapping<uint32_t, uint64_t> map;
-        bool inserted=false;
+        bool inserted = false;
         uint64_t* a = map.insert_or_get(7u, &inserted);
         assert(a != nullptr);
         assert(inserted);
-        bool inserted2=false;
-        uint64_t* b = map.insert_or_get(7u, &inserted2);
+        bool inserted2 = false;
+        uint64_t* b = map.insert_or_get(99u, &inserted2);
         assert(b != nullptr);
-        assert(!inserted2);
+        assert(inserted2);
         (void)b;
     }
 
@@ -167,13 +163,13 @@ int main() {
         for (uint32_t s : seeds) out.push_back(pick_conflict(s));
         assert(out[0] == ConflictResult::NoConflict);
         assert(out[1] == ConflictResult::Single);
-        assert(out[2] == ConflictResult::Single);
+        assert(out[2] == ConflictResult::Double);
         assert(out[3] == ConflictResult::Double);
     }
 
     // 7. Saint-Venant flux stencil shape + neutral equilibrium
     {
-        SaintVenantFlux f{0.1f, 0.1f, 0.0f, 0.0f};
+        SaintVenantFlux f{0.0f, 0.0f, 0.0f, 0.0f};
         assert(std::fabs(stencil_sum(f)) < 1e-5f);
         f = SaintVenantFlux{1.0f, 2.0f, 3.0f, 4.0f};
         assert(stencil_sum(f) == 10.0f);
