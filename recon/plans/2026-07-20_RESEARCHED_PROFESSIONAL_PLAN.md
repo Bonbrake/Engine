@@ -66,7 +66,7 @@ The three immutable pillars remain:
 | 24 | Intersection-Free Rigid Body Dynamics | ACM TOG DOI 10.1145/3450626.3459802 [S] Intersection-free rigid body dynamics  | 2021 | [cache: crossref_10.1145_3450626.3459802.json]
 
 | 25 | XPBD — Position-Based Simulation of Compliant Constrained Dynamics | SCA 2016  | 2016 |
-| 26 | Breaking Good — Fracture Modes for Realtime Destruction | ACM TOG DOI 10.1145/3549540 [S] arXiv:2111.05249 | 202 |
+| 26 | Breaking Good — Fracture Modes for Realtime Destruction | ACM TOG DOI 10.1145/3549540 [S] Breaking Good: Fracture Modes for Realtime Destruction | 2023 | [cache: crossref_10.1145_3549540.json]
 | 27 | Real-Time Eulerian Water Simulation Using a Restricted Tall Cell Grid | SIGGRAPH 2011 DOI 10.1145/2010324.1964977 [S] Real-time Eulerian water simulation using a restricted tall cell grid  | 2011 | [cache: crossref_10.1145_2010324.1964977.json]
 
 | 28 | Interactive Dynamic Response for Games | SIGGRAPH Sandbox 2007 DOI 10.1145/1274940.1274944 [S] Interactive dynamic response for games  | 2007 | [cache: crossref_10.1145_1274940.1274944.json]
