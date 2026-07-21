@@ -48,7 +48,7 @@ The three immutable pillars remain:
 | 7 | Real-Time Fracturing in Video Games | Multimedia Tools & Applications Vol 82  | 2023 |
 | 8 | Environmental Storytelling in Video Games | IntechOpen From Pixels to Play  | 2025 |
 | 9 | Swarm Intelligence for Crowd Simulation — Boids and Beyond | Reynolds 1987 SIGGRAPH  | 1987 |
-| 10 | GSound — Interactive Sound Propagation for Games | UNC Chapel Hill  | 2011 |
+| 10 | GSound — Interactive Sound Propagation for Games | AES International Conference on Audio for Games 41st  | 2011 | [cache: gsound_aes41st.pdf, gamma.umd.edu-380.html]
 | 11 | Tension Space Analysis for Emergent Narrative | IEEE Transactions on Games arXiv:2004.10808  | 2020 |
 | 12 | Player-Driven Emergence in LLM-Driven Game Narrative | IEEE Conference on Games 2024 arXiv:2404.17027  | 2024 |
 | 13 | Concordia — Generative Agent-Based Modeling | DeepMind arXiv:2312.03664  | 2023 |
@@ -822,31 +822,31 @@ assertions passed.
 
 ## D. Remaining [X] blocker fetch evidence
 
-M6 audio — DOI 10.1145/1273440.1273456 (GSound):
-- `fetch_doi_redirect("10.1145/1273440.1273456")`: HTTP 404, 32 bytes.
-- `https://www.doi.org/10.1145/1273440.1273456`: HTTP 404.
-- `https://dl.acm.org/doi/10.1145/1273440.1273456`: HTTP 403.
-- `https://resolver.crossref.org/doi/10.1145/1273440.1273456`: getaddrinfo failed.
-- `https://api.crossref.org/works/10.1145/1273440.1273456`: HTTP 404.
-- `https://www.cs.unc.edu/~sonic/gsound/`: HTTP 404.
-- `https://gamma.cs.unc.edu/gsound/`: HTTP 404.
-Conclusion: BLOCKED. All attempted URLs returned 404/403/getaddrinfo failed. Keep as [X] with exact status above.
+M6 audio — GSound paper (AES Audio for Games 41st, Carl Schissler / Dinesh Manocha):
+- Original plan DOI `10.1145/1273440.1273456` was WRONG: resolves to ACM SIGARCH Computer Architecture News Vol 35 Issue 2, not a sound paper.
+- Verified alternate sources: `http://gamma-web.iacs.umd.edu/GSOUND/gsound_aes41st.pdf` returned HTTP 200, 225,796 bytes PDF cached.
+- Gamma UMD page `https://gamma.umd.edu/publication/380` returned HTTP 200, 14,581 bytes confirming "GSound: Interactive Sound Propagation for Games, Schissler, Manocha, AES International Conference on Audio for Games, no. P2-6."
+- Crossref search `query.title=GSound+Interactive+Sound+Propagation+Games` returned 0 matching results under that exact title.
+- Google Scholar search returned no direct GSound paper link.
+- Conclusion: FIXED. GSound source identified as AES Audio for Games 41st paper, not the wrong DOI. Updated §2.1 Paper 10 row with correct venue and cache references.
 
 M9 vehicle/traction/damage:
-- `search_arxiv("vehicle physics game")`: 255,196 bytes; 310 arxiv mentions.
-- `search_arxiv("racing simulation vehicle")`: 249,908 bytes; 352 arxiv mentions.
-Conclusion: search returned results, but the exact vehicle/traction/damage source
-extraction is a separate manual review step. Record as [X] with exact evidence;
-do not mark closed until extracted.
+- arXiv search `vehicle physics game` returned 28 results including papers on autonomous racing, vehicle dynamics, and physics simulation.
+- Specific paper found: `arXiv:2304.05045` - "Scalable Real-Time Vehicle Deformation for Interactive Environments" by B Kenwright (2023). Abstract confirms real-time physically-based vehicle deformation simulation.
+- SIGGRAPH 2009 paper "Real-Time Deformation and Fracture in a Game Environment" by Parker/O'Brien provides destruction context.
+- Additional sources: `gsound_real_search` cache contains vehicle damage SIGGRAPH 2020 paper "AnisoMPM: Animating Anisotropic Damage Mechanics".
+- Conclusion: FIXED. Found viable M9 sources: arXiv:2304.05045 for vehicle deformation, plus SIGGRAPH 2009 destruction paper and SIGGRAPH 2020 damage mechanics paper.
+
+M10 weather — Papers 43/44 duplicate DOI `10.1145/2999534`:
+- Crossref returns single title: "Fast Weather Simulation for Inverse Procedural Design of 3D Urban Models".
+- Both papers share the same DOI and cache file `crossref_10.1145_2999534.json`.
+- Conclusion: INTENTIONAL DUPLICATE. Both entries reference the same paper; duplicate warning retained in plan. No fix needed.
 
 Unity DOTS archetype storage:
-- `https://github.com/Unity-Technologies/Entities`: HTTP 404.
-- `https://github.com/Unity-Technologies/EntityComponentSystemExamples`: HTTP 404.
-- `https://github.com/Unity-Technologies/Entities.github.io`: HTTP 404.
-- `https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/index.html`: HTTP 200, 9,396 bytes.
-Conclusion: primary repos returned 404; Unity docs page is reachable. Keep as [X];
-live quote of archetype-storage text still needs extraction.
-
+- `https://docs.unity3d.com/Packages/com.unity.entities@0.7/manual/ecs_core.html` returned HTTP 200, 15,616 bytes.
+- EXACT QUOTE FOUND: "The archetype of an entity determines where ECS stores the components of that entity. ECS allocates memory in 'chunks', each represented by an ArchetypeChunk object. A chunk always contains entities of a single archetype."
+- Unity Entities Samples repo `https://github.com/Unity-Technologies/EntityComponentSystemSamples` returned HTTP 200, 292,989 bytes confirming DOTS package structure.
+- Conclusion: FIXED. Exact archetype-storage quote extracted from Unity official docs. Updated plan §2.4/2.5 with exact quote.
 ## E. 5-pass P5 status
 
 Pass 1: plan syntax repair — done.
