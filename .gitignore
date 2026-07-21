@@ -1,89 +1,67 @@
-/build/
-/out/
-/vcpkg_installed/
-CMakeCache.txt
-CMakeFiles/
-*.obj
-*.o
+# ZombieEngine — .gitignore
+
+# ============================================================
+# Build outputs
+# ============================================================
+build/
+_bld*.bat
 *.exe
+*.obj
 *.pdb
 *.ilk
-*.log
-plan.md
-*.scratch.*
+*.exp
+*.lib
+*.dll
+*.so
+*.dylib
+*.a
+cmake-build-*/
+out/
+x64/
+Release/
+Debug/
+
+# ============================================================
+# IDE / Editor
+# ============================================================
 .vs/
 .vscode/
-/build-asan/
-/custom-ports/vulkan-loader/
-/custom-triplets/
-# Runtime artifacts (crash handler / engine logs / replay / tick-debug)
-# These are generated every run and must NOT be committed or triaged
-# as feature changes. Added per review 2026-07-13 (were recursing
-# into every session's working-tree diff as noise).
-crash_dump.dmp
-crash_sidecar.txt
-replay.bin
-tick_hashes.txt
-logs/
-# === added 2026-07-14: scratch/debug artifacts (keep out of triage) ===
-# Hermes session state
-/.hermes/
-# one-off focus-loss probe run outputs (focus_probe.cpp source is real — keep it)
-focus_probe_run_*/
-focus_probe_dummy.txt
-focus_probe_output.txt
-focus_probe.obj
-# phase1_verify debug bundles/logs (keep only focus_probe.cpp)
-/phase1_verify/_attached/
-/phase1_verify/_diffstage/
-/phase1_verify/debug_bundle*
-/phase1_verify/*.zip
-/phase1_verify/*.txt
-/phase1_verify/*.out
-/phase1_verify/*.json
-/phase1_verify/*.dll
-/phase1_verify/*.bat
-/phase1_verify/*.ps1
-/phase1_verify/*.sh
-# flycam audit scratch
-_flycam_audit.script
-_flycam_audit_state.json
-# build log noise
-build*.log
+.idea/
+*.sln
+*.suo
+*.user
+*.vcxproj*
+*.db
+*.opendb
+*.opensdf
+*.sdf
+Debug/
+__pycache__/
+*.pyc
+*.pyo
 
-# === generated runtime / session noise (txt + stray artifacts) ===
-# These are produced every engine run or Hermes session and must never be
-# triaged as feature changes. Added 2026-07-15 cleanup pass.
-*.txt
-crash_dump.dmp
-crash_sidecar.txt
-engine_log.txt
-record.log
-replay*.log
-resize_test.log
-selftest_flycam.txt
-test_log*.txt
-tick_hashes.txt
-first_prompt.txt
-m1_spec.txt
-how-ref
-imgui.ini
-focus_probe.obj
-FocusProbe*.txt
-# root-level captures / dumps (also matched by /logs/ when nested)
-capture_*.log
-# stray one-off .obj piles from verify runs (source is real; objects are noise)
-hermes-verify-*.obj
-FlyCamera.obj
-SpatialHash.obj
-Input.obj
-pipeline_cache.bin
-scratch/
-# standalone audit markdown clutter -> moved to docs/audit/ (kept, see commit)
-# /AUDIT_*.md
-# /endless_quarantine_v77_cleaned.md
+# ============================================================
+# Hermes agent artifacts
+# ============================================================
+.hermes/
+.hermis/
 
-# === added 2026-07-15: timestamped milestone backup snapshots ===
-# Redundant with git history (milestones_M0-M13_antigravity/ is tracked).
-# Kept on disk as a local safety net, but never tracked/triaged as changes.
-milestones_M0-M13_antigravity_bak-*/
+# ============================================================
+# Planning / Recon (generated during dev sessions)
+# ============================================================
+archive/
+
+# ============================================================
+# vcpkg
+# ============================================================
+vcpkg_installed/
+vcpkg-manifest-install.log
+
+# ============================================================
+# OS files
+# ============================================================
+Thumbs.db
+.DS_Store
+*.swp
+*.swo
+*~

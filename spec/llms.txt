@@ -1,0 +1,80 @@
+# ZombieEngine — LLMS.TXT (AI Source-of-Truth Index)
+
+You are a coding agent working on ZombieEngine, a modern-day (present era) zombie
+survival game. The spec/ directory is the SINGLE SOURCE OF TRUTH. Read it before
+writing or changing any system.
+
+## How to parse the spec
+- Each system is a block: `#### [Mx-EXT-n] Title`.
+- Blocks are grouped by milestone file: spec/M0.md (engine/build) … spec/M13.md
+  (narrative/SLM), plus spec/M4.5.md (material virtualization) and spec/M6.5.md
+  (zombie sensory/awareness).
+- Every block has a standard skeleton:
+  `> **tags**` · `> **tl;dr**` · `> **ctx**` · `> **meta**` (depends-on / depended-by)
+  then `##### Systems Touched`, `##### Inputs`, `##### Outputs`, `##### Math`,
+  `##### Algorithm`, `##### Examples`, `##### Failure Modes`, `##### Player-Facing Impact`.
+- `depends-on: [Mx-EXT-n]` means that block MUST be read and respected before
+  implementing this one. `depended-by` means other blocks rely on this one.
+- There are 1,224 EXT blocks across 16 milestone files. All structural verifiers pass.
+- APPENDICES.md is the master block index (not duplicates). Always check it before
+  assigning new EXT IDs to avoid collisions.
+
+## Hard rules for coding agents
+1. DO NOT invent systems, APIs, or files that are not in spec/. If a block's
+   `depends-on` points at something missing, STOP and report it — do not guess.
+2. Respect `depends-on` ordering. Implement dependencies first.
+3. Jolt Physics is pinned to **v5.6.0** (see spec/M1.md M2 section). Build with
+   `JPH_CROSS_PLATFORM_DETERMINISTIC` + matching `JPH_DOUBLE_PRECISION` on every
+   platform or co-op lockstep desyncs. This is NOT optional.
+4. The game is MODERN-DAY. No magic, no sci-fi, no fantasy. Interactions are
+   physical minigames (welding bead control, hotwire, lockpick, circuit-bypass,
+   pickpocket) — not menus, not terminals, not command consoles. Dev consoles are
+   engine-debug-only and compiled out of retail builds.
+5. Local-first: offline play is primary, friends co-op (LAN/internet peer) is
+   secondary. No mandatory cloud dependency in core systems.
+6. Verify by disproving: implement, then test against the block's `##### Examples`
+   and `##### Failure Modes`. A system is done only when its failure modes are
+   exercised, not just the happy path.
+7. Spec milestone files (spec/Mx.md and APPENDICES.md) are READ-ONLY to agents
+   without explicit user approval. Everything else (scripts, tooling, llms.txt,
+   source code) is autonomous.
+8. Build system: CMake + Ninja + vcpkg (MSVC 2022). Configure via VS dev command
+   prompt: `cmake -B build -G Ninja` then `cmake --build build --target ZombieEngine -- -j4`.
+
+## Existing source code modules
+- `src/render/` — Vulkan 1.4 rendering: Device, Swapchain, VulkanContext, PipelineBuilder,
+  PipelineCompatValidator, ShaderManager, PipelineCacheManager, CommandManager,
+  TriangleRenderer, MaterialSystem, AssetManager, MSDFPipeline, RenderGraph,
+  DescriptorSlotAllocator, DriverBlocklist
+- `src/core/` — Engine, Config, Logger, FileSystem, CVarSystem, Input, Platform,
+  JobSystem, ThreadArena
+- `src/ecs/` — ECSContext (EnTT), GenerationalTable, MetaRegistry, SpatialHash,
+  EntityFactory, Destructible
+- `src/physics/` — PhysicsSystem (Jolt), PhysicsDebugRenderer
+- `src/debug/` — ImGuiOverlay, FlyCamera, MetaRegistry
+- `src/tests/` — Test_ExceptionContainment, Test_FlyCamera, Test_MathFormulas,
+  Test_RenderBridge, Test_RayBatchQuery, Test_TransformPrecision
+- `src/main.cpp` — Application entry point
+
+## Verification and tooling
+- `scripts/verify_m0_parity.py` — structural verifier: checks all milestone files
+  for block ID ordering, frontmatter compliance, cross-file dependency consistency.
+  Run before any PR merge.
+- `recon/check_versions.py` — dependency freshness checker: queries vcpkg registry
+  and GitHub releases for latest package versions vs vcpkg.json pins.
+  Usage: `python recon/check_versions.py`
+
+## Where to start
+- Engine/build: spec/M0.md, spec/M1.md
+- Physics/ragdoll/horde: spec/M5.md, spec/M6.5.md
+- Vehicles/interactables: spec/M9.md (includes the immersive interaction minigames
+  M9-EXT-30..34)
+- Interaction shell + proficiency: spec/M2.md (M2-EXT-78, M2-EXT-79)
+- Economy/tools: spec/M8.md (M8-EXT-66)
+- World/streaming: spec/M4.md, spec/M4.5.md, spec/M3.md, spec/M10.md
+- Narrative/social: spec/M12.md, spec/M13.md
+- Save/MP: spec/M7.md, spec/M11.md, spec/M12.md
+
+When in doubt, cross-reference the block ID in APPENDICES.md (the index) and read
+the actual block in its milestone file. The build order follows ROADMAP.md phase
+topology: M0 → M1 → M2 → M3 → M4 → M4.5 → M5 → M6 → M6.5 → M7 → M8 → M9 → M10 → M11 → M12 → M13.

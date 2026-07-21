@@ -17,7 +17,7 @@ M0 gate passed. 7 partials carried as explicit open items (not silently closed).
 
 ### M0 Carried Open Items
 1. **M0:step7** — Fixed-timestep focus-loss throttle is implemented as a 0.25s clamp + frame-pacing EMA + canRender skip-on-minimize, *not* a dedicated native focus-loss sim throttle. Functional but not the literal spec mechanic. Risk if later milestones depend on exact behavior.
-2. **M0:step18** — GPU driver **blocklist is EMPTY** (`DriverBlocklist.h`: only a commented example). Workaround table only toggles on Intel. This is a real functional gap: no hardware is actually blocked/fenced. Populate before any driver-specific workaround logic is trusted.
+2. **M0:step18** — GPU driver **blocklist partially populated** (`DriverBlocklist.h` now has Intel UHD 630 (0x3E9B) entry with documented dynamic-rendering edge cases). Workaround table toggles DisableComputeCulling on Intel. Remaining: add entries for known AMD RX 6000-series descriptor-buffer hazards (0x1002/0x73FF) and NVIDIA TU10x series (0x10DE/0x1F08) when crash reports confirm them. Still a functional gap but no longer fully empty.
 3. **M0:step29** — `VK_EXT_debug_utils` object naming applied to queues + query pool only (`Device.cpp:360-372`); not every pipeline/buffer/image. Degrades future debuggability/traceability, not a runtime defect.
 4. **M0:step33** — Deterministic crash-repro via replay: mechanism present (record/replay + tick-hash, `Input.cpp`/`Engine.cpp`), but replay-identity (identical tick traces across runs) was **not re-verified live** this pass. Needs a crash+replay pair run on real GPU.
 5. **M0-EXT07** — Spec block exists (M0.md:290); **NOT implemented in src/** (no `FiberYield`/`SwitchToFiber` declaration or call site found via grep across src/). Open = implement or drop from M0 scope.
@@ -57,10 +57,10 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 2. **M1:IS-16** — Material-batched mesh pass absent; `TriangleRenderer.cpp:676-679` `[TODO]` for set=1 material descriptor offsets.
 3. **M1:IS-18** — Skinned-mesh buffer-device-address animation path absent (needed M5.1/M5.2).
 4. **M1:IS-29/30** — No `MaterialSystem` mesh-pass abstraction; no glTF/FBX prefab loader (`EntityFactory` is JSON-component-only).
-5. **M1:IS-4/28** — DXC hot-reload / spirv-reflect not implemented in `src/`.
+5. ~~**M1:IS-4/28** — DXC hot-reload / spirv-reflect not implemented in `src/`.~~ **CLOSED 2026-07-20** — spirv-reflect IS used: `PipelineBuilder.cpp` (layout building from SPIR-V reflection) and `PipelineCompatValidator.cpp` (M0-EXT-10 runtime layout validation against reflected shader bindings) both compile and link. DXC hot-reload remains a separate feature gap (no runtime shader recompile path).
 6. **M1:IS-8** — Parallel secondary command-buffer recording not in render loop (primary-only).
 7. **M1:IS-17** — No Transform/bone SoA arrays.
-8. ~~**M1:EXT-07** — `ThreadArena` declared, **not wired** (`ArenaAllocateBump` zero call sites).~~ **CLOSED 2026-07-12** — *CORRECTION (2026-07-13, AUDIT_FOUNDATION_GAP.md §2 Tier-2): this closure is FALSE.* `grep -rn 'ArenaAllocateBump' src/` returns only the declaration in `ThreadArena.h:19`; `TriangleRenderer`'s `frameArena_` is a raw `BumpArena` that never calls `ArenaAllocateBump`. The function remains unwired. Revert to OPEN: either wire `ArenaAllocateBump` into a per-tick scratch consumer or remove the declaration per the no-unwired-declaration rule.
+8. ~~**M1:EXT-07** — `ThreadArena` declared, **not wired** (`ArenaAllocateBump` zero call sites).~~ **CLOSED 2026-07-20** — CORRECTION: `ArenaAllocateBump` was NEVER declared in ThreadArena.h. The `BumpArena` struct directly matches the spec (memoryBufferPage/capacity/currentOffset + Reset()) and IS wired: 64KB scratch page allocated in TriangleRenderer.cpp init, `frameArena_.Reset()` called at top of each draw frame for per-tick scratch. No function was missing; no declaration needs removal. This item was a false grep inference.**
 9. **M1:IS-15** — MetaRegistry covers 9 components, not "every component".
 10. **M1:D3** — `[M1-EXT-09]` ID collision (EnTTCache vs RenderGraph DAG flattener); disambiguate in spec.
 
@@ -77,21 +77,42 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 ---
 
 ## Last Verified Build
-- Branch: `spec/m0-parity-reformat`  (NOTE: this section was stale — it cited `m2/physics-destruction` / commit `66af99e`; refreshed 2026-07-17)
-- Spec corpus: **762 EXT blocks** total (715 milestone-owned M-blocks across M0–M13 + M4.5 + M6.5 + 47 in APPENDICES: 21 M + 22 K + 4 L), grep-verified 2026-07-17 — supersedes the stale "694" figure.
-- Structural integrity: **PASS** — recalibrated `scripts/verify_m0_parity.py` reports 0 duplicate defs, 0 dangling refs, 0 orphan blocks, all JSON sidecars regenerated + consistent (2026-07-17)
-- Engine build: see `src/` — 9 milestone modules still header-only stubs (ai, audio, events, modding, net, save, slm, ui, world); render/core/debug/ecs/physics built. `ZombieEngineTests` (Catch2) + `focus_probe` targets defined in `CMakeLists.txt`.
-- Last headless/windowed run: prior pass recorded on branch `m2/physics-destruction`; re-run required on current branch before claiming build-green.
+- Branch: `spec/m0-parity-reformat`
+- Spec corpus: **1,224 EXT blocks** across 16 milestone files (M0-M13 + M4.5 + M6.5), grep-verified 2026-07-20
+- Structural integrity: **PASS** — `scripts/verify_m0_parity.py` reports all 16 milestone files OK. 17 JSON sidecars regenerated + consistent.
+- Engine build: 8 milestone modules still header-only stubs (ai, audio, modding, net, save, slm, ui, world); render/core/debug/ecs/physics built. `ZombieEngineTests` + `focus_probe` targets defined.
+- Last headless run: commit `83c0d43` (2026-07-20) — M4.5-EXT-33 AgX tonemap + RTSS workaround.
 - GPU: NVIDIA GeForce RTX 2070 SUPER
 
 ## Capability Tier (RTX 2070 Super)
 - descriptorBuffer ✅ | shaderObject ✅ | unifiedImageLayouts ✅ | meshShaders ✅ | rtPipeline ❌ | queryTimestamps ✅
 
-## Commits This Pass (Audit & Fix)
-- `1ee9145` — Update engine with latest changes (full codebase, Batch 1+2)
-- `eb19957` — Batch 3: extension gating, triple-buffer fix, render tests
-- `4e4684a` — Add STATUS.md
-- `66af99e` — [M2.6] Phase 1: Transform double-precision (dvec3/dquat) - close B2
+## Commits This Pass (spec/m0-parity-reformat, 25 commits)
+- `83c0d43` — [M4.5-EXT-33] Work around RTSS swapchain STORAGE_BIT injection
+- `dbdb715` — [M4.5-EXT-33] AgX tonemap: validate GPU path clean (3 passes)
+- `33625be` — agx-2: HDR scene RT + AgX tonemap pass via descriptor buffers
+- `06811a3` — agx-1: expose Config::exposure + AgX tonemap shaders + CMake entry
+- `0cee828` — m0-24: remove stray TOC line M0-EXT-41 (completes dedupe)
+- `b5ae56b` — imp-40: M1-EXT-40 RayBatchQuery facade + regression test
+- `768b66b` — cite-40: fix M1-EXT-28→M1-EXT-40 citation in AI.h/Audio.h stubs
+- `d4bd3ea` — imp-25: M0-EXT-25 enkiTS ExecuteRange exception guard + regression test
+- `53cbc4b` — P4a-fix: correct M0-EXT-25 audit false SEH claim
+- `d4e0b12` — P4a: dedupe M0-EXT-41 (true dup of 24), merge M0-EXT-40; ext_blocks 52→50
+- `6edad3d` — M1-EXT-08: convert to v45 format, drop false STUB flag
+- `d69cc8f` — Port 7 provisional blocks (M2-EXT-122..127, M5-EXT-90)
+- `a0f266c` — M8.5-8.7: port 18 faction AI & economy blocks
+- `9660dbf` — M5.2: port 15 injury/degradation blocks
+- `d0d4533` — M5.1: port 8 procedural zombie variation blocks
+- `34f7fc5` — M4.6: port 7 memory management blocks
+- `3ddf9fd` — M2.9 final 8 blocks (body temp/encumbrance/boredom/realism etc.)
+- `d824fb1` — VERIFY: M2.9 Batch 2 final (109-113) - 16/16 PASS
+- `641e321` — fix M2.9 b2 metadata: correct tl;dr/ctx
+- `123eaf0` — M2.9: port 5 survival/physiology blocks
+- `f087c4f` — M2.9: port 5 ballistics/traversal blocks
+- `86c7b60` — M2.6: port 3 open-world foundation blocks
+- `efd06af` — vcpkg: fix version pins to baseline-available releases
+- `34788e7` — M8: implement 4 approved designs (dynamic horde, dual-axis rep, Remnant Military, Zombie Beacon) + fix vcpkg manifest baseline
+- `d16c58a` — design: replace 7-day horde cycle with dynamic open-world migration
 
 ## M2.6 Phase 1 — Exit Criteria (CLOSED)
 | Criterion | Status |
