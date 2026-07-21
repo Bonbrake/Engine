@@ -74,3 +74,40 @@ jobs:
             build/ZombieEngine.exe
             build/ZombieEngineTests.exe
           retention-days: 7
+
+  asan-build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          architecture: x64
+          toolset: 14.44
+
+      - name: Setup Ninja + CMake
+        uses: lukka/get-cmake@v3
+        with:
+          cmakeVersion: '3.27.x'
+          ninjaVersion: '1.11.x'
+
+      - name: Bootstrap vcpkg
+        shell: bash
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git C:/vcpkg
+          C:/vcpkg/bootstrap-vcpkg.bat -disableMetrics
+
+      - name: Configure ASan
+        shell: bash
+        run: cmake -B build-asan -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DENGINE_SANITIZE=ASAN
+
+      - name: Build ASan
+        shell: bash
+        run: cmake --build build-asan --parallel 4
+
+      - name: Run tests ASan
+        shell: bash
+        run: |
+          cd '${{ github.workspace }}/build-asan'
+          ./ZombieEngineTests.exe
