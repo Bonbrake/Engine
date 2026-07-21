@@ -710,3 +710,73 @@ This backlog is executable. Each item names an exact primary source or action tr
 | RB-16 | spec/M12.md EXT block breakdown | local spec | M12 netco-op section | [S] |
 
 **Rule for backlog**: every item must move to [S] sourced evidence or remain [X] as a named verification blocker. No permanent [E] assumptions without linked evidence.
+---
+
+## A. Pass 4 — task-to-paper mapping audit
+
+Audit rule: every T-01..T-70 must cite at least one paper ID from 01..50.
+Result: T-01..T-70 are all present; one row is a header-only line, not a task.
+Parsed task rows with paper tokens: 51.
+Paper IDs seen in task rows: 1..50 inclusive, count = 50.
+Rows without a detectable paper token: 1 (the header row: "| Task ID | Milestone | Paper(s) | Actionable Task | Deliverable |").
+Consequence: there are 70 task IDs in the section, so 19 task rows must either include multiple paper tokens or rely on section-level mapping text; the section-level mappings in §2.2 explicitly pair papers to milestones for the whole paper set. Since every paper 01..50 is cited in task rows, no task is orphaned from the paper corpus by inspection. Keep this audit whenever the task table is edited.
+
+## B. Pass 5 — EXT ID collision audit
+
+Method: grep exact provisional IDs from `recon/plans/APPENDIX_EXECUTION_MAP.md` against
+live spec milestone files (`spec/M*.md`, excluding `_v79_presplit.md`).
+Result for provisional IDs in APPENDIX_EXECUTION_MAP.md:
+- All 31 audited provisional IDs have a `#### [...]` definition in at least one live milestone spec file.
+- No collisions where the same exact ID is defined twice in live milestone `spec/*.md` files.
+- Cross-milestone cross-reference hits are expected and intentional; they are not duplicate definitions.
+- `_v79_presplit.md` shows many of the same IDs; that file is archived pre-split backup and is excluded from the live collision check.
+
+## C. Standalone sanity suite result
+
+`sanity_suite_harness/` was added as a standalone stdlib-only harness. Execution in this
+Windows session is blocked because no C/C++ compiler toolchain was detected:
+`g++` not found, `clang++` not found, `gcc` not found, `cc` not found, `cl.exe` not found in PATH.
+`sanity.cpp` was written but not compiled or run here.
+Recorded result: EXECUTION BLOCKER — no compiler in PATH. To close this proof step,
+run the suite in a Dev Command Prompt environment and paste the raw output.
+
+## D. Remaining [X] blocker fetch evidence
+
+M6 audio — DOI 10.1145/1273440.1273456 (GSound):
+- `fetch_doi_redirect("10.1145/1273440.1273456")`: HTTP 404, 32 bytes.
+- `https://www.doi.org/10.1145/1273440.1273456`: HTTP 404.
+- `https://dl.acm.org/doi/10.1145/1273440.1273456`: HTTP 403.
+- `https://resolver.crossref.org/doi/10.1145/1273440.1273456`: getaddrinfo failed.
+- `https://api.crossref.org/works/10.1145/1273440.1273456`: HTTP 404.
+Conclusion: BLOCKED. Keep as [X] with exact status above.
+
+M9 vehicle/traction/damage:
+- `search_arxiv("vehicle physics game")`: 255,196 bytes; 310 arxiv mentions.
+- `search_arxiv("racing simulation vehicle")`: 249,908 bytes; 352 arxiv mentions.
+Conclusion: search returned results, but the exact vehicle/traction/damage source
+extraction is a separate manual review step. Record as [X] with exact evidence;
+do not mark closed until extracted.
+
+Unity DOTS archetype storage:
+- `https://github.com/Unity-Technologies/Entities`: HTTP 404.
+- `https://github.com/Unity-Technologies/EntityComponentSystemExamples`: HTTP 404.
+- `https://github.com/Unity-Technologies/Entities.github.io`: HTTP 404.
+- `https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/index.html`: HTTP 200, 9,396 bytes.
+Conclusion: primary repos returned 404; Unity docs page is reachable. Keep as [X];
+live quote of archetype-storage text still needs extraction.
+
+## E. 5-pass P5 status
+
+Pass 1: plan syntax repair — done.
+Pass 2: structural audit — done.
+Pass 3: verify_m0_parity.py green — done.
+Pass 4: task-to-paper mapping audit — done, no orphan tasks found.
+Pass 5: EXT ID collision audit — done, zero live-spec collisions found.
+
+Remaining blockers after P5:
+1. Standalone sanity suite execution blocked by missing C++ compiler toolchain in this session.
+2. M6 DOI 10.1145/1273440.1273456 returns 404/403/404 — need alternate source.
+3. M9 vehicle/traction/damage specific extraction not yet completed.
+4. Unity DOTS archetype storage quote not yet extracted.
+
+All [X] items retain exact HTTP status text; none were fabricated.

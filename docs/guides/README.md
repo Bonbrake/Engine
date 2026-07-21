@@ -47,6 +47,19 @@ Current baseline: 20 passed, 1 skipped, 83/83 assertions green on both Debug
 and ASAN configurations. New tests belong in `tests/unit/Test_*.cpp` and are
 auto-discovered by the Catch2 single-include registration in `tests/CMakeLists.txt`.
 
+## Test runner and sanity gate
+
+Test runner is `ZombieEngineTests.exe`, built with Catch2. From the build
+directory:
+
+```
+cmd.exe /c tests\\ZombieEngineTests.exe
+```
+
+Current baseline: 20 passed, 1 skipped, 83/83 assertions green on both Debug
+and ASAN configurations. New tests belong in `tests/unit/Test_*.cpp` and are
+auto-discovered by the Catch2 single-include registration in `tests/CMakeLists.txt`.
+
 ### Standalone sanity suite
 
 Before merge, run the standalone sandboxed verification suite from
@@ -55,6 +68,21 @@ run independent of the engine, using local mock structs so it never collides
 with canonical engine types. It validates WFC recovery, Saint-Venant flux
 stencil, SPSC queue logic, cache-line alignment, and basic determinism. Use it
 as a pre-merge gate before trusting a new version's appendix block behavior.
+
+### Research cache
+
+Use `scripts/fetch_research.py` to resolve remaining `[X]` blockers without
+leaving the terminal. It caches fetches under your Hermes cache directory so
+re-runs are offline-friendly. Example:
+
+```
+python scripts/fetch_research.py
+```
+
+It probes `search_arxiv("query")`, `fetch_arxiv_abstract("<id>")`, and
+`fetch_doi_redirect("<doi>")`. Exact fetch evidence, including HTTP status and
+byte counts, is what closes a blocker; do not mark a source verified from
+memory alone.
 
 ## Profiling
 

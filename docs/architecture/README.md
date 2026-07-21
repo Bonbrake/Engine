@@ -70,6 +70,14 @@ is MiniCPM5-1B running locally through an SPSC queue into the quest/dialogue
 system. The model is a content-generation backend, not a network service; all
 inference runs on the user's machine with no telemetry exfiltrated.
 
+## How to read this plan
+
+This plan is not the spec. The implementation truth lives in the per-milestone
+spec files under `spec/` and the appendix execution map at
+`recon/plans/APPENDIX_EXECUTION_MAP.md`. Read those for the canonical block
+IDs, acceptance tests, and dependency order. This plan maps research, case
+studies, and executable tasks to those blocks.
+
 ## Appendix execution order
 
 For implementation order of appendix EXT blocks, see
