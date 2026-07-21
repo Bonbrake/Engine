@@ -48,3 +48,6 @@ archive/runtime_junk/
 # Archive cruft
 archive/old_milestones/*bak*/
 archive/plans/
+
+# Local helper scripts
+scripts/build_ze.cmd
