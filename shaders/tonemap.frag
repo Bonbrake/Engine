@@ -44,5 +44,5 @@ vec3 agx(vec3 val) {
 void main() {
     vec3 hdr = texture(hdrTex, vUv).rgb;
     vec3 mapped = agx(hdr * uExposure.exposure);
-    outColor = vec4(pow(mapped, vec3(1.0 / 2.2)), 1.0);
+    outColor = vec4(pow(mapped, vec3(1.0 / 2.2)).bgr, 1.0);
 }

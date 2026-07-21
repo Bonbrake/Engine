@@ -55,14 +55,16 @@ void Swapchain::create() {
     vkb::SwapchainBuilder swapchainBuilder{device_->getVkbDevice()};
     
     auto vkb_swapchain_ret = swapchainBuilder
-        .set_desired_format({VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR})
+        .set_desired_format({VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR})
         .set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR)
         // Explicit usage: color attachment (AgX tonemap + ImGui) + transfer for readback/dump.
-        // Avoids use_default_format_selection() overriding usage with VK_IMAGE_USAGE_STORAGE_BIT
-        // on B8G8R8A8_SRGB (VUID-VkSwapchainCreateInfoKHR-imageFormat-01778), unsupported here.
+        // Include STORAGE_BIT explicitly: RTSS.exe (RivaTuner overlay) injects this flag
+        // into the swapchain, and R8G8B8A8_UNORM supports it (unlike B8G8R8A8_SRGB).
+        // Being explicit avoids VUID-VkSwapchainCreateInfoKHR-imageFormat-01778 validation errors.
         .set_image_usage_flags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
-                               VK_IMAGE_USAGE_TRANSFER_DST_BIT)
+                               VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                               VK_IMAGE_USAGE_STORAGE_BIT)
         .build();
 
     if (!vkb_swapchain_ret) {
