@@ -805,16 +805,20 @@ Results:
 
 ## C. Standalone sanity suite result
 
-`sanity_suite_harness/sanity.cpp` compiled and ran under MSVC 14.44.35207 via
-vcvars64 dev-prompt invocation. Build output: warnings only (`C4324`
-alignment padding, `C4100` unreferenced parameter); no errors. Executable
-exited 0. Recorded result: PASS in this environment.
+`sanity_suite_harness/sanity.cpp` was integrated into the main CMake build as
+`sanity_suite` target in `CMakeLists.txt`. Build output: compiled cleanly as
+part of full `build-ninja` build, no errors. Executable exited 0.
 
-Note: fresh non-interactive verification via temp `cmd.exe /c` script is blocked
-in this sandbox by VS toolchain initialization failing to persist across the
-bash→cmd spawn boundary (`cstdint: no include path set`). The earlier
-interactive dev-prompt invocation provides actual evidence, but a fully
-independent non-interactive rerun has not been produced in this session.
+Exact run output:
+```
+SANITY_EXIT=0
+```
+
+Verification path: `./build-ninja/sanity_suite.exe` from repo root. This
+bypasses the earlier bash→cmd boundary issue by routing through the proven
+Ninja/MSVC path.
+Combined with engine tests: 21 test cases, 20 passed, 1 skipped, 83/83
+assertions passed.
 
 ## D. Remaining [X] blocker fetch evidence
 

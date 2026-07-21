@@ -70,6 +70,10 @@ apply_sanitizer(ZombieEngine)
 add_executable(focus_probe archive/phase1_verify/focus_probe.cpp)
 target_link_libraries(focus_probe PRIVATE SDL3::SDL3)
 
+# Standalone sanity suite (zero-dependency, stdlib-only)
+add_executable(sanity_suite sanity_suite_harness/sanity.cpp)
+apply_sanitizer(sanity_suite)
+
 # Tests
 enable_testing()
 add_subdirectory(tests)
