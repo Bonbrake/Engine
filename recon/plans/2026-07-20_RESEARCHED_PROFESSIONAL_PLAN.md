@@ -167,29 +167,66 @@ research backlog names the exact source for each missing section.
 
 #### Big studios and engine efforts
 
-1. id Tech 7/8 — id Software
-2. Decima Engine — Guerrilla / Sony
-3. UE5 / Nanite + Lumen — Epic Games
-4. Frostbite — DICE / EA
-5. Unity DOTS + HDRP — Unity Technologies
+1. id Tech 7/8 — id Software [X]
+   Evidence needed: SIGGRAPH Advances talks, DOOM/Eternal graphics breakdowns
+   Lesson: bindless-first design reduces CPU overhead; clustered compute shading; visibility buffer over traditional G-Buffer
+
+2. Decima Engine — Guerrilla / Sony [X]
+   Evidence needed: Horizon public talks, SIGGRAPH coverage
+   Lesson: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
+
+3. UE5 / Nanite + Lumen — Epic Games [S]
+   Evidence: cached UE5 public docs (Nanite, Lumen, World Partition, Mass Entity, PCG confirmed in fetched docs)
+   Lesson: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
+
+4. Frostbite — DICE / EA [X]
+   Evidence needed: GDC Vault Frostbite talks, cached GDC index
+   Lesson: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid; online servant layer
+
+5. Unity DOTS + HDRP — Unity Technologies [X]
+   Evidence needed: Unity blog/docs, DOTS samples
+   Lesson: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation
 
 #### Indie and small-team custom-engine efforts
 
-1. Lethal Company — Zeekerss
-2. Valheim — Iron Gate Studio
-3. Noita — Nolla Games
-4. Vintage Story — Tyron / Lone-dev model
-5. Keep Talking and Nobody Explodes — Steel Crate Games
+1. Lethal Company — Zeekerss [X]
+   Evidence needed: devlog/postmortem coverage
+   Lesson: single-session scope discipline; emergent horror from minimal systems; community rumor system as content multiplier
 
-Full lessons for each are intentionally kept in a research backlog while the
-direct source fetches are fixed; see Appendix B.
+2. Valheim — Iron Gate Studio [X]
+   Evidence needed: public Q&A/postmortem
+   Lesson: biome gating with clear visual language; disciplined scale over feature count; network architecture designed for drop-in/drop-out
+
+3. Noita — Nolla Games [X]
+   Evidence needed: devblog/postmortem videos
+   Lesson: simulation-first worldview with pixel-accurate interaction; every system mutable; failure-state as narrative
+
+4. Vintage Story — Tyron / Lone-dev model [X]
+   Evidence needed: official site, GitHub, wiki
+   Lesson: solo active-development longevity over a decade; voxel/terrain hybrid with finite survival loop; deep modding fidelity as retention mechanism
+
+5. Keep Talking and Nobody Explodes — Steel Crate Games [X]
+   Evidence needed: public postmortems
+   Lesson: small-team release discipline; documentation as UX; scoped to one mechanic and extended through community content
 
 ### 2.5 Engine Architecture Summary
 
-- id Tech 7/8: bindless descriptors, cached shadow atlas, visibility buffer, clustered compute deferred shading, sector streaming.
-- Decima: GPU-based procedural placement; wavefront-batched visibility queries; three-tier terrain; dynamic grass via compute.
-- UE5 Nanite + Lumen: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps; compute rasterizer for sub-pixel clusters.
-- Observed from cached repos/docs: Dear ImGui DBoot GPU-backed descriptor heaps are standard debug/editor layers; Valve GameNetworkingSockets confirms reliable UDP-layer abstraction is mature enough to reuse.
+[S] ValveSoftware/GameNetworkingSockets is real-time UDP with reliable/unreliable
+message lanes, fragmentation/reassembly, NAT traversal, encryption, and peer-to-peer
+relay through SDR. That makes it viable for ZE net networking instead of building UDP
+fragmentation from scratch.
+[S] Dear ImGui is a bloat-free immediate-mode C++ graphical user interface toolkit with
+minimal dependencies; it is used as a debug/editor layer in many shipped engines and tools.
+[S] UE4SS is a runtime modding/plugin system for Unreal Engine with signature scanning,
+preload injection, and scripting APIs; it validates the ZE mod compatibility approach in M7.
+[S] Vulkan roadmap 2026 adds a new descriptor heap extension, extending the bindless
+indexing story already in core Vulkan.
+[S] UE5 public docs confirm Nanite, Lumen, World Partition, Mass Entity, and PCG as
+shipped systems; ZE will subset these rather than re-solve solved problems.
+
+- id Tech 7/8: bindless descriptors, cached shadow atlas, visibility buffer, clustered compute deferred shading, sector streaming. [X]
+- Decima: GPU-based procedural placement; wavefront-batched visibility queries; three-tier terrain; dynamic grass via compute. [X]
+- UE5 Nanite + Lumen: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps; compute rasterizer for sub-pixel clusters. [X]
 
 ### 2.6 Research Gaps and Next Actions
 
