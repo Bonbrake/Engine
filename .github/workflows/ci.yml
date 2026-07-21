@@ -8,11 +8,17 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Ninja
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          architecture: x64
+          toolset: 14.44
+
+      - name: Setup Ninja + CMake
         uses: lukka/get-cmake@v3
         with:
           cmakeVersion: '3.27.x'
@@ -35,13 +41,13 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
-          cd C:/ZombieEngine/build
+          cd '${{ github.workspace }}/build'
           ./ZombieEngineTests.exe
 
       - name: Headless smoke
         shell: bash
         run: |
-          cd C:/ZombieEngine
+          cd '${{ github.workspace }}'
           ./build/ZombieEngine.exe --headless --quit-frame 1
 
       - name: Upload artifacts

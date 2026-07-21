@@ -1,3 +1,7 @@
-Checks: 'bugprone-*,cppcoreguidelines-*,performance-*,concurrency-*,clang-analyzer-*,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-owning-memory,-readability-*,-modernize-*'
-HeaderFilterRegex: '^src/.*'
+Checks: '-*,bugprone-*,performance-*,readability-*,clang-analyzer-*,cppcoreguidelines-*'
 WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+AnalyzeTemporaryDtors: true
+CheckOptions:
+  - key: readability-identifier-length.IgnoredIdentifiers
+    value: 'x|y|z|i|j|k|n'
