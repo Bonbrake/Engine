@@ -205,18 +205,18 @@ The three immutable pillars remain:
 
 ### 2.3 Game Analysis Cross-Game Truths [X/S]
 
-| Truth | Evidence | ZE Application |
+|| Truth | Evidence | ZE Application |
 |-------|----------|----------------|
-| Scheduled pressure beats random difficulty | [X] 7DTD Blood Moon; RimWorld storyteller [X] | AI Director event pool with customizable cadence |
-| Character attachment is the engine of consequence | [X] State of Decay 2 roster; Project Zomboid [X] | Memorable persistent settlements/NPCs |
-| Emergent story beats authored narrative | [S] Game Developer: RimWorld/Dwarf Fortress named "story generators" because fun comes from seeing non-scripted stories [cache: www.gamedeveloper.com-407891ff9f.md, article: rimworld-dwarf-fortress-and-procedurally-generated-story-telling] | Systemic triggers only; no forced cutscene paths |
-| The world must remember you | [X] DayZ reset flaw; SoD2 legacy [X] | Persistent buildings, NPCs, territory |
-| Difficulty should scale to assets, not level | [X] 7DTD game stage; RimWorld wealth [X] | Threat scales from base strength and map knowledge |
-| Crafting must be knowledge-based | [X] 7DTD magazine; PZ skill grind [X] | Unlock by doing/documenting, not RNG or time sink |
-| Survival is interlocking systems | [X] PZ moodles; DayZ disease [X] | Cross-system dependency graph, not isolated bars |
-| Movement must be fun first | [X] Dying Light 2 [X] | Core locomotion before traversal complexity |
-| The director system creates replayability | [X] RimWorld storyteller [X] | Dramatic event weighting, not random loot tables |
-| Technical polish beats feature count | [X] DayZ, 7DTD alpha history [X] | Ship fewer interacting systems cleanly |
+|| Scheduled pressure beats random difficulty | [X] 7DTD Blood Moon cadence and RimWorld storyteller weighting need exact extraction from gameplay docs or postmortems [target: 7DTD Blood Moon wiki + RimWorld storyteller docs] | AI Director event pool with customizable cadence |
+|| Character attachment is the engine of consequence | [X] State of Decay 2 roster-loss systems and Project Zomboid moodle interaction matrix need exact extraction [target: SoD2 roster writeup + PZ moodle docs] | Memorable persistent settlements/NPCs |
+|| Emergent story beats authored narrative | [S] Game Developer: RimWorld/Dwarf Fortress named "story generators" because fun comes from seeing non-scripted stories [cache: www.gamedeveloper.com-407891ff9f.md, article: rimworld-dwarf-fortress-and-procedurally-generated-story-telling] | Systemic triggers only; no forced cutscene paths |
+|| The world must remember you | [X] DayZ persistence reset mechanics and SoD2 legacy persistence need exact extraction [target: DayZ reset writeup] | Persistent buildings, NPCs, territory |
+|| Difficulty should scale to assets, not level | [X] 7DTD game-stage scaling thresholds and RimWorld wealth-based scaling need exact extraction [target: 7DTD game-stage docs] | Threat scales from base strength and map knowledge |
+|| Crafting must be knowledge-based | [X] 7DTD magazine-system unlock flow and PZ skill-gain thresholds need exact extraction [target: 7DTD magazine writeup + PZ skill docs] | Unlock by doing/documenting, not RNG or time sink |
+|| Survival is interlocking systems | [X] PZ moodle interaction ordering and DayZ disease severity chains need exact extraction [target: PZ moodle matrix + DayZ disease writeup] | Cross-system dependency graph, not isolated bars |
+|| Movement must be fun first | [X] Dying Light 2 traversal-first design description needs exact extraction [target: DL2 traversal writeup] | Core locomotion before traversal complexity |
+|| The director system creates replayability | [X] RimWorld storyteller cadence and event-weighting rules need exact extraction [target: RimWorld storyteller docs] | Dramatic event weighting, not random loot tables |
+|| Technical polish beats feature count | [X] DayZ/7DTD alpha postmortem scope-discipline sentences need exact extraction [target: DayZ/7DTD postmortems] | Ship fewer interacting systems cleanly |
 
 **Source status**: [S] = 1 cache-backed claim; [X] = 9 claims needing gameplay footage/postmortem extraction. Exact cache URLs and article URLs are named inline.
 
@@ -294,6 +294,8 @@ The three immutable pillars remain:
 
 ### 2.6 Research Gaps
 
+|| Gap | Status | Resolution |
+|-----|--------|------------|
 || M2 crafting systems paper corpus | [S] partial | `arXiv:2109.06780` (Crafter, ICLR 2022) cached as open-world survival benchmark with crafting-tool achievements; validates knowledge-based unlock pattern [cache: arxiv_2109.06780.html] |
 || M9 vehicle/traction/damage paper | [X] | arXiv searches for `vehicle_physics`, `vehicle_traction`, `vehicle_damage` returned 0/0/1 results respectively; the single vehicle_damage hit (`arXiv:2406.04519`) is a multifidelity digital twin paper, not game vehicle modeling. Vehicle/traction/damage sources still need targeted fetch of SIGGRAPH vehicle/racing papers or shipped vehicle postmortems |
 || M7 persistence spec breakdown | [S] | `spec/M7.md` confirms Total persistence with EXT blocks |
