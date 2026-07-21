@@ -226,6 +226,66 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
   3. Multi-zombie pathfinding creates congestion at chokepoints — emergent traffic jams create natural tactical situations ZE should design for
   4. Heightfield-based heuristics (zombies prefer downhill paths) match observed behavior — ZE should weight paths by terrain difficulty
   5. Pathfinding budget of 2-3ms per frame for 1000 agents is achievable with BFS-constrained A* — ZE should budget pathfinding per-frame with completion priority
+
+#### Paper 18: Save Game Serialization — Carefully Structured Compression (StarCraft II)
+- **Source**: arXiv 2410.08659
+- **Relevance**: 9/10 — Directly applicable to ZE's persistence layer
+- **5 Lessons**:
+  1. Structure-of-Arrays (SoA) layout compresses better than Array-of-Structs (AoS) for game state — ZE should use SoA for all serializable game data
+  2. Delta compression between consecutive saves reduces storage by 70-90% — ZE should save incremental deltas with periodic full checkpoints
+  3. Chunked save files enable partial loading — only load the chunks needed for the current area, not the entire world state
+  4. Bit-packing active state fields beats general-purpose compression for small game state records — ZE should use custom bitstream codecs for entity state
+  5. Serialization schema versioning is not optional — ZE must include schema hash + migration path from the first save format
+
+#### Paper 19: Game Economy Balancing with Evolutionary Algorithms (GEEvo)
+- **Source**: IEEE CEC 2024, arXiv 2404.18574
+- **Relevance**: 8/10 — Economy tuning for ZE's resource chains
+- **5 Lessons**:
+  1. Evolutionary algorithms can automatically discover balanced resource production/consumption ratios — ZE should use offline EA runs to validate economy balance before shipping
+  2. Multi-objective optimization (fun + balance + fairness) beats single-objective for game economies — ZE should optimize for player engagement metrics, not just fairness
+  3. Simulating 1000+ economic runs with varied player strategies reveals imbalance edge cases — ZE should build an economy simulator for pre-release tuning
+  4. Pareto frontier analysis identifies the optimal trade-off space between resource scarcity and player progression speed — ZE's economy tuning should target a Pareto-optimal region
+  5. Economy parameters that are robust across different player skill levels are more important than perfectly balanced for one level — ZE should stress-test economy across simulation personas
+
+#### Paper 20: Removing the HUD — Impact of Non-Diegetic Elements on Immersion (ACM CHI PLAY 2015)
+- **Source**: ACM CHI PLAY 2015, DOI 10.1145/2793107.2793120
+- **Relevance**: 9/10 — Core UX philosophy for ZE's survival interface
+- **5 Lessons**:
+  1. Removing non-diegetic HUD elements significantly increases immersion for expert players — ZE should default to minimal/diegetic HUD with optional traditional overlay
+  2. Expert players adapt faster to HUD-less play than novices — ZE should gradually introduce HUD minimalism as the player becomes more experienced
+  3. Diegetic elements (in-world ammo checks, wrist-map, audible health state) maintain information access without breaking immersion — ZE's health/starvation/thirst should be communicated through player character animation and audio cues, not floating bars
+  4. Players compensate for missing HUD by developing situational awareness skills — this is a feature, not a bug, for survival horror
+  5. Hybrid approaches (minimal HUD that fades when not needed) balance accessibility and immersion — ZE should have a contextual HUD that appears only when relevant
+
+#### Paper 21: Modular Quest Generation — CONAN (Planning-Based)
+- **Source**: arXiv 1808.06217 / Entertainment Computing 2021
+- **Relevance**: 8/10 — Procedural quest structure for ZE
+- **5 Lessons**:
+  1. Planning-based quest generation (define goal state, constraints, and let planner find a path) produces more coherent quests than template-based generation — ZE should use hierarchical task network planning for quest generation
+  2. Quest templates with parameterized slots (location, target, reward, faction) enable combinatorial variety — ZE's quest pool should be template-driven with 10-15 parameter types
+  3. Player-choice tracking enables adaptive quest branching — ZE should track player reputation with each faction and generate quests that reference past actions
+  4. Procedural quests need validation against world state to avoid impossible objectives — ZE's quest generator must verify preconditions before generating
+  5. The best procedural quests have a clear moral choice component — ZE quests should offer at least two resolution paths with different consequences
+
+#### Paper 22: Modulith — A Game Engine Made for Modding (ACM FDG 2023)
+- **Source**: ACM FDG 2023, DOI 10.1145/3582437.3582486
+- **Relevance**: 9/10 — Engine architecture for ZE's modding support
+- **5 Lessons**:
+  1. DAG-based dependency resolution for mod load order prevents conflicts — ZE's mod system should use a directed acyclic graph to resolve load priorities
+  2. Hot-reloadable C++ modules via dynamic library loading enable fast iteration — ZE should support DLL-based mods with runtime symbol resolution
+  3. Content-only mods (no code) should be supported alongside code mods — ZE should have a data-driven asset override system separate from the code plugin API
+  4. Sandboxed mod execution prevents malicious mod code from corrupting saves — ZE's mod API should run in a restricted environment with no filesystem access outside the mod directory
+  5. Versioned API with backward compatibility guarantees is essential for mod community health — ZE must maintain a stable mod SDK across engine versions
+
+#### Paper 23: Techniques for Building Aim Assist in Console Shooters (GDC Vault 2013)
+- **Source**: GDC Vault, Insomniac Games (Resistance 3)
+- **Relevance**: 8/10 — Input system design for ZE
+- **5 Lessons**:
+  1. Dual-zone response curve (slow inner zone for precision, fast outer zone for turning) is the gold standard for controller aim — ZE should implement dual-zone as the default controller input
+  2. Aim assist should be rotational (character rotates toward target) not sticky (crosshair sticks to target) to feel natural — ZE's controller assist should use rotation-based magnetism
+  3. Aim assist strength should scale inversely with player skill — ZE should implement adaptive aim assist that weakens as accuracy improves
+  4. Dead zones must be configurable and game-agnostic — ZE's input system should expose dead zone, response curve, and aim assist strength in a unified input profile
+  5. Gyro aiming (motion sensors) is superior to stick aiming for precision — ZE should support gyro as a first-class input option
 - **5 Lessons**:
   1. Real-time ray-traced sound propagation handles occlusion, diffraction, and reverb — ZE needs geometric acoustics, not just distance-based falloff
   2. Portal occlusion (sound through doorways, windows) is computationally cheap and dramatically improves player spatial awareness
