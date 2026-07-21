@@ -655,6 +655,52 @@ A comprehensive 416-line study of three AAA engine architectures was conducted, 
   4. **Virtual shadow maps** — Single 16384 squared sparse shadow texture per light. Per-frame visibility bitmask of needed tiles. Only renders tiles that are newly needed or invalidated. Persistent tile cache across frames.
   5. **Software rasterizer + doubly-deferred shading** — Clusters under 64 pixels switch from hardware to compute-shader rasterizer. Doubly-deferred shading groups visible pixels by material ID per 16x16 tile, evaluating each material once per tile.
 
+### 2.4 Research-to-Spec-Block Mapping
+
+Each entry ties a specific paper finding directly to an EXT block with concrete implementation detail.
+
+#### M5-EXT-10 AI Director (horde pacing) — RimWorld Storyteller + Experience-Driven Adaptation (Paper 8)
+The block says "config-driven density curve; SLM telemetry-Director tunes it" — that is not an implementation. What the research actually prescribes:
+
+- **Tension clock with explicit phases**: CALM (5min) → RISING (2min) → CRISIS (1-2min) → RECOVERY (3min). The clock is a state machine, not a density curve. Each phase has different spawn rates, ambient audio profiles, and loot availability.
+- **Director selects events by dramatic potential, not difficulty**: Maintain an event pool with weights. When tension is low, prefer "discovery" events (radio signal, rare loot cache, survivor call). When tension peaks, prefer "threat" events (horde sighting, base breach, special infected). The paper's key insight: events during high tension are memorable; events during low tension are annoying.
+- **Player state vector**: Track health (0-100), resource stockpile (starving → overflowing), time since last threat (minutes), exploration freshness (% of current zone unexplored). The director uses this to select events, not a simple "density curve."
+- **Spawn waves use logistic pacing**: Start waves at 30% of max pull, escalate to 100% over 90 seconds, then decay to 0% over 60 seconds. This creates the "rising tide" feel from L4D's director — not a flat spawn rate.
+- **Telemetry feedback every 30 seconds**: Short-term adjustment — if player cleared a wave in 15 seconds, next wave spawns 20% faster. If player is taking damage, next loot drop has 30% more ammo. This closes the adaptation loop the paper requires.
+
+#### M5-EXT-11 Horde Emergence / Spawn Waves — 7 Days to Die + Left 4 Dead Director
+- **Scheduled + dynamic hybrid**: The block says "Director emits spawn waves" without detail. Use 7DTD's Blood Moon as the backbone — a known schedule creates urgency — but layer L4D's dynamic director on top for unpredictable mini-waves between scheduled events.
+- **Screamers as emergent wave triggers**: 7DTD's heat map system is critical. Track player activity per chunk (shots fired, generator running, forge active, vehicle noise). When heat exceeds threshold, spawn a Screamer. If the Screamer survives and screams, it calls a mini-horde. This should be M5-EXT-11's core mechanic — waves emerge from player action, not just a timer.
+- **Path-of-least-resistance zombie targeting**: Zombies should A*-route through player-built structures using a material-cost heatmap. Wood > iron > concrete > reinforced. This forces smart fortification over brute walls. Implement as a compute-shader A* on a nav-tile graph, updated when structures change.
+
+#### M6-EXT-14 Audio Occlusion / Propagation — GSound (Paper 10)
+The block is a stub (no math, no algorithm). GSound prescribes:
+- **Precomputed Transmission Path Matrix**: Bake occlusion paths offline per level. For each emitter-receiver pair, precompute the acoustic path including diffraction around corners. Store as a compressed transmission matrix. Runtime does lookup + interpolation, not ray casting.
+- **Material-dependent absorption per surface**: Each surface in the voxel grid gets an absorption coefficient (0-1). Concrete absorbs low frequencies. Glass transmits. Foliage scatters. The PTM lookup returns frequency-band attenuation (low/mid/high), not a single volume scalar.
+- **Edge diffraction paths**: Sound wraps around corners. Precompute shortest diffractive paths around occluders using a visibility graph over corner vertices. Runtime interpolates across 3 nearest edge paths for smooth transitions as player moves.
+- **Reverb from voxel occlusion (M6-EXT-12 integration)**: Convolution reverb IR generated from the voxel field's impulse response. Occlusion + reverb use the same spatial grid. Not two separate systems.
+
+#### M5-EXT-06 AI Behavior — Concordia GM Architecture (Paper 6)
+- **Game Master pattern**: The block currently has no architecture. Use Concordia's GM: separate "world simulation" (weather, zombie positions, loot state) from NPC decision-making. The GM validates actions against physical plausibility before executing. This prevents NPC cheating (knowing player location through walls).
+- **No utility maximization**: NPCs should NOT calculate optimal survival strategies. Act based on personality + experience. A previously bitten NPC panics at zombie sight even at safe distance. Use a weighted drive system (survival, community, fear, curiosity) that evaluates current context — not a single survival score.
+- **Three parallel spaces**: Each NPC has (1) Physical: position, resources, health, (2) Social: trust, reputation with other NPCs and player, (3) Digital: radio contact, map knowledge. Behavior emerges from interactions between these spaces, not from a behavior tree.
+
+#### M7 Economy Blocks (Barter/Trade/Scarcity) — GEEvo + SoD2 Economy (Paper 22)
+- **Constant drain, not balance**: SoD2's economy works because consumption grows with settlement size. M8-EXT-14 must enforce passive daily drain. More survivors = more food. More tech = more fuel/ammo upkeep. The economy is never "solved."
+- **Evolutionary balancing**: GEEvo proves that static economy tables fail. Run offline evolutionary simulations that mutate trade ratios, craft costs, and loot tables. Use player telemetry (what do players craft most? what do they ignore?) as the fitness function. Evolve the economy per-save, not per-patch.
+- **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one currency. This prevents a single dominant economy and forces varied interactions.
+
+#### M0-EXT-16 ENGINE_DETERMINISM_MODE — Determinism research (cross-paper)
+- **Deterministic PCG seed per save**: All procedural generation (terrain, loot, POI placement) uses the same seed, enabling verifiable playthroughs. Enables the "stress seed suite" from M3-EXT-30.
+- **Deterministic enemy AI with seeded RNG**: Zombie decisions use a session-seeded RNG stream. Same seed = same zombie behavior. Essential for debugging and reproduction of player-reported bugs.
+- **Deterministic frame pacing**: In determinism mode, lock frame delta to a fixed 16.67ms (60Hz). Physics and job scheduling use this fixed delta, not wall clock time. Deviations log a warning. This is how id Tech 7 achieves fully deterministic playback for their replay system.
+
+#### Engine: GPU Compute Skinning (id Tech 7 → M5-EXT-02)
+M5-EXT-02 is "Dual-Quaternion GPU Compute Skinning." The id Tech 7 enhancement: run the skinning compute shader ONCE before ALL rendering passes (shadow, depth, forward). The skinned output buffer is reused across passes. ZE should enqueue the skinning compute as an enkiTS task that produces a GPU buffer dependency, consumed by all subsequent passes. Only re-skin meshes whose animation state changed since last frame.
+
+#### Engine: Bindless + Indirect Draw Merging (id Tech 7 → M0-EXT-08)
+M0-EXT-08 "Bindless Storage Handle Page Allocator" enables the id Tech 7 pattern. The critical addition: a compute shader compaction pass that groups visible instances by (meshID, materialID) and writes a compacted `VkDrawIndexedIndirectCommand` buffer. This reduces CPU draw iteration from O(visible instances) to O(unique mesh-material pairs). Implement as a post-culling compute dispatch.
+
 ---
 
 ## 3. Design Pillars (Evidence-Based)
