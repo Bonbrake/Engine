@@ -678,8 +678,8 @@ Each entry ties a specific paper finding directly to an EXT block with concrete 
 #### Paper 22: GEEvo + SoD2 Economy → M7 Economy Blocks [S+S+E]
 - **Evolve parameters once per game version** — ship baked Pareto-optimized table. Per-save apply seeded per-parameter variation, NOT full evolution per save. [S: GEEvo evolution-once approach]
 - **Offset storage in save header [E, verified architecture]**: Per-save variation MUST live in save file header, keyed by parameter name (not positional index), with versioned schema manifest. Positional offsets corrupt wrong resources when baked table changes between versions. [E: named-map requirement from Pass 4]
-- **Constant drain, never balance**: Consumption grows with settlement size — economy is never solved, only tuned. [S: SoD2 pattern]
-- **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one. [S: source corpus]
+- **Constant drain, never balance**: Consumption grows with settlement size — economy is never solved, only tuned. [E: ZE reasoning from SoD2 pattern]
+- **Three competing currencies**: Barter goods (common), ammunition (military), medicine (rare). Each faction deals primarily in one. [E: ZE reasoning from source corpus discussion]
 
 #### Paper 21: Save Serialization (SC2) → M7-EXT-07, M7-EXT-08 [S+S+E]
 - **Field-level SoA**: Each component table as flat array. Type-erased ComponentSerializer<T> reads table pointer + element count + sizeof(T). [S: SC2 approach]
