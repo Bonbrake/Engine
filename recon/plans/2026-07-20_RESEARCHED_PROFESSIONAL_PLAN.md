@@ -835,6 +835,12 @@ The following milestones had ZERO paper-to-block mappings. These are the largest
 **M1-EXT-01 SpatialHash**: Tag each cell with activity metrics (zombie kills, time spent, loot gathered). AI Director queries this for event selection. The spatial hash goes from "dumb grid" to "gameplay sensor grid."
 **M1-EXT-06 EnTT archetype mutation queue**: Add a player-state component (health 0-100, resource stockpile 0-100, threat-level 0-100) that the AI Director reads. Current spec exposes player state only as implicit survival numbers.
 
+#### M2 Crafting → NO PAPER MATCH (Gap)
+**Status**: No paper in the deep-study corpus addresses crafting systems. **Next action**: Research separately — candidate papers include *"Designing Crafting Systems for Survival Games"* (FDG 2022/2023) and crafting-system post-mortems from *Valheim* / *Subnautica* / *7 Days to Die*. Target: 3-5 sourced findings for **M2-EXT-01 through M2-EXT-05**.
+
+#### M9 Vehicles → NO PAPER MATCH (Gap)
+**Status**: Only 1 mention in the plan; 0 EXT blocks mapped. Vehicle physics, damage model, and player-vehicle interaction are absent from the deep-study corpus. **Next action**: Research separately — candidate papers include vehicle-driving post-mortems from *Project Zomboid* and vehicle-damage system studies. Target: 3-5 sourced findings for **M9-EXT-01 through M9-EXT-05**.
+
 #### M10 Environment/Atmosphere → Weather + Ecoclimate (Papers 29, 36, 43-44)
 **M10-EXT-03 Bruneton-Nishita Atmosphere**: Apply Hosek-Wilkie correction from Paper 29. Fail below 2° solar elevation — layer a post-process blue-hour correction that darkens horizon band toward deep blue.
 **M10-EXT-05 Navier-Stokes Weather**: Bake offline N-S simulation on 1km² grid (~2 minutes per day), save wind/pressure/temperature to 2D float textures. Runtime samples based on in-game time. No runtime N-S solver shipped.
