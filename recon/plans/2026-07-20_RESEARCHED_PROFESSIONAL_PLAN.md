@@ -659,14 +659,21 @@ A comprehensive 416-line study of three AAA engine architectures was conducted, 
 
 Each entry ties a specific paper finding directly to an EXT block with concrete implementation detail.
 
-#### M5-EXT-10 AI Director (horde pacing) — RimWorld Storyteller + Experience-Driven Adaptation (Paper 8)
-The block says "config-driven density curve; SLM telemetry-Director tunes it" — that is not an implementation. What the research actually prescribes:
+#### Paper 8: Experience-Driven Adaptation → M1-EXT-01, M5-EXT-10 (CORRECTED Pass 2)
+**CORRECTION from challenge agent**: Tension clock phases (CALM→RISING→CRISIS→RECOVERY) assume the director controls pacing, but enkiTS has no latency guarantees — a physics-heavy frame delays director dispatch by 10+ms, desyncing the clock from player experience.
+**Corrected approach**: Make the tension clock EVENT-DRIVEN, not timer-based. Phase transitions trigger on actual gameplay events, not elapsed time:
+- CALM → RISING: Player triggers a noise event (gunshot, generator start, vehicle engine). Not after 5 minutes of play.
+- RISING → CRISIS: Zombie discovers player. Not a timer.
+- CRISIS → RECOVERY: Player escapes or eliminates all threats in the area. Not a timer.
+The director's role shifts from "pacing clock" to "event response multiplier" — after a gunshot, multiply spawn density by 3× for 60 seconds, regardless of how many zombies are already active.
 
-- **Tension clock with explicit phases**: CALM (5min) → RISING (2min) → CRISIS (1-2min) → RECOVERY (3min). The clock is a state machine, not a density curve. Each phase has different spawn rates, ambient audio profiles, and loot availability.
-- **Director selects events by dramatic potential, not difficulty**: Maintain an event pool with weights. When tension is low, prefer "discovery" events (radio signal, rare loot cache, survivor call). When tension peaks, prefer "threat" events (horde sighting, base breach, special infected). The paper's key insight: events during high tension are memorable; events during low tension are annoying.
-- **Player state vector**: Track health (0-100), resource stockpile (starving → overflowing), time since last threat (minutes), exploration freshness (% of current zone unexplored). The director uses this to select events, not a simple "density curve."
-- **Spawn waves use logistic pacing**: Start waves at 30% of max pull, escalate to 100% over 90 seconds, then decay to 0% over 60 seconds. This creates the "rising tide" feel from L4D's director — not a flat spawn rate.
-- **Telemetry feedback every 30 seconds**: Short-term adjustment — if player cleared a wave in 15 seconds, next wave spawns 20% faster. If player is taking damage, next loot drop has 30% more ammo. This closes the adaptation loop the paper requires.
+#### M0-EXT-16 ENGINE_DETERMINISM_MODE (CORRECTED Pass 2)
+**CORRECTION from challenge agent**: Fixed delta enforcement (locking frame delta to 16.67ms) doesn't work with enkiTS because job scheduling is non-deterministic. Spin-wait sync after each pipeline stage is required.
+**Corrected approach**: After each enkiTS WaitForTask group, sample the high-precision timer, compute how much wall time the stage consumed, and inject a CPU spin-loop calibrated to the remaining budget of the fixed timestep. This wastes cycles but guarantees deterministic scheduling depth. Log the deviation: if the stage consumed MORE than the budget, the frame is non-deterministic and determinism mode should report a failure.
+
+#### M5-EXT-02 GPU Compute Skinning (CORRECTED Pass 2)
+**CORRECTION from challenge agent**: "Only re-skin meshes with changed animation state" — every zombie's animation state changes every frame. The dirty check adds branch overhead without saving work. Every active zombie needs re-skinning every frame.
+**Corrected approach**: Remove the dirty check entirely. Always re-skin all visible animated meshes every frame. The GPU compute pass runs once, processes all skinned meshes, and the output buffer is consumed by all subsequent passes. The dirty check only applies to STATIC objects that were accidentally in the skinning pass.
 
 #### M5-EXT-11 Horde Emergence / Spawn Waves — 7 Days to Die + Left 4 Dead Director
 - **Scheduled + dynamic hybrid**: The block says "Director emits spawn waves" without detail. Use 7DTD's Blood Moon as the backbone — a known schedule creates urgency — but layer L4D's dynamic director on top for unpredictable mini-waves between scheduled events.
@@ -772,10 +779,9 @@ M0-EXT-08 "Bindless Storage Handle Page Allocator" enables the id Tech 7 pattern
 - Cleanup pass: Rigid-IPC on the top 10% of penetrating contacts detected by Jolt. This catches the edge cases (thin geometry, high-speed contacts) without paying the full cost.
 -**Curved CCD costs 8× more than linear** but catches 15% more missed collisions. Use linear CCD for all zombies; reserve curved CCD for player-critical objects (vehicles, heavy weapons, physics puzzles). Linear CCD at 30fps physics rate misses <1% of collisions for zombies moving at <10m/s.
 
-#### Paper 18: XPBD Constraint Solver → M3 Physics
-**Compliance α is iteration-independent** — this is the key math property that distinguishes XPBD from PBD. In PBD, stiffness depends on iteration count; in XPBD, compliance is a material property independent of solver iterations. ZE's physics should use XPBD for soft-body constraints (cloth, rot-cloth for zombie decomposition, vegetation) because the behavior won't change between 30fps and 60fps modes.
--**20-iteration cap**: Beyond this, oscillation degrades quality rather than improving it. M3's physics solver should clamp XPBD iterations to 8-15. Use 8 for background bodies (leaves, distant vegetation), 15 for player-interacting soft bodies (zombie cloth, player-held items).
--**Ghost forces from normal→friction ordering**: The order of normal-force solving vs friction solving creates phantom forces. XPBD's typical "normal first, then friction" introduces ~2% ghost force. ZE's solver should alternate ordering every substep to cancel ghost forces, not fix the order.
+#### Paper 18: XPBD Constraint Solver → M3 Physics (CORRECTED Pass 2)
+**CORRECTION from challenge agent**: Alternating normal/friction ordering every substep doubles convergence time.
+**Corrected approach**: Use symmetric Gauss-Seidel (normal + friction together per constraint). Costs ~15% more per iteration but converges in same count.
 
 #### Paper 20: Tall Cell Water Simulation → M4 Water/Environment
 **30% memory bandwidth penalty from indirection** — tall cell grids use pointer indirection instead of direct array access. M4's water system should use flat arrays for the top 32 cell layers (where surface visual activity happens) and tall cells only for deep water (below visual interest).
