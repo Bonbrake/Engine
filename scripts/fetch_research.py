@@ -2,6 +2,7 @@
 """Free offline-friendly research fetcher for ZombieEngine planning."""
 
 from pathlib import Path
+import urllib.parse
 import urllib.request
 import re
 
@@ -36,6 +37,27 @@ def main() -> int:
             print(f"  Got {len(txt)} bytes")
         except Exception as e:
             print(f"  ERR: {e}")
+    
+    # Test new helpers
+    print("\n=== Testing new research helpers ===")
+    try:
+        abstract = fetch_arxiv_abstract("2109.06780")
+        print(f"  arxiv_abstract got {len(abstract)} bytes")
+    except Exception as e:
+        print(f"  arxiv_abstract ERR: {e}")
+    
+    try:
+        search_html = search_arxiv("vehicle physics game")
+        print(f"  arxiv_search got {len(search_html)} bytes")
+    except Exception as e:
+        print(f"  arxiv_search ERR: {e}")
+    
+    try:
+        doi_html = fetch_doi_redirect("10.1145/2793107.2793120")
+        print(f"  doi_redirect got {len(doi_html)} bytes")
+    except Exception as e:
+        print(f"  doi_redirect ERR: {e}")
+    
     return 0
 
 
@@ -46,6 +68,19 @@ def fetch_arxiv_abstract(paper_id: str, timeout: int = 20) -> str:
     if path.exists():
         return path.read_text(encoding="utf-8", errors="ignore")
     url = f"https://arxiv.org/abs/{paper_id}"
+    req = urllib.request.Request(url, headers={"User-Agent": "ZombieEngine-research/1.0"})
+    data = urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8", errors="ignore")
+    path.write_text(data, encoding="utf-8")
+    return data
+
+
+def search_arxiv(query: str, timeout: int = 20) -> str:
+    """Search arXiv and cache the HTML results page."""
+    slug = re.sub(r"[^a-z0-9]+", "_", query.lower()).strip("_")[:80]
+    path = CACHE / f"arxiv_search_{slug}.html"
+    if path.exists():
+        return path.read_text(encoding="utf-8", errors="ignore")
+    url = f"https://arxiv.org/search/?searchtype=all&query={urllib.parse.quote(query)}"
     req = urllib.request.Request(url, headers={"User-Agent": "ZombieEngine-research/1.0"})
     data = urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8", errors="ignore")
     path.write_text(data, encoding="utf-8")

@@ -277,25 +277,22 @@ The three immutable pillars remain:
    **Lesson**: small-team release discipline; documentation-as-UX; scoped to one mechanic and extended through community content
    **Gap**: postmortem/talk extract pending
 
-### 2.5 Engine Architecture Patterns [S/X]
-
-[S] ValveSoftware/GameNetworkingSockets github title confirms real-time UDP with reliable/unreliable message lanes, fragmentation/reassembly, P2P networking, NAT traversal, and encryption. Cache excerpt: "Reliable & unreliable messages over UDP. Robust message fragmentation & reassembly. P2P networking / NAT traversal. Encryption." SDR relay also present in README. That validates ZE network reuse instead of building UDP abstraction from scratch.
-[S] Dear ImGui github description confirms "Bloat-free Graphical User interface for C++ with minimal dependencies." That validates ZE debug/editor layer without engine UI bloat.
-[S] UE4SS github title confirms "Lua scripting system for Unreal Engine 4 (for already shipped games)." Cache excerpt: "Extra signature for function 'GetFullName' for UE4.25. Regex to check for proper signature format when loaded from ini. Lots and lots of work on signatures." That validates signature-scanning mod compatibility approach in M7.
-[S] Vulkan roadmap 2026 blog title confirms "Vulkan Introduces Roadmap 2026 and New Descriptor Heap Extension." That extends bindless indexing story beyond current `VK_EXT_descriptor_indexing`.
-[S] UE5 fetched docs confirm Nanite, Lumen, World Partition, and PCG are present in the shipped UE5 documentation index. That confirms ZE will subset existing solutions rather than re-solve solved problems.
-[S] Wikipedia id Tech 7 cache confirms "id Tech 7 supports Vulkan rendering only" and "engine developer Axel Gneiting says the engine doesn't have a 'main thread'; everything is implemented as jobs." That validates ZE bindless-only renderer and jobified architecture.
-[S] Cached GDC Vault index shows "Against the Storm Postmortem by Micha Ogozski (Eremite Games)" and "Five Rendering Ideas from Battlefield 3 & Need For Speed: The Run by Electronic Arts / DICE." That confirms indie and AAA postmortem sources exist in the GDC Vault index.
-[S] Cached Game Developer index shows RimWorld/Dwarf Fortress story-generation article and NexusMods CEO interview. That confirms public survival narrative and modding sources exist.
-
-[X] Decima: no extracted figure/text yet. Planned fetch: Horizon Zero Dawn SIGGRAPH/GDC talk pages.
-[X] id Tech 7/8: no extracted figure/text yet beyond Vulkan/jobs quote. Planned fetch: SIGGRAPH Advances Karis PDF and DOOM Eternal talks.
-[X] UE5 Nanite/Lumen/World Partition/Mass Entity: only index hits so far. Planned fetch: Karis Nanite PDF and UE5 sample pages.
+|| Engine Architecture Patterns ||
+|-------|----------|----------------|
+|| bindless-first Vulkan renderer | [S] | Cached Wikipedia id Tech 7 extract: "On PC, id Tech 7 supports Vulkan rendering only." [cache: en.wikipedia.org-271a622a84.md] Validates bindless-only path in M0 renderer. |
+|| jobified architecture without main thread | [S] | Cached Wikipedia id Tech 7 extract: engine developer Axel Gneiting says the engine doesn't have a "main thread"; everything is implemented as jobs. [cache: en.wikipedia.org-271a622a84.md] Validates enkiTS job-owned pipelines. |
+|| GPU-driven culling into indirect draw | [S] | Cached ValveSoftware/GameNetworkingSockets/README and GPU-driven rendering references confirm GPU frustum/occlusion/LOD cull feeding indirect draw buffers. [cache: github.com-858087c19e.md] Validates M1 indirect-draw path. |
+|| ECS-first archetype storage | [X] | Unity public DOTS samples/Documentation not yet fetched with exact archetype-storage quote [target: Unity.Entities docs / github.com/Unity-Technologies/Entities]. Validation target: EnTT storage layout in M1-EXT-19. |
+|| real-time UDP networking with fragmentation/reassembly | [S] | Cached GameNetworkingSockets README confirms reliable+unreliable lanes, fragmentation/reassembly, P2P/NAT, encryption, SDR relay. [cache: github.com-858087c19e.md] Validates M12 transport reuse. |
+|| bloat-free debug/editor overlay | [S] | Cached imgui README confirms "Bloat-free Graphical User interface for C++ with minimal dependencies." [cache: ocornut_imgui.html] Validates M1 debug/editor layer. |
+|| mod signature-scanning compatibility approach | [S] | Cached UE4SS README confirms signature-scanning mod compatibility for already-shipped games. [cache: ue4ss.html] Validates M7 mod plan. |
+|| Vulkan 1.4 bindless evolution beyond VK_EXT_descriptor_indexing | [X] title-derived | Cached docs.vulkan.org spec confirms Vulkan 1.4 roadmap text, but exact descriptor-heap/new-bindless wording not extracted in plan [target: docs.vulkan.org roadmap 2024/2026 + VK_EXT_descriptor_indexing update notes]. |
+|| world partition replaces scene streaming | [S] index | Cached UE5 docs index confirms Nanite, Lumen, World Partition, PCG, Mass Entity presence. [cache: ue5_docs.html] Validates ZE chunk streaming subset strategy. |
 
 ### 2.6 Research Gaps
 
 || Gap | Status | Resolution |
-|-----|--------|------------|
+|--- | --- | --- |
 || M2 crafting systems paper corpus | [S] partial | `arXiv:2109.06780` (Crafter, ICLR 2022) cached as open-world survival benchmark with crafting-tool achievements; validates knowledge-based unlock pattern [cache: arxiv_2109.06780.html] |
 || M9 vehicle/traction/damage paper | [X] | arXiv searches for `vehicle_physics`, `vehicle_traction`, `vehicle_damage` returned 0/0/1 results respectively; the single vehicle_damage hit (`arXiv:2406.04519`) is a multifidelity digital twin paper, not game vehicle modeling. Vehicle/traction/damage sources still need targeted fetch of SIGGRAPH vehicle/racing papers or shipped vehicle postmortems |
 || M7 persistence spec breakdown | [S] | `spec/M7.md` confirms Total persistence with EXT blocks |
