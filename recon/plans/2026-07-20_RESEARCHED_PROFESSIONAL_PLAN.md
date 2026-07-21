@@ -81,7 +81,7 @@ The three immutable pillars remain:
 | 40 | Cine-AI — Automated Game Cutscenes in the Style of Human Directors | ACM CHI PLAY 2022 arXiv:2208.05701 DOI 10.1145/3549486 | 2022 |
 | 41 | Random-Access Neural Compression of Material Textures | SIGGRAPH 2023 arXiv:2305.17105 DOI 10.1145/3592407 | 2023 |
 | 42 | Analytical Ballistic Trajectories with Approximately Linear Drag | IJCTT 2014 DOI 10.1155/2014/463489 | 2014 |
-| 43 | Fast Urban Weather Simulation | ACM TOG 36(2) DOI 10.1145/2999534 | 2017 |
+| 43 | Fast Urban Weather Simulation | ACM TOG 36(2) DOI 10.1145/2999534 [X] | 2017 |
 | 44 | Fast Weather Simulation for Inverse Procedural Design of Urban Models | ACM TOG 36(2) DOI 10.1145/2999534 | 2017 |
 | 45 | Procedural Generation of Branching Quests for Games | Entertainment Computing 43 DOI 10.1016/j.entcom.2022.100491 | 2022 |
 | 46 | Realistic Modeling and Rendering of Plant Ecosystems | SIGGRAPH 1998 DOI 10.1145/280814.280898 | 1998 |
