@@ -262,19 +262,21 @@ shipped systems; ZE will subset these rather than re-solve solved problems.
 
 ## 5. Milestone Map
 
-1. M0 — Bindless Vulkan renderer, job system, clustered lighting, shadow caching.
-2. M1 — Input, ECS foundation, EnTT integration.
-3. M2 — Weight-constrained survival loop, knowledge-based crafting, moodle status.
-4. M3 — Horde system, fire, weather, ballistics, basic interaction minigames.
-5. M4 — 36 km² streaming world, vegetation, caves, POI density.
-6. M5 — AI Director, zombie types, pathfinding, ragdoll/hit-reaction physics.
-7. M6 — Audio occlusion, long-range propagation, survival audio feedback.
-8. M7 — Total persistence, save system, delta compression, mod compatibility.
-9. M8 — Structural integrity base building, 5-tier materials, traps.
-10. M9 — Vehicles, parts assembly, fuel chains.
-11. M11 — Factions, reputation, narrative director, procedural missions.
-12. M12 — Multiplayer sync, persistence, dedicated server.
-13. M13 — Endgame legacy goals, regional threats, New Game Plus.
+1. M0 — Vulkan 1.4 native bootstrap + capability tiering.
+2. M1 — GPU-driven ECS framework.
+3. M2 — Jolt 5.6.0 physics, EventBus, and a real destructible test entity.
+4. M3 — Macro-destruction & structural graphs.
+5. M4 — Procedural world generation + chunk streaming & culling.
+6. M5 — NPCs / zombie hordes (base).
+7. M6 — Hardware-accelerated audio system with propagation.
+8. M6.5 — GPU particle/VFX system.
+9. M7 — Total persistence.
+10. M8 — Data-driven itemization.
+11. M9 — Vehicle system.
+12. M10 — Day/night, weather & atmosphere.
+13. M11 — UI/HUD, input abstraction & consolidated haptics.
+14. M12 — Networked co-op at scale.
+15. M13 — Local Small Language Model integration.
 
 ## 6. Technical Architecture
 
