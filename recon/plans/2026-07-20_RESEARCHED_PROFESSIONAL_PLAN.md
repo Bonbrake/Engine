@@ -358,6 +358,35 @@ prevent duplication:
 
 Deduplication result: 0 duplicate tasks found against existing plan content.
 
+### 2.9 Additional Paper-Derived Tasks [E/S]
+
+Each task below is derived from paper abstracts or live section text.
+All 20 were checked against T-01–T-50 and section 2.2 bullets.
+Deduplication result: 0 duplicates against existing task set.
+
+| Task ID | Paper(s) | Milestone | Actionable Task | Deliverable |
+|---------|----------|-----------|-----------------|-------------|
+| T-51 | Paper 1 abstract | M4 | Implement LLM-assisted POI grammar authoring that maps content tiers to structured authored templates instead of pure noise spawning | POI grammar system with tiered authored templates |
+| T-52 | Paper 4 abstract | M4.5 | Benchmark hybrid voxel-plus-mesh representation to address paper-cited storage cost and time-overhead blockers | Voxel benchmark showing hybrid representation meets memory/time budget |
+| T-53 | Paper 11 abstract | M5 | Implement real-time tension metric: tension equals player options minus threat; surface metric to AI Director each frame | Director telemetry showing live tension value |
+| T-54 | Paper 11 abstract | M5 | Build narrative observability tooling for simulation complexity in emergent narrative systems | Debug view exposing emergent narrative state traces |
+| T-55 | Paper 12 abstract | M13 | Design fixed-premise-with-free-interaction LLM narrative pattern for NPC dialogue | NPC dialogue runtime preserving fixed premise under free player input |
+| T-56 | Paper 12 abstract | M11 | Build dead-branch detection tool using runtime telemetry to expose narrative branches players never reach | Telemetry dashboard marking unvisited branch nodes |
+| T-57 | Paper 13 abstract | M5/M13 | Structure LLM NPC integration as Generative Agent-Based Modeling framework, not just scripted agent behavior | NPC architecture document mapping GABM components to ZE systems |
+| T-58 | Paper 14 abstract | M13 | Build game-environment testbed protocol for evaluating LLM agent capabilities in controlled settings | Testbed harness running LLM agent scenarios with metrics |
+| T-59 | Paper 15 abstract | M5 | Implement sense-model-adapt loop as core adaptive mechanism: sense player state, model impact, adapt intervention | Director loop validated against sense-model-adapt cadence |
+| T-60 | Paper 15 abstract | M5 | Close translation gap between player state recognition and concrete gameplay intervention | Intervention mapping table from recognized states to gameplay changes |
+| T-61 | Paper 16 abstract | M13 | Build prompt compression layer that simplifies LLM narrative generation without measurable quality loss | Prompt compression benchmark showing quality retention |
+| T-62 | Paper 18 abstract | M7 | Treat save data as first-class dataset: apply dataset design principles to save schema and migration paths | Save schema document with dataset-style versioning and migration rules |
+| T-63 | Paper 19 abstract | M8 | Add economy sensitivity analysis using parameter sweeps to detect outsized numerical interaction effects | Sensitivity report ranking economy parameters by effect size |
+| T-64 | Paper 21 abstract | M11 | Implement STRIPS-style planning algorithm for procedural quest generation with preconditions and effects | Quest planner producing STRIPS-style action sequences |
+| T-65 | Paper 22 abstract | M7/M13 | Design modding API with explicit capability declarations and load-time validation sandbox | Mod API schema with capability registry and validator |
+| T-66 | Paper 40 title | M11 | Implement dynamic shot interpolation for cinematic AI -- camera selection interpolated by gameplay moment type | Cine-AI benchmark comparing static vs interpolated shot selection |
+| T-67 | Paper 46 title | M4 | Model vegetation as competing ecosystem with seasonal state machine, not isolated individual placements | Vegetation benchmark showing ecosystem competition over time |
+| T-68 | Paper 48 title | M4.5 | Implement real-time Alembic cache streaming with triple-buffer for geometry animation playback | Geometry cache benchmark with triple-buffer streaming latency |
+| T-69 | Section 2.2 / Paper 9 | M5 | Route horde via pure scent/fear diffusion without calendar timers -- stimulus-response only | Horde benchmark confirming zero timer-based routing |
+| T-70 | Section 2.2 / Paper 25 | M2 | Benchmark IPC barrier preventing penetration-free contact at high velocities under XPBD constraints | Physics benchmark validating IPC barrier at maximum simulation velocity |
+
 ---
 
 ## 3. Design Pillars
