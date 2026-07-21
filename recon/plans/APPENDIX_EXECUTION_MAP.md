@@ -15,43 +15,51 @@ This is the implementation order for appendix blocks, not a replacement for mile
 These blocks have concrete code or math already; build and verify first.
 
 Batch T1-A: render infra
-- M1-EXT-11 Compute-to-Indirect-Draw Execution Barrier [line 148]
-- M4.5-EXT-28 Screen-Space Reflections SSR [line 461]
-- M4.5-EXT-29 Screen-Space Global Illumination SSGI Fallback [line 490]
-- M4.5-EXT-30 Impostor LOD Octahedral for Distant Meshes [line 517]
-- M4.5-EXT-31 SDF Shadow Cascade [line 542]
-- M4.5-EXT-26 Runtime Virtual Texture RVT Base System [line 409]
-- M4.5-EXT-27 SSAO Scalable Ambient Obscurance [line 433]
+| ID | Title | Readiness | Evidence | Blocker | Source |
+|-----|-------|-----------|----------|---------|--------|
+| M1-EXT-11 | Compute-to-Indirect-Draw Execution Barrier | T1-A | Needs live spec quote from `spec/M1.md` line 148 | None | spec |
+| M4.5-EXT-28 | Screen-Space Reflections SSR | T1-A | Needs live spec quote from `spec/M4.5.md` line 461 | None | spec |
+| M4.5-EXT-29 | Screen-Space Global Illumination SSGI Fallback | T1-A | Needs live spec quote from `spec/M4.5.md` line 490 | None | spec |
+| M4.5-EXT-30 | Impostor LOD Octahedral for Distant Meshes | T1-A | Needs live spec quote from `spec/M4.5.md` line 517 | None | spec |
+| M4.5-EXT-31 | SDF Shadow Cascade | T1-A | Needs live spec quote from `spec/M4.5.md` line 542 | None | spec |
+| M4.5-EXT-26 | Runtime Virtual Texture RVT Base System | T1-A | Needs live spec quote from `spec/M4.5.md` line 409 | None | spec |
+| M4.5-EXT-27 | SSAO Scalable Ambient Obscurance | T1-A | Needs live spec quote from `spec/M4.5.md` line 433 | None | spec |
 
 Batch T1-B: world gen and destruction
-- M4-EXT-08 3D WFC Vertical Structural Dependency Guard [line 613]
-- M4-EXT-09 Deterministic Interior Furniture Spatial Constraint Solver [line 657]
-- M4-EXT-10 Macro-Graph Vector Spline Corridor Welder [line 696]
-- M4-EXT-11 WFC Contradiction Horizon Recovery [line 735]
-- M4-EXT-23 Whittaker Temperature/Precipitation Biome Classification [line 772]
-- M4-EXT-24 Cellular Automata Structural Collapse and Rubble Debris Fields [line 804]
-- M4-EXT-25 Procedural Material Node-Graph Compiler [line 842]
-- M4-EXT-26 Procedural Decal Atlas Packing and Runtime Projection [line 875]
-- M4-EXT-27 Vegetation Impostor Foliage-Specific [line 1809]
-- M4-EXT-28 Procedural Foliage L-System Mesh Generator [line 1830]
+| ID | Title | Readiness | Evidence | Blocker | Source |
+|-----|-------|-----------|----------|---------|--------|
+| M4-EXT-08 | 3D WFC Vertical Structural Dependency Guard | T1-B | Needs live spec quote from `spec/M4.md` line 613 | None | spec |
+| M4-EXT-09 | Deterministic Interior Furniture Spatial Constraint Solver | T1-B | Needs live spec quote from `spec/M4.md` line 657 | None | spec |
+| M4-EXT-10 | Macro-Graph Vector Spline Corridor Welder | T1-B | Needs live spec quote from `spec/M4.md` line 696 | None | spec |
+| M4-EXT-11 | WFC Contradiction Horizon Recovery | T1-B | Needs live spec quote from `spec/M4.md` line 735 | None | spec |
+| M4-EXT-23 | Whittaker Temperature/Precipitation Biome Classification | T1-B | Needs live spec quote from `spec/M4.md` line 772 | None | spec |
+| M4-EXT-24 | Cellular Automata Structural Collapse and Rubble Debris Fields | T1-B | Needs live spec quote from `spec/M4.md` line 804 | None | spec |
+| M4-EXT-25 | Procedural Material Node-Graph Compiler | T1-B | Needs live spec quote from `spec/M4.md` line 842 | None | spec |
+| M4-EXT-26 | Procedural Decal Atlas Packing and Runtime Projection | T1-B | Needs live spec quote from `spec/M4.md` line 875 | None | spec |
+| M4-EXT-27 | Vegetation Impostor Foliage-Specific | T1-B | Needs live spec quote from `spec/M4.md` line 1809 | None | spec |
+| M4-EXT-28 | Procedural Foliage L-System Mesh Generator | T1-B | Needs live spec quote from `spec/M4.md` line 1830 | None | spec |
 
 Batch T1-C: physics and vehicles
-- M2-EXT-57 Fixed-Point Mesh-Vector Quantization Factory [line 305]
-- M2-EXT-68 Kinematic Character Flood Buoyancy and Drag Bridge [line 331]
-- M5-EXT-38 XPBD Rope/Tether Constraint [line 1538]
-- M9-EXT-22 RVT Skid-Mark/Tire-Track Injector [line 1564]
+| ID | Title | Readiness | Evidence | Blocker | Source |
+|-----|-------|-----------|----------|---------|--------|
+| M2-EXT-57 | Fixed-Point Mesh-Vector Quantization Factory | T1-C | Needs live spec quote from `spec/M2.md` line 305 | None | spec |
+| M2-EXT-68 | Kinematic Character Flood Buoyancy and Drag Bridge | T1-C | Needs live spec quote from `spec/M2.md` line 331 | None | spec |
+| M5-EXT-38 | XPBD Rope/Tether Constraint | T1-C | Needs live spec quote from `spec/M5.md` line 1538 | None | spec |
+| M9-EXT-22 | RVT Skid-Mark/Tire-Track Injector | T1-C | Needs live spec quote from `spec/M9.md` line 1564 | None | spec |
 
 Batch T1-D: audio VFX and misc
-- M6.5-EXT-13 Capillary Blood-Spatter RVT Projection [line 1587]
-- M6-EXT-12 Convolution-Reverb from Voxel Occlusion [line 1703]
-- M8-EXT-10 Procedural Loot Icon Generation [line 922]
-- M12-EXT-03 Bitstream Delta-Encoded Packet Replay Fragment Reassembler [line 959]
-- M3-EXT-11 Fracture-Debris Broad-Phase Reuse [line 1636]
-- M8-EXT-33 Settlement NavMesh from GA Layout [line 1658]
-- M12-EXT-13 Interest-Management Spatial Hash Net Culling [line 1681]
-- M10-EXT-11 Volumetric Cloud and Participating-Medium Scattering [line 1610]
-- M5-EXT-53 Fear-Field Diffusion via Spatial Hash [line 1750]
-- M4-EXT-89 BC7/Block-Texture Compression and Transcode [line 1726]
+| ID | Title | Readiness | Evidence | Blocker | Source |
+|-----|-------|-----------|----------|---------|--------|
+| M6.5-EXT-13 | Capillary Blood-Spatter RVT Projection | T1-D | Needs live spec quote from `spec/M6.5.md` line 1587 | None | spec |
+| M6-EXT-12 | Convolution-Reverb from Voxel Occlusion | T1-D | Needs live spec quote from `spec/M6.md` line 1703 | None | spec |
+| M8-EXT-10 | Procedural Loot Icon Generation | T1-D | Needs live spec quote from `spec/M8.md` line 922 | None | spec |
+| M12-EXT-03 | Bitstream Delta-Encoded Packet Replay Fragment Reassembler | T1-D | Needs live spec quote from `spec/M12.md` line 959 | None | spec |
+| M3-EXT-11 | Fracture-Debris Broad-Phase Reuse | T1-D | Needs live spec quote from `spec/M3.md` line 1636 | None | spec |
+| M8-EXT-33 | Settlement NavMesh from GA Layout | T1-D | Needs live spec quote from `spec/M8.md` line 1658 | None | spec |
+| M12-EXT-13 | Interest-Management Spatial Hash Net Culling | T1-D | Needs live spec quote from `spec/M12.md` line 1681 | None | spec |
+| M10-EXT-11 | Volumetric Cloud and Participating-Medium Scattering | T1-D | Needs live spec quote from `spec/M10.md` line 1610 | None | spec |
+| M5-EXT-53 | Fear-Field Diffusion via Spatial Hash | T1-D | Needs live spec quote from `spec/M5.md` line 1750 | None | spec |
+| M4-EXT-89 | BC7/Block-Texture Compression and Transcode | T1-D | Needs live spec quote from `spec/M4.md` line 1726 | None | spec |
 
 ### Tier 2 — purpose and systems scoped, math/reference impl pending
 These blocks declare systems and purpose, but lack MATH DONE or reference implementation. Treat as design-complete, implementation pending.

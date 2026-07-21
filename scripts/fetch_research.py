@@ -103,5 +103,40 @@ def fetch_doi_redirect(doi: str, timeout: int = 20) -> str:
     except Exception as e:
         return f"ERROR: {e}"
 
+
+def fetch_vehicle_sources() -> dict:
+    """Fetch vehicle physics/racing sources for M9 research."""
+    sources = {
+        "vehicle_physics_arxiv": "https://arxiv.org/search/?searchtype=all&query=vehicle+physics+game",
+        "racing_sim_arxiv": "https://arxiv.org/search/?searchtype=all&query=racing+simulation+vehicle",
+        "vehicle_traction_arxiv": "https://arxiv.org/search/?searchtype=all&query=vehicle+traction+damage",
+        "unity_entities_docs": "https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/index.html",
+        "unity_entities_github": "https://github.com/Unity-Technologies/Entities",
+    }
+    results = {}
+    for name, url in sources.items():
+        try:
+            txt = fetch(name, url)
+            results[name] = {"status": "ok", "bytes": len(txt), "url": url}
+        except Exception as e:
+            results[name] = {"status": "error", "error": str(e), "url": url}
+    return results
+
+def fetch_gsound_sources() -> dict:
+    """Fetch GSound audio propagation sources for M6 research."""
+    sources = {
+        "gsound_doi": "https://doi.org/10.1145/1273440.1273456",
+        "gsound_crossref": "https://api.crossref.org/works/10.1145/1273440.1273456",
+        "gsound_unc": "https://www.cs.unc.edu/~sonic/gsound/",
+    }
+    results = {}
+    for name, url in sources.items():
+        try:
+            txt = fetch(name, url)
+            results[name] = {"status": "ok", "bytes": len(txt), "url": url}
+        except Exception as e:
+            results[name] = {"status": "error", "error": str(e), "url": url}
+    return results
+
 if __name__ == "__main__":
     raise SystemExit(main())

@@ -81,5 +81,16 @@ studies, and executable tasks to those blocks.
 ## Appendix execution order
 
 For implementation order of appendix EXT blocks, see
-`recon/plans/APPENDIX_EXECUTION_MAP.md`. It lists the 82 blocks by readiness
-tier, dependency order, and acceptance tests.
+`recon/plans/APPENDIX_EXECUTION_MAP.md`. It lists the 51 unique provisional
+EXT IDs by readiness tier, dependency order, and acceptance tests.
+
+## Research cache
+
+This project uses `scripts/fetch_research.py` to cache research sources
+(arxiv abstracts, DOI redirects, GitHub repos, docs pages) under
+`~/AppData/Local/hermes/cache/web/`. Use it to resolve `[X]` items in the
+professional plan with real HTTP evidence instead of assumptions.
+
+Run `python scripts/fetch_research.py` to refresh all caches. Run
+`python scripts/fetch_research.py --vehicle` or `--gsound` to fetch
+specific M9/M6 sources.

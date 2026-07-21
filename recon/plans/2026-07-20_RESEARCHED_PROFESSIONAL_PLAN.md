@@ -235,15 +235,17 @@ The three immutable pillars remain:
    **Lesson**: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
    **Gap**: Planned fetch: Horizon Zero Dawn SIGGRAPH/GDC talk pages (GDC Vault index hit, full talk page fetch not yet attempted)
 
-3. UE5 Nanite + Lumen — Epic Games [S]
-   **Primary source**: cached UE5 public docs + Karis Nanite SIGGRAPH PDF cache
-   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; tokens not extracted), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
+3. UE5 Nanite + Lumen — Epic Games [X]
+   **Primary source**: cached UE5 public docs index + Karis Nanite SIGGRAPH PDF cache
+   **Evidence**: cached UE5 docs index is an Angular app shell; exact Nanite/Lumen/World Partition/PCG/Mass Entity wording was not extracted from cache. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; exact token extraction pending), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
    **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
+   **Gap**: Need to fetch actual UE5 docs page content with working JS extraction or alternate source
 
-4. Frostbite — DICE / EA [S]
+4. Frostbite — DICE / EA [X]
    **Primary source**: cached GDC Vault index + SlideShare index
    **Evidence**: cached GDC Vault index shows Frostbite rendering sessions. cached SlideShare index shows "Five Rendering Ideas from Battlefield 3 & Need For Speed: The Run by Electronic Arts / DICE" and "Frostbite on Mobile byElectronic Arts / DICE". [cache: www.gdcvault.com-8042576d17.md, www.slideshare.net-889de28ff4.md]
    **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid; mobile-aware rendering stack
+   **Gap**: Need exact Frostbite talk extracts, not just index listings
 
 5. Unity DOTS + HDRP — Unity Technologies [X]
    **Primary source**: Unity public blog/DOTS samples
@@ -645,22 +647,25 @@ Purpose: extract durable patterns for ZE from how shipped engines were built.
 2. Decima Engine — Guerrilla / Sony [X]
    **Primary source**: Horizon Zero Dawn/Frozen West public talks, SIGGRAPH coverage
    **Lesson**: three-tier terrain with compute grass; GPU-driven placement; visible multilevel environment design
-   **Gap**: no extracted Decima-specific figure/text yet; Horizon GDC talk fetch failed 404 in live retrieval
+   **Gap**: Planned fetch: Horizon Zero Dawn SIGGRAPH/GDC talk pages (GDC Vault index hit, full talk page fetch not yet attempted)
 
-3. UE5 Nanite + Lumen — Epic Games [S]
-   **Primary source**: cached UE5 public docs + Karis Nanite SIGGRAPH PDF cache
-   **Evidence**: cached UE5 docs index contains Nanite/Lumen/World Partition/PCG tokens. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; tokens not extracted), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
+3. UE5 Nanite + Lumen — Epic Games [X]
+   **Primary source**: cached UE5 public docs index + Karis Nanite SIGGRAPH PDF cache
+   **Evidence**: cached UE5 docs index is an Angular app shell; exact Nanite/Lumen/World Partition/PCG/Mass Entity wording was not extracted from cache. advances.realtimerendering.com cache contains Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf. [cache: ue5_docs.html (Angular app; exact token extraction pending), advances.realtimerendering.com-c818a353d9.md (PDF cache; exact page unverified)]
    **Lesson**: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; world partition replaces level streaming; Mass Entity for gameplay actors; PCG for authored+procedural content; compute rasterizer for sub-pixel clusters
+   **Gap**: Need to fetch actual UE5 docs page content with working JS extraction or alternate source
 
-4. Frostbite — DICE / EA [S]
+4. Frostbite — DICE / EA [X]
    **Primary source**: cached GDC Vault index + SlideShare index
    **Evidence**: cached GDC Vault index shows Frostbite rendering sessions. cached SlideShare index shows "Five Rendering Ideas from Battlefield 3 & Need For Speed: The Run by Electronic Arts / DICE" and "Frostbite on Mobile byElectronic Arts / DICE". [cache: www.gdcvault.com-8042576d17.md, www.slideshare.net-889de28ff4.md]
    **Lesson**: shared runtime toolchain across studios; data-material pipelines; deferred+forward hybrid; mobile-aware rendering stack
+   **Gap**: Need exact Frostbite talk extracts, not just index listings
 
 5. Unity DOTS + HDRP — Unity Technologies [X]
-   **Primary source**: Unity public blog/DOTS samples
+   **Primary source**: Unity public docs + GitHub samples/repos
+   **Evidence**: `https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/index.html` returned HTTP 200, 9,396 bytes, but cached content is an index/navigation page with no archetype-storage wording. `https://github.com/Unity-Technologies/Entities` returned HTTP 404. `https://github.com/Unity-Technologies/EntityComponentSystemExamples` returned HTTP 404. `https://github.com/Unity-Technologies/EntityComponentSystemSamples` not yet fetched. [cache: unity_entities_docs.html, fetch errors logged]
    **Lesson**: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation
-   **Gap**: Unity-Technologies/EntityComponentSystemExamples returned 404 in live retrieval; alternate sample repo needed: Unity-Technologies/Entities repo fetch not yet attempted
+   **Gap**: Need exact archetype-storage quote from Unity docs or samples; primary repos 404
 
 ### Indie and small-team custom-engine efforts
 
@@ -714,11 +719,12 @@ This backlog is executable. Each item names an exact primary source or action tr
 
 ## A. Pass 4 — task-to-paper mapping audit
 
-Audited task rows: 70 across §2.7 + §2.9. Exact parser was run on both tables.
+Method: regex `|<T-ID>` over both task tables in §2.7 and §2.9.
 Result:
-- §2.7 T-01..T-50: 50 rows. Parsed paper citations: 1..50 inclusive. Missing papers in this section: none. Every paper 01..50 has exactly one task row here.
-- §2.9 T-51..T-70: 20 rows. Parsed paper citations: {1, 4, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 21, 22, 26, 36, 45, 46}. Missing papers in this section: {2, 3, 5, 6, 7, 8, 17, 20, 23, 24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44, 47, 48, 49, 50} — count = 32.
-- Combined across both sections: every paper 01..50 has at least one task in the document. The earlier committed audit’s claim of “0 missing” in T-51..T-70 was incorrect; that claim is retracted here.
+- T-01..T-50: exactly 50 rows, each cites one paper 01..50. One-to-one.
+- T-51..T-70: exactly 20 rows. Parsed paper citations: {1, 4, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 21, 22, 26, 36, 45, 46}.
+- Missing from T-51..T-70: {2, 3, 5, 6, 7, 8, 17, 20, 23, 24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44, 47, 48, 49, 50} — count 32.
+- Document-level coverage: 70 tasks, 50 papers. Every paper 01..50 appears in at least one task row across both tables.
 
 Paper-to-task mapping:
 - P01: T-01, T-51
@@ -785,13 +791,17 @@ Verified conclusion: 70 tasks, 50 papers, full coverage of papers 01..50 across 
 
 ## B. Pass 5 — EXT ID collision audit
 
-Method: grep exact provisional IDs from `recon/plans/APPENDIX_EXECUTION_MAP.md` against
-live spec milestone files (`spec/M*.md`, excluding `_v79_presplit.md`).
-Result for provisional IDs in APPENDIX_EXECUTION_MAP.md:
-- All 51 unique provisional IDs from `recon/plans/APPENDIX_EXECUTION_MAP.md` were checked against live `spec/M*.md` files; each has at least one `#### [...]` definition in the live spec.
-- No collisions where the same exact ID is defined twice in live milestone `spec/*.md` files. Note: `APPENDIX_EXECUTION_MAP.md` itself contains 33 duplicate references across 34 IDs; those are map-internal cross-references, not live-spec collisions.
-- Cross-milestone cross-reference hits are expected and intentional; they are not duplicate definitions.
-- The map header claims 82 blocks but only 51 unique EXT IDs are present; this is a metadata inconsistency in the map, not a live-spec collision.
+Method: `grep -oE` for exact `M<digit>[.<digit>]-EXT-<digit>` tokens across
+`recon/plans/APPENDIX_EXECUTION_MAP.md`, then same grep across live
+`spec/M*.md` excluding `_v79_presplit.md`.
+Results:
+- `APPENDIX_EXECUTION_MAP.md` contains 84 EXT-ID occurrences, 51 unique IDs.
+- All 51 unique provisional IDs have at least one `#### [...]` definition in live `spec/M*.md` files.
+- Live `spec/*.md` contains 4,457 EXT-ID occurrences across 921 unique IDs.
+- No duplicate definitions for the same exact ID within any single live milestone file.
+- `APPENDIX_EXECUTION_MAP.md` itself contains 33 duplicate references across 34 IDs; these are map-internal cross-references, not live-spec collisions.
+- Map header metadata was inconsistent: claimed “82 blocks” but only 51 unique EXT IDs are present; corrected to 51 unique provisional EXT IDs.
+- Provision ceilings verified: M0=12, M1=25, M2=68, M3=11, M4=91, M4.5=31, M5=53, M5.4=10, M6=12, M6.5=13, M7=11, M8=33, M9=22, M10=11, M11=42, M12=13, M13=54.
 
 ## C. Standalone sanity suite result
 
@@ -814,7 +824,9 @@ M6 audio — DOI 10.1145/1273440.1273456 (GSound):
 - `https://dl.acm.org/doi/10.1145/1273440.1273456`: HTTP 403.
 - `https://resolver.crossref.org/doi/10.1145/1273440.1273456`: getaddrinfo failed.
 - `https://api.crossref.org/works/10.1145/1273440.1273456`: HTTP 404.
-Conclusion: BLOCKED. Keep as [X] with exact status above.
+- `https://www.cs.unc.edu/~sonic/gsound/`: HTTP 404.
+- `https://gamma.cs.unc.edu/gsound/`: HTTP 404.
+Conclusion: BLOCKED. All attempted URLs returned 404/403/getaddrinfo failed. Keep as [X] with exact status above.
 
 M9 vehicle/traction/damage:
 - `search_arxiv("vehicle physics game")`: 255,196 bytes; 310 arxiv mentions.
