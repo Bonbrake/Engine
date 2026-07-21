@@ -44,3 +44,7 @@ pipeline_cache.bin
 
 # Runtime junk that should not be versioned
 archive/runtime_junk/
+
+# Archive cruft
+archive/old_milestones/*bak*/
+archive/plans/
