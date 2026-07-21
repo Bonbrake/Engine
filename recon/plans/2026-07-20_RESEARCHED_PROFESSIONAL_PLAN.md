@@ -790,6 +790,66 @@ M0-EXT-08 "Bindless Storage Handle Page Allocator" enables the id Tech 7 pattern
 - Path recompute at 10-tick intervals is the sweet spot — any faster wastes CPU, any slower creates visible zombie hesitation at corners.
 - Bit-set representation of the navigation grid is 24x smaller than a full graph. Store each voxel's navigability, height, and traversal cost in a flat uint64 bit field per 4×4×4 voxel tile. A* operates on the bitset directly without materializing a graph.
 
+#### Paper 32: Nanite Virtual Geometry → M0-EXT-08, M4-EXT-02
+**Two-pass occlusion fails on first frame and fast camera movement** — Nanite's HZB uses previous-frame depth, causing disocclusion failures when the player spins the camera. ZE's M0-EXT-08 must add a third fallback: (1) previous-frame HZB, (2) current-frame partial HZB from depth-prepass, (3) full-resolution draw for geometry that passed none of the above. Without pass 3, vertical-slice first-frame shows missing geometry for 16ms.
+**Software rasterizer cannot handle alpha-tested content** — foliage and fences must be full geometry, not alpha-clipped, or they break Nanite-style compute-shader rasterization. M0's rendering pipeline must tag all transparent/alpha-tested meshes and route them through a separate forward pass, not the cluster rasterizer.
+**128-triangle cluster granule is a hard constraint** — meshes that don't partition cleanly into 128-triangle clusters produce degenerate clusters with wasted triangles. M4-EXT-02's meshlet decimation must pre-process all source meshes to ensure clean 128-triangle boundaries.
+
+#### Paper 33: GPU-Driven Pipeline (Ubisoft) → M0-EXT-08
+**Triangle strips produce non-deterministic cluster order** — the same mesh processed on different build machines produces different strip sequences. ZE must use MultiDrawIndexedIndirect with 64-triangle clusters and on-the-fly index buffer compaction, NOT pre-built triangle strips. This also enables deterministic replay.
+**Backface culling cubemap is weak** — 70-90% of triangles survive the 6-bit cubemap pre-pass. The GPU-driven pipeline should spend its culling budget on view-frustum and occlusion, not triangle-level backface testing.
+**UV gradient reconstruction at object edges fails** — virtual texturing that stores UV coords in G-buffer instead of explicit page IDs produces wrong mip levels at object boundaries. M0's G-buffer must store explicit page IDs (16+16-bit) for correct derivative-free mip selection.
+
+#### Paper 34: Quadric Error Metrics → M4-EXT-02 (Meshlet Decimation)
+**Quadric overflow after 90% simplification** — accumulated 4×4 quadric matrices overflow single-precision on million-triangle meshes. M4-EXT-02's real-time decimation must re-normalize quadrics periodically or use double-precision for the priority heap.
+**Pair contraction creates non-manifold output** — QEM can join disconnected regions, producing self-intersecting geometry that breaks meshlet generation and physics collision. M4-EXT-02 must add non-manifold detection and rejection.
+**Boundary edges collapse without explicit tagging** — silhouettes get destroyed if boundary edges aren't tagged with synthetic constraint planes. M4-EXT-02 must pre-process all source meshes to tag boundary edges before decimation.
+
+#### Paper 37: Bayesian Reputation → M8-EXT-53 (Faction Standing)
+**Cold-start prior determines entire early-game** — the Beta distribution's initial (α, β) prior sets whether NPCs start trusting or suspicious. M8-EXT-53's reputation system must vary the prior per faction: raiders start with α=5, β=20 (suspicious), traders with α=15, β=5 (trusting). A single global prior makes all factions feel the same.
+**Temporal discounting is missing from the pure Bayesian model** — old evidence never fades. A player who killed one guard in hour 1 is still a murderer in hour 100. M8-EXT-53 must add exponential decay (halflife parameter) to the Beta posterior, which breaks formal Bayesian purity but is required for playability. Without decay, one early mistake compounds into permanent faction hostility.
+**O(n²) belief propagation across NPCs** — when NPC A updates its reputation and tells NPC B, the full social graph costs O(n²) per interaction. M8-EXT-53 must limit propagation to NPC's immediate social circle (max 5 hops, max 50 total NPCs updated per action). Full propagation on 200 NPCs costs ~40,000 updates per player action.
+**Hierarchical Bayesian for faction coherence** — individual NPCs must deviate from faction reputation, but not wildly. Implement as faction-level prior + NPC-level posterior. Guard in high-reputation faction still trusts the player more than guard in low-reputation faction, even after personal negative interaction. Without hierarchy, guards in the same faction give inconsistent responses.
+
+#### Paper 38: Faction Dynamics → M8-EXT-53, M8-EXT-62
+**NPC faction switching invalidates every quest involving that NPC** — if faction leader defects, all "talk to faction A leader" quests break. M8-EXT-62's social tier system must tag every quest and dialog line with faction validity conditions, and the quest validation system must re-check after every reputation update. This is O(n_quests × n_NPCs) per update.
+**Disposition inertia is the hardest tuning knob** — the paper found most games use hard reputation thresholds (friend at 500 rep, enemy at -500). This produces visible "threshold behavior" where NPCs flip at exactly X points. ZE should use smooth interpolation for combat/ dialog, reserving hard thresholds only for story-critical faction locks.
+**O(n × m) complexity** — 200 NPCs × 10 factions = 2000 values per update. M8-EXT-53 must batch reputation updates into a single per-frame delta-pass rather than per-action push.
+
+#### Paper 39: Neural Texture Compression → M0 Rendering
+**Per-material training does not scale** — ~minutes per material × 1000 materials = 16+ hours. Only viable for final-ship, not iterative development.
+**Joint compression entangles textures** — changing albedo means retraining the whole network. Unsuitable for modding or procedural material variation. ZE should use neural compression only for static hero assets (landmark buildings, key items), not for procedurally generated world materials.
+**No mipmap efficiency** — lower mips cost same compute as full-res in the MLP decoder. ZE's mip chain must know decode cost before picking mip level.
+
+#### Paper 42: Ballistic Trajectories → M3 Combat
+**Linear drag breaks at supersonic** — muzzle velocity >800 m/s (snipers, high-cal rifles) introduces systematic aim error. M3's ballistics model must switch to quadratic drag above Mach 0.8, using lookup tables from G1/G7 drag models, not analytic formulas.
+**Hit prediction + target lead = 5th-order polynomial** — no closed form. M3 must use Newton's method (3-5 iterations, ~0.01ms each). For 100 AI computing firing solutions simultaneously: 100 × 5 × 0.01ms = 5ms budget. Must cache solutions for 3 frames and re-use if target hasn't changed direction.
+**Extreme-angle asymmetry** — >45° launch angle (mortars, grenade launchers) produces unsymmetric descent that linear drag cannot model. M3 must add a per-weapon ascent/descent asymmetry compensation term derived from empirical ballistic tables.
+
+#### Paper 45: Procedural Branching Quests → M11 Narrative
+**GA + automated planning takes 10-30 seconds to converge** — too slow for runtime generation. M11's narrative system must pre-generate quest pools offline (design-time) and select from them at runtime, not generate on-the-fly.
+**Branching factor validation is exponential** — B=3 choices × N=5 decision points = 243 terminal states. N=10 = 59,049 states. M11 must cap branching at B=3 max and N=6 max per quest cluster, and validate only statistically (sample 10% of paths) beyond that.
+**Template reuse <20 templates = perceptible patterns** — players will see the "gather N items" structure repeat. M11 needs 100+ unique templates for a 40-hour zombie game. Creating and validating 100 templates is a significant narrative design investment.
+**Human curation is mandatory for deployed quests** — fully automated branching quests produce dead ends and contradictions. M11's pipeline is "procedural draft → human curator → deploy."
+
+#### Paper 47: VRS Ray Tracing → M0 RT Pipeline
+**Inline RT + VRS causes wavefront divergence** — threads with different shading rates execute different ray counts, harming occupancy. ZE's RT pipeline must batch rays by shading rate before dispatch, not mix rates in the same wave.
+**VRS tile boundaries visible on curved surfaces** — 16×16 tile size on NVIDIA creates visible "grid" artifact on car bodies and metallic surfaces. FLIP metric misses this because it's per-pixel. Use 8×8 tile size on AMD or adaptive tile placement that avoids specular boundaries.
+**Quarter-resolution + VRS = diminishing returns** — below ~0.5 rays per pixel-equivalent, VRS tier differences are imperceptible. ZE should never use 4×4 VRS rate below 0.5 rpp-equivalent.
+
+#### Paper 48: Geometry Caches → M0 Streaming
+**5-second pre-roll constraint** — camera can spin 180° in <1s. ZE's open-world streaming must pre-load all nearby geometry caches within 300m radius, not wait for the 5s read-ahead. This means total memory budget for cached geometry = sum of all objects within 300m radius, likely 200-500MB.
+**16-bit vertex quantization fails on objects >200m** — buildings and bridges show vertex jitter at close range. Use local-space quantization with per-chunk bounding-box offset. Objects whose bounding box diagonal >200m must use 32-bit fallback.
+**Triple-buffer at 3× memory cost** — 5 simultaneous streams × 100MB per stream × 3 buffers = 1.5GB. ZE must use double-buffer (2× cost) for non-critical streams and triple-buffer only for hero objects the player is facing.
+
+#### Paper 49: Radiance Caching → M0 RT Pipeline
+**Cache boundary seams** — coarse global cache and fine per-pixel cache must blend consistently. Use the voxel-grid's spatial coherence (from M6's audio system!) as a shared spatial index for both radiance cache levels. Same grid, two different data types. This is a cross-system optimization the papers don't discuss — ZE's voxel grid can serve double duty.
+
+#### Paper 50: Engine Architecture → M0 Engine Core
+**Limit singletons to exactly 3**: Input, FrameAllocator, Device. Everything else injected via explicit dependency. ZE's current enkiTS-based architecture should enforce this at compile time — any system calling a global singleton outside these 3 triggers a compile error.
+**Verify ECS L1 cache miss rate <10%** — if ZE's ECS (currently planned) shows >10% L1 miss rate, component packing is wrong. Profile during stress-test with 10,000+ entities.
+**Deep inheritance: max depth 3** — each level doubles break surface. ZE's render graph and entity system must enforce max depth 3 via static_assert.
+
 ---
 
 ## 3. Design Pillars (Evidence-Based)
