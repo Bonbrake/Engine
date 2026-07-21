@@ -64,6 +64,7 @@ target_link_libraries(ZombieEngine PRIVATE
     Jolt::Jolt
 )
 apply_engine_definitions(ZombieEngine)
+apply_sanitizer(ZombieEngine)
 
 # Focus probe
 add_executable(focus_probe archive/phase1_verify/focus_probe.cpp)
@@ -72,6 +73,7 @@ target_link_libraries(focus_probe PRIVATE SDL3::SDL3)
 # Tests
 enable_testing()
 add_subdirectory(tests)
+apply_sanitizer(ZombieEngineTests)
 
 # Profiling
 if(ENGINE_ENABLE_PROFILING)
