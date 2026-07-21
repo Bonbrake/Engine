@@ -69,3 +69,9 @@ chosen model.
 is MiniCPM5-1B running locally through an SPSC queue into the quest/dialogue
 system. The model is a content-generation backend, not a network service; all
 inference runs on the user's machine with no telemetry exfiltrated.
+
+## Appendix execution order
+
+For implementation order of appendix EXT blocks, see
+`recon/plans/APPENDIX_EXECUTION_MAP.md`. It lists the 82 blocks by readiness
+tier, dependency order, and acceptance tests.

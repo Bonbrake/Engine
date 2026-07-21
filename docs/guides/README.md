@@ -47,6 +47,15 @@ Current baseline: 20 passed, 1 skipped, 83/83 assertions green on both Debug
 and ASAN configurations. New tests belong in `tests/unit/Test_*.cpp` and are
 auto-discovered by the Catch2 single-include registration in `tests/CMakeLists.txt`.
 
+### Standalone sanity suite
+
+Before merge, run the standalone sandboxed verification suite from
+`spec/APPENDICES.md §5.10`. It is a zero-dependency C++ harness compiled and
+run independent of the engine, using local mock structs so it never collides
+with canonical engine types. It validates WFC recovery, Saint-Venant flux
+stencil, SPSC queue logic, cache-line alignment, and basic determinism. Use it
+as a pre-merge gate before trusting a new version's appendix block behavior.
+
 ## Profiling
 
 Tracy is integrated into the engine. RTSS captures frame-time overlays; pair
