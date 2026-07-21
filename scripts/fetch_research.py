@@ -39,5 +39,34 @@ def main() -> int:
     return 0
 
 
+
+
+def fetch_arxiv_abstract(paper_id: str, timeout: int = 20) -> str:
+    path = CACHE / f"arxiv_{paper_id}.html"
+    if path.exists():
+        return path.read_text(encoding="utf-8", errors="ignore")
+    url = f"https://arxiv.org/abs/{paper_id}"
+    req = urllib.request.Request(url, headers={"User-Agent": "ZombieEngine-research/1.0"})
+    data = urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8", errors="ignore")
+    path.write_text(data, encoding="utf-8")
+    return data
+
+
+def fetch_doi_redirect(doi: str, timeout: int = 20) -> str:
+    path = CACHE / f"doi_{doi.replace('/', '_')}.html"
+    if path.exists():
+        return path.read_text(encoding="utf-8", errors="ignore")
+    url = f"https://doi.org/{doi}"
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "ZombieEngine-research/1.0",
+        "Accept": "text/html"
+    })
+    try:
+        data = urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8", errors="ignore")
+        path.write_text(data, encoding="utf-8")
+        return data
+    except Exception as e:
+        return f"ERROR: {e}"
+
 if __name__ == "__main__":
     raise SystemExit(main())
