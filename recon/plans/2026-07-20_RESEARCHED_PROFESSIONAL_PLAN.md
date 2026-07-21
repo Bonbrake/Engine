@@ -626,32 +626,34 @@ DayZ's jank kills its immersion. 7DTD's decade of alpha eroded confidence. Ship 
 
 ### 2.3 Engine Architecture Studies
 
+A comprehensive 416-line study of three AAA engine architectures was conducted, covering 15 concrete technical lessons (5 per engine) with specific Vulkan primitives, compute shader patterns, and priority matrix. Full document at `docs/research/engine_architecture_lessons.md`.
+
 #### id Tech 7/8 (id Software)
-- **Key Sources**: Simon Coenen DOOM Eternal Graphics Study, id Tech 7 Wikipedia, Digital Foundry tech reviews, GDC 2019 Stadia session
-- **Lessons for ZE**:
-  1. **Pure job system architecture**: "Doom Eternal does not have a main or render thread. It's all jobs with one worker thread per core." — ZE's enkiTS usage must be total, not partial. Every subsystem must be jobified.
-  2. **Bindless Vulkan**: All resources (textures, buffers, samplers) bound once and indexed by handles in shaders. Zero state changes = zero driver overhead.
-  3. **GPU compute skinning**: Skin all animated meshes in a compute shader before rendering. Vertex shaders treat everything as static. Dramatically fewer shader permutations.
-  4. **Clustered light culling**: 256px froxels, 24 depth slices. Hundreds of dynamic lights. CPU culling with GPU shading. Decouples light count from performance.
-  5. **Shadow caching**: Static geometry shadow maps persist across frames. Only invalidated when light or dynamic object moves. Huge GPU time savings.
-  6. **Dynamic draw call merging**: Bindless resources allow merging draw calls across objects sharing the same material. Dramatically reduces CPU overhead.
-  7. **No megatexture**: Replaced with high-performance image streaming. Higher quality, no blurry pop-in. ZE should skip megatextures entirely.
+- **Sources**: Simon Coenen DOOM Eternal Graphics Study, SIGGRAPH 2020 Advances, GDC 2026 Rip and Tear session, Digital Foundry tech interviews, NVIDIA neural rendering blog
+- **Key Techniques**:
+  1. **Bindless descriptor architecture + dynamic draw call merging** — VK_EXT_descriptor_indexing with compute shader compaction of draw calls by mesh+material ID. Renders 80-90M triangle scenes with near-zero CPU draw overhead.
+  2. **GPU compute skinning pre-pass** — All animated meshes skinned once per frame in compute shader before shadow/depth/forward passes. Vertex shaders treat everything as static. Dramatically reduces shader permutations.
+  3. **Cached shadow maps** — Static geometry shadow contributions persist across frames in a 4096x8192 shadow atlas. Only re-renders when light direction changes beyond a threshold.
+  4. **Visibility buffer + compute-based deferred texturing (id Tech 8)** — First pass writes 4-8 byte per-pixel (triangle ID + instance ID). Tile classification dispatch evaluates only visible materials via software Variable-Rate Compute Shaders.
+  5. **Sector streaming + auto vista LOD** — World divided into streaming sectors with prediction-based prefetch. Automated impostor geometry generation for distant structures.
 
 #### Decima Engine (Guerrilla Games / Kojima Productions)
-- **Key Sources**: SIGGRAPH 2017 Decima visibility talk, Guerrilla Games blog, Digital Foundry analyses
-- **Lessons for ZE**:
-  1. **K-d tree visibility**: Meshes organized into k-d trees for efficient spatial queries. Static and dynamic objects use same hierarchy for frustum + occlusion culling.
-  2. **GPU + CPU occlusion culling**: Same algorithm runs on GPU (compute) and CPU (SIMD). Player camera uses GPU; shadow maps use CPU.
-  3. **MeshInstanceTree**: Efficient flat encoding of resource tree. Each drawable has its own MeshInstanceTree for rapid culling.
-  4. **DrawableSetups**: Primitive geometry packed with shader handles and transforms into flat arrays. Minimizes draw call setup cost.
-  5. **Procedural terrain + authored POI blending**: Heightfield terrain with hand-authored detail areas mixed seamlessly. ZE should blend procedural biomes with authored points of interest.
+- **Sources**: GDC 2017 Visibility and Procedural Placement talks, SIGGRAPH 2017 Nubis cloud system, Digital Foundry analyses
+- **Key Techniques**:
+  1. **GPU compute-based runtime procedural placement** — Artists define placement rules in a graph editor (height, slope, biome mask, exclusion zones). Compute shader evaluates per-tile near player, populating millions of instances deterministically per seed.
+  2. **GPU compute visibility queries with wavefront batching** — 500K to 1.5M static instances per query. Wavefront-wide batching of instances sharing mesh+material yields up to 64x reduction in output draw commands.
+  3. **Three-tier terrain rendering** — Heightmap-tessellated patches + voxel/cliff representations + procedural instancing for surface detail. Dynamic switching based on viewing distance.
+  4. **GPU-based dynamic grass/foliage rendering** — Compute-generated blade quads with per-blade wind phase, bend, and color variation. Wind simulation as a global compute pass with disturbance channel for player/zombie movement.
+  5. **Nubis volumetric cloud system** — Regional-scale volumetric clouds as gameplay element. 3D density fields with artist shapes, ray-marched via compute shaders. Temporal reprojection enables 4-8 samples per pixel with 32-64 quality.
 
-#### Unreal Engine 5 (Epic Games)
-- **Key Sources**: Nanite Virtualized Geometry, Lumen Dynamic Global Illumination, World Partition
-- **Lessons for ZE**:
-  1. **Nanite-style virtual geometry**: Not applicable directly (Vulkan + custom engine), but the principle of software-rasterized micromesh LOD is worth understanding for future scale
-  2. **World Partition**: One-file-per-cell level streaming. ZE's open world needs equivalent cell-based streaming
-  3. **Lumen**: Software raytracing GI at scale. ZE should consider compute-shader GI (like id Tech 7's approach) rather than full raytracing given target hardware
+#### Unreal Engine 5 — Nanite + Lumen (Epic Games)
+- **Sources**: SIGGRAPH 2021 Nanite Deep Dive, Epic Games official documentation, UIUC CS 418 case study
+- **Key Techniques**:
+  1. **Hierarchical cluster-based virtualized geometry (Group-Decimate-Split)** — 128-triangle clusters in DAG hierarchy. Group-Decimate-Split avoids dense border problem; every node has watertight boundaries. GPU selects cluster LOD per-cluster based on screen-space projected error.
+  2. **GPU-driven two-pass Hi-Z occlusion culling with LOD integration** — Pass 1 tests instance bounding boxes against previous frame's Hi-Z. Pass 2 re-evaluates occlusion at cluster granularity during rendering. LOD selection and occlusion share same error metric.
+  3. **Page-based cluster storage with virtual streaming** — 128KB pages, spatially and LOD-local allocation. First page always resident contains coarsest LOD. Feedback system tracks page demand per frame. Sparse residency via VK_EXT_memory_budget.
+  4. **Virtual shadow maps** — Single 16384 squared sparse shadow texture per light. Per-frame visibility bitmask of needed tiles. Only renders tiles that are newly needed or invalidated. Persistent tile cache across frames.
+  5. **Software rasterizer + doubly-deferred shading** — Clusters under 64 pixels switch from hardware to compute-shader rasterizer. Doubly-deferred shading groups visible pixels by material ID per 16x16 tile, evaluating each material once per tile.
 
 ---
 
