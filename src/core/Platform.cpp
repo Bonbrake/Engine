@@ -1,5 +1,5 @@
-#include "Platform.h"
-#include "Logger.h"
+#include "ze/core/Platform.h"
+#include "ze/core/Logger.h"
 
 #ifdef _WIN32
 #include <windows.h>

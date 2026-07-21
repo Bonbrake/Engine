@@ -1,6 +1,6 @@
-#include "MSDFPipeline.h"
-#include "../core/Logger.h"
-#include "Device.h"
+#include "ze/render/MSDFPipeline.h"
+#include "ze/core/Logger.h"
+#include "ze/render/Device.h"
 #include <msdfgen.h>
 #include <msdfgen-ext.h>
 #include <vector>

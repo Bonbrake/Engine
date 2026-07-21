@@ -1,12 +1,12 @@
-#include "ImGuiOverlay.h"
-#include "../core/Logger.h"
+#include "ze/debug/ImGuiOverlay.h"
+#include "ze/core/Logger.h"
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_vulkan.h>
 #include <windows.h>
 #include <stdio.h>
-#include "../core/Platform.h"
-#include "../core/CVarSystem.h"
+#include "ze/core/Platform.h"
+#include "ze/core/CVarSystem.h"
 
 bool CallImGuiInit(ImGui_ImplVulkan_InitInfo* info) {
     __try {

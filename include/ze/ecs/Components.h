@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <entt/entt.hpp>
-#include "ecs/GenerationalTable.h"
+#include "ze/ecs/GenerationalTable.h"
 
 namespace ecs {
 

@@ -1,4 +1,4 @@
-#include "PhysicsDebugRenderer.h"
+#include "ze/physics/PhysicsDebugRenderer.h"
 
 #ifdef JPH_DEBUG_RENDERER
 

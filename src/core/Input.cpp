@@ -1,6 +1,6 @@
-#include "Input.h"
-#include "Config.h"
-#include "Logger.h"
+#include "ze/core/Input.h"
+#include "ze/core/Config.h"
+#include "ze/core/Logger.h"
 #include <cstdio>
 #include <cstring>
 #include <sstream>

@@ -1,11 +1,11 @@
 #define VMA_IMPLEMENTATION
-#include "Device.h"
-#include "VulkanContext.h"
-#include "MemoryBudget.h"
-#include "DriverBlocklist.h"
-#include "../core/Logger.h"
-#include "../core/Config.h"
-#include "../core/Platform.h"
+#include "ze/render/Device.h"
+#include "ze/render/VulkanContext.h"
+#include "ze/render/MemoryBudget.h"
+#include "ze/render/DriverBlocklist.h"
+#include "ze/core/Logger.h"
+#include "ze/core/Config.h"
+#include "ze/core/Platform.h"
 
 namespace render {
 

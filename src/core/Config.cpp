@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "ze/core/Config.h"
 #include <cxxopts.hpp>
 #include <nlohmann/json.hpp>
 #include <fstream>

@@ -1,6 +1,6 @@
-#include "ShaderManager.h"
-#include "Device.h"
-#include "../core/Logger.h"
+#include "ze/render/ShaderManager.h"
+#include "ze/render/Device.h"
+#include "ze/core/Logger.h"
 
 namespace render {
 

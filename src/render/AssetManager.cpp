@@ -1,4 +1,4 @@
-#include "AssetManager.h"
+#include "ze/render/AssetManager.h"
 #include "ze/core/Logger.h"
 #include <fastgltf/core.hpp>
 #include <fastgltf/tools.hpp>

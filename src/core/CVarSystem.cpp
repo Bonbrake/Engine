@@ -1,4 +1,4 @@
-#include "CVarSystem.h"
+#include "ze/core/CVarSystem.h"
 #include <imgui.h>
 
 namespace core {

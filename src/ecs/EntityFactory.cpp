@@ -1,5 +1,5 @@
-#include "EntityFactory.h"
-#include "Components.h"
+#include "ze/ecs/EntityFactory.h"
+#include "ze/ecs/Components.h"
 #include "ze/debug/MetaRegistry.h"
 #include "ze/core/PRNG.h"
 #include "ze/core/Logger.h"

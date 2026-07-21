@@ -5,7 +5,7 @@
 #include <VkBootstrap.h>
 #include <glm/glm.hpp>
 #include <memory>
-#include "ecs/GenerationalTable.h"
+#include "ze/ecs/GenerationalTable.h"
 
 namespace debug { class ImGuiOverlay; }
 namespace ecs { class ECSContext; }

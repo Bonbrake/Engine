@@ -1,4 +1,4 @@
-#include "MaterialSystem.h"
+#include "ze/render/MaterialSystem.h"
 #include "ze/core/Logger.h"
 
 namespace render {

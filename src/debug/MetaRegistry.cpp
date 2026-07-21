@@ -1,9 +1,9 @@
-#include "MetaRegistry.h"
+#include "ze/debug/MetaRegistry.h"
 #include <entt/meta/factory.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include "../ecs/Components.h"
-#include "../ecs/Destructible.h"
+#include "ze/ecs/Components.h"
+#include "ze/ecs/Destructible.h"
 #include "ze/core/Logger.h"
 
 namespace debug {

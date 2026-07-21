@@ -1,13 +1,13 @@
-#include "RenderGraph.h"
-#include "HazardValidator.h"
+#include "ze/render/RenderGraph.h"
+#include "ze/render/HazardValidator.h"
 #include <queue>
 #include <algorithm>
 #include <exception>
 #include <volk.h>
-#include "../core/Logger.h"
-#include "../core/JobSystem.h"
-#include "Device.h"
-#include "CommandPoolMatrix.h"
+#include "ze/core/Logger.h"
+#include "ze/core/JobSystem.h"
+#include "ze/render/Device.h"
+#include "ze/render/CommandPoolMatrix.h"
 
 namespace render {
 

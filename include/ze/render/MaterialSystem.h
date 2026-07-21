@@ -3,7 +3,7 @@
 #include "Device.h"
 #include "AssetManager.h"
 #include "AssetTypes.h"
-#include "ecs/GenerationalTable.h"
+#include "ze/ecs/GenerationalTable.h"
 
 namespace render {
 

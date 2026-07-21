@@ -1,5 +1,5 @@
-#include "SpatialHash.h"
-#include "Components.h"
+#include "ze/ecs/SpatialHash.h"
+#include "ze/ecs/Components.h"
 #include <algorithm>
 
 namespace ecs {

@@ -1,8 +1,8 @@
-#include "Destructible.h"
-#include "Components.h"
-#include "../events/EventBus.h"
-#include "../core/Logger.h"
-#include "../physics/PhysicsSystem.h"
+#include "ze/ecs/Destructible.h"
+#include "ze/ecs/Components.h"
+#include "ze/events/EventBus.h"
+#include "ze/core/Logger.h"
+#include "ze/physics/PhysicsSystem.h"
 #include <entt/entt.hpp>
 
 namespace ecs {

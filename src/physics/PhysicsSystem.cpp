@@ -1,6 +1,6 @@
-#include "PhysicsSystem.h"
-#include "../ecs/Components.h"
-#include "../core/Logger.h"
+#include "ze/physics/PhysicsSystem.h"
+#include "ze/ecs/Components.h"
+#include "ze/core/Logger.h"
 #include <Jolt/RegisterTypes.h>
 #include <Jolt/Core/Factory.h>
 #include <Jolt/Physics/PhysicsSettings.h>
@@ -11,8 +11,8 @@
 #include <Jolt/Physics/Collision/RayCast.h>
 #include <Jolt/Physics/Collision/CastResult.h>
 #include <glm/glm.hpp>
-#include "PhysicsDebugRenderer.h"
-#include "../events/EventBus.h"
+#include "ze/physics/PhysicsDebugRenderer.h"
+#include "ze/events/EventBus.h"
 #include <exception>
 
 // Jolt uses right-handed Y-up — matches spec.

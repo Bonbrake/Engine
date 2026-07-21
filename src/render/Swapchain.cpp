@@ -1,10 +1,10 @@
-#include "Swapchain.h"
-#include "Device.h"
-#include "../core/Logger.h"
-#include "../core/JobSystem.h"
-#include "../core/Config.h"
-#include "../render/PipelineBuilder.h"
-#include "../debug/ImGuiOverlay.h"
+#include "ze/render/Swapchain.h"
+#include "ze/render/Device.h"
+#include "ze/core/Logger.h"
+#include "ze/core/JobSystem.h"
+#include "ze/core/Config.h"
+#include "ze/render/PipelineBuilder.h"
+#include "ze/debug/ImGuiOverlay.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>

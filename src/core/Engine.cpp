@@ -1,18 +1,18 @@
-#include "Engine.h"
-#include "Config.h"
-#include "Logger.h"
-#include "Platform.h"
-#include "Input.h"
-#include "JobSystem.h"
-#include "TeardownTracker.h"
-#include "../render/VulkanContext.h"
-#include "../render/MSDFPipeline.h"
-#include "../render/Device.h"
-#include "../debug/FlyCamera.h"
-#include "../physics/PhysicsSystem.h"
-#include "../events/EventBus.h"
-#include "../ecs/Destructible.h"
-#include "CVarSystem.h"
+#include "ze/core/Engine.h"
+#include "ze/core/Config.h"
+#include "ze/core/Logger.h"
+#include "ze/core/Platform.h"
+#include "ze/core/Input.h"
+#include "ze/core/JobSystem.h"
+#include "ze/core/TeardownTracker.h"
+#include "ze/render/VulkanContext.h"
+#include "ze/render/MSDFPipeline.h"
+#include "ze/render/Device.h"
+#include "ze/debug/FlyCamera.h"
+#include "ze/physics/PhysicsSystem.h"
+#include "ze/events/EventBus.h"
+#include "ze/ecs/Destructible.h"
+#include "ze/core/CVarSystem.h"
 #include <exception>
 
 #ifdef TRACY_ENABLE
@@ -25,22 +25,22 @@
 #include <fstream>
 #include <thread>
 
-#include "../debug/MetaRegistry.h"
-#include "../render/Device.h"
-#include "../ecs/ECS.h"
-#include "../ecs/Components.h"
-#include "../ecs/EnTTCache.h"
+#include "ze/debug/MetaRegistry.h"
+#include "ze/render/Device.h"
+#include "ze/ecs/ECS.h"
+#include "ze/ecs/Components.h"
+#include "ze/ecs/EnTTCache.h"
 
 #include <imgui.h>
 
 #ifdef JPH_DEBUG_RENDERER
-#include "../physics/PhysicsDebugRenderer.h"
+#include "ze/physics/PhysicsDebugRenderer.h"
 #endif
-#include "../ecs/EntityFactory.h"
-#include "../ecs/SpatialHash.h"
-#include "../ecs/GenerationalTable.h"
-#include "FileHandleRing.h"
-#include "ThreadAffinity.h"
+#include "ze/ecs/EntityFactory.h"
+#include "ze/ecs/SpatialHash.h"
+#include "ze/ecs/GenerationalTable.h"
+#include "ze/core/FileHandleRing.h"
+#include "ze/core/ThreadAffinity.h"
 
 namespace core {
 
@@ -850,4 +850,3 @@ bool Engine::verifyHeadlessInit() const {
 }
 
 } // namespace core
-

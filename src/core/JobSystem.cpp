@@ -1,5 +1,5 @@
-#include "JobSystem.h"
-#include "Logger.h"
+#include "ze/core/JobSystem.h"
+#include "ze/core/Logger.h"
 
 namespace core {
 

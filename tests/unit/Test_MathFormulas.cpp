@@ -4,11 +4,11 @@
 #include <stdexcept>
 
 // Ext systems headers
-#include "../ecs/SpatialHash.h"
-#include "../render/CommandPoolMatrix.h"
-#include "../render/FrameDeletionQueue.h"
-#include "../render/StagingRingBuffer.h"
-#include "../core/ThreadAffinity.h"
+#include "ze/ecs/SpatialHash.h"
+#include "ze/render/CommandPoolMatrix.h"
+#include "ze/render/FrameDeletionQueue.h"
+#include "ze/render/StagingRingBuffer.h"
+#include "ze/core/ThreadAffinity.h"
 
 // ---------------------------------------------------------
 // [M1-EXT-01] SpatialHash Uniform Grid Bucketing

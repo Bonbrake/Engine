@@ -1,8 +1,8 @@
 #pragma once
 
 #include "AssetTypes.h"
-#include "ecs/GenerationalTable.h"
-#include "render/Device.h"
+#include "ze/ecs/GenerationalTable.h"
+#include "ze/render/Device.h"
 #include <filesystem>
 #include <string>
 

@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
-#include "../src/core/PRNG.h"
-#include "../src/core/Memory.h"
+#include "ze/core/PRNG.h"
+#include "ze/core/Memory.h"
 
 TEST_CASE("PRNG Determinism", "[prng]") {
     core::prng::SplitMix64 rng1(12345);

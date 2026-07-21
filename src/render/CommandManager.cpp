@@ -1,5 +1,5 @@
-#include "CommandManager.h"
-#include "Device.h"
+#include "ze/render/CommandManager.h"
+#include "ze/render/Device.h"
 
 namespace render {
 

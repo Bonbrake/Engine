@@ -5,7 +5,7 @@
 #include <entt/entt.hpp>
 #include <string>
 #include <cstdint>
-#include "ecs/GenerationalTable.h"   // ecs::Handle (index + generation)
+#include "ze/ecs/GenerationalTable.h"   // ecs::Handle (index + generation)
 
 namespace ecs {
 

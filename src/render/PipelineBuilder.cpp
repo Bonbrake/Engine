@@ -1,6 +1,6 @@
-#include "PipelineBuilder.h"
-#include "Device.h"
-#include "../core/Logger.h"
+#include "ze/render/PipelineBuilder.h"
+#include "ze/render/Device.h"
+#include "ze/core/Logger.h"
 #define SPIRV_REFLECT_USE_SYSTEM_SPIRV_H
 #include <spirv_reflect.h>
 #include <map>

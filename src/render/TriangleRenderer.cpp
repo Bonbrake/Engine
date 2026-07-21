@@ -1,12 +1,12 @@
-#include "TriangleRenderer.h"
-#include "MaterialSystem.h"
-#include "Device.h"
-#include "PipelineBuilder.h"
-#include "../core/Logger.h"
-#include "../core/CVarSystem.h"
-#include "../ecs/ECS.h"
-#include "../render/AssetManager.h"
-#include "../ecs/Components.h"          // ecs::Transform, ecs::MeshComponent
+#include "ze/render/TriangleRenderer.h"
+#include "ze/render/MaterialSystem.h"
+#include "ze/render/Device.h"
+#include "ze/render/PipelineBuilder.h"
+#include "ze/core/Logger.h"
+#include "ze/core/CVarSystem.h"
+#include "ze/ecs/ECS.h"
+#include "ze/render/AssetManager.h"
+#include "ze/ecs/Components.h"          // ecs::Transform, ecs::MeshComponent
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>      // glm::qua, glm::mat4_cast
