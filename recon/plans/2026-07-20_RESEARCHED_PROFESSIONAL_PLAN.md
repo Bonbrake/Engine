@@ -249,14 +249,18 @@ The three immutable pillars remain:
 
 ### 2.5 Engine Architecture Patterns [S/X]
 
-[S] ValveSoftware/GameNetworkingSockets is real-time UDP with reliable/unreliable message lanes, fragmentation/reassembly, NAT traversal, encryption, and peer-to-peer relay through SDR. That makes it viable for ZE net networking instead of building UDP fragmentation from scratch.
-[S] Dear ImGui is a bloat-free immediate-mode C++ graphical user interface toolkit with minimal dependencies; it is used as a debug/editor layer in many shipped engines and tools.
-[S] UE4SS is a runtime modding/plugin system for Unreal Engine with signature scanning, preload injection, and scripting APIs; it validates the ZE mod compatibility approach in M7.
-[S] Vulkan roadmap 2026 adds a new descriptor heap extension, extending the bindless indexing story already in core Vulkan.
-[S] UE5 public docs confirm Nanite, Lumen, World Partition, Mass Entity, and PCG as shipped systems; ZE will subset these rather than re-solve solved problems.
-[X] id Tech 7/8: bindless descriptors, cached shadow atlas, visibility buffer, clustered compute deferred shading, sector streaming.
-[X] Decima: GPU-based procedural placement; wavefront-batched visibility queries; three-tier terrain; dynamic grass via compute.
-[X] UE5 Nanite + Lumen: hierarchical cluster DAG; Hi-Z two-pass culling; virtual shadow maps with tile residency; compute rasterizer for sub-pixel clusters.
+[S] ValveSoftware/GameNetworkingSockets github title confirms real-time UDP with reliable/unreliable message lanes, fragmentation/reassembly, P2P networking, NAT traversal, and encryption. Cache excerpt: "Reliable & unreliable messages over UDP. Robust message fragmentation & reassembly. P2P networking / NAT traversal. Encryption." SDR relay also present in README. That validates ZE network reuse instead of building UDP abstraction from scratch.
+[S] Dear ImGui github description confirms "Bloat-free Graphical User interface for C++ with minimal dependencies." That validates ZE debug/editor layer without engine UI bloat.
+[S] UE4SS github title confirms "Lua scripting system for Unreal Engine 4 (for already shipped games)." Cache excerpt: "Extra signature for function 'GetFullName' for UE4.25. Regex to check for proper signature format when loaded from ini. Lots and lots of work on signatures." That validates signature-scanning mod compatibility approach in M7.
+[S] Vulkan roadmap 2026 blog title confirms "Vulkan Introduces Roadmap 2026 and New Descriptor Heap Extension." That extends bindless indexing story beyond current `VK_EXT_descriptor_indexing`.
+[S] UE5 fetched docs confirm Nanite, Lumen, World Partition, and PCG are present in the shipped UE5 documentation index. That confirms ZE will subset existing solutions rather than re-solve solved problems.
+[S] Wikipedia id Tech 7 cache confirms "id Tech 7 supports Vulkan rendering only" and "engine developer Axel Gneiting says the engine doesn't have a 'main thread'; everything is implemented as jobs." That validates ZE bindless-only renderer and jobified architecture.
+[S] Cached GDC Vault index shows "Against the Storm Postmortem by Micha Ogozski (Eremite Games)" and "Five Rendering Ideas from Battlefield 3 & Need For Speed: The Run by Electronic Arts / DICE." That confirms indie and AAA postmortem sources exist in the GDC Vault index.
+[S] Cached Game Developer index shows RimWorld/Dwarf Fortress story-generation article and NexusMods CEO interview. That confirms public survival narrative and modding sources exist.
+
+[X] Decima: no extracted figure/text yet. Planned fetch: Horizon Zero Dawn SIGGRAPH/GDC talk pages.
+[X] id Tech 7/8: no extracted figure/text yet beyond Vulkan/jobs quote. Planned fetch: SIGGRAPH Advances Karis PDF and DOOM Eternal talks.
+[X] UE5 Nanite/Lumen/World Partition/Mass Entity: only index hits so far. Planned fetch: Karis Nanite PDF and UE5 sample pages.
 
 ### 2.6 Research Gaps
 
@@ -501,9 +505,11 @@ Purpose: extract durable patterns for ZE from how shipped engines were built.
 
 ### Big studios
 
-1. id Tech 7/8 — id Software
-   **Primary source**: SIGGRAPH Advances talk, DOOM Eternal graphics breakdown
+1. id Tech 7/8 — id Software [S]
+   **Primary source**: Wikipedia cached extract + SIGGRAPH Advances talk
+   **Evidence**: cached Wikipedia extract quotes engine developer Axel Gneiting: engine has no "main thread"; everything is implemented as jobs.
    **Lesson**: bindless-first design reduces CPU overhead; clustered compute shading; visibility buffer over traditional G-Buffer
+   **Gap**: full architectural diagram set still needs SIGGRAPH Advances PDF extraction
 
 2. Decima Engine — Guerrilla / Sony
    **Primary source**: Horizon public talks, SIGGRAPH coverage
