@@ -134,7 +134,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
   1. Real-time ray-traced sound propagation handles occlusion, diffraction, and reverb — ZE needs geometric acoustics, not just distance-based falloff
   2. Portal occlusion (sound through doorways, windows) is computationally cheap and dramatically improves player spatial awareness
   3. Dynamic sound propagation only needs 10-20 Hz update rate — audio is far less demanding than graphics rendering
-  4. GSound achieved interactive rates (sub-10ms) on 2011-era hardware — modern GPUs handle this trivially via compute shaders
+  4. GSound achieved interactive rates on 2011-era hardware — modern GPUs handle this trivially via compute shaders
   5. Sound propagation is critical for survival horror tension — a zombie heard-but-not-seen is scarier than one on screen. ZE's AI Director should use audio cues for pre-threat buildup
 
 #### Paper 11: Tension Space Analysis for Emergent Narrative (Kybartas, Verbrugge & Lessard, 2020)
@@ -290,7 +290,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
   1. Real-time ray-traced sound propagation handles occlusion, diffraction, and reverb — ZE needs geometric acoustics, not just distance-based falloff
   2. Portal occlusion (sound through doorways, windows) is computationally cheap and dramatically improves player spatial awareness
   3. Dynamic sound propagation only needs 10-20 Hz update rate — audio is far less demanding than graphics rendering
-  4. GSound achieved interactive rates (sub-10ms) on 2011-era hardware — modern GPUs handle this trivially via compute shaders
+  4. GSound achieved interactive rates on 2011-era hardware — modern GPUs handle this trivially via compute shaders
   5. Sound propagation is critical for survival horror tension — a zombie heard-but-not-seen is scarier than one on screen. ZE's AI Director should use audio cues for pre-threat buildup
 
 #### Paper 24: Intersection-Free Rigid Body Dynamics (Rigid-IPC, SIGGRAPH 2021)
@@ -350,7 +350,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
   1. Dual-layer fluid solver (separate grids for fire and smoke) — ZE should use coarse grid for fire volume and separate transport for smoke/soot, keeping fire sharp and smoke volumetric
   2. Differentiated fire types by fuel — gasoline fires (tall flames), wood barricade fires (sustained burn), zombie corpse fires (oily black smoke), each with different gameplay effects
   3. Blackbody radiation color rendering — ZE should use temperature-to-color lookup for fire rendering (blue core → white → yellow → orange → red), giving realistic fire without sprite faking
-  4. Fire propagation as voxel diffusion — each voxel has fuel-remaining and temperature values, ignites when temperature exceeds material ignition point (wood 300°C, flesh 200°C, gasoline 50°C)
+  4. Fire propagation as voxel diffusion — each voxel has fuel-remaining and temperature values, ignites when temperature exceeds material ignition point [S: source corpus; exact temperatures are ZE material-property tuning]. Buoyancy drives smoke upward, cooler air sinks
   5. Buoyancy + vorticity confinement for flame character — variable buoyancy drives hot gases upward, vorticity confinement adds the signature flickering swirl, adds ~0.5ms per frame as compute shader passes
 
 #### Paper 30: End-to-End Compressed Meshlet Rendering (Eurographics 2024)
@@ -408,7 +408,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
 - **Relevance**: 9/10 — Physics-based zombie death/responses without per-animation authoring
 - **5 Lessons**:
   1. Physics-based characters learned from motion clips via RL — zombie learns stagger-and-fall skill from 10 mocap death sequences, physics handles novel hit locations without animating every permutation
-  2. Pre-train policies offline, export binary weights (~200KB per skill) — runtime inference on CPU ~0.5ms per zombie, no GPU needed at inference time
+  2. Pre-train policies offline, export binary weights per skill — runtime inference on CPU ~0.5ms per zombie [S: runtime cost per source; exact weight size is ZE implementation]
   3. External force perturbations handled by the policy — trained with random force applications, generalizes to unseen hit impacts; headshot from .50 cal vs gut shot from pistol produce dramatically different death sequences from same policy
   4. Multi-skill agents with gating — zombie has movement (shamble-chase), hit-reaction (stagger), and death (collapse) skills, gated by health threshold with brief blend between stance and death to prevent instant-ragdoll snap
   5. Terrain-aware falling via physics scene — zombie interacts with world collision geometry during death sequence, doesn't clip through railings or float mid-air before collapsing
@@ -421,7 +421,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
   2. Microclimate-driven vegetation response — local terrain (slope, shade, water proximity) creates microclimates determining which plants thrive; abandoned farm fields grow waist-high corn (ambush terrain), dry hilltops have scrub (sight lines for sniping)
   3. Disturbance events and ecological succession — fire/explosion strips vegetation, then weeds → grasses → shrubs over weeks; zombies pathfind differently through each succession stage (avoid noisy brush, prefer burnt ground at night)
   4. Water table simulation — 2D grid at 10m resolution, rain raises it, drainage lowers it; puddles become infected water hazards; crops grow only where water table is adequate
-  5. Ecosystem state serialization — grid of species IDs + ages + health, ~4 bytes per 10m cell, 4km² world = ~160KB; full flora reconstructed from serialized state, not regenerated, preserving player deforestation permanently
+  5. Ecosystem state serialization — grid of species IDs + ages + health, ~4 bytes per 10m cell [S: cell encoding from source; exact world size is ZE-level tuning]. Full flora reconstructed from serialized state, not regenerated, preserving player deforestation permanently
 
 #### Paper 37: Rethinking NPC Intelligence — Bayesian Reputation System (MIG 2014)
 - **Source**: ACM MIG 2014, DOI 10.1145/2668084.2668091
@@ -470,7 +470,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
   1. Joint compression of full material sets — compress albedo, normal, roughness, metallic, AO, height together into one neural representation, exploiting inter-channel correlation for 10-16× compression over BCx
   2. Coordinate-based random-access decoding — small MLP (2-3 layers, ~128 hidden) evaluated per UV coordinate in compute shader, weights ~8-16KB per material in constant buffer
   3. Integrated mip chain — network outputs correctly filtered values at any mip level; learns correct pre-filtered roughness/normal mips without separate generation pipeline
-  4. GPU-optimized evaluation — Q8.8 fixed-point weights packed into uint32 vectors, thread-group shared memory for weight caching, 4×4 pixel quads with subgroup ops, target <0.1ms per frame
+  4. GPU-optimized evaluation — Q8.8 fixed-point weights packed into uint32 vectors, thread-group shared memory for weight caching, 4×4 pixel quads with subgroup ops [S: quantization + subgroup ops from source; exact ms budget unsourced]
   5. Adaptive fallback — near-field (<10m) uses neural decoding for highest quality, far-field uses pre-baked BC textures, shader blends between based on distance
 
 #### Paper 42: Analytical Ballistic Trajectories with Approximately Linear Drag (IJCTT 2014)
@@ -489,7 +489,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
 - **5 Lessons**:
   1. Cellular weather at city-block granularity — 100m×100m WeatherCells with wind vector, rain intensity, fog density, temperature; zombies move faster downwind (scent-assisted), slower in heavy rain (mud), rain noise masks footsteps
   2. Wind advection of rain and sound — rain particles offset by wind magnitude; zombie groans and environmental sounds carried downwind, creating stealth advantage upwind
-  3. Temperature affects zombie behavior zones — below 5°C zombies slow 30% (shambling gait), above 35°C lethargic but attract more flies; horde clusters in warm drainage tunnels in winter, cool shaded alleys in summer
+  3. Temperature affects zombie behavior zones — temperature-sensitive zombie behavior [S: source corpus describes temperature effects; exact °C thresholds and speed modifiers are ZE tuning]; horde clusters in warm drainage tunnels in winter, cool shaded alleys in summer
   4. Precipitation accumulation into puddles and wetness — heightfield water layer increases footstep noise (splash), slows sprinting speed, causes zombie slipping on steep wet terrain; zombie corpses in puddles accelerate decay
   5. Weather cell state machine for storm lifecycle — clear → building → precipitating → dissipating; thunderstorm builds 10min, rains 20min, dissipates 10min; lightning flashes briefly illuminate all zombies in radius for scouting
 
@@ -499,7 +499,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
 - **5 Lessons**:
   1. Simplified Navier-Stokes per weather cell — ZE divides open world into 100m cells, each with eWeatherState enum, simulates wind/temp/humidity via Jacobi relaxation on 2D WindField
   2. Rain particle advection by wind — slanted rain sheets driven by WindField; environmental sound advection (zombie groans travel farther downwind)
-  3. Microclimate temperature tracking — shade vs concrete, day vs night; zombies have ColdBlooded trait: below 5°C slow 30%, above 35°C lethargic but attract more flies/attention
+  3. Microclimate temperature tracking — shade vs concrete, day vs night [S: source corpus describes microclimate effects; exact °C thresholds and speed changes are ZE tuning]. Cold-blooded trait designates zombies as temperature-sensitive
   4. Water layer on terrain — heightfield puddle simulation, splash sounds increase footstep noise, slows sprinting, causes zombie slipping; zombie corpses in puddles rot faster
   5. Lightning flash illumination during storms — briefly reveals all zombie positions in radius, critical gameplay window for scouting horde positions during night storms
 
@@ -537,8 +537,8 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
 - **Source**: SIGGRAPH 2014 Talks, Crytek (Ryse)
 - **Relevance**: 7/10 — Animation streaming for ZE's open-world NPCs
 - **5 Lessons**:
-  1. Alembic as interchange only — bake to GPU-optimized binary format at cook time; per-frame vertex positions (uint16×3 quantized), per-frame QTangents, per-frame transform matrices; target 10MB/s data rate
-  2. Aggressive vertex quantization — 3× uint16 positions, 2× int16 UVs, 8-bit QTangents; 56 bytes/vertex → 16 bytes/vertex; data rate drops from 50MB/s to 10MB/s for 30K-vertex animation at 30fps
+  1. Alembic as interchange only — bake to GPU-optimized binary format at cook time; per-frame vertex positions (uint16×3 quantized), per-frame QTangents; per-frame transform matrices [S: quantization scheme from source; exact MB/s budget is ZE profiling target]
+  2. Aggressive vertex quantization — 3× uint16 positions, 2× int16 UVs, 8-bit QTangents; 56 bytes/vertex → 16 bytes/vertex [S: byte counts from source corpus]. Attribute layout: 12+4+4 = 20 bytes, not 16
   3. Pre-baked per-frame tangent frames — topology is static (only position changes), so bake normal/tangent/bitangent offline as QTangents per vertex per frame; eliminates runtime recomputation
   4. Triple-buffer streaming — current frame (GPU rendering) + next frame (DMA upload) + pending (CPU decode), asynchronous via VkFence and staging buffers, pre-decode 3-5 frames ahead
   5. Hierarchy simplification — collapse rigidly animated objects to single world-space transform per frame; vertex-animated caches (cloth, flags) use identity transform with per-vertex motion; cut Ryse's transform budget 80%
@@ -557,7 +557,7 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
 - **Source**: SIGGRAPH Asia 2023 Technical Comms, DOI 10.1145/3610543.3626167
 - **Relevance**: 7/10 — Efficient glossy reflections for ZE's PBR rendering
 - **5 Lessons**:
-  1. Two-level radiance caching — 1st level: screen-space probes on visible surfaces from previous frame (~0.2ms); 2nd level: world-space hash grid (32³ cells, spherical harmonic coefficients); fallback from screen cache → hash grid on disocclusion
+  1. Two-level radiance caching — 1st level: screen-space probes on visible surfaces from previous frame; 2nd level: world-space radiancesh grid (32³ cells, spherical harmonic coefficients); fallback from screen cache → hash grid on disocclusion
   2. Roughness-stratified ray strategy — smooth <0.1: trace 1-2 rays per pixel with GGX importance sampling; medium 0.1-0.4: 1 ray + screen-space cache; rough >0.4: hash-grid cache only, no ray tracing
   3. Specular denoising via separable À-Trous wavelet — 4-5 iterations at ½ or ¼ resolution, step sizes 1→2→4→8→16, edge-stopping by roughness + normal variance; temporal accumulation via motion vector reprojection
   4. G-buffer as RT input — GI-1.1 arch: rasterize G-buffer first, then ray trace glossy reflections using G-buffer depth/normal/roughness/albedo as input; total RT budget ~1 ray per pixel
@@ -651,7 +651,7 @@ A comprehensive 416-line study of three AAA engine architectures was conducted, 
 - **Key Techniques**:
   1. **Hierarchical cluster-based virtualized geometry (Group-Decimate-Split)** — 128-triangle clusters in DAG hierarchy. Group-Decimate-Split avoids dense border problem; every node has watertight boundaries. GPU selects cluster LOD per-cluster based on screen-space projected error.
   2. **GPU-driven two-pass Hi-Z occlusion culling with LOD integration** — Pass 1 tests instance bounding boxes against previous frame's Hi-Z. Pass 2 re-evaluates occlusion at cluster granularity during rendering. LOD selection and occlusion share same error metric.
-  3. **Page-based cluster storage with virtual streaming** — 128KB pages, spatially and LOD-local allocation. First page always resident contains coarsest LOD. Feedback system tracks page demand per frame. Sparse residency via VK_EXT_memory_budget.
+  3. **Page-based cluster storage with virtual streaming** — pages, spatially and LOD-local allocation. Feedback system tracks page demand per frame. Sparse residency via VK_EXT_memory_budget.
   4. **Virtual shadow maps** — Single 16384 squared sparse shadow texture per light. Per-frame visibility bitmask of needed tiles. Only renders tiles that are newly needed or invalidated. Persistent tile cache across frames.
   5. **Software rasterizer + doubly-deferred shading** — Clusters under 64 pixels switch from hardware to compute-shader rasterizer. Doubly-deferred shading groups visible pixels by material ID per 16x16 tile, evaluating each material once per tile.
 
@@ -844,14 +844,14 @@ The following milestones had ZERO paper-to-block mappings. These are the largest
 #### M10 Environment/Atmosphere → Weather + Ecoclimate (Papers 29, 36, 43-44)
 **M10-EXT-03 Bruneton-Nishita Atmosphere**: Apply Hosek-Wilkie correction from Paper 29. Fail below 2° solar elevation — layer a post-process blue-hour correction that darkens horizon band toward deep blue.
 **M10-EXT-05 Navier-Stokes Weather**: Bake offline N-S simulation on 1km² grid (~2 minutes per day), save wind/pressure/temperature to 2D float textures. Runtime samples based on in-game time. No runtime N-S solver shipped.
-**M10-EXT-06 Phenological Cycles**: Chlorophyll transitions based on cumulative growing-degree-days (base 10°C) + photoperiod from M10-EXT-02. Compute shader updates all tree instances every 100 game-seconds. Each tree uses local elevation and soil type from M4-EXT-17 Edaphic grid.
+**M10-EXT-06 Phenological Cycles**: Chlorophyll transitions based on cumulative growing-degree-days + photoperiod from M10-EXT-02. Compute shader updates all tree instances every 100 game-seconds. Each tree uses local elevation and soil type from M4-EXT-17 Edaphic grid.
 
 #### M12 Multiplayer/Netcode → Save Serialization + Tension Space (Papers 2, 21, 27)
 **M12-EXT-01 Bitstream Delta Encoding**: Apply Paper 21's static/dynamic separation to network. Static properties (modelID, spawnPosition) send once. Dynamic properties (position, health, inventory) as bit-packed delta frames at 10-30Hz.
-**M12-EXT-17 Co-op Determinism**: HOST runs authoritative physics, sends entity position+velocity at 10Hz, clients interpolate. Tension sync packet aligns director state across clients every 30 seconds.
+**M12-EXT-17 Co-op Determinism**: Authoritative server reconciliation with client-side prediction for latency masking packet aligns director state across clients every 30 seconds.
 
 #### M13 Endgame → Mission Director + Rumor Network (Papers 8, 37)
-**M13-EXT-01 Procedural Mission Director**: Weighted pool based on (1) settlement needs, (2) faction standing, (3) player engagement. Each mission type has cooldown (5 in-game days between repeats).
+**M13-EXT-01 Procedural Mission Director**: Weighted pool based on (1) settlement needs, (2) faction standing, (3) player engagement. Each mission type has cooldown [S: source corpus describes mission rotation; exact cooldown duration is ZE pacing tuning].
 **M13-EXT-06 Survivor Rumor Network**: Bayesian belief propagation with gossip protocol. Each survivor periodically (every 1-4 game-hours) picks a random conversation partner and exchanges highest-confidence rumor. Rumor quality decays with distance (3 hops) and time (50% loss per day).
 
 ---
