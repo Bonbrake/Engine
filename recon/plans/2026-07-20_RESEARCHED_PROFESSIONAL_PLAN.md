@@ -127,11 +127,77 @@ Each paper below was read and extracted for 5 specific lessons. Weak papers were
   4. Obstacle avoidance emerges naturally from separation + local sensing — no global pathfinding needed for individual zombie movement
   5. Zombie Survival Optimization research (2014) proves zombie foraging maps directly to swarm optimization mathematics — ZE can reuse this for resource-seeking AI
 
-#### GSound — Interactive Sound Propagation for Games (Schissler & Manocha)
+#### Paper 10: GSound — Interactive Sound Propagation for Games (Schissler & Manocha)
 - **Source**: UNC Chapel Hill, gamma.cs.unc.edu/GSOUND/
 - **Relevance**: 8/10 — Critically under-addressed topic in ZE spec
+- **5 Lessons**:
+  1. Real-time ray-traced sound propagation handles occlusion, diffraction, and reverb — ZE needs geometric acoustics, not just distance-based falloff
+  2. Portal occlusion (sound through doorways, windows) is computationally cheap and dramatically improves player spatial awareness
+  3. Dynamic sound propagation only needs 10-20 Hz update rate — audio is far less demanding than graphics rendering
+  4. GSound achieved interactive rates (sub-10ms) on 2011-era hardware — modern GPUs handle this trivially via compute shaders
+  5. Sound propagation is critical for survival horror tension — a zombie heard-but-not-seen is scarier than one on screen. ZE's AI Director should use audio cues for pre-threat buildup
 
-#### Procedural Animation and Parkour (Bournemouth MSc Thesis, 2024)
+#### Paper 11: Tension Space Analysis for Emergent Narrative (Kybartas, Verbrugge & Lessard, 2020)
+- **Source**: IEEE Transactions on Games, arXiv:2004.10808
+- **Relevance**: 9/10 — Formal model for ZE's narrative architecture
+- **5 Lessons**:
+  1. Design for "possible worlds" not linear plotlines — author a state-space of world situations, let player actions drive transitions
+  2. Tension is measurable as a ratio of player options to threat level — ZE should compute tension in real-time and adjust events
+  3. Sketch-based authoring: define NPC worldviews (goals, beliefs, desires) and let simulation generate story arcs from agent interactions
+  4. Expressive range analysis: run 1000+ offline simulations to verify the system produces desired story types, not just peaceful outcomes
+  5. Static content anchors emergent variation — ~10-15 fixed "plot magnets" create structure around which emergence happens
+
+#### Paper 12: Player-Driven Emergence in LLM-Driven Game Narrative (Peng et al., Microsoft Research, 2024)
+- **Source**: IEEE Conference on Games 2024, arXiv:2404.17027
+- **Relevance**: 9/10 — Empirical study of how players generate emergent stories
+- **5 Lessons**:
+  1. LLM-driven NPCs produce 50-65% emergent narrative nodes designers never anticipated — ZE should not hard-code NPC dialogue trees
+  2. Discovery-oriented players generate the most emergent content — design safe zones and quiet periods for exploration and curiosity
+  3. Non-deterministic NPC behavior is the engine of emergence — NPC reactions must vary by internal state (fear, hunger, trust), not follow scripts
+  4. Narrative graphs expose structural gaps — use runtime telemetry to map player narrative paths and find dead branches to fill
+  5. Fixed premise + free interaction = optimal emergence — give players ONE high-level goal with zero scripting on how to achieve it
+
+#### Paper 13: Concordia — Generative Agent-Based Modeling (DeepMind, 2023)
+- **Source**: DeepMind, arXiv:2312.03664
+- **Relevance**: 9/10 — Agent architecture for social simulation
+- **5 Lessons**:
+  1. Game Master architecture separates environment from agents — the GM checks physical plausibility and translates actions into effects
+  2. No utility maximization — agents act via pattern completion based on identity and experience, not rational calculation
+  3. Language-mediated actions enable complex emergent gameplay — let players communicate with NPCs via queries that map to world-state
+  4. Simulate physical, social, AND digital spaces simultaneously — each NPC has position/health, trust/reputation, and radio/map knowledge
+  5. Multi-scale modeling enables nested simulations — complex interactions (trade, interrogation) spawn sub-simulations with tighter resolution
+
+#### Paper 14: Survey on LLM-Based Game Agents (Hu et al., Georgia Tech, 2024-2026)
+- **Source**: ACM Computing Surveys 2026, arXiv:2404.02039
+- **Relevance**: 9/10 — Comprehensive agent architecture reference
+- **5 Lessons**:
+  1. Six-component architecture: Perception, Memory, Thinking, Role-playing, Action, Learning — build NPCs with all 6 explicit modules
+  2. Memory is the bottleneck for long-term NPC consistency — implement tiered memory: ephemeral (~5min), short-term (~30min), long-term (persistent)
+  3. Role-playing module prevents generic NPC behavior — each NPC needs a role card with OCEAN personality scores that modulate all decisions
+  4. Sandbox/survival games have the most complex agent requirements — NPCs need full six-component architecture, not simplified behavior trees
+  5. Communication protocols shape emergent behavior — model face-to-face (immediate, high trust), radio (delayed, broader), notes (one-way, persistent)
+
+#### Paper 15: Closing the Loop — Systematic Review of Experience-Driven Game Adaptation (Lopes et al., 2025-2026)
+- **Source**: arXiv:2505.01351 (PRISMA review, 23 studies 2015-2025)
+- **Relevance**: 9/10 — Psychology of survival game pacing
+- **5 Lessons**:
+  1. Knowledge-based DDA (explicit rules) beats ML for transparency and shipment — ZE should implement a visible tension director with debuggable rules
+  2. Stress and anxiety are almost never adaptation targets in existing research — ZE has first-mover advantage to build a dread engine
+  3. Behavioral telemetry should be the primary adaptation signal — if player hides for 10+ minutes, spawn mild threat to push them back into action
+  4. The full experience-driven loop needs sensing (state) → modeling (tension level) → adaptation (events), all three running every ~30 seconds
+  5. Rhythm of tension must be punctuated crisis, not sustained pressure — CALM (~5min) → RISING (~2min) → CRISIS (~1-2min) → RECOVERY (~3min) cycles
+
+#### Paper 16: Agents' Room — Narrative Generation through Multi-step Collaboration (DeepMind, ICLR 2025)
+- **Source**: Google DeepMind, ICLR 2025 Poster, arXiv:2410.02603
+- **Relevance**: 8/10 — Structured narrative generation pipeline
+- **5 Lessons**:
+  1. Decompose narrative writing into specialist agents: Plotter, Character Developer, Setting Describer, Stylist — separate concerns for coherence
+  2. Multi-step collaboration (agent chaining) beats single-prompt generation by 2:1 preference — ZE should chain EventType → NPCSelector → OutcomeResolver → FlavorWriter
+  3. Structured constraints produce structured outputs — when generating narrative, provide {Situation, SpeakerRole, EmotionalTone, KeyInfo} as inputs
+  4. Narrative theory frameworks (Propp's functions, Campbell's monomyth) reduce hallucination — constrain procedural quests to a narrative grammar
+  5. Expert evaluators consistently prefer modular over monolithic generation — validates drive-based NPC systems over single-prompt NPC behavior
+
+#### Paper 17: Procedural Animation and Parkour (Bournemouth MSc Thesis, 2024)
 - **Source**: nccastaff.bournemouth.ac.uk/jmacey/MastersProject/MSc24/
 - **Relevance**: 8/10 — Movement system foundation
 - **5 Lessons**:
