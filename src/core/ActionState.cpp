@@ -55,10 +55,6 @@ void ActionMap::setDefaultBindings() {
     bindings_[Action::MoveLeft] = {Action::MoveLeft, ActionSource::GamepadAxis, SDL_SCANCODE_UNKNOWN, 0, SDL_GAMEPAD_AXIS_LEFTX, -1, SDL_GAMEPAD_BUTTON_INVALID, 0.15f};
     bindings_[Action::MoveRight] = {Action::MoveRight, ActionSource::GamepadAxis, SDL_SCANCODE_UNKNOWN, 0, SDL_GAMEPAD_AXIS_LEFTX, 1, SDL_GAMEPAD_BUTTON_INVALID, 0.15f};
 
-    keyMap_.clear();
-    mouseMap_.clear();
-    axisMap_.clear();
-    gamepadButtonMap_.clear();
     for (const auto& [action, binding] : bindings_) {
         if (binding.source == ActionSource::KeyboardMouse && binding.key != SDL_SCANCODE_UNKNOWN) {
             keyMap_[binding.key] = action;
@@ -129,6 +125,10 @@ void ActionMap::processEvent(const SDL_Event& event) {
 
 void ActionMap::setGamepadConnected(bool connected) {
     gamepadConnected_ = connected;
+}
+
+bool ActionMap::isGamepadConnected() const {
+    return gamepadConnected_;
 }
 
 void ActionMap::applyAxis(Action action, float value) {

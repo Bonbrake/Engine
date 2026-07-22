@@ -59,8 +59,12 @@ public:
     static ActionMap& get();
 
     void setDefaultBindings();
+    void load(const std::string& path);
+    void save(const std::string& path) const;
+
     void update(const SDL_Event* events, size_t count);
     void setGamepadConnected(bool connected);
+    bool isGamepadConnected() const;
     const ActionState& get(Action action) const;
     void resetFrameState();
 
