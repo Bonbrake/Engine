@@ -4,7 +4,7 @@ if(TEST_SRC_FILES)
     add_executable(ZombieEngineTests ${TEST_SRC_FILES})
     
     # Link game sources
-    set(ZE_SUBSYSTEMS core debug ecs events modding net physics render save slm ui world)
+    set(ZE_SUBSYSTEMS ai audio core debug ecs events modding net physics render save slm ui world)
     foreach(subsystem IN LISTS ZE_SUBSYSTEMS)
         target_link_libraries(ZombieEngineTests PRIVATE ze-${subsystem})
     endforeach()

@@ -10,6 +10,7 @@ include(cmake/Dependencies.cmake)
 include(cmake/Shaders.cmake)
 
 # Subsystems
+add_subdirectory(src/ai)
 add_subdirectory(src/audio)
 add_subdirectory(src/combat)
 add_subdirectory(src/core)
@@ -50,6 +51,7 @@ target_link_libraries(ZombieEngine PRIVATE
     ze-ui
     ze-world
     ze-audio
+    ze-ai
     ze-combat
     ze-survival
     ze-vehicle
