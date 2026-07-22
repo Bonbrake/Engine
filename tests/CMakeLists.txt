@@ -72,7 +72,6 @@ if(TEST_SRC_FILES)
                 "$<TARGET_FILE_DIR:ZombieEngineTests>")
         add_custom_command(TARGET ZombieEngineTests POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${VCPKG_DEBUG_BIN_DIR}/Jolt.lib"
                 "${VCPKG_DEBUG_BIN_DIR}/Jolt.dll"
                 "${VCPKG_DEBUG_BIN_DIR}/spdlogd.dll"
                 "${VCPKG_DEBUG_BIN_DIR}/fmtd.dll"
@@ -83,6 +82,24 @@ if(TEST_SRC_FILES)
                 "${VCPKG_DEBUG_BIN_DIR}/vulkan-1.dll"
                 "$<TARGET_FILE_DIR:ZombieEngineTests>"
             COMMENT "Copying vcpkg debug runtime DLLs for test binary")
+    endif()
+
+    # Copy MSVC debug CRT DLLs so the Debug test binary can load.
+    set(DEBUG_CRT_DIR "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Redist/MSVC/14.44.35112/debug_nonredist/x64/Microsoft.VC143.DebugCRT")
+    if(EXISTS "${DEBUG_CRT_DIR}")
+        add_custom_command(TARGET ZombieEngineTests POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${DEBUG_CRT_DIR}"
+                    "$<TARGET_FILE_DIR:ZombieEngineTests>"
+            COMMENT "Copying MSVC debug CRT DLLs for test binary")
+    endif()
+    # Also copy ucrtbased.dll from Windows Kits.
+    set(UCRT_DEBUG_DIR "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/ucrt")
+    if(EXISTS "${UCRT_DEBUG_DIR}/ucrtbased.dll")
+        add_custom_command(TARGET ZombieEngineTests POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${UCRT_DEBUG_DIR}/ucrtbased.dll"
+                "$<TARGET_FILE_DIR:ZombieEngineTests>"
+            COMMENT "Copying ucrtbased.dll for debug test binary")
     endif()
 
     include(Catch)
