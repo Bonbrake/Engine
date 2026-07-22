@@ -74,11 +74,11 @@ private:
     void applyButton(Action action, bool down);
     void set(Action action, bool down, float analogValue = 0.0f);
 
-    std::unordered_map<Action, Binding> bindings_;
+    std::unordered_map<Action, std::vector<Binding>> bindings_;
     std::unordered_map<Action, ActionState> states_;
     std::unordered_map<SDL_Scancode, Action> keyMap_;
     std::unordered_map<uint32_t, Action> mouseMap_;
-    std::unordered_map<SDL_GamepadAxis, std::pair<Action, int>> axisMap_;
+    std::unordered_map<SDL_GamepadAxis, std::vector<std::pair<Action, int>>> axisMap_;
     std::unordered_map<SDL_GamepadButton, Action> gamepadButtonMap_;
     bool gamepadConnected_ = false;
 };
