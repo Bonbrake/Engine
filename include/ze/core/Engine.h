@@ -3,7 +3,7 @@
 #include <SDL3/SDL.h>
 #include <memory>
 #include <entt/entt.hpp>
-#include "../debug/ImGuiOverlay.h"
+#include "ze/debug/ImGuiOverlay.h"
 
 namespace render { class VulkanContext; }
 namespace ecs { class ECSContext; }

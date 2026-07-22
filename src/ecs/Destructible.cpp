@@ -64,11 +64,12 @@ void DamageSystem::receive(const DamageEvent& ev) {
                             }
                         }
                         if (registry.all_of<physics::PhysicsBodyComponent>(target)) {
-                            auto& phys = registry.get<physics::PhysicsBodyComponent>(target);
-                            LOG_INFO("DamageSystem: removing collider body 0x{:X} for destroyed entity {}",
-                                phys.bodyId.GetIndexAndSequenceNumber(),
-                                static_cast<uint32_t>(target));
-                            registry.remove<physics::PhysicsBodyComponent>(target);
+                            if (auto* physComp = registry.try_get<physics::PhysicsBodyComponent>(target)) {
+                                LOG_INFO("DamageSystem: removing collider body 0x{:X} for destroyed entity {}",
+                                    physComp->bodyId.GetIndexAndSequenceNumber(),
+                                    static_cast<uint32_t>(target));
+                                registry.remove<physics::PhysicsBodyComponent>(target);
+                            }
                         }
                     }
                 }
