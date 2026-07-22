@@ -23,7 +23,9 @@ void ChunkStreamer::generateMacroGraph() {
     // Generate ~50 macro nodes across the world
     for (uint32_t i = 0; i < 50; ++i) {
         MacroNode node;
-        node.position = glm::vec3(posDist(gen), 0.0f, posDist(gen));
+        float nx = posDist(gen);
+        float nz = posDist(gen);
+        node.position = glm::vec3(nx, 0.0f, nz);
         node.width = widthDist(gen);
         node.isRiver = riverChance(gen);
         node.nodeId = i;
