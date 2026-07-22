@@ -41,4 +41,4 @@ archive/runtime_junk/
 archive/old_milestones/*bak*/
 
 # Keep docs/build/ tracked — intentionally not ignored
-vcpkg-manifest-install.log
+scripts/vcpkg-manifest-install.log

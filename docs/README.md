@@ -4,8 +4,8 @@
 
 | Path | Contents |
 |------|----------|
-| `docs/build.md` | Local build instructions |
-| `docs/build/` | Build prerequisites, VS toolchain notes, packaging |
+| `docs/build/build.md` | Build instructions, prerequisites, presets |
+| `docs/status/STATUS.md` | Current project status and completion tracking |
 | `docs/verify/` | Verification gates, headless smoke notes, test conventions |
 | `docs/research/` | Externally sourced research feeding spec decisions |
 | `docs/research/engine_architecture_lessons.md` | id Tech / Decima / UE5 architecture lessons |

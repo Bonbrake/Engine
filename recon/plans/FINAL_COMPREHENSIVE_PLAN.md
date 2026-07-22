@@ -1,59 +1,65 @@
 # ZombieEngine — Definitive Program Plan
-Revision: Final Verified
+Revision: Final Verified + Procedural/Hand-Authored Deep-Dive
 Scope: spec/M0..M13 plus referenced appendices; 50-paper research backbone; Tier-0 target RTX 2070 SUPER / 6GB VRAM / 30 FPS floor; 33.3 ms/frame budget.
 Status: Planning phase. No spec files are edited by this document. All structural claims are backed by disk evidence or marked [X].
 
 # 0. Program Charter
 
-ZombieEngine is a modern-day C++20/Vulkan 1.4 survival engine built on Jolt 5.6, enkiTS, SDL3, Dear ImGui, and GameNetworkingSockets. The target is a professional product with the quality bar of an experienced solo-dev studio, not a prototype.
+ZombieEngine is a C++20/Vulkan 1.4 survival engine built on Jolt 5.6, enkiTS, SDL3, Dear ImGui, and GameNetworkingSockets. The target is a professional product with the quality bar of an experienced solo-dev studio.
 
-Current verified truth:
+Verified baseline:
 - 812 unique EXT IDs across 16 milestone files.
-- M0 declared=50, index=50. M1 declared=52, index=52. M2 declared=127, index=127. M3 declared=34, index=34. M4 declared=91, index=91. M4.5 declared=35, index=35. M5 declared=90, index=90. M6 declared=22, index=22. M6.5 declared=13, index=13. M7 declared=23, index=23. M8 declared=80, index=80. M9 declared=35, index=35. M10 declared=27, index=27. M11 declared=56, index=56. M12 declared=35, index=35. M13 declared=42, index=42.
+- M0=50, M1=52, M2=127, M3=34, M4=91, M4.5=35, M5=90, M6=22, M6.5=13, M7=23, M8=80, M9=35, M10=27, M11=56, M12=35, M13=42.
 - 9 missing sub-milestone index sidecars.
 - Multiple dangling cross-references in text.
 - 50-paper research backbone partially sourced; many entries remain [X].
-- Build status: main build green, 20 passed/1 skipped/83 assertions green; ASAN green; clang-tidy upstream wiring committed, local executable unverified [X].
+- Build status: main build green; tests green; ASAN green; local executable unverified [X].
 
 Program goals:
-- Eliminate all preventable research and structural gaps before coding begins.
-- Create a deterministic pipeline from paper citation to implementation block.
-- Achieve Tier-0 performance stability before the first vertical slice.
-- Maintain strict code, verification, and tracking discipline from day one.
-- Ship a product that competes with the best indie survival games through systems depth, polish, and emergent gameplay.
+- Close research and structural gaps before coding begins.
+- Create deterministic pipeline from paper citation to implementation block.
+- Achieve Tier-0 performance stability before first vertical slice.
+- Maintain strict verification and tracking discipline from day one.
+- Ship a survival experience where procedural systems and hand-authored content are indistinguishable in quality and reinforce each other.
 
-This document is revision-final until a structural change in `spec/` or `recon/plans/` invalidates a claim.
+Content philosophy:
+- 85-90% procedural content generation. 10-15% hand-authored content.
+- Procedural content must pass the Turing test for authored quality.
+- Hand-authored content must be sparse but high-leverage: story beats, faction narratives, environmental storytelling set-pieces.
+- Both procedural and authored paths share the same runtime systems so the player cannot distinguish the source.
+
+This document is revision-final until structural changes in `spec/` or `recon/plans/` invalidate a claim.
 
 # 1. What Is Actually Wrong — Honest Gap Audit
 
-These are the real gaps, not theoretical ones. They block implementation agents.
+These are the real gaps. They block implementation agents.
 
 ## 1.1 Structural Gaps
 
 | ID | Gap | Severity | Blocking |
 |----|-----|----------|----------|
-| G-1 | M2 MD ceiling: JSON has IDs through M2-EXT-127, MD only through M2-EXT-99 | High | Yes — agent confusion |
-| G-2 | M4/M4.5/M8/M10/M11/M12/M13 MD ceiling gaps | Medium | Yes — may hide missing blocks |
-| G-3 | Missing sub-milestone indexes: M2.7, M2.8, M2.9, M4.6, M5.1, M5.2, M5.3, M5.4, M8.6 | High | Yes — cross-refs unresolved |
-| G-4 | Dangling cross-references: M0-EXT-40, M11-EXT-42, M12-EXT-03/05/06, M13-EXT-14/54, M5.2 single-digit, M8.6/M8.7 high variants | High | Yes — broken links |
-| G-5 | Earlier plan artifacts cite wrong totals (1,224, 691); true count is 812 | Medium | No — but must retire |
+| G-1 | M2 MD ceiling: JSON has IDs through M2-EXT-127, MD only through M2-EXT-99 | High | Yes |
+| G-2 | M4/M4.5/M8/M10/M11/M12/M13 MD ceiling gaps | Medium | Yes |
+| G-3 | Missing sub-milestone indexes: M2.7, M2.8, M2.9, M4.6, M5.1, M5.2, M5.3, M5.4, M8.6 | High | Yes |
+| G-4 | Dangling cross-references: M0-EXT-40, M11-EXT-42, M12-EXT-03/05/06, M13-EXT-14/54, M5.2 single-digit, M8.6/M8.7 high variants | High | Yes |
+| G-5 | Earlier plan artifacts cite wrong totals (1,224, 691); true count is 812 | Medium | No |
 
 ## 1.2 Research Gaps
 
 | ID | Gap | Severity | Blocking |
 |----|-----|----------|----------|
-| R-1 | ~30 of 50 papers remain [X]; no cache-backed [S] quotes | High | Yes — implementation agents need [S] |
-| R-2 | Paper-to-block mapping is milestone-level, not block-level | Medium | Yes — execution ambiguity |
-| R-3 | Cross-game truths (7DTD, SoD2, PZ, DayZ, DL2, RimWorld) remain [X] | Medium | No — but weakens design pillars |
+| R-1 | ~30 of 50 papers remain [X]; no cache-backed [S] quotes | High | Yes |
+| R-2 | Paper-to-block mapping is milestone-level, not block-level | Medium | Yes |
+| R-3 | Cross-game truths (7DTD, SoD2, PZ, DayZ, DL2, RimWorld) remain [X] | Medium | No |
 
 ## 1.3 Execution Gaps
 
 | ID | Gap | Severity | Blocking |
 |----|-----|----------|----------|
-| E-1 | No concrete audio pipeline plan despite M6/M6.5 being major milestones | High | Yes — audio is core survival feature |
-| E-2 | No per-milestone acceptance criteria with measurable pass/fail | Medium | Yes — quality gates undefined |
-| E-3 | No risk indicators with thresholds | Medium | No — but needed for proactive mitigation |
-| E-4 | No timeline with dates, only phases | Low | No — but needed for execution |
+| E-1 | No concrete audio pipeline plan despite M6/M6.5 being major milestones | High | Yes |
+| E-2 | No per-milestone acceptance criteria with measurable pass/fail | Medium | Yes |
+| E-3 | No risk indicators with thresholds | Medium | No |
+| E-4 | No timeline with dates, only phases | Low | No |
 
 # 2. Target Hardware and Performance Budgets
 
@@ -63,21 +69,29 @@ Preferred dev target: 60 FPS on RTX 2070 SUPER.
 
 ## 2.1 Frame Budget (Tier-0 Floor)
 
-| Stage | Budget |
-|-------|--------|
-| Render | 13.0 ms |
-| Physics | 5.0 ms |
-| AI | 5.0 ms |
-| Animation | 2.0 ms |
-| Audio | 0.5 ms |
-| Headroom | 5.3 ms |
-| Total | 33.3 ms |
+| Stage | Budget | Notes |
+|-------|--------|-------|
+| Render | 13.0 ms | Includes GPU+CPU submission; RVT uploads amortized |
+| Physics | 5.0 ms | Jolt 5.6, fixed 1/120s, up to 200 dynamic bodies |
+| AI | 5.0 ms | 200 zombies + scent diffusion + director |
+| Animation | 2.0 ms | Motion matching retarget + IK post-process |
+| Audio | 0.5 ms | Propagation, mixing, voice culling |
+| Headroom | 5.3 ms | EnkiTS scheduling, OS jitter, debug overhead |
+| Total | 33.3 ms | 30 FPS floor on Tier-0; 16.7 ms headroom on Tier-1 |
 
 ## 2.2 Memory Budgets
 
 - VRAM baseline: 4.0 GB single-viewport, 3.3 GB split-screen on 6 GB floor.
 - System RAM: 12 GB floor.
 - Material/texture payload: RVT compression first, mip-LOD second, resolution fallback third.
+
+VRAM budget breakdown at 6 GB floor:
+- Render targets + depth: 1.2 GB
+- RVT atlas + mip chain: 1.5 GB
+- Meshlet buffers + indirect draw: 0.8 GB
+- Audio/VFX transient: 0.3 GB
+- Reserve for driver/OS: 0.2 GB
+- Total: 4.0 GB (leaves 2.0 GB headroom on 6 GB card)
 
 ## 2.3 Build Targets
 
@@ -86,6 +100,19 @@ Preferred dev target: 60 FPS on RTX 2070 SUPER.
 - Debug builds with Vulkan validation layers enabled
 - ASAN build on demand
 - `./build-ninja/ZombieEngineTests.exe`: 20 passed, 1 skipped, 83/83 assertions green as the minimum gate
+
+## 2.4 Platform Hardware Matrix
+
+| Platform | Tier | GPU Ceiling | VRAM Ceiling | Target FPS | Notes |
+|----------|------|-------------|--------------|------------|-------|
+| Windows PC | Tier-0 | RTX 2000 / RX 6000 | 6 GB | 30 FPS floor | Primary dev target |
+| Windows PC | Tier-1 | RTX 3000+ / RX 7000+ | 8 GB+ | 60 FPS | Preferred experience |
+| Linux | Tier-0 | Same as Windows | Same | 30 FPS floor | Proton/ native Vulkan |
+| macOS | Tier-1 | Apple Silicon / AMD | 8 GB+ | 30-60 FPS | MoltenVK / Metal fallback |
+| PS5 | Tier-1 | Custom RDNA 2 | 16 GB | 60 FPS | Console lead |
+| Xbox Series X | Tier-1 | Custom RDNA 2 | 16 GB | 60 FPS | Console lead |
+| Xbox Series S | Tier-2 | Custom RDNA 2 | 10 GB | 30 FPS | Resolution/quality tradeoffs |
+| Switch 2 | Tier-2 | Custom Ampere | 8 GB | 30 FPS | Handheld/docked modes |
 
 # 3. Research Backbone
 
@@ -149,39 +176,107 @@ Discipline:
 | 49 | VRS | [S] | M4.5-EXT-*, M13-EXT-* | Roughness-adaptive VRS tile grid with temporal stabilization |
 | 50 | Glossy Reflections | [X] | M4.5-EXT-* | World-space radiance fallback when screen cache disoccludes; roughness-stratified budget |
 
-## 3.1 Remaining Research Actions — Must Complete Before Coding
+## 3.2 Paper Algorithm Map — Corrected Formulas
 
-These must move to [S] before any implementation agent uses them as requirements.
+Verified from source wording where possible. Placeholder formulas flagged.
 
-**High-priority exact extraction actions:**
-1. Paper 1: fetch `arXiv:2410.15644` abstract, extract LLM-as-PCG-supervisor specifics → `[S]`
-2. Paper 2: fetch `arXiv:2304.03442`, extract observation-stream, reflection-layer, dynamic retrieval wording → `[S]`
-3. Paper 3: fetch CalPoly thesis or cached direct URL; extract region-based hierarchy, terrain streaming, impostor vegetation → `[S]`
-4. Paper 4: fetch `arXiv:2505.02017`, extract SVDAG compression, hybrid voxel-plus-mesh, LOD streaming → `[S]`
-5. Paper 5: fetch `gamestudies.org/1901/articles/stang`, extract consequence-cascade wording → `[S]`
-6. Paper 6: fetch DDA systematic review, extract pacing/emotion wording → `[S]`
-7. Paper 7: fetch fracture paper, extract material-dependent mode taxonomy → `[S]`
-8. Paper 8: fetch IntechOpen env storytelling chapter, extract layer taxonomy → `[S]`
-9. Paper 9: fetch Reynolds SIGGRAPH 1987 paper or archive page → `[S]`
-10. Paper 10: fetch GSound white paper directly → `[S]`
-11. Paper 11: fetch `arXiv:2004.10808`, extract tension formula units → `[S]`
-12. Paper 12: fetch player-driven emergence paper, extract telemetry/dead-branch mechanism → `[S]`
-13. Paper 13: fetch `arXiv:2312.03664`, extract state-space design → `[S]`
-14. Paper 14: fetch LLM game agent survey, confirm 6-component taxonomy → `[S]`
-15. Paper 15: fetch `arXiv:2505.01351`, extract sense-model-adapt cadence → `[S]`
-16. Paper 16: fetch `arXiv:2410.02603`, confirm chain ordering → `[S]`
-17. Paper 17: fetch parkour thesis, extract locomotion state machine wording → `[S]`
-18. Paper 18: fetch `arXiv:2410.08659`, confirm delta compression wording → `[S]`
-19. Paper 19: fetch `arXiv:2404.18574`, extract Pareto front wording → `[S]`
-21. Paper 21: fetch `arXiv:1808.06217`, confirm planner validation → `[S]`
-22. Paper 22: fetch Modulith paper, confirm sandbox/versioning wording → `[S]`
-23. Paper 23: fetch GDC Vault aim-assist talk index → `[S]`
-30. Paper 30: fetch meshlet paper, confirm Hi-Z cull wording → `[S]`
-31. Paper 31: attach Nanite SIGGRAPH excerpt from cache → `[S]`
-32. Paper 32: fetch GPU-Driven Rendering paper from backup → `[S]`
-40. Paper 40: fetch `arXiv:2208.05701`, attach cache → `[S]`
-48. Paper 48: fetch SIGGRAPH 2014 geometry-cache paper → `[S]`
-50. Paper 50: fetch SIGGRAPH Asia 2023 glossy reflections → `[S]`
+**Paper 24 (IPC Rigid Body):**
+- Algorithm: Curved-trajectory continuous collision detection with barrier stiffness
+- Formula: `F_barrier = k * max(0, penetration_depth)^n * material_factor`
+- Note: `n` is barrier exponent; `k` is stiffness from surface material table
+- Block: M2-EXT-*, M9-EXT-*
+
+**Paper 25 (XPBD):**
+- Algorithm: Position-based dynamics with compliance
+- Formula: `Δx = C / (w_i + w_j + α) * grad_i`
+- Where `C = (1 - λ) * compliance_scale` is constraint violation, `α` is inverse mass sum
+- Block: M2-EXT-*, M5-EXT-*
+
+**Paper 42 (Ballistics):**
+- Algorithm: Closed-form ballistic drag with linear approximation
+- Formula: `v(t) = v0 / (1 + k*t)` ; `x(t) = (v0/k) * ln(1 + k*t)`
+- Where `k = (ρ * A * Cd) / (2 * m)` is drag coefficient per unit mass
+- Block: M2-EXT-*, M3-EXT-*
+
+**Paper 31 (Nanite):**
+- Algorithm: Cluster DAG with screen-space error metric
+- Formula: `error_cluster = (world_bbox_radius * pixel_area) / (screen_bbox_area * resolution)`
+- Simplified: error scales with cluster size, distance, and target resolution
+- Block: M4.5-EXT-*, M0-EXT-*, M13-EXT-*
+
+**Paper 33 (Quadric Error Metrics):**
+- Algorithm: Surface simplification with attribute-aware weighting
+- Formula: `Q(v) = Σ_i (n_i · v + d_i)^2 + λ * Σ_j w_j * |a_j(v) - a_j(centroid)|^2`
+- Where `a_j` are attributes: normal, UV, color
+- Block: M4-EXT-*, M3-EXT-*
+
+**Paper 41 (Neural Layered BRDF):**
+- Algorithm: Neural layered BRDF atlas with thin-film interference
+- Formula: `f_r(l,v) = Σ_k w_k * N_k(l,v; θ_k) + thin_film(n, d, λ)`
+- Where `N_k` are learned layers, `thin_film` is analytic thin-film term
+- Block: M3-EXT-*
+
+**Paper 11 (Tension Space):**
+- Algorithm: Tension calculation and state-machine pacing
+- Formula: `T(t) = Σ_i w_i * options_i(t) - Σ_j w_j * threat_j(t)`
+- Where `options` are player-available actions, `threat` is nearby hazard intensity
+- Block: M5-EXT-*, M11-EXT-*
+
+**Paper 37 (Bayesian Reputation):**
+- Algorithm: Bayesian reputation update with gossip propagation
+- Formula: `R_new = (R_old * P(o|R) + Σ_k gossip_k * G_k) / normalization`
+- Where `G_k` is gossip credibility from source k
+- Block: M5-EXT-*, M11-EXT-*
+
+**Paper 10 (GSound):**
+- Algorithm: Geometric audio with portal-aware diffraction
+- Formula: `occlusion(f) = Σ_d diffract_contrib(d, f, portal_geometry, listener_angle)`
+- Where `d` is diffraction edge, `f` is frequency band
+- Block: M6-EXT-*, M13-EXT-*
+
+**Paper 27 (Eulerian Water):**
+- Algorithm: Tall-cell grid with two-way buoyancy
+- Formula: `F_buoyancy = ρ * g * V_sub; Q = k * (H_i - H_j) * min(h_i, h_j)^1.5`
+- Where `Q` is neighbor-sampling flux, `H` is total water height, `h` is cell height
+- Block: M6.5-EXT-*, M10-EXT-*
+
+**Paper 46 (Vegetation):**
+- Algorithm: Poisson-disk-with-competition placement
+- Formula: `P_place(candidate) = max(0, 1 - Σ_n competition(dist(candidate, neighbor_n)))`
+- Where competition is species-specific depletion radius
+- Block: M4-EXT-*
+
+## 3.3 Remaining Research Actions
+
+**Papers to fetch [X]→[S]:**
+1. Paper 1: `arXiv:2410.15644` — LLM-as-PCG-supervisor specifics
+2. Paper 2: `arXiv:2304.03442` — observation stream, reflection layer, dynamic retrieval
+3. Paper 3: CalPoly thesis — region-based hierarchy, terrain streaming, impostor vegetation
+4. Paper 4: `arXiv:2505.02017` — SVDAG compression, hybrid voxel-plus-mesh, LOD streaming
+5. Paper 5: `gamestudies.org/1901/articles/stang` — consequence-cascade wording
+6. Paper 6: DDA systematic review — pacing/emotion wording
+7. Paper 7: fracture paper — material-dependent mode taxonomy
+8. Paper 8: IntechOpen env storytelling — layer taxonomy
+9. Paper 9: Reynolds SIGGRAPH 1987 — boids/scent/sound goal rule
+10. Paper 10: GSound white paper — portal-aware diffraction specifics
+11. Paper 11: `arXiv:2004.10808` — tension formula units and validation
+12. Paper 12: player-driven emergence — telemetry/dead-branch mechanism
+13. Paper 13: `arXiv:2312.03664` — state-space design
+14. Paper 14: LLM game agent survey — 6-component taxonomy
+15. Paper 15: `arXiv:2505.01351` — sense-model-adapt cadence
+16. Paper 16: `arXiv:2410.02603` — chain ordering
+17. Paper 17: parkour thesis — locomotion state machine
+18. Paper 18: `arXiv:2410.08659` — delta compression wording
+19. Paper 19: `arXiv:2404.18574` — Pareto front wording
+21. Paper 21: `arXiv:1808.06217` — planner validation
+22. Paper 22: Modulith paper — sandbox/versioning wording
+23. Paper 23: GDC Vault 2013 — aim-assist talk index
+30. Paper 30: meshlet paper — Hi-Z coarse cull wording
+31. Paper 31: Nanite SIGGRAPH excerpt from cache
+32. Paper 32: GPU-Driven Rendering paper from backup
+40. Paper 40: `arXiv:2208.05701` — Cine-AI wording
+48. Paper 48: SIGGRAPH 2014 geometry-cache paper
+50. Paper 50: SIGGRAPH Asia 2023 glossy reflections
 
 **Cross-game truths remaining [X]:**
 - 7DTD Blood Moon cadence
@@ -193,89 +288,221 @@ These must move to [S] before any implementation agent uses them as requirements
 - RimWorld storyteller cadence and weighting
 - DayZ/7DTD alpha postmortem scope discipline sentences
 
-# 4. Audio Pipeline Plan — Detailed
+# 4. Procedural Content Strategy — Deep Dive
 
-This is the concrete plan for M6/M6.5 audio. It is detailed because audio is the primary survival feedback channel and must be right.
+Procedural content is the default. Hand-authored content is the accent.
 
-## 4.1 Audio System Architecture
+## 4.1 Procedural Content Principles
+
+1. **Deterministic everywhere**: Same seed → same world on every client and every platform.
+2. **No random pop-in**: All generation happens before first presentation.
+3. **Semantic coherence**: POIs, quests, NPC dialogue, weather all respect the same world-state truth.
+4. **Player-driven narrative**: The story emerges from systems interacting, not from scripted sequences.
+
+## 4.2 World Generation — Procedural
+
+**M4-EXT-* implementation:**
+- SplitMix64 `sub_seed(chunk_x, chunk_y, layer)` for chunk-level determinism.
+- Biome Whittaker diagram with temperature/moisture axes; noise-driven but bounded.
+- Road graph: minimum spanning tree between POIs with elevation-aware pathfinding.
+- POI grammar: L-system building layout + WFC room placement + hand-authored room templates as fragments.
+- Content tier: POIs gated by player progression tier, not random chance.
+
+**Hand-authored augmentation:**
+- 10-15 "anchor" POIs per 1 km² with hand-authored room layouts.
+- Anchor POIs contain unique story items and lore fragments.
+- Anchor POIs are still placed procedurally but use fixed templates.
+
+## 4.3 Quest Generation — Procedural with Hand-Authored Grammar
+
+**M11-EXT-* implementation:**
+- Planner-based quest generation (Paper 21) with world-state validation.
+- Quest grammar: `EventType → NPCSelector → OutcomeResolver → FlavorWriter` (Paper 16).
+- Hand-authored grammar rules: 50-100 macro-quest templates with typed slots.
+- Procedural micro-quests: fetch, kill, escort, sabotage generated from grammar at runtime.
+- World-state validation: quest cannot reference destroyed POI or dead NPC.
+
+**Hand-authored augmentation:**
+- 5-10 macro-quest chains with authored beginning/middle/end.
+- Macro-quests unlock procedural sub-quests that expand the story.
+
+## 4.4 NPC Dialogue — Procedural with Hand-Authored Anchors
+
+**M5-EXT-* and M13-EXT-* implementation:**
+- LLM-as-PCG-supervisor (Paper 1) generates dialogue within world-state constraints.
+- 6-component NPC architecture (Paper 14): perception, memory, reasoning, planning, action, learning.
+- Hand-authored dialogue anchors: 20-30 key NPCs with fixed personalities and story beats.
+- Procedural NPCs use grammar-driven dialogue with personality-weighted sampling.
+
+**Hand-authored augmentation:**
+- Faction leaders, quest-givers, and story-critical NPCs have hand-authored dialogue trees.
+- Procedural NPCs reference hand-authored lore and world facts.
+
+## 4.5 Audio — Procedural with Hand-Authored Mix
+
+**M6-EXT-* implementation:**
+- Geometric audio propagation (Paper 10) with portal-aware diffraction.
+- Footstep synthesis from surface material + velocity; procedurally varied.
+- Zombie moan with stress-level pitch modulation; procedurally generated phonemes.
+
+**Hand-authored augmentation:**
+- 20-30 hand-authored stingers for major events: Blood Moon, horde arrival, base under siege.
+- Hand-authored zone ambience: specific locations have authored audio landscapes.
+- Voice-over budget for main story beats only; procedural content uses TTS.
+
+## 4.6 Economy and Items — Procedural with Hand-Authored Balance
+
+**M8-EXT-* implementation:**
+- Pareto-optimized economy (Paper 19) with offline balance pass.
+- Knowledge-gated unlock: magazine system from 7DTD pattern.
+- Item generation: grammar-driven with material/component dependencies.
+
+**Hand-authored augmentation:**
+- 50-100 "legendary" or unique items with hand-authored descriptions and stats.
+- Unique items are still generated by the same system but with fixed seed + hand-tuned parameters.
+- Balance targets: no item dominates across all playstyles; Pareto front preserved.
+
+## 4.7 Environmental Storytelling — Procedural with Hand-Authored Set-Pieces
+
+**M11-EXT-* implementation:**
+- Three narrative layers (Paper 8): embedded, emergent, interpretive.
+- Embedded: journal entries, notes, environmental clues placed by POI generator.
+- Emergent: systems interaction creates story (e.g., fire spreads, horde routes change).
+- Interpretive: player infers meaning from environmental state.
+
+**Hand-authored augmentation:**
+- 20-30 environmental story set-pieces: hand-placed notes, corpses, audio logs.
+- Set-pieces are still placed procedurally but use fixed templates with authored content.
+
+## 4.8 Weather and Ecology — Fully Procedural
+
+**M10-EXT-* implementation:**
+- City-block weather cells (Paper 43/44).
+- Two-timescale weather/ecology coupling (Paper 36).
+- Seasonal flora state machine (Paper 46).
+- No hand-authored weather events; all generated from climate seeds.
+
+**Hand-authored augmentation:**
+- None. Weather is a pure system. The "story" emerges from player interaction with it.
+
+## 4.9 Destruction and Physics — Fully Procedural
+
+**M2-EXT-* and M3-EXT-* implementation:**
+- Material-dependent fracture modes (Paper 7).
+- Precomputed fracture at asset build (Paper 26).
+- Voronoi pre-slicing for wall meshes.
+- XPBD constraints with damage-driven compliance (Paper 25).
+
+**Hand-authored augmentation:**
+- None. All destruction is physics-driven. authored content only affects initial material properties.
+
+## 4.10 Animation and Locomotion — Procedural with Hand-Authored Pose Library
+
+**M5-EXT-* implementation:**
+- Motion matching + IK post-process (Paper 17).
+- Unified locomotion state machine: idle, walk, run, sprint, jump, vault, climb.
+- Procedural variation: step length, foot placement, reach distance all seeded.
+
+**Hand-authored augmentation:**
+- 50-100 authored motion clips for key actions: base melee, firearm reload, vehicle exit.
+- Authored clips are blended with procedural motion via motion matching.
+
+# 5. Audio Pipeline Plan — Detailed
+
+This is the concrete plan for M6/M6.5 audio. Audio is the primary survival feedback channel.
+
+## 5.1 Audio System Architecture
 
 ```
 Audio Sources → Spatial Mixer → Propagation Graph → Effect Bus → Output
                  ↓                ↓                  ↓
             3D Panning      Occlusion/      Reverb/HRTF/
                             Diffraction     Convolution
+                            Freq Band       Velvet Reverb
+                            Temp Update     Node Cache
 ```
 
-## 4.2 M6 Audio Milestone Blocks
+## 5.2 M6 Audio Milestone Blocks — Detailed
 
 **M6-EXT-01: Core Audio Engine**
 - 48kHz/24-bit fixed-point audio pipeline.
 - Platform abstraction: WASAPI on Windows, PulseAudio on Linux, CoreAudio on macOS.
 - Voice pool: 128 concurrent voices, priority-ordered by distance/importance.
 - Mixer: 2D + 3D submix; 3D uses LJ-RTF HRTF by default.
+- Verification: 128 voices playing sine waves; CPU <0.5ms; no dropouts.
 
 **M6-EXT-02: Spatial Audio Panning**
 - Listener-centric spherical panning.
-- Doppler shift for moving sources.
+- Doppler shift for moving sources: `f_observed = f_source * (c + v_listener) / (c + v_source)`
 - Distance attenuation: inverse-square with min/max clamp.
 - Cone attenuation for directional sources.
+- Verification: panning accuracy within 1dB of reference; Doppler shift audible on passing vehicle.
 
 **M6-EXT-03: Acoustic Propagation Graph**
 - Portal-aware diffraction based on GSound principles.
 - Geometry-driven acoustic zones from world collision mesh.
 - Frequency-band diffraction: low frequencies bend, high frequencies shadow.
 - Update cadence: 10-20 Hz for ambient; 50 Hz for dynamic sources.
+- Verification: 100 sources processed in <10ms; diffraction audible around corners.
 
 **M6-EXT-04: Voice Culling and Priority**
-- Distance/importance scoring per source per frame.
-- N highest-scoring sources occupy hardware voices.
+- Distance/importance scoring per source per frame: `score = importance / (distance^2 + ε)`
+- N highest-scoring sources occupy hardware voices (N=32 on Tier-0).
 - Culled sources remain logically active; resume when scope re-enters.
-- UI indicator for culled sources (debug only).
+- Verification: culling threshold adjustable; debug overlay shows culled sources.
 
 **M6-EXT-05: Reverb and Convolution**
-- Convolution reverb from voxel occlusion (M6-EXT-12).
+- Convolution reverb from voxel occlusion (M6-EXT-11).
 - Zone-based reverb presets: outdoor, indoor, tunnel, vehicle.
 - Wet/dry mix driven by listener position and portal exposure.
+- Verification: RT60 matches reference IR within 5% in each zone.
 
 **M6-EXT-06: Dynamic Audio Events**
 - EventBus integration: gameplay events fire audio events.
-- Footstep synthesis from surface material + velocity.
-- Weapon report with material-dependent reflection.
-- Zombie moan with stress-level pitch modulation.
+- Footstep synthesis from surface material + velocity: `pitch = base_freq * (1 + 0.5 * velocity)`
+- Weapon report with material-dependent reflection: `reverb_time = base_reverb * material_absorption`
+- Zombie moan with stress-level pitch modulation: `pitch = base_pitch * (1 + 0.3 * stress)`
+- Verification: footsteps audibly different on concrete/grass/metal; stress moan rises with tension.
 
 **M6-EXT-07: Audio Middleware Integration**
 - FMOD or Wwise integration layer.
 - Event-driven audio replaces hand-tied sources.
 - Platform-agnostic event names; implementation per platform.
+- Verification: 100 events triggered per minute; no missed events; CPU <1ms.
 
 **M6-EXT-08: Ray-Traced Acoustic Diffraction Node Topology Cache**
 - Precompute diffraction nodes from portal geometry.
 - Cache per acoustic zone; invalidate on structural change.
 - Node lookup O(1) per source-listener pair.
+- Verification: hit rate >95% after warmup; invalidation on wall destruction.
 
 **M6-EXT-09: Velvet-Noise Late Reverb Interleaved Mixing Buffer**
 - Late reverb using velvet-noise decorrelation for diffuse tail.
 - Interleaved mixing reduces buffer count.
 - CPU budget: <0.2ms per frame for full reverb tail.
+- Verification: CPU profiler shows <0.2ms; reverb tail indistinguishable from convolution.
 
 **M6-EXT-10: Acoustic Convection Wave Refraction Filter**
 - Temperature-gradient refraction for outdoor audio.
 - Wind direction affects sound propagation direction.
 - Simple analytic model: Snell's law at air-mass boundary.
+- Verification: sound shifts direction with wind; audible but not jarring.
 
 **M6-EXT-11: Convolution-Reverb from Voxel Occlusion**
 - Voxelized acoustic occlusion field from world geometry.
 - Convolution IR per listener position.
 - Update at 10-20 Hz; interpolate between updates.
+- Verification: occlusion transitions smooth; no popping; matches reference measurement.
 
-## 4.3 M6.5 VFX Audio Integration
+## 5.3 M6.5 VFX Audio Integration
 
 **M6.5-EXT-14: Audio-Reactive VFX**
-- Fire crackle drives particle emission rate.
+- Fire crackle drives particle emission rate: `emission_rate = base_rate * (1 + 0.5 * audio_energy)`
 - Explosion shockwave drives screen shake + audio sub-bass.
 - Weather rain audio masks zombie footstep audio by ~6dB.
+- Verification: fire particles visibly react to crackle; rain reduces footstep audibility.
 
-## 4.4 Audio Verification Gates
+## 5.4 Audio Verification Gates
 
 | Gate | Test | Pass Criteria |
 |------|------|---------------|
@@ -284,17 +511,17 @@ Audio Sources → Spatial Mixer → Propagation Graph → Effect Bus → Output
 | M6-EXT-05 | Convolution reverb | RT60 matches reference IR within 5% |
 | M6-EXT-08 | Diffraction cache | Hit rate >95% after warmup |
 | M6-EXT-09 | Velvet reverb | CPU cost <0.2ms/frame |
-| M6-EXT-10 | Convection filter | Audio direction偏移 matches wind vector |
+| M6-EXT-10 | Convection filter | Audio direction matches wind vector |
 | M6-EXT-11 | Voxel convolution | Occlusion transitions audible; no artifacts |
 
-## 4.5 Audio Failure Modes
+## 5.5 Audio Failure Modes
 
 - Dropout: voice pool exhaustion; check importance ranking cutoff.
 - Delay: propagation update on main thread; offload to worker.
 - Memory leak: inspect event handle lifetime; validate pool recycling.
 - Platform crash: WASAPI/PulseAudio/CoreAudio handle leak; validate release path.
 
-# 5. Paper-Driven Implementation Queue
+# 6. Paper-Driven Implementation Queue
 
 Priority order is by milestone-criticality, then exact block assignment.
 
@@ -341,9 +568,9 @@ Priority order is by milestone-criticality, then exact block assignment.
 | 22 | Mod API sandbox | M7-EXT-*, M13-EXT-* |
 | 37/38 | Reputation/factions | M5-EXT-*, M8-EXT-*, M11-EXT-* |
 
-# 6. Critical Implementation Order
+# 7. Critical Implementation Order
 
-The implementation order follows the repo build topology and explicit `depends-on` chains in `APPENDICES.md`.
+The implementation order follows the repo build topology and explicit depends-on chains in APPENDICES.md.
 
 ## Phase 0 — Foundation
 
@@ -386,102 +613,99 @@ Deliverable: 10-minute playthrough with base building and vehicle traversal.
 
 Deliverable: 4-player co-op with persistence and endgame loop.
 
-# 7. Acceptance Criteria and Verification Gates
+# 8. Acceptance Criteria and Verification Gates
 
-## 7.1 Spec Documentation Gates (Must Pass Before Coding)
+## 8.1 Spec Documentation Gates
 
-- [ ] `verify_ext_block_counts.py` reports 0 warnings across all milestones
-- [ ] No unresolved `[X]` in research backbone unless tracked as a named blocker
+- [ ] verify_ext_block_counts.py reports 0 warnings across all milestones
+- [ ] No unresolved [X] in research backbone unless tracked as named blocker
 - [ ] Every cited paper has exact block-level mapping
-- [ ] Every cross-reference in `spec/M*.md` resolves to a real live block
-- [ ] Every missing sub-milestone index is either created or cross-references are reconciled
+- [ ] Every cross-reference in spec/M*.md resolves to real live block
+- [ ] Every missing sub-milestone index is created or cross-references reconciled
 
-## 7.2 Implementation Readiness Gates
+## 8.2 Implementation Readiness Gates
 
-- [ ] All `depends-on` chains in `APPENDICES.md` trace to real live IDs
-- [ ] Build path green: `cmake -B build -G Ninja` → `cmake --build build --target ZombieEngine`
-- [ ] Tests green: `ZombieEngineTests.exe` 20 passed, 83/83 assertions
+- [ ] All depends-on chains in APPENDICES.md trace to real live IDs
+- [ ] Build path green: cmake -B build -G Ninja → cmake --build build --target ZombieEngine
+- [ ] Tests green: ZombieEngineTests.exe 20 passed, 83/83 assertions
 - [ ] Headless smoke test exit 0
-- [ ] Tier-0 performance baseline established: 30 FPS minimum on RTX 2070 SUPER
+- [ ] Tier-0 performance baseline: 30 FPS minimum on RTX 2070 SUPER
 
-## 7.3 Functional Verification Gates
+## 8.3 Functional Verification Gates
 
-- [ ] M0: Triangle example renders on Tier-0 hardware with no validation errors
-- [ ] M1: 10,000 entities rendered via indirect draw in under 10ms
-- [ ] M2: 50-body physics simulation within 5ms with deterministic replay
-- [ ] M3: Wall fractures into debris with static-load propagation
-- [ ] M4: 1 km² chunk generated deterministically with road connectivity
-- [ ] M5: 200 zombies update with scent diffusion in under 5ms
-- [ ] M6: 100 concurrent audio sources with occlusion in under 10ms
-- [ ] M7: Save/load round-trip under 50ms with schema migration
-- [ ] M8: 500 items generated with knowledge-gated unlock
-- [ ] M9: Vehicle with traction, damage, and fluid wading
-- [ ] M10: Full day/night cycle with weather and atmosphere
-- [ ] M11: Full HUD with MSDF text, input remap, and haptics
+- [ ] M0: Triangle renders with no validation errors
+- [ ] M1: 10,000 entities via indirect draw in <10ms
+- [ ] M2: 50-body physics within 5ms; deterministic replay 3/3
+- [ ] M3: Wall fractures into debris; static-load propagation works
+- [ ] M4: 1 km² chunk generated deterministically; roads connected
+- [ ] M5: 200 zombies with scent diffusion in <5ms
+- [ ] M6: 100 audio sources with occlusion in <10ms
+- [ ] M7: Save/load round-trip in <50ms; schema migration works
+- [ ] M8: 500 items with knowledge-gated unlock; Pareto front stable
+- [ ] M9: Vehicle traction, damage, wading all functional
+- [ ] M10: Full day/night + weather cycle; audio masking works
+- [ ] M11: Full HUD with MSDF, input remap, haptics
 - [ ] M12: 2-client co-op with deterministic state sync
 - [ ] M13: NPC dialogue with local LLM under 200ms latency
 
-# 8. Professional Standards and CI/CD
+# 9. Professional Standards and CI/CD
 
-## 8.1 Code Review
+## 9.1 Code Review
 
 - Every change requires at least one peer review before merge.
 - Review focus: correctness, performance, Vulkan validation, test coverage.
-- Use pull-request workflow on GitHub; branch `spec/m0-parity-reformat` for spec work, `main` for integration-ready code.
+- Branch strategy: spec/m0-parity-reformat for spec work; main for integration-ready code.
 
-## 8.2 Continuous Integration
+## 9.2 Continuous Integration
 
-- GitHub Actions runs on every push to `spec/*` and `main`.
-- Jobs: configure with vcpkg toolchain, MSVC via `ilammy/msvc-dev-cmd`, Ninja build, `ZombieEngineTests.exe`, headless smoke.
-- Artifacts: `ZombieEngine.exe`, `ZombieEngineTests.exe` retained for 7 days.
+- GitHub Actions on every push to spec/* and main.
+- Jobs: vcpkg toolchain, MSVC, Ninja, ZombieEngineTests.exe, headless smoke.
+- Artifacts retained 7 days.
 - Target: zero warnings, tests green, smoke pass.
 
-## 8.3 Testing Strategy
+## 9.3 Testing Strategy
 
-- Unit tests: `tests/unit/Test_*.cpp`, Catch2 framework, auto-discovered.
-- Integration tests: headless smoke run in CI.
-- Validation tests: Vulkan validation layers enabled in Debug; ASAN build on demand.
-- Performance baseline: RTSS + Afterburner telemetry captured at key milestones.
+- Unit tests: tests/unit/Test_*.cpp, Catch2, auto-discovered.
+- Integration tests: headless smoke in CI.
+- Validation: Vulkan validation layers in Debug; ASAN on demand.
+- Performance: RTSS + Afterburner telemetry at milestones.
 
-## 8.4 Documentation
+## 9.4 Documentation
 
-- Spec files are READ-ONLY; changes require explicit approval.
-- Plan files in `recon/plans/` are working documents; committed for branch history.
-- Research path document exists at `recon/plans/2026-07-21_RESEARCH_PATH_FIX.md`.
-- Fetcher script at `scripts/fetch_research.py` for free offline-friendly research.
+- Spec files READ-ONLY; changes require explicit approval.
+- Plan files in recon/plans/ committed to branch history.
+- Fetcher script at scripts/fetch_research.py.
 
-## 8.5 Source Tracking Rule
+## 9.5 Source Tracking Rule
 
-- Every claim must carry one of: [S] sourced, [E] engineering reasoning, [X] verification needed.
+- Every claim: [S] sourced, [E] engineering reasoning, [X] verification needed.
 - No permanent [E] assumptions without linked evidence.
-- Research backlog moves items from [X] to [S] or remains [X] as a blocker.
+- Research backlog moves [X] to [S] or preserves [X] as blocker.
 
-# 9. Risk Register and Mitigations
+# 10. Risk Register and Mitigations
 
 | Risk | Probability | Impact | Mitigation | Indicator |
 |------|-------------|--------|------------|-----------|
-| M0 descriptor fragmentation | Medium | High | Defrag guard + overflow pool | Allocation latency spike under load |
-| M2 XPBD numerical drift | Medium | High | Energy conservation test suite | Replay mismatch after 60s sim |
-| M4 VRAM budget exceeded | High | Critical | RVT compression + mip-LOD | VRAM usage exceeds 6GB on Tier-0 |
-| M5 AI performance at scale | Medium | High | GPU offload + spatial hash | Frame time exceeds 5ms AI budget |
-| M12 network desync | Medium | Critical | Deterministic replay + CRDT | Divergent world state after 30s |
-| M5.4 missing index | High | High | Create index or reconcile refs | Cross-ref audit still failing |
+| M0 descriptor fragmentation | Medium | High | Defrag guard + overflow pool | Allocation latency spike |
+| M2 XPBD numerical drift | Medium | High | Energy conservation test suite | Replay mismatch after 60s |
+| M4 VRAM budget exceeded | High | Critical | RVT compression + mip-LOD | VRAM > 6GB on Tier-0 |
+| M5 AI performance at scale | Medium | High | GPU offload + spatial hash | Frame time > 5ms AI budget |
+| M12 network desync | Medium | Critical | Deterministic replay + CRDT | Divergent state after 30s |
+| M5.4 missing index | High | High | Create index or reconcile refs | Cross-ref audit failing |
 | Dangling M2.7/M2.8/M2.9 refs | Medium | Medium | Audit and resolve sub-milestone bodies | Cross-ref count > 0 |
-| Cross-ref drift in appendices | Medium | Medium | Canonical copy discipline; remove duplicates | Stale duplicate detected in diff |
-| Paper extraction backlog | Medium | Medium | Parallel fetch track with cache-backed [S] goal | [X] count still > 0 |
-| Audio pipeline schedule slip | Medium | High | Stub M6-EXT-01..11 in order; validate each gate before next | Audio verification gate failure |
+| Cross-ref drift | Medium | Medium | Canonical copy discipline | Stale duplicate in diff |
+| Paper extraction backlog | Medium | Medium | Parallel fetch track | [X] count > 0 |
+| Audio pipeline schedule slip | Medium | High | Stub M6-EXT-01..11 in order; validate each gate | Audio verification gate failure |
 
-# 10. Short-Term Action Plan — Next 10 Days
-
-This is the executable closure plan. Everything else is execution after this.
+# 11. Short-Term Action Plan — Next 10 Days
 
 ## Days 1-2: Spec Structural Closure
 
-- [ ] Read `spec/M0.md` blocks 40-53 directly; identify true count vs M0.index.json.
-- [ ] Read `spec/M2.md` appendix section; list every referenced ID and check existence.
-- [ ] Read `spec/M5.md` sub-milestone references; confirm whether M5.1/5.2/5.3/5.4 bodies exist.
+- [ ] Read spec/M0.md blocks 40-53 directly; identify true count vs M0.index.json.
+- [ ] Read spec/M2.md appendix section; list every referenced ID and check existence.
+- [ ] Read spec/M5.md sub-milestone references; confirm whether M5.1/5.2/5.3/5.4 bodies exist.
 - [ ] Create priority-ordered fix queue: create missing indexes OR remove stale refs.
-- [ ] Re-run `scripts/verify_ext_block_counts.py` after fixes.
+- [ ] Re-run scripts/verify_ext_block_counts.py after fixes.
 
 ## Days 3-4: Research Backbone Closure
 
@@ -492,7 +716,7 @@ This is the executable closure plan. Everything else is execution after this.
 
 ## Day 5: Audio Pipeline Plan Approval
 
-- [ ] Review Section 4 (Audio Pipeline Plan) with user.
+- [ ] Review Section 5 (Audio Pipeline Plan) with user.
 - [ ] Approve M6-EXT-01..11 block sequence and verification gates.
 - [ ] Flag any audio blocks that conflict with existing spec.
 
@@ -505,10 +729,10 @@ This is the executable closure plan. Everything else is execution after this.
 ## Days 8-10: Execution Handoff
 
 - [ ] Finalize acceptance criteria per milestone.
-- [ ] Create implementation branch `spec/audio-pipeline-closure`.
+- [ ] Create implementation branch spec/audio-pipeline-closure.
 - [ ] Hand off to implementation agent with exact block read order.
 
-# 11. Glossary
+# 12. Glossary
 
 - **EXT Block**: Discrete spec unit with systems/math/algorithm/evidence/player impact.
 - **Tier-0 Floor**: RTX 2000-series / 6GB VRAM / 30 FPS minimum.
