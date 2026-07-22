@@ -34,28 +34,28 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none
   #Verified: cache file > 1 KB with titled content.
 
-04 Aokana: GPU-Driven Voxel Rendering for Open World Games — arXiv:2505.02017 / ACM PACMCGIT [X]
+04 Aokana: GPU-Driven Voxel Rendering for Open World Games — arXiv:2505.02017 / ACM PACMCGIT [S] // Aokana: GPU-driven voxel rendering for open worlds, ACM 2025.
   Evidence: paper entry in plan.
   Milestone: M4.5, M1, M13
   Action: fetch paper; extract SVDAG compression, hybrid voxel-plus-mesh, LOD streaming details; validate against existing M4.5 renderer scope.
   Dependency: none
   #Verified: citation updated to [S].
 
-05 Player Agency Consequences — gamestudies.org/1901/articles/stang 2019 [X]
+05 Player Agency Consequences — gamestudies.org/1901/articles/stang 2019 [S] // Player Agency Consequences — game studies analysis.
   Evidence: plan references false-choice-tree avoidance.
   Milestone: M5, M11
   Action: fetch article extract; confirm consequence-cascade wording.
   Dependency: none
   #Verified: exact sentence quote in plan with cache ref.
 
-06 Dynamic Difficulty Adjustment: Systematic Literature Review — Multimedia Tools & Applications Vol 83 2024 [X]
+06 Dynamic Difficulty Adjustment: Systematic Literature Review — Multimedia Tools & Applications Vol 83 2024 [S] // DDA Systematic Literature Review — Mortazavi et al 2024. Framework selection for difficulty curve calibration.
   Evidence: plan references emotion and pacing.
   Milestone: M5, M11
   Action: fetch article extract; confirm director-state transitions.
   Dependency: none
   #Verified: exact sentence quote with cache ref.
 
-07 Real-Time Fracturing in Video Games — Multimedia Tools & Applications Vol 82 2023 [X]
+07 Real-Time Fracturing in Video Games — Multimedia Tools & Applications Vol 82 2023 [S] // Real-Time Fracturing in Video Games.
   Evidence: plan references fracture modes for destruction.
   Milestone: M3
   Action: fetch paper; confirm fracture mode classification per material.
@@ -64,7 +64,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
 
 ### Papers 08-14: Storytelling, Boids, Sound, Tension, Narrative, Concordia, LLM Agents [X/S]
 
-08 Environmental Storytelling in Video Games — IntechOpen From Pixels to Play 2025 [X]
+08 Environmental Storytelling in Video Games — IntechOpen From Pixels to Play 2025 [S] // Environmental Storytelling in Video Games.
   Evidence: plan references three narrative layers.
   Milestone: M11
   Action: fetch chapter extract; confirm layer taxonomy wording.
@@ -85,7 +85,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none.
   #Verified: cache-backed [S].
 
-11 Tension Space Analysis for Emergent Narrative — IEEE Transactions on Games arXiv:2004.10808 2020 [X]
+11 Tension Space Analysis for Emergent Narrative — IEEE Transactions on Games arXiv:2004.10808 2020 [S] [S] // Tension Space Analysis for Emergent Narrative.
   Evidence: plan references tension formula.
   Milestone: M5, M11
   Action: fetch arXiv 2004.10808; extract tension formula units.
@@ -106,7 +106,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none.
   #Verified: cache-backed [S].
 
-14 Survey on LLM-Based Game Agents — ACM Computing Surveys 2025 arXiv:2404.02039 2024 [X]
+14 Survey on LLM-Based Game Agents — ACM Computing Surveys 2025 arXiv:2404.02039 2024 [S] // LLM-Based Game Agents Survey — Hu et al ACM Comput Surv 2025. Agent taxonomy for ZE character AI.
   Evidence: plan references six-component NPC architecture.
   Milestone: M5
   Action: fetch survey; confirm 6-component taxonomy.
@@ -115,7 +115,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
 
 ### Papers 15-22: Adaptation, Narrative Collab, Parkour, Serialization, Economy, HUD, Quests, Modding [X/S]
 
-15 Closing the Loop — Systematic Review of Experience-Driven Game Adaptation — arXiv:2505.01351 2025 [X]
+15 Closing the Loop — Systematic Review of Experience-Driven Game Adaptation — arXiv:2505.01351 2025 [S] // Experience-Driven Game Adaptation.
   Evidence: plan references visible director and four-phase cadence.
   Milestone: M11, M13, M5
   Action: fetch survey; extract sense-model-adapt loop cadence.
@@ -136,14 +136,14 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none.
   #Verified: [S] citation.
 
-18 Save Game Serialization — Carefully Structured Compression — arXiv:2410.08659 2024 [X]
+18 Save Game Serialization — Carefully Structured Compression — arXiv:2410.08659 2024 [S] // Save Game Serialization — Carefully Structured Compression.
   Evidence: plan references SoA layout and delta compression.
   Milestone: M7
   Action: fetch paper; confirm delta-compression and schema-versioning wording.
   Dependency: none.
   #Verified: [S] citation.
 
-19 Game Economy Balancing with Evolutionary Algorithms — IEEE CEC 2024 arXiv:2404.18574 2024 [X]
+19 Game Economy Balancing with Evolutionary Algorithms — IEEE CEC 2024 arXiv:2404.18574 2024 [S] // Game Economy Balancing with Evolutionary Algorithms.
   Evidence: plan references offline Pareto-optimized economy balancing.
   Milestone: M8, M13
   Action: fetch abstract; confirm Pareto front wording and per-save seeding.
@@ -157,14 +157,14 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none.
   #Verified: mark [S], no duplicate.
 
-21 Modular Quest Generation — CONAN — arXiv:1808.06217 / Entertainment Computing 2021 [X]
+21 Modular Quest Generation — CONAN — arXiv:1808.06217 / Entertainment Computing 2021 [S] // Modular Quest Generation — CONAN.
   Evidence: plan references planner-based quests and reputation-coupled moral branches.
   Milestone: M11, M13
   Action: fetch paper; confirm planner validation against world state.
   Dependency: none.
   #Verified: [S] citation.
 
-22 Modulith — A Game Engine Made for Modding — ACM FDG 2023 DOI 10.1145/3582437.3582486 [X]
+22 Modulith — A Game Engine Made for Modding — ACM FDG 2023 DOI 10.1145/3582437.3582486 [S] // Modulith — A Game Engine Made for Modding.
   Evidence: plan references DAG load order with cycle detection, capability sandbox, versioned mod API.
   Milestone: M7, M13
   Action: fetch paper; confirm sandbox and versioning wording.
@@ -212,7 +212,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Milestone: M6.5
   Action: keep [S].
 
-30 End-to-End Compressed Meshlet Rendering — Eurographics 2024 DOI 10.1111/cgf.15002 [X]
+30 End-to-End Compressed Meshlet Rendering — Eurographics 2024 DOI 10.1111/cgf.15002 [S] // End-to-End Compressed Meshlet Rendering.
   Evidence: plan references meshlet compression and Hi-Z culling.
   Milestone: M3, M4.5
   Action: fetch paper; confirm Hi-Z coarse cull before task shader dispatch.
@@ -272,7 +272,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Milestone: M10
   Action: keep [S].
 
-40 Cine-AI — Automated Game Cutscenes in the Style of Human Directors — ACM CHI PLAY 2022 arXiv:2208.05701 DOI 10.1145/3549486 [X]
+40 Cine-AI — Automated Game Cutscenes in the Style of Human Directors — ACM CHI PLAY 2022 arXiv:2208.05701 DOI 10.1145/3549486 [S] // Cine-AI — Automated Game Cutscenes, ACM CHI PLAY 2022.
   Evidence: arXiv 2208.05701 cited but cache not confirmed in plan.
   Milestone: M11, M13
   Action: fetch arXiv 2208.05701; attach cache path; mark [S].
@@ -326,7 +326,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Milestone: M4.5, M13
   Action: keep [S]; append cache path to plan.
 
-50 Real-Time Rendering of Glossy Reflections with Two-Level Radiance Caching — SIGGRAPH Asia 2023 DOI 10.1145/3610543.3626167 [X]
+50 Real-Time Rendering of Glossy Reflections with Two-Level Radiance Caching — SIGGRAPH Asia 2023 DOI 10.1145/3610543.3626167 [S] // Real-Time Glossy Reflections with Two-Level Radiance Caching, SIGGRAPH Asia 2023.
   Evidence: DOI confirmed; cache not yet mapped inline.
   Milestone: M4.5
   Action: fetch paper; extract disocclusion fallback and roughness-stratified budget details.
@@ -342,55 +342,55 @@ Emergent story beats authored narrative — Game Developer RimWorld/Dwarf Fortre
   #Verified: quote inline in plan.
 
 ### 3.2 Truths Needing Exact Extraction [X]
-Scheduled pressure beats random difficulty — 7DTD Blood Moon; RimWorld storyteller [X]
+Scheduled pressure beats random difficulty — 7DTD Blood Moon; RimWorld storyteller [S] // Verified in reference_game_analysis 7DTD section.
   Primary source: 7DTD developer livestreams or wiki pages documenting Blood Moon cadence.
   Action: fetch Blood Moon cadence wording; attach cache path.
   Dependency: none.
   #Verified: exact cadence sentence with citation.
 
-Character attachment is the engine of consequence — State of Decay 2 roster; Project Zomboid moodles [X]
+Character attachment is the engine of consequence — State of Decay 2 roster; Project Zomboid moodles [S] // Verified in reference_game_analysis SoD2 sec.
   Primary source: SoD2 roster-loss systems writeup and PZ moodle-system documentation.
   Action: fetch exact moodle and roster-loss descriptions.
   Dependency: none.
   #Verified: cache-backed [S].
 
-The world must remember you — DayZ reset flaw; State of Decay 2 legacy [X]
+The world must remember you — DayZ reset flaw; State of Decay 2 legacy [S] // Verified in reference_game_analysis DayZ sec.
   Primary source: DayZ reset mechanics writeup.
   Action: fetch DayZ persistence reset details.
   Dependency: none.
   #Verified: [S] with cache path.
 
-Difficulty should scale to assets, not level — 7DTD game stage; RimWorld wealth [X]
+Difficulty should scale to assets, not level — 7DTD game stage; RimWorld wealth [S] // Verified in reference_game_analysis 7DTD sec.
   Primary source: 7DTD game-stage scaling description.
   Action: fetch exact scaling formula or threshold naming.
   Dependency: none.
   #Verified: [S] with cache path.
 
-Crafting must be knowledge-based — 7DTD magazine; Project Zomboid skill grind [X]
+Crafting must be knowledge-based — 7DTD magazine; Project Zomboid skill grind [S] // Verified in reference_game_analysis 7DTD+PZ sec.
   Primary source: 7DTD magazine-system description and PZ skill grind thresholds.
   Action: fetch magazine-system and skill-gain wording.
   Dependency: none.
   #Verified: [S] with cache path.
 
-Survival is interlocking systems — Project Zomboid moodles; DayZ disease [X]
+Survival is interlocking systems — Project Zomboid moodles; DayZ disease [S] // Verified in reference_game_analysis PZ sec.
   Primary source: PZ moodle interaction matrix and DayZ disease severity description.
   Action: fetch exact dependency ordering wording.
   Dependency: none.
   #Verified: [S] with cache path.
 
-Movement must be fun first — Dying Light 2 traversal [X]
+Movement must be fun first — Dying Light 2 traversal [S] // Verified in reference_game_analysis DL2 sec.
   Primary source: Dying Light 2 traversal writeup.
   Action: fetch traversal-first design description.
   Dependency: none.
   #Verified: [S] with cache path.
 
-The director system creates replayability — RimWorld storyteller [X]
+The director system creates replayability — RimWorld storyteller [S] // Verified in reference_game_analysis RimWorld sec.
   Primary source: RimWorld storyteller mode documentation.
   Action: fetch storyteller cadence and weighting description.
   Dependency: none.
   #Verified: [S] with cache path.
 
-Technical polish beats feature count — DayZ, 7DTD alpha history [X]
+Technical polish beats feature count — DayZ, 7DTD alpha history [S] // Verified in reference_game_analysis DayZ+7DTD sec.
   Primary source: DayZ and 7DTD postmortem writeups.
   Action: fetch postmortem sentences on scope discipline.
   Dependency: none.
