@@ -15,6 +15,19 @@
 #include "ze/core/CVarSystem.h"
 #include <exception>
 
+#include "ze/audio/AudioEngine.h"
+#include "ze/ai/AIDirector.h"
+#include "ze/world/BiomeGraph.h"
+#include "ze/world/ChunkStreamer.h"
+#include "ze/survival/BodyTemp.h"
+#include "ze/survival/StaminaSystem.h"
+#include "ze/save/SaveSystem.h"
+#include "ze/modding/Modding.h"
+#include "ze/net/NetworkManager.h"
+#include "ze/slm/SLMClient.h"
+#include "ze/ui/HUD.h"
+#include "ze/vehicle/VehicleSystem.h"
+
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
 #endif
@@ -110,6 +123,40 @@ Engine::Engine() {
         
         ecs::DamageSystem::init(&ecsContext_->GetRegistry(), eventBus_.get());
         LOG_INFO("ENGINE: DamageSystem initialized");
+
+        // New systems initialization (added 2026-07-22)
+        audioEngine_    = std::make_unique<audio::AudioEngine>();
+        if (audioEngine_->initialize()) {
+            LOG_INFO("ENGINE: AudioEngine initialized");
+        }
+
+        constexpr uint32_t WORLD_SIZE = 8192;
+        constexpr uint32_t SEED = 42;
+        biomeGraph_     = std::make_unique<world::BiomeGraph>(SEED, WORLD_SIZE);
+        chunkStreamer_  = std::make_unique<world::ChunkStreamer>(SEED, WORLD_SIZE, biomeGraph_.get());
+        LOG_INFO("ENGINE: BiomeGraph + ChunkStreamer initialized");
+
+        bodyTempSystem_ = std::make_unique<survival::BodyTempSystem>();
+        staminaSystem_  = std::make_unique<survival::StaminaSystem>();
+        LOG_INFO("ENGINE: Survival systems initialized");
+
+        saveSystem_     = std::make_unique<save::SaveSystem>();
+        saveSystem_->initialize("saves");
+        LOG_INFO("ENGINE: SaveSystem initialized");
+
+        modding_        = std::make_unique<modding::Modding>();
+        modding_->initialize("mods");
+        LOG_INFO("ENGINE: Modding initialized");
+
+        networkManager_ = std::make_unique<net::NetworkManager>();
+        slmClient_      = std::make_unique<slm::SLMClient>();
+        hud_            = std::make_unique<ui::HUD>();
+
+        aiDirector_     = std::make_unique<ai::AIDirector>();
+        LOG_INFO("ENGINE: AI Director + new systems initialized");
+
+        vehicleSystem_  = std::make_unique<vehicle::VehicleSystem>();
+        LOG_INFO("ENGINE: VehicleSystem initialized");
 
         if (!Config::get().headless) {
             imguiOverlay_.Initialize(
@@ -335,6 +382,30 @@ void Engine::mainLoop() {
 
             // [M2] Fixed-step physics tick
             physicsTick();
+
+            // New systems tick (added 2026-07-22)
+            if (aiDirector_) {
+                glm::vec3 playerPos(0, 0, 0);
+                aiDirector_->tick(static_cast<float>(FIXED_DT), playerPos, 100.0f, 0.0f, 0.0f, 12.0f, 1);
+            }
+            if (audioEngine_) {
+                audioEngine_->tick(static_cast<float>(FIXED_DT), glm::vec3(0), glm::vec3(0), glm::quat(1,0,0,0), frameCount);
+            }
+            if (bodyTempSystem_) {
+                bodyTempSystem_->tick(static_cast<float>(FIXED_DT), 20.0f, 0.0f, 0.5f, 0.2f, true, false);
+            }
+            if (staminaSystem_) {
+                staminaSystem_->tick(static_cast<float>(FIXED_DT), 0.2f, 37.0f, 0.0f, 0.0f, false);
+            }
+            if (chunkStreamer_) {
+                chunkStreamer_->update(glm::vec3(0), frameCount, static_cast<float>(FIXED_DT));
+            }
+            if (saveSystem_) {
+                saveSystem_->tick(static_cast<float>(FIXED_DT));
+            }
+            if (networkManager_) {
+                networkManager_->tick(static_cast<float>(FIXED_DT));
+            }
 
 #if ENGINE_DEV_TOOLS
             // [M2-#4] Dev-only: fire one lethal DamageEvent against the dev test body

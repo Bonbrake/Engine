@@ -10,6 +10,17 @@ namespace ecs { class ECSContext; }
 namespace physics { class PhysicsSystem; }
 namespace events { class EventBus; }
 namespace debug { class FlyCamera; }
+namespace audio { class AudioEngine; }
+namespace ai { class AIDirector; }
+namespace world { class BiomeGraph; class ChunkStreamer; }
+namespace survival { class BodyTempSystem; class StaminaSystem; }
+namespace save { class SaveSystem; }
+namespace modding { class Modding; }
+namespace net { class NetworkManager; }
+namespace slm { class SLMClient; }
+namespace ui { class HUD; }
+namespace combat { class DamageSystem; }
+namespace vehicle { class VehicleSystem; }
 
 namespace core {
 
@@ -43,6 +54,20 @@ private:
     std::unique_ptr<physics::PhysicsSystem> physicsSystem_; // [M2] Jolt
     std::unique_ptr<events::EventBus>       eventBus_;      // [M2] entt::dispatcher
     debug::ImGuiOverlay imguiOverlay_;
+
+    // New systems (added 2026-07-22)
+    std::unique_ptr<audio::AudioEngine>          audioEngine_;
+    std::unique_ptr<ai::AIDirector>              aiDirector_;
+    std::unique_ptr<world::BiomeGraph>           biomeGraph_;
+    std::unique_ptr<world::ChunkStreamer>        chunkStreamer_;
+    std::unique_ptr<survival::BodyTempSystem>    bodyTempSystem_;
+    std::unique_ptr<survival::StaminaSystem>     staminaSystem_;
+    std::unique_ptr<save::SaveSystem>            saveSystem_;
+    std::unique_ptr<modding::Modding>            modding_;
+    std::unique_ptr<net::NetworkManager>         networkManager_;
+    std::unique_ptr<slm::SLMClient>              slmClient_;
+    std::unique_ptr<ui::HUD>                     hud_;
+    std::unique_ptr<vehicle::VehicleSystem>      vehicleSystem_;
 
 #if ENGINE_DEV_TOOLS
     // [M2-#4] Dev-test hook state (devMode && !headless only)
