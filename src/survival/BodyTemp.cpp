@@ -28,8 +28,8 @@ void BodyTempSystem::tick(float dt, float airTemp, float windSpeed, float humidi
     float tempDelta = netFlux * dt / (70.0f * 3500.0f / 1.8f);
 
     // Apply to core and skin temperature
-    state_.coreTemp += tempDelta * 0.3f; // core is buffered
-    state_.skinTemp += tempDelta * 0.7f; // skin responds faster
+    state_.coreTemp -= tempDelta * 0.3f; // core is buffered
+    state_.skinTemp -= tempDelta * 0.7f; // skin responds faster
 
     // Wetness decays when not in rain
     if (!isInWater && state_.wetness > 0.0f) {
