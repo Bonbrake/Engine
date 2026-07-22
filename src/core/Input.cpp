@@ -1,6 +1,7 @@
 #include "ze/core/Input.h"
 #include "ze/core/Config.h"
 #include "ze/core/Logger.h"
+#include "ze/core/ActionState.h"
 #include <cstdio>
 #include <cstring>
 #include <sstream>
@@ -215,6 +216,14 @@ void Input::shutdown() {
         fclose(replayFile);
         replayFile = nullptr;
     }
+}
+
+// [M1-EXT-43] Action Map / ActionState Layer integration.
+// Update the action map from this frame's polled events, then reset per-frame
+// pressed/released so gameplay systems see clean edge-style state.
+void Input::updateActionMap() {
+    ActionMap::get().update(state_.events.data(), state_.events.size());
+    ActionMap::get().resetFrameState();
 }
 
 } // namespace core

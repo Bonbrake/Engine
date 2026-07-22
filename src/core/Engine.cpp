@@ -262,6 +262,10 @@ void Engine::mainLoop() {
         if (Input::getState().quit) {
             running_ = false;
         }
+
+        // [M1-EXT-43] Update action map from this frame's polled input.
+        Input::updateActionMap();
+
         if (!Config::get().headless) {
             for (const auto& ev : Input::getState().events) {
                 imguiOverlay_.ProcessEvent(&ev);

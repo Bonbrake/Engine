@@ -1,4 +1,5 @@
 set(SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/ActionState.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CVarSystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Config.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Engine.cpp

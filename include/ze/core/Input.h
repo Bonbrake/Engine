@@ -42,6 +42,9 @@ public:
     // on parse error. poll() then replays the per-frame events instead of SDL.
     static bool loadScript(const std::string& path);
 
+    // [M1-EXT-43] Action map access for gameplay systems.
+    static void updateActionMap();
+
 private:
     static InputState state_;
     static std::vector<ScriptFrame> script_;
