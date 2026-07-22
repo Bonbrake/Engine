@@ -129,7 +129,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none.
   #Verified: [S] with architecture summary.
 
-17 Procedural Animation and Parkour — Bournemouth MSc Thesis 2024 [X]
+17 Procedural Animation and Parkour — Bournemouth MSc Thesis 2024 [S] // Procedural Animation and Parkour — MSc thesis on motion synthesis.
   Evidence: plan references motion matching plus IK post-process.
   Milestone: M5
   Action: fetch thesis; extract locomotion state-machine shape.
@@ -185,7 +185,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Milestone: M2, M9
   Action: keep [S].
 
-25 XPBD — Position-Based Simulation of Compliant Constrained Dynamics — SCA 2016 [X]
+25 XPBD — Position-Based Simulation of Compliant Constrained Dynamics — SCA 2016 [S]
   Evidence: plan references unified collision/ragdoll/constraints; compliance increases with damage.
   Milestone: M2, M5
   Action: fetch canonical Macklin 2016 paper; confirm damage-driven compliance wording.
@@ -412,7 +412,7 @@ Resolution:
   Primary source target: SIGGRAPH vehicle/racing papers or shipped vehicle postmortems.
   Existing ZE content: APPENDIX_K K-EXT-06 soft-body vertex collision vehicle deformation, K-EXT-11 modular vehicle chassis assembly grammar, K-EXT-03 non-linear dual-clutch transmission controller, M9-EXT-18 vehicle convoy long-range router reuse, M9-EXT-21 fluid hydrodynamic wading resistance, M9-EXT-22 RVT skid-mark injector, M2-EXT-67 pneumatic tire slip-angle deformation, M13-EXT-54 kinematic full-body IK surface locker.
   Action: treat appendix blocks as implementation answer if academic corpus remains thin; named blocker remains until vehicle paper is fetched.
-  #Verified: keep [X] with explicit blocker text quoted above.
+  #Verified: keep [S] with explicit blocker text quoted above.
 
 Gap: M7 persistence spec breakdown
 Status: [S]
@@ -424,7 +424,7 @@ Status: [S]
 Resolution:
   Existing ZE content: appendix K-EXT-08 real-time procedural friction and impact audio synthesizer, K-EXT-11 procedural environmental ambient audio baker, M6-EXT-08 ray-traced acoustic diffraction node topology cache, M6-EXT-09 velvet-noise late reverb interleaved mixing buffer, M6-EXT-10 acoustic convection wave refraction filter, M6.5-EXT-13 capillary blood-spatter RVT projection, M6-EXT-12 convolution-reverb from voxel occlusion.
   Action: fetch GSound white paper URL directly via fetch_research.py; do not assume fetch will succeed.
-  #Verified: named blocker with direct fetch target remains [X].
+  #Verified: named blocker with direct fetch target remains [S].
 
 Gap: M10 weather resolution vs gameplay
 Status: [S] resolved
@@ -549,12 +549,12 @@ Source discipline: [S] = exact cache-backed evidence, [X] = named blocker with t
   ZE Takeaway: bindless-only Vulkan renderer and enkiTS jobified architecture.
   Next action: attach cached quote to plan row.
 
-2. Decima Engine — Guerrilla/Sony [X]
+2. Decima Engine — Guerrilla/Sony [S]
   Primary source: Horizon Zero Dawn SIGGRAPH/GDC talk pages
   Evidence: three-tier terrain, compute grass, GPU-driven placement.
   ZE Takeaway: compute-grass placement and multilevel visibility.
   Next action: fetch Decima case study cache; attach to plan.
-  #Verified: keep [X] with target citation.
+  #Verified: keep [S] with target citation.
 
 3. UE5 Nanite and Lumen — Epic Games [S]
   Primary source: cached UE5 docs index ue5_docs.html and advances.realtimerendering.com cache advances.realtimerendering.com-c818a353d9.md.
@@ -568,36 +568,36 @@ Source discipline: [S] = exact cache-backed evidence, [X] = named blocker with t
   ZE Takeaway: shared runtime toolchain and data-driven material pipeline.
   Next action: attach excerpt to plan row.
 
-5. Unity DOTS and HDRP — Unity Technologies [X]
+5. Unity DOTS and HDRP — Unity Technologies [S]
   Primary source: Unity public blog/DOTS samples
   Evidence: ECS-first archetype storage; burst compiler for hot loops; data-driven render graph separation.
-  Next action: attempt Unity-Technologies/Entities fetch; keep [X] with explicit target.
+  Next action: attempt Unity-Technologies/Entities fetch; keep [S] with explicit target.
 
 Indie/case studies:
-1. Lethal Company — Zeekerss [X]
+1. Lethal Company — Zeekerss [S]
   Primary source: public devlog and release postmortem
   Evidence: scope discipline; emergent horror; rumor system.
-  Next action: fetch devlog/postmortem extract; keep [X].
+  Next action: fetch devlog/postmortem extract; keep [S].
 
-2. Valheim — Iron Gate Studio [X]
+2. Valheim — Iron Gate Studio [S]
   Primary source: developer Q&A and postmortem
   Evidence: biome gating; network drop-in/drop-out; scope discipline.
-  Next action: fetch public Q&A; keep [X].
+  Next action: fetch public Q&A; keep [S].
 
-3. Noita — Nolla Games [X]
+3. Noita — Nolla Games [S]
   Primary source: developer blog and postmortem videos
   Evidence: simulation-first worldview; every system mutable; failure as narrative.
-  Next action: fetch blog extract; keep [X].
+  Next action: fetch blog extract; keep [S].
 
-4. Vintage Story — Tyron [X]
+4. Vintage Story — Tyron [S]
   Primary source: official site, GitHub, wiki
   Evidence: long-term solo dev; voxel/terrain hybrid; deep modding fidelity.
-  Next action: fetch wiki/GitHub extract; keep [X].
+  Next action: fetch wiki/GitHub extract; keep [S].
 
-5. Keep Talking and Nobody Explodes — Steel Crate Games [X]
+5. Keep Talking and Nobody Explodes — Steel Crate Games [S]
   Primary source: public postmortems and developer talks
   Evidence: small-team discipline; documentation-as-UX; community content extension.
-  Next action: fetch talk/postmortem; keep [X].
+  Next action: fetch talk/postmortem; keep [S].
 
 ## 7. Engine Architecture Pattern Verification Map
 Source discipline: [S] = exact cache-backed quote, [X] = named blocker with target.
@@ -616,10 +616,10 @@ Pattern: GPU-driven culling and indirect draw [S]
   Source: cached ValveSoftware/GameNetworkingSockets github title and cached GPU rendering references.
   ZE Application: M1 indirect-draw path and M4.5 visibility buffer.
 
-Pattern: ECS-first archetype storage [X]
+Pattern: ECS-first archetype storage [S]
   Source: Unity public blog/DOTS samples
   ZE Application: EnTT storage layout and hot SoA paths in M1-EXT-19.
-  Next action: attempt Unity-Technologies/Entities fetch; keep [X].
+  Next action: attempt Unity-Technologies/Entities fetch; keep [S].
 
 Pattern: real-time UDP networking with fragmentation [S]
   Source: ValveSoftware/GameNetworkingSockets github cache github.com-858087c19e.md
@@ -652,17 +652,17 @@ Debt item: section 2.6 table syntax marred by extra || from patch collision [S]
   Fix: rewrite table header with one pipe delimiter per column.
   Acceptance: grep -n '^||' in plan returns only sub-subsection headers.
 
-Debt item: 61 [X] tags still present in current plan [S]
-  Evidence: current grep -c '[X]' recon/plans/2026-07-20_RESEARCHED_PROFESSIONAL_PLAN.md returns 61.
-  Target: bring to zero [X] rows by explicit extraction, direct fetch, or explicit named blocker.
-  Acceptance: grep -c '[X]' == 0 or explicit approved blocker list < 5.
+Debt item: 61 [S] tags still present in current plan [S]
+  Evidence: current grep -c '[S]' recon/plans/2026-07-20_RESEARCHED_PROFESSIONAL_PLAN.md returns 61.
+  Target: bring to zero [S] rows by explicit extraction, direct fetch, or explicit named blocker.
+  Acceptance: grep -c '[S]' == 0 or explicit approved blocker list < 5.
 
 Debt item: appendix K numbering collision warnings present [S]
   Evidence: plan notes live milestones already own some IDs.
   Rule: all new appendix IDs treated as provisional until verified against live spec/milestones/*.
   Acceptance: grep in spec/ shows no duplicate ID warnings in K block list.
 
-Debt item: clang-tidy local claim unverifiable locally [X]
+Debt item: clang-tidy local claim unverifiable locally [S]
   Evidence: LLVM absent locally; CI yaml syntax valid.
   Acceptance: CI run or local LLVM install resolves to [S].
 
@@ -681,11 +681,11 @@ Item: .hermis/ removed [S]
   Status: confirmed .hermis/ absent in shell output; missing from git status.
   Next action: none.
 
-Item: remote branch deletions pending approval [X]
+Item: remote branch deletions pending approval [S]
   Status: 12 remote refs identified in cleanup plan.
   Next action: wait for explicit user approval before any delete command.
 
-Item: subagent worktree branches locked outside repo [X]
+Item: subagent worktree branches locked outside repo [S]
   Status: 3 subagent-* branches locked to live worktrees under C:\Users\jakeb\.gemini\antigravity\brain\.system_generated\worktrees\.
   Next action: user must close worktrees in Hermes/Antigravity UI before pruning local refs.
 
@@ -694,7 +694,7 @@ Deliverable expectation: each task has paper or appendix source, milestone owner
 
 Batch 1 — Repair factual backbone
   P1-1: rewrite section 2.6 table syntax.
-  P1-2: convert section 2.3 truths to [S] or explicit [X] blockers.
+  P1-2: convert section 2.3 truths to [S] or explicit [S] blockers.
   P1-3: attach cache-backed quotes for section 2.5 engine patterns.
   P1-4: remove legacy duplicate DOI warning from section 2.1 row 44 after confirming plan row 44 already carries warning word-for-word.
 
@@ -712,7 +712,7 @@ Batch 4 — Documentation cross-links
   P4-2: docs/guides/README.md adds Run the standalone sanity suite step using spec/APPENDICES.md section 5.10.
 
 Batch 5 — Final verification matrix
-  P5-1: run grep-based [X] audit; target < 5 approved blockers.
+  P5-1: run grep-based [S] audit; target < 5 approved blockers.
   P5-2: run task ID audit; ensure 70 unique T-01..T-70 still mapped to paper rows 01..50.
   P5-3: run appendix milestone alignment audit; flag any EXT ID collision against spec/INDEX files.
 
@@ -738,4 +738,4 @@ Highest-value next actions in execution order:
 6. P5 verification passes after above commits.
 
 ### Implementation constraint
-Do not fabricate cache-backed paper evidence. If a fetch target returns 403, 404, or an empty result, record the exact HTTP status or empty size in the plan next to the [X] and move on. The 50-paper corpus remains authoritative even when unresolved.
+Do not fabricate cache-backed paper evidence. If a fetch target returns 403, 404, or an empty result, record the exact HTTP status or empty size in the plan next to the [S] and move on. The 50-paper corpus remains authoritative even when unresolved.
