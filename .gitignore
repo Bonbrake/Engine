@@ -3,6 +3,7 @@
 /build-asan/
 /build-clean/
 /build-ninja/
+/build-vs/
 *.obj
 *.pdb
 *.ilk
