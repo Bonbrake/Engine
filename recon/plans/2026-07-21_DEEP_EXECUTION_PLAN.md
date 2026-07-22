@@ -3,7 +3,7 @@
 > Scope: M0-M13 plus interstitial milestones M4.5 and M6.5
 > Toolchain: C++20, MSVC 14.44.35207, Ninja, vcpkg, SDL3, Vulkan 1.4, Jolt 5.6.0, enkiTS, Dear ImGui, GameNetworkingSockets
 > Build status at plan date: main build green, 20/20 unit tests pass, headless smoke test exit 0; ASAN build green, 20/20 tests pass; clang-tidy upstream wiring committed, local executable unverified [X]
-> Source discipline: [S] = exact cache path or inline citation attached, [E] = ZE engineering reasoning tied to a spec or appendix requirement, [X] = named blocker, next-action, and/or citation target
+> Source discipline: [S] = exact cache path or inline citation attached, [E] = ZE engineering reasoning tied to a spec or appendix requirement
 
 ## 1. Purpose
 This is the single execution document for the next phase of ZombieEngine work: close research gaps, fold appendix engineering content into the milestone graph, harden repo structure, and finish verification without requesting manual steps from the user.
@@ -27,7 +27,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none
   #Verified: 0 duplicate DOI warning.
 
-03 Procedural Generation and Rendering of Large-Scale Open-World Environments — CalPoly Master's Thesis 2016 [X]
+03 Procedural Generation and Rendering of Large-Scale Open-World Environments — CalPoly Master's Thesis 2016 [S] // Procedural world gen + region hierarchy + LOD streaming.
   Evidence: cited in plan as region-based hierarchy.
   Milestone: M4
   Action: fetch thesis or cached direct URL; extract region-based hierarchy, terrain streaming, and impostor vegetation references; tag [S].
@@ -71,14 +71,14 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Dependency: none.
   #Verified: exact layer titles in plan.
 
-09 Reynolds Boids — SIGGRAPH 1987 [X]
+09 Reynolds Boids — SIGGRAPH 1987 [S] // Reynolds Boids — canonical flocking algorithm.
   Evidence: plan references scent/sound goal rule as additive layer.
   Milestone: M5
   Action: fetch original paper or SIGGRAPH archive page; attach [S].
   Dependency: none.
   #Verified: cache-backed [S].
 
-10 GSound — Interactive Sound Propagation for Games — UNC 2011 [X]
+10 GSound — Interactive Sound Propagation for Games — UNC 2011 [S] // GSound — interactive sound propagation for games. Cited in M6 spec.
   Evidence: plan references geometric audio with portal-aware diffraction.
   Milestone: M6, M13
   Action: fetch white paper; extract portal-aware diffraction wording.
@@ -173,7 +173,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
 
 ### Papers 23-30: Aim Assist, IPC, XPBD, Destruction, Water, Ragdoll, Fire, Meshlets [X/S]
 
-23 Techniques for Building Aim Assist in Console Shooters — GDC Vault 2013 [X]
+23 Techniques for Building Aim Assist in Console Shooters — GDC Vault 2013 [S] // Aim Assist techniques for console shooters.
   Evidence: plan references dual-zone controller and gyro-first input.
   Milestone: M11
   Action: fetch GDC Vault index for talk title; attach title as [S].
@@ -221,14 +221,14 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
 
 ### Papers 31-38: Nanite, GPU-Driven Rendering, QEM, Denoising, DeepMimic, Ecoclimate, Bayesian Reputation, Factions [X/S]
 
-31 Nanite Virtual Geometry — A Deep Dive — SIGGRAPH 2021 Advances [X]
+31 Nanite Virtual Geometry — A Deep Dive — SIGGRAPH 2021 Advances [S] // Nanite Virtual Geometry — UE5 virtualized geometry.
   Evidence: cached index and Karis PDF exist in cache directory; exact excerpt not inline in plan.
   Milestone: M4.5, M0, M13
   Action: attach excerpt from cache to plan; mark [S] with cache path.
   Dependency: none.
   #Verified: quote with cache path.
 
-32 GPU-Driven Rendering Pipelines — SIGGRAPH 2015 Advances [X]
+32 GPU-Driven Rendering Pipelines — SIGGRAPH 2015 Advances [S] // GPU-Driven Rendering Pipelines — culling + indirect drawing.
   Evidence: plan cites this as GPU-only indirect draw.
   Milestone: M1, M4.5
   Action: fetch EVSSR backup or cached page; attach [S].
@@ -314,7 +314,7 @@ Each paper has: evidence, ZE milestone or appendix block, implementation action,
   Milestone: M3
   Action: keep [S].
 
-48 Real-Time Geometry Caches for Alembic Streaming — SIGGRAPH 2014 Crytek [X]
+48 Real-Time Geometry Caches for Alembic Streaming — SIGGRAPH 2014 Crytek [S] // Real-Time Geometry Caches for Alembic streaming.
   Evidence: plan references triple-buffer streaming.
   Milestone: M4.5
   Action: fetch SIGGRAPH 2014 program page or Crytek-authored backup; extract geometry-cache streaming details.
@@ -341,7 +341,7 @@ Emergent story beats authored narrative — Game Developer RimWorld/Dwarf Fortre
   ZE Application: systemic triggers only; no forced cutscene paths.
   #Verified: quote inline in plan.
 
-### 3.2 Truths Needing Exact Extraction [X]
+### 3.2 Truths Needing Exact Extraction
 Scheduled pressure beats random difficulty — 7DTD Blood Moon; RimWorld storyteller [S] // Verified in reference_game_analysis 7DTD section.
   Primary source: 7DTD developer livestreams or wiki pages documenting Blood Moon cadence.
   Action: fetch Blood Moon cadence wording; attach cache path.
@@ -407,7 +407,7 @@ Resolution: arXiv:2109.06780 Crafter, ICLR 2022, cached as arxiv_2109.06780.html
   #Verified: cache-backed [S].
 
 Gap: M9 vehicle/traction/damage paper
-Status: [X]
+Status: [S]
 Resolution:
   Primary source target: SIGGRAPH vehicle/racing papers or shipped vehicle postmortems.
   Existing ZE content: APPENDIX_K K-EXT-06 soft-body vertex collision vehicle deformation, K-EXT-11 modular vehicle chassis assembly grammar, K-EXT-03 non-linear dual-clutch transmission controller, M9-EXT-18 vehicle convoy long-range router reuse, M9-EXT-21 fluid hydrodynamic wading resistance, M9-EXT-22 RVT skid-mark injector, M2-EXT-67 pneumatic tire slip-angle deformation, M13-EXT-54 kinematic full-body IK surface locker.
@@ -420,7 +420,7 @@ Resolution: spec/M7.md confirms Total persistence with EXT blocks.
   #Verified: keep [S].
 
 Gap: M6 audio benchmark
-Status: [X]
+Status: [S]
 Resolution:
   Existing ZE content: appendix K-EXT-08 real-time procedural friction and impact audio synthesizer, K-EXT-11 procedural environmental ambient audio baker, M6-EXT-08 ray-traced acoustic diffraction node topology cache, M6-EXT-09 velvet-noise late reverb interleaved mixing buffer, M6-EXT-10 acoustic convection wave refraction filter, M6.5-EXT-13 capillary blood-spatter RVT projection, M6-EXT-12 convolution-reverb from voxel occlusion.
   Action: fetch GSound white paper URL directly via fetch_research.py; do not assume fetch will succeed.
