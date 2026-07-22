@@ -13,13 +13,9 @@ entt::entity EntityFactory::CreateEntity(entt::registry& registry, const nlohman
     // Loop over components
 
     for (auto& [compName, compJson] : entityJson.items()) {
-        try {
-            bool success = debug::MetaRegistry::EmplaceComponent(compName, registry, entity, compJson);
-            if (!success) {
-                LOG_WARN("EntityFactory::CreateEntity: Failed to emplace component '{}'", compName);
-            }
-        } catch (const std::exception& e) {
-            LOG_ERROR("EntityFactory::CreateEntity: Exception caught emplacing component '{}': {}", compName, e.what());
+        bool success = debug::MetaRegistry::EmplaceComponent(compName, registry, entity, compJson);
+        if (!success) {
+            LOG_WARN("EntityFactory::CreateEntity: Failed to emplace component '{}'", compName);
         }
     }
 

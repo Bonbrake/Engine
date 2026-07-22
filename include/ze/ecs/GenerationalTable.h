@@ -8,15 +8,22 @@ namespace ecs {
 
 // [M1-EXT-02] Generational Resource Table Pointer Validator
 struct Handle {
-    uint32_t index;
-    uint32_t generation;
+    uint32_t index{};
+    uint32_t generation{};
 
     bool operator==(const Handle& o) const { return index == o.index && generation == o.generation; }
     bool operator!=(const Handle& o) const { return !(*this == o); }
+
+    // [M1-EXT-02] Generational Resource Table Pointer Validator
+    // Validation is an integer bound + generation match:
+    // valid = (h.index < generations.size()) && (h.generation == generations[h.index]).
+    bool IsValid(const std::vector<uint32_t>& generations) const {
+        return index < static_cast<uint32_t>(generations.size()) && generation == generations[index];
+    }
 };
 
 inline bool IsHandleValid(const Handle& h, const std::vector<uint32_t>& generations) {
-    return h.index < generations.size() && h.generation == generations[h.index];
+    return h.IsValid(generations);
 }
 
 template<typename T>
@@ -56,6 +63,21 @@ public:
 
     T* Get(Handle h) {
         if (IsHandleValid(h, generations)) {
+            return &data[h.index];
+        }
+        return nullptr;
+    }
+
+    // [M1-EXT-02] Generational Resource Table Pointer Validator
+    // Null-only Get does not say why a lookup failed; this variant exposes
+    // validity explicitly via pValid so callers can distinguish
+    // "not present", "stale handle", and "index OOB".
+    T* GetChecked(Handle h, bool* pValid = nullptr) const {
+        const bool valid = IsHandleValid(h, generations);
+        if (pValid) {
+            *pValid = valid;
+        }
+        if (valid) {
             return &data[h.index];
         }
         return nullptr;

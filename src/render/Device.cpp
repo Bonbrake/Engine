@@ -148,16 +148,6 @@ void Device::createLogicalDevice() {
             break;
         }
     }
-    // Extensions were already conditionally enabled in selectPhysicalDevice via enable_extension_if_present.
-    // DeviceBuilder has no add_extension API — extensions flow through the PhysicalDevice selection.
-    // We only need to chain the feature structs here if the extension was actually enabled.
-    VkPhysicalDeviceDescriptorBufferFeaturesEXT descBufferFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_BUFFER_FEATURES_EXT};
-    void** pNextChain = &descBufferFeatures.pNext;
-    if (supportsDescBuffer && !core::Config::get().forceTier0) {
-        descBufferFeatures.descriptorBuffer = VK_TRUE;
-        *pNextChain = &descBufferFeatures;
-        pNextChain = &descBufferFeatures.pNext;
-    }
 
     // 2. Shader Object Extension Gating
     bool supportsShaderObject = false;
@@ -166,12 +156,6 @@ void Device::createLogicalDevice() {
             supportsShaderObject = true;
             break;
         }
-    }
-    VkPhysicalDeviceShaderObjectFeaturesEXT shaderObjectFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_OBJECT_FEATURES_EXT};
-    if (supportsShaderObject && !core::Config::get().forceTier0) {
-        shaderObjectFeatures.shaderObject = VK_TRUE;
-        *pNextChain = &shaderObjectFeatures;
-        pNextChain = &shaderObjectFeatures.pNext;
     }
 
     // 3. Unified Image Layouts KHR Extension Gating
@@ -182,29 +166,41 @@ void Device::createLogicalDevice() {
             break;
         }
     }
-    VkPhysicalDeviceUnifiedImageLayoutsFeaturesKHR unifiedLayoutFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFIED_IMAGE_LAYOUTS_FEATURES_KHR};
-    if (supportsUnifiedLayouts && !core::Config::get().forceTier0) {
-        unifiedLayoutFeatures.unifiedImageLayouts = VK_TRUE;
-        *pNextChain = &unifiedLayoutFeatures;
-        pNextChain = &unifiedLayoutFeatures.pNext;
-    }
 
     // 4. Vendor Diagnostics Gating
     bool supportsNVCheckpoints = false;
     bool supportsNVConfig = false;
-    bool supportsAMDMarkers = false;
     for (const auto& ext : available_extensions) {
         if (ext == VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME) supportsNVCheckpoints = true;
         if (ext == VK_NV_DEVICE_DIAGNOSTICS_CONFIG_EXTENSION_NAME) supportsNVConfig = true;
-        if (ext == VK_AMD_BUFFER_MARKER_EXTENSION_NAME) supportsAMDMarkers = true;
     }
-    
+
+    // Build the pNext chain for optional feature structs.
+    // Chain order: descriptor-buffer → shader-object → unified-image-layouts → diagnostics.
+    // Only enable features when the extension is present and forceTier0 is off.
+    VkPhysicalDeviceDescriptorBufferFeaturesEXT descBufferFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_BUFFER_FEATURES_EXT};
+    VkPhysicalDeviceShaderObjectFeaturesEXT shaderObjectFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_OBJECT_FEATURES_EXT};
+    VkPhysicalDeviceUnifiedImageLayoutsFeaturesKHR unifiedLayoutFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFIED_IMAGE_LAYOUTS_FEATURES_KHR};
     VkPhysicalDeviceDiagnosticsConfigFeaturesNV nvConfigFeatures{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DIAGNOSTICS_CONFIG_FEATURES_NV};
-    if (supportsNVCheckpoints && supportsNVConfig) {
-        nvConfigFeatures.diagnosticsConfig = VK_TRUE;
-        *pNextChain = &nvConfigFeatures;
-        pNextChain = &nvConfigFeatures.pNext;
+
+    if (supportsDescBuffer && !core::Config::get().forceTier0) {
+        descBufferFeatures.descriptorBuffer = VK_TRUE;
     }
+    if (supportsShaderObject && !core::Config::get().forceTier0) {
+        shaderObjectFeatures.shaderObject = VK_TRUE;
+    }
+    if (supportsUnifiedLayouts && !core::Config::get().forceTier0) {
+        unifiedLayoutFeatures.unifiedImageLayouts = VK_TRUE;
+    }
+    if (supportsNVCheckpoints && supportsNVConfig && !core::Config::get().forceTier0) {
+        nvConfigFeatures.diagnosticsConfig = VK_TRUE;
+    }
+
+    // Wire the chain in a linear order; last element terminates with nullptr.
+    descBufferFeatures.pNext = &shaderObjectFeatures;
+    shaderObjectFeatures.pNext = &unifiedLayoutFeatures;
+    unifiedLayoutFeatures.pNext = &nvConfigFeatures;
+    nvConfigFeatures.pNext = nullptr;
 
     deviceBuilder.add_pNext(&descBufferFeatures);
     

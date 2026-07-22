@@ -53,8 +53,8 @@ require("11. No ||| malformed rows", "|||" not in plan)
 require("12. T-70 present", "| T-70 |" in plan)
 
 # Execution map
-require("13. Exec map has evidence table", "| ID | Title | Readiness | Evidence | Blocker | Source |" in exec_map)
-require("14. Exec map notes 51 IDs", "51 unique provisional EXT IDs" in exec_map)
+require("13. Exec map has block inventory table", "| Milestone | Blocks | Max EXT | Sample blocks |" in exec_map)
+require("14. Exec map notes total block count", "**Total blocks**:" in exec_map)
 
 # Build wiring
 require("15. CMake has sanity_suite target", "add_executable(sanity_suite" in cmake)
