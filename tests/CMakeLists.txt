@@ -40,7 +40,27 @@ if(TEST_SRC_FILES)
         JPH_DOUBLE_PRECISION
     )
 
-    # Ensure vcpkg debug runtime DLLs are co-located/discoverable for test discovery/run.
+    # Ensure vcpkg release runtime DLLs are co-located for test execution.
+    set(VCPKG_RELEASE_BIN_DIR "$ENV{VCPKG_ROOT}/installed/x64-windows/bin")
+    if(EXISTS "${VCPKG_RELEASE_BIN_DIR}")
+        add_custom_command(TARGET ZombieEngineTests POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${VCPKG_RELEASE_BIN_DIR}/SDL3.dll"
+                "$<TARGET_FILE_DIR:ZombieEngineTests>")
+        add_custom_command(TARGET ZombieEngineTests POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${VCPKG_RELEASE_BIN_DIR}/enkiTS.dll"
+                "${VCPKG_RELEASE_BIN_DIR}/spdlog.dll"
+                "${VCPKG_RELEASE_BIN_DIR}/fmt.dll"
+                "${VCPKG_RELEASE_BIN_DIR}/msdfgen-core.dll"
+                "${VCPKG_RELEASE_BIN_DIR}/msdfgen-ext.dll"
+                "${VCPKG_RELEASE_BIN_DIR}/fastgltf.dll"
+                "${VCPKG_RELEASE_BIN_DIR}/vulkan-1.dll"
+                "$<TARGET_FILE_DIR:ZombieEngineTests>"
+            COMMENT "Copying vcpkg release runtime DLLs for test binary")
+    endif()
+
+    # Ensure vcpkg debug runtime DLLs are co-located for test discovery/run.
     set(VCPKG_DEBUG_BIN_DIR "$ENV{VCPKG_ROOT}/installed/x64-windows/debug/bin")
     if(EXISTS "${VCPKG_DEBUG_BIN_DIR}")
         set_target_properties(ZombieEngineTests PROPERTIES

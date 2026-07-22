@@ -54,19 +54,11 @@ static std::vector<uint32_t> readSpvFile(const std::string& path) {
 void Swapchain::create() {
     vkb::SwapchainBuilder swapchainBuilder{device_->getVkbDevice()};
     
-    // Query the actual surface format first; fall back to R8G8B8A8_UNORM
-    // for RTSS/overlay workflows that inject STORAGE_BIT.
-    VkSurfaceFormatKHR surfaceFormat = {VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
-    uint32_t formatCount = 0;
-    if (vkGetPhysicalDeviceSurfaceFormatsKHR(device_->getPhysicalDevice(), device_->getSurface(), &formatCount, nullptr) == VK_SUCCESS && formatCount > 0) {
-        std::vector<VkSurfaceFormatKHR> formats(formatCount);
-        if (vkGetPhysicalDeviceSurfaceFormatsKHR(device_->getPhysicalDevice(), device_->getSurface(), &formatCount, formats.data()) == VK_SUCCESS) {
-            surfaceFormat = formats[0];
-        }
-    }
-    
+    // Prefer R8G8B8A8_UNORM explicitly: RTSS/MSI Afterburner injects STORAGE_BIT
+    // into the swapchain, and R8G8B8A8_UNORM supports it (unlike B8G8R8A8_SRGB).
+    // Being explicit avoids VUID-VkSwapchainCreateInfoKHR-imageFormat-01778 validation errors.
     auto vkb_swapchain_ret = swapchainBuilder
-        .set_desired_format({surfaceFormat.format, surfaceFormat.colorSpace})
+        .set_desired_format({VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR})
         .set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR)
         // Explicit usage: color attachment (AgX tonemap + ImGui) + transfer for readback/dump.
         // Include STORAGE_BIT explicitly: RTSS.exe (RivaTuner overlay) injects this flag
