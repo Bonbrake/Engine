@@ -59,6 +59,18 @@ struct BarrelHeat {
     float grimeFactor = 0.0f;   // maintenance neglect scalar
 };
 
+// [M3] Minimal canonical breakable-door component.
+// Backs M2.7-EXT-11 (Kinematic Door-Kick Hydraulic Ram Splitting) and
+// M2.7-EXT-13 (Latch-Shear Kinematic Door Piercing). Add this component
+// to any entity that should be breakable as a door.
+struct DoorComponent {
+    bool locked = false;
+    float shearThreshold = 1.0f;     // material shear threshold
+    // Material class tags: wood, metal, reinforced, etc.
+    // Intentionally simple for now; expand once M3 destruction graph defines material table.
+    uint8_t materialClass = 0;
+};
+
 struct BulletComponent {
     glm::vec3 velocity{0.0f};
     float mass = 0.0f;

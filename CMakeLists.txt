@@ -10,6 +10,8 @@ include(cmake/Dependencies.cmake)
 include(cmake/Shaders.cmake)
 
 # Subsystems
+add_subdirectory(src/audio)
+add_subdirectory(src/combat)
 add_subdirectory(src/core)
 add_subdirectory(src/debug)
 add_subdirectory(src/ecs)
@@ -20,7 +22,9 @@ add_subdirectory(src/physics)
 add_subdirectory(src/render)
 add_subdirectory(src/save)
 add_subdirectory(src/slm)
+add_subdirectory(src/survival)
 add_subdirectory(src/ui)
+add_subdirectory(src/vehicle)
 add_subdirectory(src/world)
 
 # Main executable
@@ -45,6 +49,10 @@ target_link_libraries(ZombieEngine PRIVATE
     ze-slm
     ze-ui
     ze-world
+    ze-audio
+    ze-combat
+    ze-survival
+    ze-vehicle
     SDL3::SDL3
     Vulkan::Headers
     vk-bootstrap::vk-bootstrap

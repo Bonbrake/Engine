@@ -1,478 +1,380 @@
 [
   {
     "id": "M13-EXT-01",
-    "title": "Systems Touched",
+    "title": "Procedural Mission & Bounty Director",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 165,
+    "line": 0,
     "anchor": "m13-ext-01"
   },
   {
     "id": "M13-EXT-02",
-    "title": "Systems Touched",
+    "title": "Infected Mutation Forensic Log",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 190,
+    "line": 0,
     "anchor": "m13-ext-02"
   },
   {
     "id": "M13-EXT-03",
-    "title": "Systems Touched",
+    "title": "Dynamic Graveyard & Memorial Wall Epitaphs",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 215,
+    "line": 0,
     "anchor": "m13-ext-03"
   },
   {
     "id": "M13-EXT-04",
-    "title": "Systems Touched",
+    "title": "Inter-Faction Extortion & Diplomacy Dispatch",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 240,
+    "line": 0,
     "anchor": "m13-ext-04"
   },
   {
     "id": "M13-EXT-05",
-    "title": "Systems Touched",
+    "title": "Procedural Vehicle Maintenance Diagnostics",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 265,
+    "line": 0,
     "anchor": "m13-ext-05"
   },
   {
     "id": "M13-EXT-06",
-    "title": "Systems Touched",
+    "title": "Dynamic Survivor Hearsay & Rumor Network",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 290,
+    "line": 0,
     "anchor": "m13-ext-06"
   },
   {
     "id": "M13-EXT-07",
-    "title": "Systems Touched",
+    "title": "Safehouse Logbook Auto-Journalizer",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 315,
+    "line": 0,
     "anchor": "m13-ext-07"
   },
   {
     "id": "M13-EXT-08",
-    "title": "Systems Touched",
+    "title": "Infiltration & Stealth Audio-Text Interpreter",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 340,
+    "line": 0,
     "anchor": "m13-ext-08"
   },
   {
     "id": "M13-EXT-09",
-    "title": "Systems Touched",
+    "title": "Dynamic Quarantine Zone Signage & Lore",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 365,
+    "line": 0,
     "anchor": "m13-ext-09"
   },
   {
     "id": "M13-EXT-10",
-    "title": "Systems Touched",
+    "title": "Jury-Rigged Weapon Mod Descriptors",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 390,
+    "line": 0,
     "anchor": "m13-ext-10"
   },
   {
     "id": "M13-EXT-11",
-    "title": "Systems Touched",
+    "title": "Hardware Backend Auto-Detection & Async Compute Queue Isolation",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 415,
+    "line": 0,
     "anchor": "m13-ext-11"
   },
   {
     "id": "M13-EXT-12",
-    "title": "Systems Touched",
+    "title": "Attenuated Narrative Radio Scrambler",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-12]",
-      "[M2-EXT-50]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 440,
+    "line": 0,
     "anchor": "m13-ext-12"
   },
   {
     "id": "M13-EXT-13",
-    "title": "Systems Touched",
+    "title": "Survivor Behavior-Tree Flavor Advisor",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-13]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 465,
+    "line": 0,
     "anchor": "m13-ext-13"
   },
   {
     "id": "M13-EXT-15",
-    "title": "Systems Touched",
+    "title": "SLM Broadcast Text Determinism Seeder",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-15]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 490,
+    "line": 0,
     "anchor": "m13-ext-15"
   },
   {
     "id": "M13-EXT-16",
-    "title": "Systems Touched",
+    "title": "Offline SLM Generation Harness",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-16]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 515,
+    "line": 0,
     "anchor": "m13-ext-16"
   },
   {
     "id": "M13-EXT-17",
-    "title": "Systems Touched",
+    "title": "SLM Prompt-Template Library",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 540,
+    "line": 0,
     "anchor": "m13-ext-17"
   },
   {
     "id": "M13-EXT-18",
-    "title": "Systems Touched",
+    "title": "SLM Output Schema Validator",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 565,
+    "line": 0,
     "anchor": "m13-ext-18"
   },
   {
     "id": "M13-EXT-19",
-    "title": "Systems Touched",
+    "title": "SLM Output \u2192 Validation Pipeline",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 590,
+    "line": 0,
     "anchor": "m13-ext-19"
   },
   {
     "id": "M13-EXT-20",
-    "title": "Systems Touched",
+    "title": "SLM Cache",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-20]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 615,
+    "line": 0,
     "anchor": "m13-ext-20"
   },
   {
     "id": "M13-EXT-21",
-    "title": "Systems Touched",
+    "title": "SLM Deterministic Seeding",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 640,
+    "line": 0,
     "anchor": "m13-ext-21"
   },
   {
     "id": "M13-EXT-22",
-    "title": "Systems Touched",
+    "title": "SLM Fallback on Failure",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 665,
+    "line": 0,
     "anchor": "m13-ext-22"
   },
   {
     "id": "M13-EXT-23",
-    "title": "Systems Touched",
+    "title": "SLM Provenance Tag",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-23]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 690,
+    "line": 0,
     "anchor": "m13-ext-23"
   },
   {
     "id": "M13-EXT-24",
-    "title": "Systems Touched",
+    "title": "SLM Quest & Objective Text (plus lore pins from POI dressing)",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-24]",
-      "[M4-EXT-32]",
-      "[M8-EXT-60]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 715,
+    "line": 0,
     "anchor": "m13-ext-24"
   },
   {
     "id": "M13-EXT-25",
-    "title": "Systems Touched",
+    "title": "SLM Dialogue & Branching",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-25]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 744,
+    "line": 0,
     "anchor": "m13-ext-25"
   },
   {
     "id": "M13-EXT-26",
-    "title": "Systems Touched",
+    "title": "SLM Lore & Worldbuilding",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 769,
+    "line": 0,
     "anchor": "m13-ext-26"
   },
   {
     "id": "M13-EXT-27",
-    "title": "Systems Touched",
+    "title": "SLM Loadout/Build Suggestions",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-27]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 794,
+    "line": 0,
     "anchor": "m13-ext-27"
   },
   {
     "id": "M13-EXT-28",
-    "title": "Systems Touched",
+    "title": "SLM Moderation/Filtering",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-28]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 819,
+    "line": 0,
     "anchor": "m13-ext-28"
   },
   {
     "id": "M13-EXT-31",
-    "title": "Systems Touched",
+    "title": "Moral Choice Consequence Broadcast",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-31]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 844,
+    "line": 0,
     "anchor": "m13-ext-31"
   },
   {
     "id": "M13-EXT-36",
-    "title": "Systems Touched",
+    "title": "SLM Story Broadcast Bus",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-36]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 869,
+    "line": 0,
     "anchor": "m13-ext-36"
   },
   {
     "id": "M13-EXT-41",
-    "title": "Systems Touched",
+    "title": "NPC Relationship / Diary Graph",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-41]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 894,
+    "line": 0,
     "anchor": "m13-ext-41"
   },
   {
     "id": "M13-EXT-42",
-    "title": "Systems Touched",
+    "title": "NPC Diary / Recollection Surface",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-42]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 919,
+    "line": 0,
     "anchor": "m13-ext-42"
   },
   {
     "id": "M13-EXT-43",
-    "title": "Systems Touched",
+    "title": "Motivated Combatant Spawn (Non-Target)",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-43]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 944,
+    "line": 0,
     "anchor": "m13-ext-43"
   },
   {
     "id": "M13-EXT-48",
-    "title": "Systems Touched",
+    "title": "Story-Pin World Anchoring",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-48]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 969,
+    "line": 0,
     "anchor": "m13-ext-48"
   },
   {
     "id": "M13-EXT-50",
-    "title": "Systems Touched",
+    "title": "NPC Long-Term Memory Store",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-50]"
-    ],
-    "depended_by": [
-      "[M13-EXT-53]"
-    ],
-    "line": 994,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m13-ext-50"
   },
   {
     "id": "M13-EXT-53",
-    "title": "Systems Touched",
+    "title": "SLM Content-Drought Guard",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-50]",
-      "[M13-EXT-60]"
-    ],
-    "depended_by": [
-      "[M13-EXT-60]",
-      "[M5-EXT-60]"
-    ],
-    "line": 1019,
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m13-ext-53"
   },
   {
     "id": "M13-EXT-55",
-    "title": "Systems Touched",
+    "title": "Forge Editor Sandbox",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-39]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1046,
+    "line": 0,
     "anchor": "m13-ext-55"
   },
   {
     "id": "M13-EXT-56",
-    "title": "Systems Touched",
+    "title": "Co-op Edit Session",
     "cluster": "A",
-    "depends_on": [
-      "[M12-EXT-22]",
-      "[M1-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1071,
+    "line": 0,
     "anchor": "m13-ext-56"
   },
   {
     "id": "M13-EXT-57",
-    "title": "Systems Touched",
+    "title": "Prefab Publish System",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-50]",
-      "[M7-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1096,
+    "line": 0,
     "anchor": "m13-ext-57"
   },
   {
     "id": "M13-EXT-58",
-    "title": "Systems Touched",
+    "title": "Forge Scripting / Logic",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 1121,
+    "line": 0,
     "anchor": "m13-ext-58"
   },
   {
     "id": "M13-EXT-59",
-    "title": "Systems Touched",
+    "title": "Modding SDK Surface",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-58]",
-      "[M13-EXT-16]",
-      "[M4-EXT-98]",
-      "[M13-EXT-61]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1146,
+    "line": 0,
     "anchor": "m13-ext-59"
   },
   {
     "id": "M13-EXT-60",
-    "title": "Systems Touched",
+    "title": "SLM Quest Generator",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-16]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1173,
+    "line": 0,
     "anchor": "m13-ext-60"
   },
   {
     "id": "M13-EXT-61",
-    "title": "Systems Touched",
+    "title": "Lua VM Modding Runtime",
     "cluster": "A",
-    "depends_on": [
-      "[M13-EXT-59]",
-      "[M13-EXT-16]",
-      "[M13-EXT-59]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1200,
+    "line": 0,
     "anchor": "m13-ext-61"
   }
 ]

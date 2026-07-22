@@ -1,981 +1,722 @@
 [
   {
     "id": "M8-EXT-01",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M8-EXT-01]"
-    ],
+    "title": "Brand-Gated Thermal Ammo Cook-Off",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 79,
+    "line": 0,
     "anchor": "m8-ext-01"
   },
   {
     "id": "M8-EXT-02",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M8-EXT-02]",
-      "[M9-EXT-16]"
-    ],
+    "title": "Property-Matching Crafting & Derived Item Stats",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 106,
+    "line": 0,
     "anchor": "m8-ext-02"
   },
   {
     "id": "M8-EXT-03",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M8-EXT-03]",
-      "[M7-EXT-05]",
-      "[M8-EXT-20]"
-    ],
+    "title": "Secondary Illness via Reparameterized SEIR (Sepsis, Dysentery, Tetanus)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 135,
+    "line": 0,
     "anchor": "m8-ext-03"
   },
   {
     "id": "M8-EXT-04",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M8-EXT-04]",
-      "[M7-EXT-05]",
-      "[M3-EXT-06]",
-      "[M8-EXT-21]",
-      "[M8-EXT-29]",
-      "[M8-EXT-03]"
-    ],
+    "title": "Per-Save Pathogen Characterization & Cure Synthesis (Deliberately Near-Impossible)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 162,
+    "line": 0,
     "anchor": "m8-ext-04"
   },
   {
     "id": "M8-EXT-05",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M8-EXT-05]",
-      "[M8-EXT-02]",
-      "[M8-EXT-04]"
-    ],
+    "title": "Data-Table Modding/Workshop Exposure",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 197,
+    "line": 0,
     "anchor": "m8-ext-05"
   },
   {
     "id": "M8-EXT-06",
-    "title": "Systems Touched",
+    "title": "Two-Tier Deterministic Archetype Synthesis (Identity vs. Session Variance)",
     "cluster": "A",
-    "depends_on": [
-      "[M8-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 224,
+    "line": 0,
     "anchor": "m8-ext-06"
   },
   {
     "id": "M8-EXT-07",
-    "title": "Systems Touched",
+    "title": "Memory-Mapped FlatBinary Archetype Schema Serializer",
     "cluster": "A",
-    "depends_on": [
-      "[M8-EXT-07]",
-      "[M8-EXT-06]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 252,
+    "line": 0,
     "anchor": "m8-ext-07"
   },
   {
     "id": "M8-EXT-08",
-    "title": "Systems Touched",
+    "title": "Log-Normal Camouflage Masking",
     "cluster": "A",
-    "depends_on": [
-      "[M8-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 277,
+    "line": 0,
     "anchor": "m8-ext-08"
   },
   {
     "id": "M8-EXT-09",
-    "title": "Systems Touched",
+    "title": "Memory-Mapped FlatBinary Inventory Cache Dictionary",
     "cluster": "A",
-    "depends_on": [
-      "[M8-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 302,
+    "line": 0,
     "anchor": "m8-ext-09"
   },
   {
     "id": "M8-EXT-10",
-    "title": "Systems Touched",
+    "title": "Procedural Loot Icon Generation",
     "cluster": "A",
-    "depends_on": [
-      "[M8-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 327,
+    "line": 0,
     "anchor": "m8-ext-10"
   },
   {
     "id": "M8-EXT-11",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-11]"
-    ],
+    "title": "Data-Driven Itemization",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 355,
+    "line": 0,
     "anchor": "m8-ext-11"
   },
   {
     "id": "M8-EXT-12",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-12]"
-    ],
+    "title": "Stacking & Inventory Slots",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 380,
+    "line": 0,
     "anchor": "m8-ext-12"
   },
   {
     "id": "M8-EXT-13",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-13]"
-    ],
+    "title": "Ammo Types & Crafting",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 405,
+    "line": 0,
     "anchor": "m8-ext-13"
   },
   {
     "id": "M8-EXT-14",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-53]",
-      "[M8-EXT-62]",
-      "[M8-EXT-61]",
-      "[M8-EXT-15]"
-    ],
-    "depended_by": [
-      "[M8-EXT-53]",
-      "[M8-EXT-60]",
-      "[M8-EXT-61]"
-    ],
-    "line": 433,
+    "title": "Barter & Trade Economy",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-14"
   },
   {
     "id": "M8-EXT-15",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-61]",
-      "[M8-EXT-60]",
-      "[M8-EXT-14]"
-    ],
-    "depended_by": [
-      "[M8-EXT-14]",
-      "[M8-EXT-53]",
-      "[M8-EXT-62]",
-      "[M8-EXT-61]"
-    ],
-    "line": 459,
+    "title": "Currency & Scarcity Model",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-15"
   },
   {
     "id": "M8-EXT-16",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-59]",
-      "[M8-EXT-62]",
-      "[M8-EXT-65]",
-      "[M2-EXT-76]",
-      "[M2-EXT-77]"
-    ],
+    "title": "Settlement NPC Residents",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 484,
+    "line": 0,
     "anchor": "m8-ext-16"
   },
   {
     "id": "M8-EXT-17",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-18]",
-      "[M2-EXT-18]",
-      "[M8-EXT-56]"
-    ],
-    "depended_by": [
-      "[M8-EXT-18]"
-    ],
-    "line": 509,
+    "title": "Perk Tree & Prerequisites",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-17"
   },
   {
     "id": "M8-EXT-18",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-17]",
-      "[M2-EXT-18]"
-    ],
-    "depended_by": [
-      "[M8-EXT-17]"
-    ],
-    "line": 534,
+    "title": "Skill Progression & XP",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-18"
   },
   {
     "id": "M8-EXT-19",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-19]"
-    ],
+    "title": "Poisson-Disk Farm Plot Growth & Scent-Attractor Coupling",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 559,
+    "line": 0,
     "anchor": "m8-ext-19"
   },
   {
     "id": "M8-EXT-20",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-20]",
-      "[M8-EXT-03]"
-    ],
+    "title": "Boid-Flock Fish Population & Hazard-Cell Contamination",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 590,
+    "line": 0,
     "anchor": "m8-ext-20"
   },
   {
     "id": "M8-EXT-21",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-21]"
-    ],
+    "title": "Recruitable Survivor AI (Companion Command Layer over Existing Zombie AI)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 623,
+    "line": 0,
     "anchor": "m8-ext-21"
   },
   {
     "id": "M8-EXT-22",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-22]"
-    ],
+    "title": "Live Economy-Sim Trade Pricing (Barter)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 650,
+    "line": 0,
     "anchor": "m8-ext-22"
   },
   {
     "id": "M8-EXT-23",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-23]"
-    ],
+    "title": "Snare / Trap Detailing for Foraging",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 677,
+    "line": 0,
     "anchor": "m8-ext-23"
   },
   {
     "id": "M8-EXT-24",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-24]"
-    ],
+    "title": "Kirchhoff Power Grid Overload Arcing",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 702,
+    "line": 0,
     "anchor": "m8-ext-24"
   },
   {
     "id": "M8-EXT-25",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-25]",
-      "[M8-EXT-27]"
-    ],
+    "title": "Surface-Saturation Capacitive Arc Tracking",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 731,
+    "line": 0,
     "anchor": "m8-ext-25"
   },
   {
     "id": "M8-EXT-26",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-26]",
-      "[M8-EXT-28]",
-      "[M8-EXT-24]",
-      "[M8-EXT-25]"
-    ],
+    "title": "Catenary Cable Tension Snapping Solver",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 760,
+    "line": 0,
     "anchor": "m8-ext-26"
   },
   {
     "id": "M8-EXT-27",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-27]",
-      "[M8-EXT-25]"
-    ],
+    "title": "Electro-Capacitive Water-Wading Chain Stun",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 803,
+    "line": 0,
     "anchor": "m8-ext-27"
   },
   {
     "id": "M8-EXT-28",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-28]",
-      "[M8-EXT-26]"
-    ],
+    "title": "Catenary Wire Clothesline Decapitation Loop",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 832,
+    "line": 0,
     "anchor": "m8-ext-28"
   },
   {
     "id": "M8-EXT-29",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-29]",
-      "[M8-EXT-26]"
-    ],
+    "title": "Player-Placed Barricade Snap Constraints (Fortification)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 859,
+    "line": 0,
     "anchor": "m8-ext-29"
   },
   {
     "id": "M8-EXT-30",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-30]",
-      "[M8-EXT-26]",
-      "[M8-EXT-28]",
-      "[M8-EXT-24]",
-      "[M8-EXT-27]"
-    ],
+    "title": "Kirchhoff Circuit Ohmic Dissipation Water Vaporization Solver",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 890,
+    "line": 0,
     "anchor": "m8-ext-30"
   },
   {
     "id": "M8-EXT-31",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-31]"
-    ],
+    "title": "M/M/c Queueing Labor Model for Workstation Assignment",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 915,
+    "line": 0,
     "anchor": "m8-ext-31"
   },
   {
     "id": "M8-EXT-32",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-32]"
-    ],
+    "title": "Genetic-Algorithm Settlement Macro-Layout Optimizer",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 940,
+    "line": 0,
     "anchor": "m8-ext-32"
   },
   {
     "id": "M8-EXT-33",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-33]",
-      "[M4-EXT-09]",
-      "[M5-EXT-51]"
-    ],
+    "title": "Settlement NavMesh from GA Layout *(SOURCED FROM PLAN FILE)*",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 965,
+    "line": 0,
     "anchor": "m8-ext-33"
   },
   {
     "id": "M8-EXT-34",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-34]"
-    ],
+    "title": "Encounter+Loot+Story Bundle",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 990,
+    "line": 0,
     "anchor": "m8-ext-34"
   },
   {
     "id": "M8-EXT-35",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-35]"
-    ],
+    "title": "Faction Reputation / Vendor Edge Graph",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1015,
+    "line": 0,
     "anchor": "m8-ext-35"
   },
   {
     "id": "M8-EXT-36",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-36]"
-    ],
+    "title": "Civil-War Faction Event",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1040,
+    "line": 0,
     "anchor": "m8-ext-36"
   },
   {
     "id": "M8-EXT-37",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-37]"
-    ],
+    "title": "Smuggling \u2194 Encounter Hook",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1065,
+    "line": 0,
     "anchor": "m8-ext-37"
   },
   {
     "id": "M8-EXT-38",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-38]"
-    ],
+    "title": "Forced-Labor / Exploitation Event",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1090,
+    "line": 0,
     "anchor": "m8-ext-38"
   },
   {
     "id": "M8-EXT-39",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-39]"
-    ],
+    "title": "Player-Owned Hub",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1115,
+    "line": 0,
     "anchor": "m8-ext-39"
   },
   {
     "id": "M8-EXT-40",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-40]"
-    ],
+    "title": "Crafting Recipe Graph (Tier 2)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1140,
+    "line": 0,
     "anchor": "m8-ext-40"
   },
   {
     "id": "M8-EXT-41",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-41]"
-    ],
+    "title": "Perk-Ceiling Gated Crafting",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1167,
+    "line": 0,
     "anchor": "m8-ext-41"
   },
   {
     "id": "M8-EXT-50",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Quest-Choice Settlement Ripple",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 1192,
+    "line": 0,
     "anchor": "m8-ext-50"
   },
   {
     "id": "M8-EXT-51",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M5-EXT-14]",
-      "[M5-EXT-65]",
-      "[M5-EXT-64]",
-      "[M10]",
-      "[M8-EXT-53]"
-    ],
-    "depended_by": [
-      "[M8-EXT-54]",
-      "[M8-EXT-59]"
-    ],
-    "line": 1217,
+    "title": "Dynamic Open-World Horde Migration",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-51"
   },
   {
     "id": "M8-EXT-52",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-50]"
-    ],
+    "title": "Emergent Character Arc",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1252,
+    "line": 0,
     "anchor": "m8-ext-52"
   },
   {
     "id": "M8-EXT-53",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-14]",
-      "[M8-EXT-15]",
-      "[M11-EXT-64]",
-      "[M5-EXT-60]",
-      "[M8-EXT-60]",
-      "[M8-EXT-59]",
-      "[M12-EXT-39]"
-    ],
-    "depended_by": [
-      "[M8-EXT-14]"
-    ],
-    "line": 1279,
+    "title": "Faction Standing System (NV-style vector + player-founded faction + leader-of-all)",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-53"
   },
   {
     "id": "M8-EXT-54",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-16]",
-      "[M12-EXT-30]",
-      "[M8-EXT-14]",
-      "[M8-EXT-29]",
-      "[M8-EXT-51]"
-    ],
+    "title": "Settlement Growth Sim",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1313,
+    "line": 0,
     "anchor": "m8-ext-54"
   },
   {
     "id": "M8-EXT-55",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-39]",
-      "[M8-EXT-02]",
-      "[M8-EXT-15]"
-    ],
+    "title": "Corporate Decay Layer",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1340,
+    "line": 0,
     "anchor": "m8-ext-55"
   },
   {
     "id": "M8-EXT-56",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M2-EXT-18]",
-      "[M8-EXT-03]"
-    ],
+    "title": "Survivor Psyche (needs + break)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1365,
+    "line": 0,
     "anchor": "m8-ext-56"
   },
   {
     "id": "M8-EXT-57",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-53]",
-      "[M5-EXT-60]",
-      "[M1-EXT-36]"
-    ],
+    "title": "AI Faction War",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1397,
+    "line": 0,
     "anchor": "m8-ext-57"
   },
   {
     "id": "M8-EXT-58",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-02]",
-      "[M8-EXT-01]"
-    ],
+    "title": "Weapon Modding System",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1424,
+    "line": 0,
     "anchor": "m8-ext-58"
   },
   {
     "id": "M8-EXT-59",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-16]",
-      "[M8-EXT-54]",
-      "[M8-EXT-53]",
-      "[M8-EXT-56]",
-      "[M8-EXT-02]",
-      "[M8-EXT-29]"
-    ],
+    "title": "Autonomous Settlement Sim",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1451,
+    "line": 0,
     "anchor": "m8-ext-59"
   },
   {
     "id": "M8-EXT-60",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-53]",
-      "[M8-EXT-57]",
-      "[M8-EXT-54]",
-      "[M8-EXT-59]"
-    ],
+    "title": "World-State Cascade Engine",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1476,
+    "line": 0,
     "anchor": "m8-ext-60"
   },
   {
     "id": "M8-EXT-61",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-14]",
-      "[M8-EXT-15]",
-      "[M8-EXT-59]",
-      "[M8-EXT-60]",
-      "[M8-EXT-57]"
-    ],
-    "depended_by": [
-      "[M8-EXT-14]",
-      "[M8-EXT-15]",
-      "[M8-EXT-60]"
-    ],
-    "line": 1501,
+    "title": "Trade Route Network",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-61"
   },
   {
     "id": "M8-EXT-62",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M2-EXT-77]",
-      "[M8-EXT-16]",
-      "[M8-EXT-59]",
-      "[M8-EXT-64]",
-      "[M8-EXT-53]"
-    ],
+    "title": "NPC Social Stratification",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1528,
+    "line": 0,
     "anchor": "m8-ext-62"
   },
   {
     "id": "M8-EXT-63",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-62]",
-      "[M8-EXT-64]",
-      "[M4-EXT-25]",
-      "[M4-EXT-39]"
-    ],
+    "title": "Shanty Town / Vertical Slums",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1553,
+    "line": 0,
     "anchor": "m8-ext-63"
   },
   {
     "id": "M8-EXT-64",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-62]",
-      "[M8-EXT-59]",
-      "[M12-EXT-30]",
-      "[M4-EXT-32]"
-    ],
+    "title": "Land & Plot Allocation by Status",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1578,
+    "line": 0,
     "anchor": "m8-ext-64"
   },
   {
     "id": "M8-EXT-65",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M2-EXT-77]",
-      "[M8-EXT-16]",
-      "[M8-EXT-56]",
-      "[M8-EXT-59]",
-      "[M8-EXT-62]"
-    ],
+    "title": "NPC Daily Life Simulation",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1603,
+    "line": 0,
     "anchor": "m8-ext-65"
   },
   {
     "id": "M8-EXT-66",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-02]",
-      "[M8-EXT-09]",
-      "[M8-EXT-14]",
-      "[M8-EXT-15]",
-      "[M9-EXT-30]",
-      "[M9-EXT-31]",
-      "[M9-EXT-32]",
-      "[M9-EXT-33]",
-      "[M9-EXT-34]"
-    ],
+    "title": "Interaction Tool Economy",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1630,
+    "line": 0,
     "anchor": "m8-ext-66"
   },
   {
     "id": "M8-EXT-67",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-01]",
-      "[M4-EXT-33]",
-      "[M12-EXT-38]",
-      "[M12-EXT-37]"
-    ],
+    "title": "G-LOOTRISK: Threat-Scaled Loot Economy",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1658,
+    "line": 0,
     "anchor": "m8-ext-67"
   },
   {
     "id": "M8-EXT-68",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-53]",
-      "[M8-EXT-14]",
-      "[M8-EXT-15]",
-      "[M11-EXT-64]",
-      "[M5-EXT-60]"
-    ],
-    "depended_by": [
-      "[M8-EXT-14]",
-      "[M11-EXT-65]"
-    ],
-    "line": 1689,
+    "title": "Dual-Axis Faction Reputation (Fame/Infamy per Faction)",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-68"
   },
   {
     "id": "M8-EXT-69",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-53]",
-      "[M8-EXT-68]",
-      "[M5-EXT-60]",
-      "[M13-EXT-55]"
-    ],
-    "depended_by": [
-      "[M8-EXT-53]",
-      "[M8-EXT-68]"
-    ],
-    "line": 1782,
+    "title": "Remnant Military (5th Built-In Faction)",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-69"
   },
   {
     "id": "M8-EXT-70",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M8-EXT-68]",
-      "[M5-EXT-65]",
-      "[M5-EXT-64]",
-      "[M11-EXT-64]",
-      "[M11-EXT-65]",
-      "[M8-EXT-51]",
-      "[M8-EXT-53]"
-    ],
-    "depended_by": [
-      "[M8-EXT-68]"
-    ],
-    "line": 1828,
+    "title": "Zombie Beacon (Player-Zombie Leadership)",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m8-ext-70"
   },
   {
     "id": "M8-EXT-71",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Poisson-Disk Farm Plot Growth & Scent-Attractor Coupling",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 1869,
+    "line": 0,
     "anchor": "m8-ext-71"
   },
   {
     "id": "M8-EXT-72",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Boid-Flock Fish Population & Hazard-Cell Contamination",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 1914,
+    "line": 0,
     "anchor": "m8-ext-72"
   },
   {
     "id": "M8-EXT-73",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Recruitable Survivor AI (Companion Command Layer over Existing Zombie AI)",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 1966,
+    "line": 0,
     "anchor": "m8-ext-73"
   },
   {
     "id": "M8-EXT-74",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Live Economy-Sim Trade Pricing (Barter)",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2010,
+    "line": 0,
     "anchor": "m8-ext-74"
   },
   {
     "id": "M8-EXT-75",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Barter & Trade Economy",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2189,
+    "line": 0,
     "anchor": "m8-ext-75"
   },
   {
     "id": "M8-EXT-76",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Currency & Scarcity Model",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2218,
+    "line": 0,
     "anchor": "m8-ext-76"
   },
   {
     "id": "M8-EXT-77",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Kirchhoff Power Grid Overload Arcing",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2247,
+    "line": 0,
     "anchor": "m8-ext-77"
   },
   {
     "id": "M8-EXT-78",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Surface-Saturation Capacitive Arc Tracking",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2287,
+    "line": 0,
     "anchor": "m8-ext-78"
   },
   {
     "id": "M8-EXT-79",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Catenary Cable Tension Snapping Solver",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2330,
+    "line": 0,
     "anchor": "m8-ext-79"
   },
   {
     "id": "M8-EXT-80",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Electro-Capacitive Water-Wading Chain Stun",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2384,
+    "line": 0,
     "anchor": "m8-ext-80"
   },
   {
     "id": "M8-EXT-81",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Catenary Wire Clothesline Decapitation Loop",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2427,
+    "line": 0,
     "anchor": "m8-ext-81"
   },
   {
     "id": "M8-EXT-82",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Player-Placed Barricade Snap Constraints (Fortification)",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2466,
+    "line": 0,
     "anchor": "m8-ext-82"
   },
   {
     "id": "M8-EXT-83",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Kirchhoff Circuit Ohmic Dissipation Water Vaporization Solver",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2513,
+    "line": 0,
     "anchor": "m8-ext-83"
   },
   {
     "id": "M8-EXT-84",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "M/M/c Queueing Labor Model for Workstation Assignment",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2552,
+    "line": 0,
     "anchor": "m8-ext-84"
   },
   {
     "id": "M8-EXT-85",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Settlement NPC Residents",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2681,
+    "line": 0,
     "anchor": "m8-ext-85"
   },
   {
     "id": "M8-EXT-86",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Settlement NavMesh from GA Layout",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2712,
+    "line": 0,
     "anchor": "m8-ext-86"
   },
   {
     "id": "M8-EXT-87",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Perk Tree & Prerequisites",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2740,
+    "line": 0,
     "anchor": "m8-ext-87"
   },
   {
     "id": "M8-EXT-88",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Skill Progression & XP",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2769,
+    "line": 0,
     "anchor": "m8-ext-88"
   }
 ]

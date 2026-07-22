@@ -1,444 +1,317 @@
 [
   {
     "id": "M12-EXT-01",
-    "title": "Systems Touched",
+    "title": "Bitstream Delta-Encoded Network Serialization Packet Encoder",
     "cluster": "A",
-    "depends_on": [
-      "[M12-EXT-01]",
-      "[M2-EXT-51]",
-      "[M2-EXT-53]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 58,
+    "line": 0,
     "anchor": "m12-ext-01"
   },
   {
     "id": "M12-EXT-02",
-    "title": "Systems Touched",
+    "title": "Bitmask Packet Loss Sliding Window Acknowledgement Register",
     "cluster": "A",
-    "depends_on": [
-      "[M12-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 83,
+    "line": 0,
     "anchor": "m12-ext-02"
   },
   {
     "id": "M12-EXT-04",
-    "title": "Systems Touched",
+    "title": "Local Network-Relevancy Grid Culling Filter",
     "cluster": "A",
-    "depends_on": [
-      "[M12-EXT-04]",
-      "[M12-EXT-01]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 108,
+    "line": 0,
     "anchor": "m12-ext-04"
   },
   {
     "id": "M12-EXT-07",
-    "title": "Systems Touched",
+    "title": "Network Clock Sync & Tick-Drift Compensator",
     "cluster": "A",
-    "depends_on": [
-      "[M12-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 133,
+    "line": 0,
     "anchor": "m12-ext-07"
   },
   {
     "id": "M12-EXT-12",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M12-EXT-12]"
-    ],
+    "title": "Interest Management for Spatial Audio",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 161,
+    "line": 0,
     "anchor": "m12-ext-12"
   },
   {
     "id": "M12-EXT-13",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M12-EXT-13]"
-    ],
+    "title": "Interest-Management Spatial Hash (Net Culling)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 186,
+    "line": 0,
     "anchor": "m12-ext-13"
   },
   {
     "id": "M12-EXT-14",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M12-EXT-14]"
-    ],
+    "title": "Networking / Netcode Transport",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 211,
+    "line": 0,
     "anchor": "m12-ext-14"
   },
   {
     "id": "M12-EXT-15",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M12-EXT-15]"
-    ],
+    "title": "Voice Chat / Push-To-Talk",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 236,
+    "line": 0,
     "anchor": "m12-ext-15"
   },
   {
     "id": "M12-EXT-16",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M12-EXT-16]"
-    ],
+    "title": "Anti-Cheat / Server Authority",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 264,
+    "line": 0,
     "anchor": "m12-ext-16"
   },
   {
     "id": "M12-EXT-17",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M12-EXT-17]"
-    ],
+    "title": "Co-op Determinism Guard",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 289,
+    "line": 0,
     "anchor": "m12-ext-17"
   },
   {
     "id": "M12-EXT-18",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M12-EXT-18]"
-    ],
+    "title": "Matchmaking / Lobby / Session",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 314,
+    "line": 0,
     "anchor": "m12-ext-18"
   },
   {
     "id": "M12-EXT-19",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M12-EXT-19]"
-    ],
+    "title": "Lobby / Session Integrity",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 339,
+    "line": 0,
     "anchor": "m12-ext-19"
   },
   {
     "id": "M12-EXT-20",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-20]"
-    ],
+    "title": "Entity Interpolation",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 367,
+    "line": 0,
     "anchor": "m12-ext-20"
   },
   {
     "id": "M12-EXT-21",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-21]"
-    ],
+    "title": "Lag Compensation",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 392,
+    "line": 0,
     "anchor": "m12-ext-21"
   },
   {
     "id": "M12-EXT-22",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-22]"
-    ],
+    "title": "Dedicated Server Model",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 417,
+    "line": 0,
     "anchor": "m12-ext-22"
   },
   {
     "id": "M12-EXT-26",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M10-EXT-24]"
-    ],
-    "depended_by": [
-      "[M11-EXT-64]"
-    ],
-    "line": 442,
+    "title": "Side-Quest System (200, constrained, NV-style multi-solution)",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m12-ext-26"
   },
   {
     "id": "M12-EXT-27",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M8-EXT-32]",
-      "[M8-EXT-16]"
-    ],
+    "title": "Outpost-Clear-Loop",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 467,
+    "line": 0,
     "anchor": "m12-ext-27"
   },
   {
     "id": "M12-EXT-28",
-    "title": "Systems Touched",
-    "cluster": "D",
+    "title": "Tragedy Beats (suicide-as-environmental-storytelling)",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 492,
+    "line": 0,
     "anchor": "m12-ext-28"
   },
   {
     "id": "M12-EXT-29",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M4-EXT-32]",
-      "[M13-EXT-55]"
-    ],
+    "title": "Quest Placement Tool",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 519,
+    "line": 0,
     "anchor": "m12-ext-29"
   },
   {
     "id": "M12-EXT-30",
-    "title": "Systems Touched",
-    "cluster": "D",
+    "title": "Build Placement System",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 546,
+    "line": 0,
     "anchor": "m12-ext-30"
   },
   {
     "id": "M12-EXT-31",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-22]",
-      "[M13-EXT-57]"
-    ],
+    "title": "Server Browser / World List",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 571,
+    "line": 0,
     "anchor": "m12-ext-31"
   },
   {
     "id": "M12-EXT-32",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M4-EXT-32]",
-      "[M8-EXT-16]",
-      "[M8-EXT-14]",
-      "[M8-EXT-15]",
-      "[M8-EXT-53]"
-    ],
+    "title": "Neutral Haven (Hidden Safe-Town + Casino)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 596,
+    "line": 0,
     "anchor": "m12-ext-32"
   },
   {
     "id": "M12-EXT-33",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M8-EXT-57]",
-      "[M8-EXT-53]",
-      "[M12-EXT-32]",
-      "[M11-EXT-60]"
-    ],
+    "title": "War Map Overlay",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 623,
+    "line": 0,
     "anchor": "m12-ext-33"
   },
   {
     "id": "M12-EXT-34",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M1-EXT-36]"
-    ],
+    "title": "Permadeath + Endless",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 652,
+    "line": 0,
     "anchor": "m12-ext-34"
   },
   {
     "id": "M12-EXT-35",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M8-EXT-60]",
-      "[M8-EXT-59]",
-      "[M8-EXT-57]",
-      "[M5-EXT-63]",
-      "[M12-EXT-34]"
-    ],
+    "title": "Endgame Divergence Engine",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 679,
+    "line": 0,
     "anchor": "m12-ext-35"
   },
   {
     "id": "M12-EXT-36",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-35]",
-      "[M8-EXT-60]",
-      "[M4-EXT-39]"
-    ],
+    "title": "Nuclear Ending (Metro 2033)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 710,
+    "line": 0,
     "anchor": "m12-ext-36"
   },
   {
     "id": "M12-EXT-37",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M5-EXT-10]",
-      "[M5-EXT-63]",
-      "[M4-EXT-96]",
-      "[M8-EXT-59]"
-    ],
-    "depended_by": [
-      "[M7-EXT-22]",
-      "[M12-EXT-38]"
-    ],
-    "line": 735,
+    "title": "Encounter Zones (Layered Density)",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m12-ext-37"
   },
   {
     "id": "M12-EXT-38",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M8-EXT-01]",
-      "[M4-EXT-33]",
-      "[M12-EXT-37]"
-    ],
-    "depended_by": [
-      "[M8-EXT-51]"
-    ],
-    "line": 766,
+    "title": "Threat-Scaled Loot Budget",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m12-ext-38"
   },
   {
     "id": "M12-EXT-39",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M8-EXT-32]",
-      "[M5-EXT-10]",
-      "[M7-EXT-20]",
-      "[M4-EXT-101]",
-      "[M8-EXT-51]"
-    ],
-    "depended_by": [
-      "[M12-EXT-37]"
-    ],
-    "line": 797,
+    "title": "G-BASE: Player-Built Fortifications",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m12-ext-39"
   },
   {
     "id": "M12-EXT-40",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M8-EXT-56]",
-      "[M8-EXT-53]",
-      "[M12-EXT-26]",
-      "[M8-EXT-16]"
-    ],
+    "title": "G-EMERGE: Emergent Storytelling",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 828,
+    "line": 0,
     "anchor": "m12-ext-40"
   },
   {
     "id": "M12-EXT-41",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-26]",
-      "[M12-EXT-40]",
-      "[M13-EXT-60]"
-    ],
+    "title": "No-Forced-Narrative Design Pillar",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 858,
+    "line": 0,
     "anchor": "m12-ext-41"
   },
   {
     "id": "M12-EXT-42",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M2-EXT-64]",
-      "[M4-EXT-34]",
-      "[M5-EXT-10]",
-      "[M10-EXT-31]"
-    ],
+    "title": "FO3 / NV-Style Free-Roam Movement & Direction-Agnostic Play",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 888,
+    "line": 0,
     "anchor": "m12-ext-42"
   },
   {
     "id": "M12-EXT-43",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-41]",
-      "[M12-EXT-42]",
-      "[M4-EXT-101]",
-      "[M7-EXT-20]",
-      "[M8-EXT-29]",
-      "[M8-EXT-58]",
-      "[M13-EXT-55]"
-    ],
+    "title": "Engine Influences \u2014 Salvage the Useful, Reject the Hated",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 918,
+    "line": 0,
     "anchor": "m12-ext-43"
   },
   {
     "id": "M12-EXT-44",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M12-EXT-41]",
-      "[M12-EXT-26]",
-      "[M13-EXT-60]",
-      "[M11-EXT-53]"
-    ],
+    "title": "Natural-Start Quests (no accept, no tracker, mostly untimed)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 959,
+    "line": 0,
     "anchor": "m12-ext-44"
   },
   {
     "id": "M12-EXT-45",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M4-EXT-34]",
-      "[M5-EXT-10]",
-      "[M7-EXT-21]",
-      "[M4.5-EXT-26]",
-      "[M12-EXT-36]",
-      "[M12-EXT-37]"
-    ],
-    "depended_by": [
-      "[M12-EXT-44]"
-    ],
-    "line": 991,
+    "title": "Living, Dynamic World (drastic map changes)",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m12-ext-45"
   }
 ]

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "M8.7-EXT-01",
+    "title": "Placeholder Block",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "M8.7-ext-01"
+  },
+  {
+    "id": "M8.7-EXT-02",
+    "title": "Placeholder Block",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "M8.7-ext-02"
+  },
+  {
+    "id": "M8.7-EXT-03",
+    "title": "Placeholder Block",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "M8.7-ext-03"
+  }
+]

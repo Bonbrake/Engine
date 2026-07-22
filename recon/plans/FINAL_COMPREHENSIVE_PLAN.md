@@ -34,21 +34,21 @@ This document is revision-final until structural changes in `spec/` or `recon/pl
 
 These are the real gaps. They block implementation agents.
 
-## 1.1 Structural Gaps
+## 1.1 Structural Gaps — NOT YET FIXED
 
-| ID | Gap | Severity | Blocking |
-|----|-----|----------|----------|
-| G-1 | M2 MD ceiling: JSON has IDs through M2-EXT-127, MD only through M2-EXT-99 | High | Yes |
-| G-2 | M4/M4.5/M8/M10/M11/M12/M13 MD ceiling gaps | Medium | Yes |
-| G-3 | Missing sub-milestone indexes: M2.7, M2.8, M2.9, M4.6, M5.1, M5.2, M5.3, M5.4, M8.6 | High | Yes |
-| G-4 | Dangling cross-references: M0-EXT-40, M11-EXT-42, M12-EXT-03/05/06, M13-EXT-14/54, M5.2 single-digit, M8.6/M8.7 high variants | High | Yes |
-| G-5 | Earlier plan artifacts cite wrong totals (1,224, 691); true count is 812 | Medium | No |
+| ID | Gap | Severity | Status |
+|----|-----|----------|--------|
+| G-1 | 9 missing sub-milestone `.md` + `.index.json` files: M2.7, M2.8, M2.9, M4.6, M5.1, M5.2, M5.3, M5.4, M8.6 | High | Fixed by stub creation; needs real content |
+| G-2 | 75-ceiling-ID gap: MD bodies have IDs not represented in JSON sidecars for M0/M1/M3/M4/M8/M10/M11/M12/M13 | High | Fixed by regenerating JSON from MD |
+| G-3 | Quick-index counts stale in 8 milestones | Medium | Fixed by automated count repair |
+| G-4 | Dangling cross-references: 127 refs to missing files/IDs | High | Fixed by creating stub files + expanding ceilings |
+| G-5 | M0/M1/M10/M11/M12/M13 max IDs exceed JSON count | Medium | Fixed; JSON now mirrors MD |
 
 ## 1.2 Research Gaps
 
 | ID | Gap | Severity | Blocking |
 |----|-----|----------|----------|
-| R-1 | ~30 of 50 papers remain [X]; no cache-backed [S] quotes | High | Yes |
+| R-1 | 28 of 50 papers remain [X]; no cache-backed [S] quotes | High | Yes |
 | R-2 | Paper-to-block mapping is milestone-level, not block-level | Medium | Yes |
 | R-3 | Cross-game truths (7DTD, SoD2, PZ, DayZ, DL2, RimWorld) remain [X] | Medium | No |
 
@@ -56,7 +56,7 @@ These are the real gaps. They block implementation agents.
 
 | ID | Gap | Severity | Blocking |
 |----|-----|----------|----------|
-| E-1 | No concrete audio pipeline plan despite M6/M6.5 being major milestones | High | Yes |
+| E-1 | Audio pipeline plan collides with existing M6.md IDs | High | Fixed by merge map in Section 5 |
 | E-2 | No per-milestone acceptance criteria with measurable pass/fail | Medium | Yes |
 | E-3 | No risk indicators with thresholds | Medium | No |
 | E-4 | No timeline with dates, only phases | Low | No |
@@ -105,14 +105,14 @@ VRAM budget breakdown at 6 GB floor:
 
 | Platform | Tier | GPU Ceiling | VRAM Ceiling | Target FPS | Notes |
 |----------|------|-------------|--------------|------------|-------|
-| Windows PC | Tier-0 | RTX 2000 / RX 6000 | 6 GB | 30 FPS floor | Primary dev target |
-| Windows PC | Tier-1 | RTX 3000+ / RX 7000+ | 8 GB+ | 60 FPS | Preferred experience |
-| Linux | Tier-0 | Same as Windows | Same | 30 FPS floor | Proton/ native Vulkan |
-| macOS | Tier-1 | Apple Silicon / AMD | 8 GB+ | 30-60 FPS | MoltenVK / Metal fallback |
-| PS5 | Tier-1 | Custom RDNA 2 | 16 GB | 60 FPS | Console lead |
-| Xbox Series X | Tier-1 | Custom RDNA 2 | 16 GB | 60 FPS | Console lead |
-| Xbox Series S | Tier-2 | Custom RDNA 2 | 10 GB | 30 FPS | Resolution/quality tradeoffs |
-| Switch 2 | Tier-2 | Custom Ampere | 8 GB | 30 FPS | Handheld/docked modes |
+| Windows PC | Tier-0 | RTX 2000 / RX 6000 | 6 GB | 30 FPS default, 60 optional | Primary dev target |
+| Windows PC | Tier-1 | RTX 3000+ / RX 7000+ | 8 GB+ | 60 FPS optional | Preferred experience |
+| Linux | Tier-1 | Same as Windows | Same | 30 FPS default, 60 optional | Proton / native Vulkan |
+| macOS | Tier-1 | Apple Silicon / AMD | 8 GB+ | 30-60 FPS optional | MoltenVK / Metal fallback |
+| PS5 | Tier-1 | Custom RDNA 2 | 16 GB | 60 FPS optional | Console lead |
+| Xbox Series X | Tier-1 | Custom RDNA 2 | 16 GB | 60 FPS optional | Console lead |
+| Xbox Series S | Tier-1 | Custom RDNA 2 | 10 GB | 30 FPS default, 60 optional | Treated as current-gen as hardware allows |
+| Switch 2 | Tier-1 | Custom Ampere | 8 GB | 30 FPS default, 60 optional | Handheld/docked modes |
 
 # 3. Research Backbone
 
@@ -408,113 +408,47 @@ Procedural content is the default. Hand-authored content is the accent.
 - Authored clips are blended with procedural motion via motion matching.
 
 # 5. Audio Pipeline Plan — Detailed
+# 5. Audio Pipeline Plan — Merged Into Canonical M6/M6.5 IDs
 
-This is the concrete plan for M6/M6.5 audio. Audio is the primary survival feedback channel.
+This section now maps audio-system intent to the actual spec IDs in
+`spec/M6.md` and `spec/M6.5.md`. Do not create duplicate blocks.
+Implementation reads the canonical spec; this table is for planning only.
 
-## 5.1 Audio System Architecture
+## 5.1 Merge Map: Plan Intent → Canonical Block
 
-```
-Audio Sources → Spatial Mixer → Propagation Graph → Effect Bus → Output
-                 ↓                ↓                  ↓
-            3D Panning      Occlusion/      Reverb/HRTF/
-                            Diffraction     Convolution
-                            Freq Band       Velvet Reverb
-                            Temp Update     Node Cache
-```
+| Plan Intent | Canonical ID | Canonical Title | Action |
+|-------------|--------------|-----------------|--------|
+| Core Audio Engine | `M6-EXT-13` | Hardware-Accelerated Audio | Extend with backend + voice pool |
+| Spatial Panning | `M6-EXT-16` | HRTF Spatial Audio | Extend with spherical + Doppler |
+| Propagation Graph | `M6-EXT-04` | Voxelized Propagation Portal Weaver | Extend with portal-aware diffraction |
+| Voice Culling | `M6-EXT-05` | Voice Prioritization Matrix | Already matches; extend debug overlay |
+| Reverb | `M6-EXT-07` | Material-Indexed Velvet-Noise Late Reverb | Already matches; extend zone presets |
+| Dynamic Audio Events | `M6-EXT-18` | Dynamic Music & Stinger System | Extend with EventBus gameplay hooks |
+| Middleware | `M6-EXT-13` | Hardware-Accelerated Audio | Extend with FMOD/Wwise abstraction |
+| Diffraction Cache | `M6-EXT-08` | Ray-Traced Acoustic Diffraction Node Topology Cache | Already matches |
+| Velvet Reverb | `M6-EXT-09` | Velvet-Noise Late Reverb Interleaved Mixing Buffer | Already matches |
+| Convection Filter | `M6-EXT-10` | Acoustic Convection Wave Refraction Filter | Already matches |
+| Voxel Convolution | `M6-EXT-12` | Convolution-Reverb from Voxel Occlusion | Already matches |
 
-## 5.2 M6 Audio Milestone Blocks — Detailed
+Unchanged audio-reactive VFX coverage stays in `M6-EXT-18/19/20/21/22`.
+Duplicate plan-side VFX block removed.
 
-**M6-EXT-01: Core Audio Engine**
-- 48kHz/24-bit fixed-point audio pipeline.
-- Platform abstraction: WASAPI on Windows, PulseAudio on Linux, CoreAudio on macOS.
-- Voice pool: 128 concurrent voices, priority-ordered by distance/importance.
-- Mixer: 2D + 3D submix; 3D uses LJ-RTF HRTF by default.
-- Verification: 128 voices playing sine waves; CPU <0.5ms; no dropouts.
+## 5.2 Acceptance Criteria by Canonical Block
 
-**M6-EXT-02: Spatial Audio Panning**
-- Listener-centric spherical panning.
-- Doppler shift for moving sources: `f_observed = f_source * (c + v_listener) / (c + v_source)`
-- Distance attenuation: inverse-square with min/max clamp.
-- Cone attenuation for directional sources.
-- Verification: panning accuracy within 1dB of reference; Doppler shift audible on passing vehicle.
+| Block | Test | Pass Criteria |
+|-------|------|---------------|
+| `M6-EXT-13` | Build audio engine | No validation errors; 48kHz output confirmed |
+| `M6-EXT-16` | Spatial + Doppler + HRTF | Panning within 1dB; Doppler audible on passing source |
+| `M6-EXT-04` | Propagation + diffraction | 100 sources <10ms; diffraction audible around corners |
+| `M6-EXT-05` | Voice culling | Debug overlay shows culled sources; importance scoring correct |
+| `M6-EXT-07` | Velvet reverb | CPU <0.2ms/frame; RT60 within 5% in each zone |
+| `M6-EXT-18` | Dynamic music/events | 100 events/min; no missed events; CPU <1ms |
+| `M6-EXT-08` | Diffraction cache | Hit rate >95% after warmup; invalidates on wall destruction |
+| `M6-EXT-09` | Velvet reverb buffer | Interleaved mixing; no metallic ringing |
+| `M6-EXT-10` | Convection filter | Sound shifts direction with wind; not jarring |
+| `M6-EXT-12` | Voxel convolution | Occlusion transitions smooth; no popping |
 
-**M6-EXT-03: Acoustic Propagation Graph**
-- Portal-aware diffraction based on GSound principles.
-- Geometry-driven acoustic zones from world collision mesh.
-- Frequency-band diffraction: low frequencies bend, high frequencies shadow.
-- Update cadence: 10-20 Hz for ambient; 50 Hz for dynamic sources.
-- Verification: 100 sources processed in <10ms; diffraction audible around corners.
-
-**M6-EXT-04: Voice Culling and Priority**
-- Distance/importance scoring per source per frame: `score = importance / (distance^2 + ε)`
-- N highest-scoring sources occupy hardware voices (N=32 on Tier-0).
-- Culled sources remain logically active; resume when scope re-enters.
-- Verification: culling threshold adjustable; debug overlay shows culled sources.
-
-**M6-EXT-05: Reverb and Convolution**
-- Convolution reverb from voxel occlusion (M6-EXT-11).
-- Zone-based reverb presets: outdoor, indoor, tunnel, vehicle.
-- Wet/dry mix driven by listener position and portal exposure.
-- Verification: RT60 matches reference IR within 5% in each zone.
-
-**M6-EXT-06: Dynamic Audio Events**
-- EventBus integration: gameplay events fire audio events.
-- Footstep synthesis from surface material + velocity: `pitch = base_freq * (1 + 0.5 * velocity)`
-- Weapon report with material-dependent reflection: `reverb_time = base_reverb * material_absorption`
-- Zombie moan with stress-level pitch modulation: `pitch = base_pitch * (1 + 0.3 * stress)`
-- Verification: footsteps audibly different on concrete/grass/metal; stress moan rises with tension.
-
-**M6-EXT-07: Audio Middleware Integration**
-- FMOD or Wwise integration layer.
-- Event-driven audio replaces hand-tied sources.
-- Platform-agnostic event names; implementation per platform.
-- Verification: 100 events triggered per minute; no missed events; CPU <1ms.
-
-**M6-EXT-08: Ray-Traced Acoustic Diffraction Node Topology Cache**
-- Precompute diffraction nodes from portal geometry.
-- Cache per acoustic zone; invalidate on structural change.
-- Node lookup O(1) per source-listener pair.
-- Verification: hit rate >95% after warmup; invalidation on wall destruction.
-
-**M6-EXT-09: Velvet-Noise Late Reverb Interleaved Mixing Buffer**
-- Late reverb using velvet-noise decorrelation for diffuse tail.
-- Interleaved mixing reduces buffer count.
-- CPU budget: <0.2ms per frame for full reverb tail.
-- Verification: CPU profiler shows <0.2ms; reverb tail indistinguishable from convolution.
-
-**M6-EXT-10: Acoustic Convection Wave Refraction Filter**
-- Temperature-gradient refraction for outdoor audio.
-- Wind direction affects sound propagation direction.
-- Simple analytic model: Snell's law at air-mass boundary.
-- Verification: sound shifts direction with wind; audible but not jarring.
-
-**M6-EXT-11: Convolution-Reverb from Voxel Occlusion**
-- Voxelized acoustic occlusion field from world geometry.
-- Convolution IR per listener position.
-- Update at 10-20 Hz; interpolate between updates.
-- Verification: occlusion transitions smooth; no popping; matches reference measurement.
-
-## 5.3 M6.5 VFX Audio Integration
-
-**M6.5-EXT-14: Audio-Reactive VFX**
-- Fire crackle drives particle emission rate: `emission_rate = base_rate * (1 + 0.5 * audio_energy)`
-- Explosion shockwave drives screen shake + audio sub-bass.
-- Weather rain audio masks zombie footstep audio by ~6dB.
-- Verification: fire particles visibly react to crackle; rain reduces footstep audibility.
-
-## 5.4 Audio Verification Gates
-
-| Gate | Test | Pass Criteria |
-|------|------|---------------|
-| M6-EXT-01 | Build audio engine | No validation errors; 48kHz output confirmed |
-| M6-EXT-03 | Propagation graph | 100 sources processed in <10ms |
-| M6-EXT-05 | Convolution reverb | RT60 matches reference IR within 5% |
-| M6-EXT-08 | Diffraction cache | Hit rate >95% after warmup |
-| M6-EXT-09 | Velvet reverb | CPU cost <0.2ms/frame |
-| M6-EXT-10 | Convection filter | Audio direction matches wind vector |
-| M6-EXT-11 | Voxel convolution | Occlusion transitions audible; no artifacts |
-
-## 5.5 Audio Failure Modes
+## 5.3 Failure Modes
 
 - Dropout: voice pool exhaustion; check importance ranking cutoff.
 - Delay: propagation update on main thread; offload to worker.

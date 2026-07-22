@@ -1,1029 +1,821 @@
 [
   {
     "id": "M4-EXT-01",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-01]"
-    ],
+    "title": "Hierarchical Global Macro-Graph Constraint Pass",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 107,
+    "line": 0,
     "anchor": "m4-ext-01"
   },
   {
     "id": "M4-EXT-02",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-02]"
-    ],
+    "title": "Asynchronous Quadric Error Meshlet Decimation (Runtime Procedural LODs)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 134,
+    "line": 0,
     "anchor": "m4-ext-02"
   },
   {
     "id": "M4-EXT-03",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-03]",
-      "[M4-EXT-01]"
-    ],
+    "title": "Hierarchical WFC Multi-Grid Graph Layering (Contradiction Guard)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 161,
+    "line": 0,
     "anchor": "m4-ext-03"
   },
   {
     "id": "M4-EXT-04",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-04]"
-    ],
+    "title": "Voronoi Chunk Seam Vertex Normal-Welding Post-Process",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 188,
+    "line": 0,
     "anchor": "m4-ext-04"
   },
   {
     "id": "M4-EXT-05",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-05]",
-      "[M4-EXT-02]",
-      "[M4-EXT-04]"
-    ],
+    "title": "Geometric Edge Seam Welding for LOD Transitions",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 213,
+    "line": 0,
     "anchor": "m4-ext-05"
   },
   {
     "id": "M4-EXT-08",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-08]"
-    ],
+    "title": "3D WFC Vertical Structural Dependency Guard",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 238,
+    "line": 0,
     "anchor": "m4-ext-08"
   },
   {
     "id": "M4-EXT-09",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-09]"
-    ],
+    "title": "Deterministic Interior Furniture Spatial Constraint Solver",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 263,
+    "line": 0,
     "anchor": "m4-ext-09"
   },
   {
     "id": "M4-EXT-10",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-10]"
-    ],
+    "title": "Macro-Graph Vector Spline Corridor Welder",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 288,
+    "line": 0,
     "anchor": "m4-ext-10"
   },
   {
     "id": "M4-EXT-11",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-11]"
-    ],
+    "title": "WFC Contradiction Horizon Recovery",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 313,
+    "line": 0,
     "anchor": "m4-ext-11"
   },
   {
     "id": "M4-EXT-12",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-12]"
-    ],
+    "title": "Voronoi Crustal Tectonics & Macro-Geomorphology",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 338,
+    "line": 0,
     "anchor": "m4-ext-12"
   },
   {
     "id": "M4-EXT-13",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M4-EXT-13]",
-      "[M4-EXT-12]"
-    ],
+    "title": "Dual-Contouring Volumetric Cave Carving",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 365,
+    "line": 0,
     "anchor": "m4-ext-13"
   },
   {
     "id": "M4-EXT-14",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-14]",
-      "[M4-EXT-13]",
-      "[M4-EXT-12]"
-    ],
+    "title": "Stratigraphic Substrate Horizon Tracking",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 394,
+    "line": 0,
     "anchor": "m4-ext-14"
   },
   {
     "id": "M4-EXT-15",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-15]",
-      "[M4-EXT-14]"
-    ],
+    "title": "Darcy's-Law Deep Aquifer Extension",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 421,
+    "line": 0,
     "anchor": "m4-ext-15"
   },
   {
     "id": "M4-EXT-16",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-16]",
-      "[M4-EXT-12]",
-      "[M10-EXT-01]"
-    ],
+    "title": "Saint-Venant Generation-Time Hydraulic Erosion",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 450,
+    "line": 0,
     "anchor": "m4-ext-16"
   },
   {
     "id": "M4-EXT-17",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-17]",
-      "[M4-EXT-18]",
-      "[M4-EXT-14]"
-    ],
+    "title": "Edaphic Soil Chemistry & Nutrient Grid",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 477,
+    "line": 0,
     "anchor": "m4-ext-17"
   },
   {
     "id": "M4-EXT-18",
-    "title": "Systems Touched",
+    "title": "Space-Colonization Canopy Seeding & Shade Competition",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-18]",
-      "[M4-EXT-17]",
-      "[M6.5-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 506,
+    "line": 0,
     "anchor": "m4-ext-18"
   },
   {
     "id": "M4-EXT-19",
-    "title": "Systems Touched",
+    "title": "Anthropogenic Infrastructure Exclusion Splines",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-19]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 533,
+    "line": 0,
     "anchor": "m4-ext-19"
   },
   {
     "id": "M4-EXT-20",
-    "title": "Systems Touched",
+    "title": "WFC Adjacency Propagator",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-20]",
-      "[M5-EXT-51]",
-      "[M4-EXT-17]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 558,
+    "line": 0,
     "anchor": "m4-ext-20"
   },
   {
     "id": "M4-EXT-21",
-    "title": "Systems Touched",
+    "title": "Signage Grammar Transcoder",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-21]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 583,
+    "line": 0,
     "anchor": "m4-ext-21"
   },
   {
     "id": "M4-EXT-22",
-    "title": "Systems Touched",
+    "title": "Meshoptimizer Vertex Cache / Fetch Optimization",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-22]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 608,
+    "line": 0,
     "anchor": "m4-ext-22"
   },
   {
     "id": "M4-EXT-23",
-    "title": "Systems Touched",
+    "title": "Whittaker Temperature/Precipitation Biome Classification",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-23]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 633,
+    "line": 0,
     "anchor": "m4-ext-23"
   },
   {
     "id": "M4-EXT-24",
-    "title": "Systems Touched",
+    "title": "Cellular Automata Structural Collapse & Rubble Debris Fields",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-24]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 658,
+    "line": 0,
     "anchor": "m4-ext-24"
   },
   {
     "id": "M4-EXT-25",
-    "title": "Systems Touched",
+    "title": "Procedural Material Node-Graph Compiler (Structure + Color + Normal)",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-25]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 683,
+    "line": 0,
     "anchor": "m4-ext-25"
   },
   {
     "id": "M4-EXT-26",
-    "title": "Systems Touched",
+    "title": "Procedural Decal Atlas Packing & Runtime Projection",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-26]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 708,
+    "line": 0,
     "anchor": "m4-ext-26"
   },
   {
     "id": "M4-EXT-27",
-    "title": "Systems Touched",
+    "title": "Vegetation Impostor",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-27]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 733,
+    "line": 0,
     "anchor": "m4-ext-27"
   },
   {
     "id": "M4-EXT-28",
-    "title": "Systems Touched",
+    "title": "Procedural Foliage L-System Mesh Generator",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-28]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 758,
+    "line": 0,
     "anchor": "m4-ext-28"
   },
   {
     "id": "M4-EXT-29",
-    "title": "Systems Touched",
+    "title": "Layer-Based Contextual Generation",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-29]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 783,
+    "line": 0,
     "anchor": "m4-ext-29"
   },
   {
     "id": "M4-EXT-30",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-30]"
-    ],
+    "title": "Generation Pass DAG",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 811,
+    "line": 0,
     "anchor": "m4-ext-30"
   },
   {
     "id": "M4-EXT-31",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-31]"
-    ],
+    "title": "Biome Blending at Borders",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 836,
+    "line": 0,
     "anchor": "m4-ext-31"
   },
   {
     "id": "M4-EXT-32",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-32]",
-      "[M13-EXT-24]"
-    ],
+    "title": "POI Placement Validator (RDR2 style show-dont-tell)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 861,
+    "line": 0,
     "anchor": "m4-ext-32"
   },
   {
     "id": "M4-EXT-33",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-33]"
-    ],
+    "title": "Loot/Encounter Table Compiler",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 902,
+    "line": 0,
     "anchor": "m4-ext-33"
   },
   {
     "id": "M4-EXT-34",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-34]"
-    ],
+    "title": "Generation Seed Hierarchy",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 927,
+    "line": 0,
     "anchor": "m4-ext-34"
   },
   {
     "id": "M4-EXT-35",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-35]"
-    ],
+    "title": "Stable Entity-ID per Chunk",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 952,
+    "line": 0,
     "anchor": "m4-ext-35"
   },
   {
     "id": "M4-EXT-36",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-36]"
-    ],
+    "title": "Archetype Seeded Variation Salt",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 977,
+    "line": 0,
     "anchor": "m4-ext-36"
   },
   {
     "id": "M4-EXT-37",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-37]"
-    ],
+    "title": "Generation Budget Governor",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1002,
+    "line": 0,
     "anchor": "m4-ext-37"
   },
   {
     "id": "M4-EXT-38",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-38]"
-    ],
+    "title": "Fractal Octave Cap",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1027,
+    "line": 0,
     "anchor": "m4-ext-38"
   },
   {
     "id": "M4-EXT-39",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-39]"
-    ],
+    "title": "Biome\u2192Asset Palette Binding",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1052,
+    "line": 0,
     "anchor": "m4-ext-39"
   },
   {
     "id": "M4-EXT-40",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-40]"
-    ],
+    "title": "Clutter/Scatter Generator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1077,
+    "line": 0,
     "anchor": "m4-ext-40"
   },
   {
     "id": "M4-EXT-41",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-41]"
-    ],
+    "title": "Water/Liquid Volume Generator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1102,
+    "line": 0,
     "anchor": "m4-ext-41"
   },
   {
     "id": "M4-EXT-42",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-42]"
-    ],
+    "title": "Cave/Underground Generator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1127,
+    "line": 0,
     "anchor": "m4-ext-42"
   },
   {
     "id": "M4-EXT-43",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-43]"
-    ],
+    "title": "Generation Disk-Cache",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1152,
+    "line": 0,
     "anchor": "m4-ext-43"
   },
   {
     "id": "M4-EXT-44",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-44]"
-    ],
+    "title": "Generation Debug Visualization",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1177,
+    "line": 0,
     "anchor": "m4-ext-44"
   },
   {
     "id": "M4-EXT-45",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-45]"
-    ],
+    "title": "Multi-Resolution LOD Generation",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1202,
+    "line": 0,
     "anchor": "m4-ext-45"
   },
   {
     "id": "M4-EXT-46",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-46]"
-    ],
+    "title": "Procedural Sky/Starfield/Cloud",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1227,
+    "line": 0,
     "anchor": "m4-ext-46"
   },
   {
     "id": "M4-EXT-47",
-    "title": "Systems Touched",
-    "cluster": "D",
-    "depends_on": [
-      "[M4-EXT-47]"
-    ],
+    "title": "Async Generation Off Main Thread",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1255,
+    "line": 0,
     "anchor": "m4-ext-47"
   },
   {
     "id": "M4-EXT-48",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-48]"
-    ],
+    "title": "Per-Frame Generation Budget",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1283,
+    "line": 0,
     "anchor": "m4-ext-48"
   },
   {
     "id": "M4-EXT-49",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-49]"
-    ],
+    "title": "Prioritized Chunk Queue",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1308,
+    "line": 0,
     "anchor": "m4-ext-49"
   },
   {
     "id": "M4-EXT-50",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-50]"
-    ],
+    "title": "Pre-Generation Lookahead",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1333,
+    "line": 0,
     "anchor": "m4-ext-50"
   },
   {
     "id": "M4-EXT-51",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-51]"
-    ],
+    "title": "Generation Cancellation",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1358,
+    "line": 0,
     "anchor": "m4-ext-51"
   },
   {
     "id": "M4-EXT-52",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-52]"
-    ],
+    "title": "Chunk Generation State Machine",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1383,
+    "line": 0,
     "anchor": "m4-ext-52"
   },
   {
     "id": "M4-EXT-53",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-53]"
-    ],
+    "title": "Parallel Mesh/Collider Build",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1408,
+    "line": 0,
     "anchor": "m4-ext-53"
   },
   {
     "id": "M4-EXT-54",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-54]"
-    ],
+    "title": "Procedural Quest / Mission Generator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1433,
+    "line": 0,
     "anchor": "m4-ext-54"
   },
   {
     "id": "M4-EXT-55",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-55]"
-    ],
+    "title": "Procedural Narrative / Dialogue Generator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1458,
+    "line": 0,
     "anchor": "m4-ext-55"
   },
   {
     "id": "M4-EXT-56",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-56]"
-    ],
+    "title": "Difficulty / Tuning Curve Generator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1483,
+    "line": 0,
     "anchor": "m4-ext-56"
   },
   {
     "id": "M4-EXT-57",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-57]"
-    ],
+    "title": "Generation RNG Replay File",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1508,
+    "line": 0,
     "anchor": "m4-ext-57"
   },
   {
     "id": "M4-EXT-58",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-58]"
-    ],
+    "title": "Generation Math Reduction Order",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1533,
+    "line": 0,
     "anchor": "m4-ext-58"
   },
   {
     "id": "M4-EXT-59",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-59]"
-    ],
+    "title": "Procedural Road/Path Network",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1558,
+    "line": 0,
     "anchor": "m4-ext-59"
   },
   {
     "id": "M4-EXT-60",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-60]"
-    ],
+    "title": "Procedural Encounter/Event Spawner",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1583,
+    "line": 0,
     "anchor": "m4-ext-60"
   },
   {
     "id": "M4-EXT-61",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-61]"
-    ],
+    "title": "Coastal Tidal Flooding & Storm-Surge Inundation",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1608,
+    "line": 0,
     "anchor": "m4-ext-61"
   },
   {
     "id": "M4-EXT-62",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-62]"
-    ],
+    "title": "Planar Surface Map (Top-Down World Overview)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1633,
+    "line": 0,
     "anchor": "m4-ext-62"
   },
   {
     "id": "M4-EXT-63",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-63]"
-    ],
+    "title": "Macro-Zone Socio-Economic Utility Assignment",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1658,
+    "line": 0,
     "anchor": "m4-ext-63"
   },
   {
     "id": "M4-EXT-64",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-64]"
-    ],
+    "title": "Stratigraphic Resource Vein Distribution",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1683,
+    "line": 0,
     "anchor": "m4-ext-64"
   },
   {
     "id": "M4-EXT-74",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-74]"
-    ],
+    "title": "World-Graph Root Node (Canonical Anchor)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1708,
+    "line": 0,
     "anchor": "m4-ext-74"
   },
   {
     "id": "M4-EXT-77",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-77]"
-    ],
+    "title": "Pharmacy / Med-Lab Procedural Detailing",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1733,
+    "line": 0,
     "anchor": "m4-ext-77"
   },
   {
     "id": "M4-EXT-83",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-83]"
-    ],
+    "title": "Water-Treatment / Purification Plant Detailing",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1758,
+    "line": 0,
     "anchor": "m4-ext-83"
   },
   {
     "id": "M4-EXT-84",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-84]"
-    ],
+    "title": "Procedural Vertex Buffer Pooling & Dynamic GPU Compaction",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1783,
+    "line": 0,
     "anchor": "m4-ext-84"
   },
   {
     "id": "M4-EXT-85",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-85]",
-      "[M0-EXT-04]"
-    ],
+    "title": "Asynchronous OS Overlapped Direct-VRAM Disk Streaming Queue",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1810,
+    "line": 0,
     "anchor": "m4-ext-85"
   },
   {
     "id": "M4-EXT-86",
-    "title": "Systems Touched",
+    "title": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-86]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1837,
+    "line": 0,
     "anchor": "m4-ext-86"
   },
   {
     "id": "M4-EXT-87",
-    "title": "Systems Touched",
+    "title": "DirectStorage Decompression Buffer Ring Allocator Pool",
     "cluster": "A",
-    "depends_on": [
-      "[M4-EXT-87]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 1862,
+    "line": 0,
     "anchor": "m4-ext-87"
   },
   {
     "id": "M4-EXT-88",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-88]",
-      "[M4-EXT-84]"
-    ],
+    "title": "Basis Universal GPU Texture Transcoder",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1889,
+    "line": 0,
     "anchor": "m4-ext-88"
   },
   {
     "id": "M4-EXT-89",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-89]"
-    ],
+    "title": "BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)*",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1914,
+    "line": 0,
     "anchor": "m4-ext-89"
   },
   {
     "id": "M4-EXT-90",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-90]"
-    ],
+    "title": "BC1/BC4 Preferred Path + BC5-Normal Cost Caveat",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1939,
+    "line": 0,
     "anchor": "m4-ext-90"
   },
   {
     "id": "M4-EXT-91",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-91]"
-    ],
+    "title": "Material Texture-Sample Budget (3\u20134 max, memory-bound)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1968,
+    "line": 0,
     "anchor": "m4-ext-91"
   },
   {
     "id": "M4-EXT-92",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-34]"
-    ],
+    "title": "Canonical Shared-World Seed Pin",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1996,
+    "line": 0,
     "anchor": "m4-ext-92"
   },
   {
     "id": "M4-EXT-93",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-23]"
-    ],
+    "title": "Macro-Climate Region Field",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 2021,
+    "line": 0,
     "anchor": "m4-ext-93"
   },
   {
     "id": "M4-EXT-94",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-01]"
-    ],
+    "title": "Region-Themed City Placement",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 2046,
+    "line": 0,
     "anchor": "m4-ext-94"
   },
   {
     "id": "M4-EXT-95",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-93]",
-      "[M4-EXT-32]"
-    ],
+    "title": "Biome-Region Sizing",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 2073,
+    "line": 0,
     "anchor": "m4-ext-95"
   },
   {
     "id": "M4-EXT-96",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-32]",
-      "[M5-EXT-14]",
-      "[M8-EXT-56]"
-    ],
-    "depended_by": [
-      "[M8-EXT-51]"
-    ],
-    "line": 2098,
+    "title": "POI Density Field (FO3 \"interesting despite wasteland\")",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m4-ext-96"
   },
   {
     "id": "M4-EXT-97",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-01]",
-      "[M13-EXT-55]"
-    ],
+    "title": "Topology Import Pipeline",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 2136,
+    "line": 0,
     "anchor": "m4-ext-97"
   },
   {
     "id": "M4-EXT-98",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-25]"
-    ],
+    "title": "Asset Library Ingest Pipeline",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 2163,
+    "line": 0,
     "anchor": "m4-ext-98"
   },
   {
     "id": "M4-EXT-99",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-39]"
-    ],
+    "title": "Photoreal Filter + Provenance",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 2188,
+    "line": 0,
     "anchor": "m4-ext-99"
   },
   {
     "id": "M4-EXT-100",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-32]",
-      "[M4-EXT-93]",
-      "[M4-EXT-25]",
-      "[M4-EXT-39]",
-      "[M11-EXT-61]",
-      "[M12-EXT-26]"
-    ],
+    "title": "Stadium & Signature Landmark POIs",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 2217,
+    "line": 0,
     "anchor": "m4-ext-100"
   },
   {
     "id": "M4-EXT-101",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M7-EXT-20]",
-      "[M7-EXT-21]",
-      "[M4-EXT-25]",
-      "[M4.5-EXT-26]",
-      "[M8-EXT-60]"
-    ],
-    "depended_by": [
-      "[M7-EXT-22]"
-    ],
-    "line": 2242,
+    "title": "Edit-Aware Precombine Bake",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m4-ext-101"
   },
   {
     "id": "M4-EXT-102",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M4-EXT-101]",
-      "[M4.5-EXT-26]",
-      "[M1-EXT-08]",
-      "[M8-EXT-60]"
-    ],
-    "depended_by": [
-      "[M7-EXT-22]"
-    ],
-    "line": 2273,
+    "title": "Previs Occlusion Bake",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
     "anchor": "m4-ext-102"
   },
   {
     "id": "M4-EXT-103",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Procedural Vertex Buffer Pooling & Dynamic GPU Compaction",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2304,
+    "line": 0,
     "anchor": "m4-ext-103"
   },
   {
     "id": "M4-EXT-104",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Asynchronous OS Overlapped Direct-VRAM Disk Streaming Queue",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2347,
+    "line": 0,
     "anchor": "m4-ext-104"
   },
   {
     "id": "M4-EXT-105",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Vulkan Host-Visible Page-Pool Memory Defragmentation Compiler",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2389,
+    "line": 0,
     "anchor": "m4-ext-105"
   },
   {
     "id": "M4-EXT-106",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "DirectStorage Decompression Buffer Ring Allocator Pool *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2440,
+    "line": 0,
     "anchor": "m4-ext-106"
   },
   {
     "id": "M4-EXT-107",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "Compute-Driven Hierarchical Z-Buffer Downsampler *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2472,
+    "line": 0,
     "anchor": "m4-ext-107"
   },
   {
     "id": "M4-EXT-108",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "VRAM-Pressure Radial Streaming Scale-Back",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2502,
+    "line": 0,
     "anchor": "m4-ext-108"
   },
   {
     "id": "M4-EXT-109",
-    "title": "Systems Touched",
-    "cluster": "B",
+    "title": "BC7 / Block-Texture Compression & Transcode *(SOURCED FROM PLAN FILE)*",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 2654,
+    "line": 0,
     "anchor": "m4-ext-109"
   }
 ]

@@ -1,421 +1,317 @@
 [
   {
     "id": "M9-EXT-01",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M9-EXT-01]"
-    ],
+    "title": "Fluid Momentum Traction Shear (Blood-Slick Viscosity)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 93,
+    "line": 0,
     "anchor": "m9-ext-01"
   },
   {
     "id": "M9-EXT-02",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M9-EXT-02]"
-    ],
+    "title": "Non-Linear Tire Slip Friction Heating (Thermal Traction Breakdown)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 120,
+    "line": 0,
     "anchor": "m9-ext-02"
   },
   {
     "id": "M9-EXT-03",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M9-EXT-03]"
-    ],
+    "title": "High-Velocity Wet-Silt Aquaplaning",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 147,
+    "line": 0,
     "anchor": "m9-ext-03"
   },
   {
     "id": "M9-EXT-04",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M9-EXT-04]"
-    ],
+    "title": "Non-Newtonian Mud Silt Advection (Soil Rut Tracking)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 178,
+    "line": 0,
     "anchor": "m9-ext-04"
   },
   {
     "id": "M9-EXT-05",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M9-EXT-05]"
-    ],
+    "title": "Aerodynamic Wind Lift & Side-Slip Force Vectoring (Chassis Loft)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 213,
+    "line": 0,
     "anchor": "m9-ext-05"
   },
   {
     "id": "M9-EXT-06",
-    "title": "Systems Touched",
-    "cluster": null,
-    "depends_on": [
-      "[M9-EXT-06]"
-    ],
+    "title": "Horde Continuum Fluid Drag (The Swarm Plow Solver)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 242,
+    "line": 0,
     "anchor": "m9-ext-06"
   },
   {
     "id": "M9-EXT-07",
-    "title": "Systems Touched",
+    "title": "Dynamic Skid-Mark Injection via Runtime Virtual Textures (RVT)",
     "cluster": "A",
-    "depends_on": [
-      "[M9-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 269,
+    "line": 0,
     "anchor": "m9-ext-07"
   },
   {
     "id": "M9-EXT-08",
-    "title": "Systems Touched",
+    "title": "Open/Locked Axle Torque Differential Splitter",
     "cluster": "A",
-    "depends_on": [
-      "[M9-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 298,
+    "line": 0,
     "anchor": "m9-ext-08"
   },
   {
     "id": "M9-EXT-09",
-    "title": "Systems Touched",
+    "title": "Volatile Fuel Tank Puncture Bernoulli Drainage",
     "cluster": "A",
-    "depends_on": [
-      "[M9-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 329,
+    "line": 0,
     "anchor": "m9-ext-09"
   },
   {
     "id": "M9-EXT-10",
-    "title": "Systems Touched",
+    "title": "Aero-Elastic Body Panel Drag Deformation Scaling",
     "cluster": "A",
-    "depends_on": [
-      "[M9-EXT-10]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 360,
+    "line": 0,
     "anchor": "m9-ext-10"
   },
   {
     "id": "M9-EXT-11",
-    "title": "Systems Touched",
+    "title": "Wake-Slipstream Aerodynamic Drafting",
     "cluster": "A",
-    "depends_on": [
-      "[M9-EXT-11]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 387,
+    "line": 0,
     "anchor": "m9-ext-11"
   },
   {
     "id": "M9-EXT-12",
-    "title": "Systems Touched",
+    "title": "Exhaust Backpressure Aquatic Stutter",
     "cluster": "A",
-    "depends_on": [
-      "[M9-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 414,
+    "line": 0,
     "anchor": "m9-ext-12"
   },
   {
     "id": "M9-EXT-13",
-    "title": "Systems Touched",
+    "title": "Gyroscopic Wheel-Spin Precession Self-Righting",
     "cluster": "A",
-    "depends_on": [
-      "[M9-EXT-13]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 441,
+    "line": 0,
     "anchor": "m9-ext-13"
   },
   {
     "id": "M9-EXT-14",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M9-EXT-14]"
-    ],
+    "title": "Non-Newtonian Mud-Slurry Catapult (Tire Rooster-Tails)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 470,
+    "line": 0,
     "anchor": "m9-ext-14"
   },
   {
     "id": "M9-EXT-15",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M9-EXT-15]"
-    ],
+    "title": "Chassis Vortex Debris Drafting",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 497,
+    "line": 0,
     "anchor": "m9-ext-15"
   },
   {
     "id": "M9-EXT-16",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M9-EXT-16]",
-      "[M8-EXT-02]",
-      "[M3-EXT-06]"
-    ],
+    "title": "Socio-Economic Fuel Scarcity & Shared-Station Garage Repair",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 524,
+    "line": 0,
     "anchor": "m9-ext-16"
   },
   {
     "id": "M9-EXT-17",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M9-EXT-17]",
-      "[M3-EXT-06]",
-      "[M9-EXT-16]"
-    ],
+    "title": "Rigid-Body Lateral Frame Shear Stress Accumulator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 549,
+    "line": 0,
     "anchor": "m9-ext-17"
   },
   {
     "id": "M9-EXT-18",
-    "title": "Systems Touched",
-    "cluster": "B",
-    "depends_on": [
-      "[M9-EXT-18]"
-    ],
+    "title": "Vehicle Convoy Long-Range Router",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 574,
+    "line": 0,
     "anchor": "m9-ext-18"
   },
   {
     "id": "M9-EXT-19",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-19]"
-    ],
+    "title": "Parallax-Occlusion Topography Deformation & Persistent Ruts",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 601,
+    "line": 0,
     "anchor": "m9-ext-19"
   },
   {
     "id": "M9-EXT-20",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-20]",
-      "[M9-EXT-04]"
-    ],
+    "title": "Anti-Roll Torsional Suspension Stabilizer",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 626,
+    "line": 0,
     "anchor": "m9-ext-20"
   },
   {
     "id": "M9-EXT-21",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-21]"
-    ],
+    "title": "Fluid Hydrodynamic Wading Resistance Modulator",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 651,
+    "line": 0,
     "anchor": "m9-ext-21"
   },
   {
     "id": "M9-EXT-22",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-22]"
-    ],
+    "title": "RVT Skid-Mark / Tire-Track Injector *(SOURCED FROM PLAN FILE)*",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 676,
+    "line": 0,
     "anchor": "m9-ext-22"
   },
   {
     "id": "M9-EXT-23",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-23]"
-    ],
+    "title": "Day/Night, Weather & Atmosphere",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 701,
+    "line": 0,
     "anchor": "m9-ext-23"
   },
   {
     "id": "M9-EXT-24",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-01]"
-    ],
+    "title": "Vehicle Assembly / Customization",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 726,
+    "line": 0,
     "anchor": "m9-ext-24"
   },
   {
     "id": "M9-EXT-25",
-    "title": "Systems Touched",
-    "cluster": "C",
+    "title": "Universal Interactables",
+    "cluster": "A",
     "depends_on": [],
     "depended_by": [],
-    "line": 751,
+    "line": 0,
     "anchor": "m9-ext-25"
   },
   {
     "id": "M9-EXT-26",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-24]",
-      "[M9-EXT-25]"
-    ],
+    "title": "Vehicle Combat",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 778,
+    "line": 0,
     "anchor": "m9-ext-26"
   },
   {
     "id": "M9-EXT-27",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-24]",
-      "[M9-EXT-25]"
-    ],
+    "title": "Death Race Custom Cars",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 803,
+    "line": 0,
     "anchor": "m9-ext-27"
   },
   {
     "id": "M9-EXT-28",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M4-EXT-32]",
-      "[M8-EXT-54]",
-      "[M12-EXT-26]",
-      "[M11-EXT-64]"
-    ],
+    "title": "Vehicle Scarcity + Loot",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 828,
+    "line": 0,
     "anchor": "m9-ext-28"
   },
   {
     "id": "M9-EXT-29",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-09]",
-      "[M9-EXT-25]",
-      "[M8-EXT-54]",
-      "[M8-EXT-02]"
-    ],
+    "title": "Fuel + Durability",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 853,
+    "line": 0,
     "anchor": "m9-ext-29"
   },
   {
     "id": "M9-EXT-30",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-24]",
-      "[M9-EXT-25]",
-      "[M8-EXT-02]",
-      "[M8-EXT-66]",
-      "[M2-EXT-78]",
-      "[M2-EXT-79]"
-    ],
+    "title": "Welding Minigame (Steady-Bead + Material Variants)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 878,
+    "line": 0,
     "anchor": "m9-ext-30"
   },
   {
     "id": "M9-EXT-31",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M9-EXT-28]",
-      "[M9-EXT-09]",
-      "[M2-EXT-78]",
-      "[M2-EXT-79]",
-      "[M8-EXT-66]"
-    ],
+    "title": "Hotwire Minigame (NoPixel-Style)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 908,
+    "line": 0,
     "anchor": "m9-ext-31"
   },
   {
     "id": "M9-EXT-32",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M2-EXT-78]",
-      "[M2-EXT-79]",
-      "[M8-EXT-66]",
-      "[M6.5]"
-    ],
+    "title": "Lockpick Minigame (Fallout-Harder)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 938,
+    "line": 0,
     "anchor": "m9-ext-32"
   },
   {
     "id": "M9-EXT-33",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M2-EXT-78]",
-      "[M2-EXT-79]",
-      "[M8-EXT-66]",
-      "[M6.5]"
-    ],
+    "title": "Circuit Hack Minigame (Lockpick Sibling)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 969,
+    "line": 0,
     "anchor": "m9-ext-33"
   },
   {
     "id": "M9-EXT-34",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M2-EXT-78]",
-      "[M2-EXT-79]",
-      "[M8-EXT-53]",
-      "[M8-EXT-16]",
-      "[M6.5]"
-    ],
+    "title": "Pickpocket / Sleight Interaction",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 999,
+    "line": 0,
     "anchor": "m9-ext-34"
   },
   {
     "id": "M9-EXT-35",
-    "title": "Systems Touched",
-    "cluster": "C",
-    "depends_on": [
-      "[M8-EXT-24]",
-      "[M8-EXT-30]",
-      "[M9-EXT-09]",
-      "[M8-EXT-66]",
-      "[M2-EXT-74]"
-    ],
+    "title": "Incendiary / Molotov (Fire as Weapon)",
+    "cluster": "A",
+    "depends_on": [],
     "depended_by": [],
-    "line": 1026,
+    "line": 0,
     "anchor": "m9-ext-35"
   }
 ]

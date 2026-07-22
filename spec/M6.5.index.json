@@ -1,150 +1,119 @@
 [
   {
     "id": "M6.5-EXT-01",
-    "title": "Systems Touched",
+    "title": "Shockwave Hydro-Cavitation (Gore Fragmentation Dispersal)",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-01]",
-      "[M2-EXT-59]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 60,
-    "anchor": "m65-ext-01"
+    "line": 0,
+    "anchor": "m6.5-ext-01"
   },
   {
     "id": "M6.5-EXT-02",
-    "title": "Systems Touched",
+    "title": "Capillary Spatter Impact Angle Projection",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 91,
-    "anchor": "m65-ext-02"
+    "line": 0,
+    "anchor": "m6.5-ext-02"
   },
   {
     "id": "M6.5-EXT-03",
-    "title": "Systems Touched",
+    "title": "Venturi-Effect Smoke Drafting",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 120,
-    "anchor": "m65-ext-03"
+    "line": 0,
+    "anchor": "m6.5-ext-03"
   },
   {
     "id": "M6.5-EXT-04",
-    "title": "Systems Touched",
+    "title": "Particle Stream Compaction Pipeline",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 147,
-    "anchor": "m65-ext-04"
+    "line": 0,
+    "anchor": "m6.5-ext-04"
   },
   {
     "id": "M6.5-EXT-05",
-    "title": "Systems Touched",
+    "title": "Stress-Intensity Glass Fracture",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-05]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 172,
-    "anchor": "m65-ext-05"
+    "line": 0,
+    "anchor": "m6.5-ext-05"
   },
   {
     "id": "M6.5-EXT-06",
-    "title": "Systems Touched",
+    "title": "Cellular-Automata Fire Thermodynamics",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-06]",
-      "[M6.5-EXT-03]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 197,
-    "anchor": "m65-ext-06"
+    "line": 0,
+    "anchor": "m6.5-ext-06"
   },
   {
     "id": "M6.5-EXT-07",
-    "title": "Systems Touched",
+    "title": "Depth-Buffer Particle Collision Proxies",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-07]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 222,
-    "anchor": "m65-ext-07"
+    "line": 0,
+    "anchor": "m6.5-ext-07"
   },
   {
     "id": "M6.5-EXT-08",
-    "title": "Systems Touched",
+    "title": "Blue-Noise Importance Sampling",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-08]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 247,
-    "anchor": "m65-ext-08"
+    "line": 0,
+    "anchor": "m6.5-ext-08"
   },
   {
     "id": "M6.5-EXT-09",
-    "title": "Systems Touched",
+    "title": "Linked-List Order-Independent Transparency",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-09]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 272,
-    "anchor": "m65-ext-09"
+    "line": 0,
+    "anchor": "m6.5-ext-09"
   },
   {
     "id": "M6.5-EXT-10",
-    "title": "Systems Touched",
+    "title": "G-Buffer Attachment Feedback Loop",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-10]",
-      "[M6.5-EXT-02]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 297,
-    "anchor": "m65-ext-10"
+    "line": 0,
+    "anchor": "m6.5-ext-10"
   },
   {
     "id": "M6.5-EXT-11",
-    "title": "Systems Touched",
+    "title": "fBm Wind Kinematics & Collision-Reactive Foliage",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-11]",
-      "[M4-EXT-18]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 322,
-    "anchor": "m65-ext-11"
+    "line": 0,
+    "anchor": "m6.5-ext-11"
   },
   {
     "id": "M6.5-EXT-12",
-    "title": "Systems Touched",
+    "title": "Volumetric Micro-Atmospherics & Heat-Shimmer Fields",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-12]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 353,
-    "anchor": "m65-ext-12"
+    "line": 0,
+    "anchor": "m6.5-ext-12"
   },
   {
     "id": "M6.5-EXT-13",
-    "title": "Systems Touched",
+    "title": "Capillary Blood-Spatter RVT Projection",
     "cluster": "A",
-    "depends_on": [
-      "[M6.5-EXT-13]",
-      "[M4.5-EXT-04]"
-    ],
+    "depends_on": [],
     "depended_by": [],
-    "line": 378,
-    "anchor": "m65-ext-13"
+    "line": 0,
+    "anchor": "m6.5-ext-13"
   }
 ]
