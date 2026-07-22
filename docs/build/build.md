@@ -1,7 +1,6 @@
 # Build Instructions
 
 ## Prerequisites
-
 - Windows 10/11 64-bit
 - Visual Studio 2022 Community (MSVC v14.44)
 - CMake 3.20+
@@ -9,7 +8,18 @@
 - vcpkg with SDL3/Jolt/volk/vk-bootstrap/glm/EnTT/spdlog/enkiTS/cxxopts/msdfgen/fastgltf/spirv-reflect/freetype/imgui/catch2
 - Vulkan SDK 1.4.x
 
-## Canonical build
+## One-shot local build
+
+```powershell
+cd C:\ZombieEngine
+.\scripts\build_ze.cmd
+```
+
+Artifacts land in `build/`:
+- `build/ZombieEngine.exe`
+- `build/build/tests/ZombieEngineTests.exe`
+
+## Manual build
 
 ```powershell
 cd C:\ZombieEngine\build

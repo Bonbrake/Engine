@@ -1,16 +1,11 @@
-# Build outputs
-build/
-build-asan/
-build-clean/
-build-ninja/
-*.exe
-*.dll
-*.lib
+# Build outputs — root-anchored so docs/build/ is not ignored
+/build/
+/build-asan/
+/build-clean/
+/build-ninja/
 *.obj
 *.pdb
 *.ilk
-*.log
-*.spv
 
 # IDE
 .vs/
@@ -26,10 +21,6 @@ compile_commands.json
 
 # Dependencies
 vcpkg_installed/
-vcpkg_installed/
-vcpkg/buildtrees/
-vcpkg/downloads/
-custom-triplets/
 
 # OS
 Thumbs.db
@@ -40,7 +31,6 @@ Desktop.ini
 .hermis/
 
 # Logs/scratch blobs
-*.log
 logs/
 pipeline_cache.bin
 
@@ -49,7 +39,6 @@ archive/runtime_junk/
 
 # Archive cruft
 archive/old_milestones/*bak*/
-archive/plans/
 
-# Local helper scripts
-scripts/build_ze.cmd
+# Keep docs/build/ tracked — intentionally not ignored
+vcpkg-manifest-install.log
