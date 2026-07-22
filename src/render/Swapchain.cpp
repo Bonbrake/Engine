@@ -487,8 +487,6 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
         }
     }
 
-    framePacing_.EvaluateQueuePacingIntercept(device_->getLogicalDevice(), frameTimelineSemaphore_, frameTimelineValue_, 3);
-    
     triangleRenderer_.readbackCount(device_, lastImageIndex_);
 
     uint32_t imageIndex;
@@ -501,6 +499,10 @@ void Swapchain::acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, MaterialSys
         LOG_ERROR("Failed to acquire swapchain image!");
         return;
     }
+
+    // [M0-EXT-09] Frame pacing: wait on previously signaled timeline value.
+    // This limits GPU latency to maxFramesInFlight before allowing the next frame to progress.
+    framePacing_.EvaluateQueuePacingIntercept(device_->getLogicalDevice(), frameTimelineSemaphore_, frameTimelineValue_, 3);
 
     frameTimelineValue_++;
 
