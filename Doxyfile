@@ -1,0 +1,15 @@
+PROJECT_NAME           = "ZombieEngine"
+PROJECT_NUMBER         = "0.1.0"
+OUTPUT_DIRECTORY       = docs/doxygen
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+INPUT                  = src include tests
+RECURSIVE              = YES
+QUIET                  = NO
+JAVADOC_AUTOBRIEF      = YES
+MULTILINE_CPP_IS_BRIEF = YES
+OPTIMIZE_OUTPUT_FOR_C  = NO
+EXTENSION_MAPPING      = md=Markdown
+FILE_PATTERNS          = *.h *.cpp *.md
+EXCLUDE_PATTERNS       = */build/* */vcpkg_installed/* */sanity_suite_harness/*
+HTML_OUTPUT            = html
