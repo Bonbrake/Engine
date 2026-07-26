@@ -49865,3 +49865,39 @@ Sits above the procedural planner. Tracks player progression through Start -> Mi
 
 ##### Implementation
 Validates an interior bounding box and spawns a pre-baked .gltf diorama template (e.g., a barricaded door + 3 skeletons + an audio log), overriding procedural scatter.
+
+
+### [M0-EXT-101] Camera-Centric Relative-To-Eye (RTE) & Floating Origin System
+
+> **tags** · rendering, precision, architecture
+> **tl;dr** · M0. Eliminates 32-bit floating point precision loss in large procedural terrain by using int64 sector coordinates and Relative-To-Eye (RTE) rendering.
+> **ctx** · Unconventional Audit. Single-precision 32-bit floats lose sub-millimeter precision past 10,000m from origin, causing vertex jitter and shadow map tearing.
+> **meta** · depends-on: M0-EXT-01
+
+##### Systems Touched
+Vulkan uniform buffer generator, Camera System, Meshlet Shader Pipeline.
+
+##### Math
+pos_camera_relative = float3(object_world_pos_int64 - camera_world_pos_int64)
+World Matrix translated on CPU before GPU push constant submission: M_modelview = V * T(pos_camera_relative) * R * S.
+
+##### Implementation
+1. World space uses int64_t global coordinates.
+2. Every frame, camera position is subtracted from object position on CPU in double/int64 precision.
+3. Converted to 32-bit float *only* after camera translation.
+4. Sent to Vulkan push constants / GPU buffers, guaranteeing zero jitter at 100,000+ km from origin.
+
+
+### [M2-EXT-101] Cross-Platform IEEE 754 Deterministic Physics Matrix
+
+> **tags** · physics, networking, determinism
+> **tl;dr** · M2. Enforces bit-identical Jolt physics simulation across x86_64 and ARM64 architectures for multiplayer co-op.
+> **ctx** · Unconventional Audit. Compiler /fp:fast optimizations and FMA instructions cause x86 and ARM CPUs to drift, breaking M12 lockstep network sync.
+> **meta** · depends-on: M2-EXT-01
+
+##### Implementation
+1. Enforce MSVC /fp:precise and GCC/Clang -ffp-contract=off across build systems.
+2. On thread initialization in enkiTS, set CPU control registers:
+   _MM_SET_ROUNDING_MODE(_MM_ROUND_NEAREST)
+   _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON)
+3. Disable hardware Fused Multiply-Add (FMA) in physics math headers to guarantee identical SIMD precision on PC and mobile/console ARM CPUs.
