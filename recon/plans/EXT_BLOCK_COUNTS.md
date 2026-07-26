@@ -4,7 +4,7 @@
 | Milestone | JSON count | MD count | True max | Status |
 |-----------|-----------|----------|---------|--------|
 | M0 | 55 | 55 | 105 | OK |
-| M1 | 42 | 42 | 53 | OK |
+| M1 | 43 | 43 | 101 | OK |
 | M2 | 127 | 127 | 127 | OK |
 | M3 | 34 | 34 | 35 | OK |
 | M4 | 91 | 91 | 109 | OK |
@@ -33,8 +33,8 @@
 | M8.6 | 25 | 25 | 28 | OK |
 | M8.7 | 3 | 3 | 3 | OK |
 
-**Total JSON**: 988
-**Total MD**: 988
+**Total JSON**: 989
+**Total MD**: 989
 
 ## Warnings
 - None

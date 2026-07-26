@@ -1,7 +1,7 @@
 [
   {
     "id": "M1-EXT-1",
-    "title": "Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -10,7 +10,7 @@
   },
   {
     "id": "M1-EXT-2",
-    "title": "Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -19,7 +19,7 @@
   },
   {
     "id": "M1-EXT-3",
-    "title": "Systems Touched",
+    "title": "M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -28,7 +28,7 @@
   },
   {
     "id": "M1-EXT-4",
-    "title": "Systems Touched",
+    "title": "M1/M5/M6/M9. grep RayBatch \u2192 0. Jolt CastRay collector = multi-hit-per-ray, not N independent rays.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -37,7 +37,7 @@
   },
   {
     "id": "M1-EXT-5",
-    "title": "Systems Touched",
+    "title": "M1/M11. Bind file schema.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M1-EXT-10",
-    "title": "Render-Graph Pass Dependency DAG Flattener *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M1-EXT-11",
-    "title": "Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M1-EXT-12",
-    "title": "ts = QueryPool.GetTimestamp(pass); dt = ts_end - ts_start;",
+    "title": "M1-EXT-09. Only Transform snapshot tested (Engine.cpp:391-412); other hot components not cached.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M1-EXT-13",
-    "title": "Render-Graph Barrier Topological Sorter *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M1-EXT-15",
-    "title": "GPU Query Pool Timestamp Profiler *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M1-EXT-16",
-    "title": "SoA Cache-Line Padding *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M1-EXT-17",
-    "title": "Deterministic Secondary Command-Buffer Merger *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M1-EXT-18",
-    "title": "Material-Batched Mesh-Pass Rendering *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M1-EXT-19",
-    "title": "SoA Layout for Hot Components *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M1-EXT-20",
-    "title": "EnTT Group-Backed Hot-Component Storage *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M1-EXT-21",
-    "title": "Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M1-EXT-22",
-    "title": "CVar System (ImGui-Backed) *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M1-EXT-23",
-    "title": "Timeline Semaphores for Multi-Queue Sync *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M1-EXT-24",
-    "title": "Multi-Threaded Secondary Command Buffer Recording *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M1-EXT-25",
-    "title": "Descriptor Update Templates for Per-Frame Bindless Writes *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M1-EXT-26",
-    "title": "Chunk-Boundary Spatial-Hash Transfer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M1-EXT-27",
-    "title": "Uniform-Grid Spatial Hash Broad-Phase *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M1-EXT-28",
-    "title": "GPU Software Occlusion Rasterizer (HZB Feeder) *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M1-EXT-39",
-    "title": "Systems Touched",
+    "title": "M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M1-EXT-40",
-    "title": "Systems Touched",
+    "title": "M1/M5/M6/M9. grep RayBatch \u2192 0. Jolt CastRay collector = multi-hit-per-ray, not N independent rays.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M1-EXT-41",
-    "title": "Systems Touched",
+    "title": "M1/M9. grep \"struct Parent\" \u2192 0. Weapon sockets, camera-on-head, turrets need it.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M1-EXT-42",
-    "title": "Systems Touched",
+    "title": "M1-EXT-09. Only Transform snapshot tested (Engine.cpp:391-412); other hot components not cached.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M1-EXT-43",
-    "title": "Systems Touched",
+    "title": "M0-EXT-15/M11. Input.cpp polls continuous keyboard (good) but no ActionState/ActionMap, no gamepad hot-plug, no deadzone.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M1-EXT-44",
-    "title": "Systems Touched",
+    "title": "M1/M2.7. FlyCamera.cpp = WASD+mouse-look only. Real player cam = virtual-head entity, semi-implicit Euler damped spring.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M1-EXT-45",
-    "title": "Systems Touched",
+    "title": "M1/M11. Bind file persists key mappings (versioned, atomic write, validated on load).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M1-EXT-46",
-    "title": "Systems Touched",
+    "title": "M1 audit hygiene (J2). Criteria claim GPU indirect draw verified, but verified path is demo-only (M0-001).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -316,7 +316,7 @@
   },
   {
     "id": "M1-EXT-47",
-    "title": "Systems Touched",
+    "title": "M1/M2. Prefab with UnregisteredComponent silently dropped.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -325,7 +325,7 @@
   },
   {
     "id": "M1-EXT-48",
-    "title": "Systems Touched",
+    "title": "M1. EnTT cap = 1,048,576 (2^20, issue #197).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -334,7 +334,7 @@
   },
   {
     "id": "M1-EXT-49",
-    "title": "Systems Touched",
+    "title": "M1-EXT-09. Only Transform tested.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -343,7 +343,7 @@
   },
   {
     "id": "M1-EXT-50",
-    "title": "Systems Touched",
+    "title": "M1/M11. Bind file schema.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -352,7 +352,7 @@
   },
   {
     "id": "M1-EXT-51",
-    "title": "// Packs a 2m grid cell into one 64-bit key; floor() keeps negative-coordinate cells continuous",
+    "title": "M1. No GPU mem budget.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -361,7 +361,7 @@
   },
   {
     "id": "M1-EXT-52",
-    "title": "// Packs a 2m grid cell into one 64-bit key; floor() keeps negative-coordinate cells continuous",
+    "title": "M2. grep CharacterController|CharacterBody \u2192 0. Jolt has Character but nothing wires it to input.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -370,11 +370,20 @@
   },
   {
     "id": "M1-EXT-53",
-    "title": "Systems Touched",
+    "title": "cell = floor(p/cell); bucket; pairs = cells overlapping both AABBs.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
     "anchor": "m1-ext-53"
+  },
+  {
+    "id": "M1-EXT-101",
+    "title": "M1. Pins high-priority enkiTS jobs (Physics, Rendering, ECS) to CPU P-cores / 3D V-Cache, offloading background streaming to E-cores to eliminate micro-stuttering.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m1-ext-101"
   }
 ]
