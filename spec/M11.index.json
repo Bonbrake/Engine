@@ -511,14 +511,5 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m11-ext-101"
-  },
-  {
-    "id": "M11-EXT-102",
-    "title": "M11. Provides razor-sharp, resolution-independent UI typography and multi-language UTF-8 localization using GPU MSDF fragment rendering.",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m11-ext-102"
   }
 ]

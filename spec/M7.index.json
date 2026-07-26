@@ -100,7 +100,7 @@
   },
   {
     "id": "M7-EXT-12",
-    "title": "Systems Touched",
+    "title": "M7. grep zstd|lz4 \u2192 0 (vertex quantization only). Tick-hash replay unbounded.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M7-EXT-13",
-    "title": "Systems Touched",
+    "title": "M7/M0-EXT-28. FileSystem.cpp:7-11 only resolves mods/; no checksum. Corrupt mod loads silently.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M7-EXT-14",
-    "title": "Systems Touched",
+    "title": "M7/M13. grep telemetry \u2192 0. Prereq for SLM Director + \"single tuned experience\".",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M7-EXT-15",
-    "title": "Systems Touched",
+    "title": "M7/M11. grep localiz|string.table \u2192 0. Route text through offline-generated (SLM) table; MSDF already renders it.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M7-EXT-16",
-    "title": "Systems Touched",
+    "title": "M7. Atomic write planned but no rollback on parse failure.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M7-EXT-17",
-    "title": "Systems Touched",
+    "title": "M0 (tick-hash). Only hash, no full state replay.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M7-EXT-18",
-    "title": "Systems Touched",
+    "title": "Encrypt save blob (key from user-data) to deter manual editing",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M7-EXT-19",
-    "title": "Systems Touched",
+    "title": "On load, migrate old save versions forward via per-version patches",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -205,5 +205,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m7-ext-23"
+  },
+  {
+    "id": "M7-EXT-101",
+    "title": "M7. Guarantees 100% save file corruption immunity during sudden power outages or OS crashes using atomic Write-Ahead Logging (WAL) transactions.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m7-ext-101"
   }
 ]
