@@ -322,5 +322,32 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m4.5-ext-100"
+  },
+  {
+    "id": "M4.5-EXT-104",
+    "title": "M4.5. Evaluates a 2-layer FP16 neural network in Vulkan Cooperative Matrix units to decompress multi-channel PBR textures with 4x higher quality density than BC7.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-104"
+  },
+  {
+    "id": "M4.5-EXT-105",
+    "title": "M4.5. Implements ReSTIR GI spatiotemporal reservoir sampling to render dynamic indirect global illumination and emissive zombie eyes in real-time.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-105"
+  },
+  {
+    "id": "M4.5-EXT-106",
+    "title": "M4.5. Caches infinite-bounce global illumination using a small neural network evaluated live on GPU Tensor Cores.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-106"
   }
 ]

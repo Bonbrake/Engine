@@ -817,5 +817,32 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m5-ext-91"
+  },
+  {
+    "id": "M5-EXT-102",
+    "title": "M5. Replaces Transformer quadratic O(N^2) memory with Mamba State-Space O(N) linear context scaling for long-horizon NPC memory recall.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-102"
+  },
+  {
+    "id": "M5-EXT-103",
+    "title": "M5. Blends physics ragdoll impulses with keyframed animations using neural pose matching for realistic zombie stumble and knockdown recoveries.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-103"
+  },
+  {
+    "id": "M5-EXT-104",
+    "title": "M5. Coordinates 1000+ zombies into intelligent flank, ambush, and siege formations using Hierarchical Task Networks (HTN) and Monte Carlo Tree Search (MCTS).",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-104"
   }
 ]

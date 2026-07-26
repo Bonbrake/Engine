@@ -174,7 +174,17 @@ Discipline:
 | 47 | Neural Layered BRDF duplicate | [S] | M3-EXT-* | Duplicate of 41 |
 | 48 | Geometry Caches | [S] | M4.5-EXT-* | Bake Alembic to GPU-optimized binary; triple-buffer streaming |
 | 49 | VRS | [S] | M4.5-EXT-*, M13-EXT-* | Roughness-adaptive VRS tile grid with temporal stabilization |
-| 50 | Glossy Reflections | [S] | M4.5-EXT-* | World-space radiance fallback when screen cache disoccludes; roughness-stratified budget |
+| 50 | Glossy Reflections | [S] | M4.5-EXT-* |
+| 51 | Neural Texture Compression (NTC) | [S] | M4.5-EXT-104 | Real-Time Neural Shader Unpacking (4x BC7 Compression) |
+| 52 | ReSTIR GI (Spatiotemporal Reservoir GI) | [S] | M4.5-EXT-105 | Real-Time Dynamic Indirect Lighting & Emissive Sources |
+| 53 | 3D Gaussian Splatting Volumetric Fog | [S] | M4-EXT-104 | Real-Time Volumetric Fog, Smoke & Dense Foliage |
+| 54 | Neural Radiance Caching (NRC) | [S] | M4.5-EXT-106 | Tensor-Core Accelerated Dynamic GI Cache |
+| 55 | Mamba State-Space NPC Memory | [S] | M5-EXT-102 | Linear O(N) Context Scaling for Long-Horizon NPC Memories |
+| 56 | Speculative Continuous Collision Detection (CCD) | [S] | M2-EXT-103 | Tunneling Immunity for Fast Projectiles & Zombie Hits |
+| 57 | Learned Physics Locomotion & Ragdoll Recovery | [S] | M5-EXT-103 | Physics-Based Zombie Stumbling & Dynamic Ragdoll Recovery |
+| 58 | Wave Packet Acoustic Diffraction | [S] | M6-EXT-102 | Wave-Based Architectural Sound Propagation |
+| 59 | Procedural Weather Spectrum Audio Synthesis | [S] | M6-EXT-103 | Real-Time Wind & Rain Audio Synthesis |
+| 60 | HTN + MCTS Strategic Horde Director AI | [S] | M5-EXT-104 | Flanking & Multi-Squad Coordination for 1000+ Zombies | World-space radiance fallback when screen cache disoccludes; roughness-stratified budget |
 
 ## 3.2 Paper Algorithm Map — Corrected Formulas
 

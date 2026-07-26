@@ -205,5 +205,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m6-ext-101"
+  },
+  {
+    "id": "M6-EXT-102",
+    "title": "M6. Simulates low-frequency sound diffraction around corners and through open windows using wave-packet acoustic synthesis.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m6-ext-102"
+  },
+  {
+    "id": "M6-EXT-103",
+    "title": "M6. Synthesizes dynamic wind, heavy rain, and thunder audio in real-time using spectral noise shaping instead of looping wave samples.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m6-ext-103"
   }
 ]

@@ -1,6 +1,6 @@
 # ZombieEngine EXT Index
 
-> 1419 EXT blocks across 33 files. Each `ID | file | line`.
+> 1429 EXT blocks across 33 files. Each `ID | file | line`.
 
 ## K
 - `K-EXT-01` → `APPENDIX_K.md` (L14)
@@ -705,6 +705,9 @@
 - `M4.5-EXT-34` → `M4.5.md` (L2208)
 - `M4.5-EXT-35` → `M4.5.md` (L2241)
 - `M4.5-EXT-100` → `M4.5.md` (L2273)
+- `M4.5-EXT-104` → `M4.5.md` (L2287)
+- `M4.5-EXT-105` → `M4.5.md` (L2301)
+- `M4.5-EXT-106` → `M4.5.md` (L2315)
 
 ## M4.6
 - `M4.6-EXT-01` → `M4.6.md` (L25)
@@ -809,6 +812,9 @@
 - `M5-EXT-89` → `M5.md` (L3519)
 - `M5-EXT-90` → `M5.md` (L3554)
 - `M5-EXT-91` → `M5.md` (L3689)
+- `M5-EXT-102` → `M5.md` (L3701)
+- `M5-EXT-103` → `M5.md` (L3715)
+- `M5-EXT-104` → `M5.md` (L3729)
 
 ## M5.1
 - `M5.1-EXT-01` → `M5.1.md` (L29)
@@ -891,6 +897,8 @@
 - `M6-EXT-21` → `M6.md` (L584)
 - `M6-EXT-22` → `M6.md` (L609)
 - `M6-EXT-101` → `M6.md` (L1029)
+- `M6-EXT-102` → `M6.md` (L1044)
+- `M6-EXT-103` → `M6.md` (L1058)
 
 ## M6.5
 - `M6.5-EXT-01` → `M6.5.md` (L27)
