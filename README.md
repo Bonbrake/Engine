@@ -26,7 +26,7 @@ and agent workflow rules are described in [`.hermes.md`](.hermes.md).
 | `tools/` | Project tooling |
 | `spec/` | Per-milestone split spec working set + `llms.txt` index — **the live source of truth** |
 | `recon/` | Research plans, audits, and professionalization plans |
-| `recon/plans/2026-07-20_RESEARCHED_PROFESSIONAL_PLAN.md` | Research-backed plan: 50 papers, 6 reference games, 3 engine architectures, milestone map, verification gates |
+| `recon/plans/FINAL_COMPREHENSIVE_PLAN.md` | Master Blueprint & Execution Plan: Fully verified research, numeric metrics, sprint timeline, and architectural fixes, 6 reference games, 3 engine architectures, milestone map, verification gates |
 | `docs/` | Live build, verification, architecture, and research docs |
 | `docs/build.md` | Local build instructions |
 | `docs/verify/verify.md` | Verification checklist |
