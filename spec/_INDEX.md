@@ -1,6 +1,6 @@
 # ZombieEngine EXT Index
 
-> 1418 EXT blocks across 33 files. Each `ID | file | line`.
+> 1416 EXT blocks across 33 files. Each `ID | file | line`.
 
 ## K
 - `K-EXT-01` → `APPENDIX_K.md` (L14)
@@ -89,8 +89,7 @@
 - `M0-EXT-54` → `APPENDICES.md` (L1446)
 - `M0-EXT-101` → `M0.md` (L2717)
 - `M0-EXT-102` → `M0.md` (L2739)
-- `M0-EXT-103` → `M0.md` (L2754)
-- `M0-EXT-104` → `M0.md` (L2769)
+- `M0-EXT-105` → `M0.md` (L2754)
 
 ## M1
 - `M1-EXT-01` → `M1.md` (L64)
@@ -234,7 +233,6 @@
 - `M11-EXT-66` → `M11.md` (L1906)
 - `M11-EXT-67` → `M11.md` (L1944)
 - `M11-EXT-101` → `M11.md` (L2006)
-- `M11-EXT-102` → `M11.md` (L2021)
 
 ## M12
 - `M12-EXT-01` → `M12.md` (L23)

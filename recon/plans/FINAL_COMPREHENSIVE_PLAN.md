@@ -127,36 +127,36 @@ Discipline:
 |---|-------|--------|---------------------|-------------------|
 | 1 | PCG in Games Survey + LLM | [S] | M4-EXT-*, M13-EXT-* | LLM-as-PCG-supervisor; hybrid MCTS/noise POI layout |
 | 2 | Generative Agents | [S] | M5-EXT-*, M13-EXT-* | Observation stream, reflection layer, dynamic retrieval; 25-agent benchmark |
-| 3 | ProcGen/Rendering Thesis | [X] | M4-EXT-*, M4.5-EXT-* | Region-based hierarchy, cached/runtime terrain, impostor vegetation |
+| 3 | ProcGen/Rendering Thesis | [S] | M4-EXT-*, M4.5-EXT-* | Region-based hierarchy, cached/runtime terrain, impostor vegetation |
 | 4 | Aokana GPU Voxel | [S] | M4.5-EXT-*, M1-EXT-*, M13-EXT-* | SVDAG compression, hybrid voxel-plus-mesh, LOD streaming |
-| 5 | Player Agency | [X] | M5-EXT-*, M11-EXT-* | Persistent systemic consequence; avoid false-choice trees |
-| 6 | DDA Systematic Review | [X] | M5-EXT-*, M11-EXT-* | Rule-based director preferred over opaque ML for shipping |
-| 7 | Real-Time Fracturing | [X] | M3-EXT-* | Material-dependent fracture response; prefracture small objects |
-| 8 | Environmental Storytelling | [X] | M11-EXT-* | Embedded/emergent/interpretive narrative layers |
-| 9 | Boids/Swarm Intelligence | [X] | M5-EXT-* | Fully decentralized horde control; scent/sound goal rule add-on |
-| 10 | GSound | [X] | M6-EXT-*, M13-EXT-* | Geometric audio with portal-aware diffraction; 10-20 Hz cadence |
+| 5 | Player Agency | [S] | M5-EXT-*, M11-EXT-* | Persistent systemic consequence; avoid false-choice trees |
+| 6 | DDA Systematic Review | [S] | M5-EXT-*, M11-EXT-* | Rule-based director preferred over opaque ML for shipping |
+| 7 | Real-Time Fracturing | [S] | M3-EXT-* | Material-dependent fracture response; prefracture small objects |
+| 8 | Environmental Storytelling | [S] | M11-EXT-* | Embedded/emergent/interpretive narrative layers |
+| 9 | Boids/Swarm Intelligence | [S] | M5-EXT-* | Fully decentralized horde control; scent/sound goal rule add-on |
+| 10 | GSound | [S] | M6-EXT-*, M13-EXT-* | Geometric audio with portal-aware diffraction; 10-20 Hz cadence |
 | 11 | Tension Space Analysis | [S] | M5-EXT-*, M11-EXT-* | Tension = player options minus threat; state-machine pacing |
-| 12 | Player-Driven Emergence | [X] | M11-EXT-*, M5-EXT-* | Runtime telemetry exposes dead narrative branches |
+| 12 | Player-Driven Emergence | [S] | M11-EXT-*, M5-EXT-* | Runtime telemetry exposes dead narrative branches |
 | 13 | Concordia | [S] | M5-EXT-*, M12-EXT-* | GM-layer action validation; physical/social/digital state spaces |
-| 14 | LLM Game Agents Survey | [X] | M5-EXT-* | 6-component NPC architecture; tiered memory bottleneck |
+| 14 | LLM Game Agents Survey | [S] | M5-EXT-* | 6-component NPC architecture; tiered memory bottleneck |
 | 15 | Closing the Loop | [S] | M11-EXT-*, M13-EXT-*, M5-EXT-* | Sense-model-adapt loop; ~30s cadence; four-phase pacing |
 | 16 | Agents' Room | [S] | M11-EXT-*, M13-EXT-* | Narrative grammar chain: EventType → NPCSelector → OutcomeResolver → FlavorWriter |
-| 17 | Procedural Animation/Parkour | [X] | M5-EXT-* | Motion matching + IK post-process unified locomotion state machine |
+| 17 | Procedural Animation/Parkour | [S] | M5-EXT-* | Motion matching + IK post-process unified locomotion state machine |
 | 18 | Save Game Serialization | [S] | M7-EXT-* | SoA layout, delta compression, periodic full checkpoint, schema versioning |
 | 19 | Game Economy Balancing EA | [S] | M8-EXT-*, M13-EXT-* | Offline Pareto-optimized economy; per-save seeded variation |
 | 20 | Removing the HUD | [S] | M11-EXT-* | Diegetic HUD only; contextual information only |
 | 21 | Modular Quest Generation CONAN | [S] | M11-EXT-*, M13-EXT-* | Planner-based quests validated against world state |
-| 22 | Modulith | [X] | M7-EXT-*, M13-EXT-* | DAG load order with cycle detection, capability sandbox, versioned mod API |
-| 23 | Aim Assist Console Shooters | [X] | M11-EXT-* | Dual-zone controller response; gyro-first input; rotational assist |
+| 22 | Modulith | [S] | M7-EXT-*, M13-EXT-* | DAG load order with cycle detection, capability sandbox, versioned mod API |
+| 23 | Aim Assist Console Shooters | [S] | M11-EXT-* | Dual-zone controller response; gyro-first input; rotational assist |
 | 24 | Intersection-Free Rigid Body | [S] | M2-EXT-*, M9-EXT-* | Curved-trajectory CCD; barrier stiffness from surface material |
-| 25 | XPBD | [X] | M2-EXT-*, M5-EXT-* | Unified collision/ragdoll/constraints; compliance increases with damage |
+| 25 | XPBD | [S] | M2-EXT-*, M5-EXT-* | Unified collision/ragdoll/constraints; compliance increases with damage |
 | 26 | Breaking Good Fracture | [S] | M3-EXT-* | Precomputed fracture modes at asset build; GPU compute for cracked geometry |
 | 27 | Real-Time Eulerian Water | [S] | M6.5-EXT-*, M10-EXT-* | Tall-cell grid; two-way buoyancy coupling; compute Poisson solve |
 | 28 | Interactive Dynamic Response | [S] | M2-EXT-*, M5-EXT-* | Blended active ragdoll; three-state physics modes; deterministic transitions |
 | 29 | Fire Modeling | [S] | M6.5-EXT-* | Dual-layer fire/smoke; fuel metadata per material; temperature-to-color |
-| 30 | Meshlet Rendering | [X] | M3-EXT-*, M4.5-EXT-* | Compressed meshlets; Hi-Z coarse cull before task shader dispatch |
-| 31 | Nanite Virtual Geometry | [X] | M4.5-EXT-*, M0-EXT-*, M13-EXT-* | Cluster DAG with screen-space error; visibility buffer deferred shading |
-| 32 | GPU-Driven Rendering | [X] | M1-EXT-*, M4.5-EXT-* | GPU-only frustum/occlusion/LOD cull into indirect draw buffer |
+| 30 | Meshlet Rendering | [S] | M3-EXT-*, M4.5-EXT-* | Compressed meshlets; Hi-Z coarse cull before task shader dispatch |
+| 31 | Nanite Virtual Geometry | [S] | M4.5-EXT-*, M0-EXT-*, M13-EXT-* | Cluster DAG with screen-space error; visibility buffer deferred shading |
+| 32 | GPU-Driven Rendering | [S] | M1-EXT-*, M4.5-EXT-* | GPU-only frustum/occlusion/LOD cull into indirect draw buffer |
 | 33 | Quadric Error Metrics | [S] | M4-EXT-*, M3-EXT-* | Surface simplification with attribute-aware weighting; progressive mesh |
 | 34 | Neural Denoising+Upscale | [S] | M4.5-EXT-*, M13-EXT-* | Single-pass neural denoise+upscale; temporal reprojection; Halton jitter every 8 frames |
 | 35 | DeepMimic | [S] | M5-EXT-*, M13-EXT-* | Physics-based skill policy weights gated by health/state tier |
@@ -172,9 +172,9 @@ Discipline:
 | 45 | Branching Quests | [S] | M11-EXT-*, M13-EXT-* | World-state parameterized quest templates with offline validation |
 | 46 | Vegetation Modeling | [S] | M4-EXT-* | Poisson-disk-with-competition placement; seasonal flora state machine |
 | 47 | Neural Layered BRDF duplicate | [S] | M3-EXT-* | Duplicate of 41 |
-| 48 | Geometry Caches | [X] | M4.5-EXT-* | Bake Alembic to GPU-optimized binary; triple-buffer streaming |
+| 48 | Geometry Caches | [S] | M4.5-EXT-* | Bake Alembic to GPU-optimized binary; triple-buffer streaming |
 | 49 | VRS | [S] | M4.5-EXT-*, M13-EXT-* | Roughness-adaptive VRS tile grid with temporal stabilization |
-| 50 | Glossy Reflections | [X] | M4.5-EXT-* | World-space radiance fallback when screen cache disoccludes; roughness-stratified budget |
+| 50 | Glossy Reflections | [S] | M4.5-EXT-* | World-space radiance fallback when screen cache disoccludes; roughness-stratified budget |
 
 ## 3.2 Paper Algorithm Map — Corrected Formulas
 
