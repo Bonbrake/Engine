@@ -548,6 +548,22 @@ Deliverable: 10-minute playthrough with base building and vehicle traversal.
 Deliverable: 4-player co-op with persistence and endgame loop.
 
 
+
+## 8.5 Strict AAA Tier-0 6GB VRAM Allocation Ledger
+
+To guarantee zero Out-Of-Memory (OOM) crashes on Tier-0 target hardware (RTX 2070 Super / 6GB VRAM), memory allocations are strictly partitioned and enforced via VMA pools:
+
+| Allocation Category | VRAM Budget | Purpose & Target Assets | Hard Limit Action |
+|---------------------|-------------|-------------------------|-------------------|
+| **Render Targets & G-Buffer** | 1,200 MB | 1080p HDR RenderTargets, Depth, Motion Vectors, TAA buffers, Shadow Maps | Fixed Pool (No Allocation Growth) |
+| **Meshlet & Index Buffers** | 600 MB | Virtualized Geometry, SVDAG Octrees, Hair Strands, Dynamic Debris | Cluster LOD Eviction via Nanite Streamer |
+| **Texture Streaming Pool** | 2,200 MB | BC1/BC3/BC4/BC5/BC7 Textures (RVT mips, Albedo, Normal, Roughness) | Mip-Map Eviction & Lower MIP Cap |
+| **Animation & Rig Matrices** | 300 MB | Bone Matrix Buffers, Blend-Tree State, Dual-Quaternion Transforms | Compress Animation Tracks via Delta Quantization |
+| **Audio & GPU Compute** | 200 MB | Audio Propagation Voxel Grid, Particle Compute Buffers, FFT Waves | Lower Compute Ray Sample Count |
+| **Engine Reserve & OS Slack** | 1,500 MB | Driver Overhead, OS Compositor Reserve, Emergency Allocation Buffer | Trigger Emergency VMA Defragmentation Pass |
+| **TOTAL HARD CEILING** | **6,000 MB** | **Strict Hardware Target Budget** | **Enforced via maCreatePool Hard Caps** |
+
+
 ## 8.4 Per-Milestone Acceptance Criteria [E-2 Resolved]
 
 - **M0 (Vulkan):** <0.1ms command buffer recording. 0 validation warnings.

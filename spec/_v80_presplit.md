@@ -49969,3 +49969,48 @@ World Matrix translated on CPU before GPU push constant submission: M_modelview 
 2. When the 120Hz fixed physics step (M2) runs, it calculates the exact fractional offset between the input timestamp and the physics tick.
 3. Applies sub-tick transform interpolation to the player camera and weapon traces before the raycast is evaluated.
 4. Sends the timestamped fractional commands to the M12 networking layer for perfectly precise Client-Side Prediction rollback.
+
+
+### [M0-EXT-103] Offline Shader Permutation Warm-Up & Binary PSO Cache System
+
+> **tags** · rendering, vulkan, optimization, aaa
+> **tl;dr** · M0. Eliminates runtime shader compilation stuttering by pre-compiling all Vulkan Pipeline State Objects (PSOs) into a binary cache file (pipelines.bin) during loading.
+> **ctx** · AAA Quality Standard. Runtime VkPipeline creation causes severe 50ms+ frame hitches. Pre-compilation guarantees zero shader hitching during gameplay.
+> **meta** · depends-on: M0-EXT-01
+
+##### Implementation
+1. The offline build pipeline compiles all GLSL shaders to SPIR-V and enumerates all valid material state permutations (defines, blending modes, topology).
+2. On engine startup, pipelines.bin is read from disk and validated against GPU driver UUID (VkPhysicalDeviceProperties::pipelineCacheUUID).
+3. If valid, kCreatePipelineCache warms up all PSOs across enkiTS worker threads during the game splash screen.
+4. If invalid (driver update), background worker threads rebuild the PSO cache asynchronously without blocking the main render thread.
+
+
+### [M0-EXT-104] GPU TDR Breadcrumb Logging & Minidump Diagnostic Capture
+
+> **tags** · vulkan, debugging, stability, aaa
+> **tl;dr** · M0. Pinpoints GPU crashes (VK_ERROR_DEVICE_LOST) down to the exact Vulkan render pass and draw call using hardware buffer markers and minidump capture.
+> **ctx** · AAA Quality Standard. GPU TDR crashes are notoriously un-debuggable without hardware execution breadcrumbs.
+> **meta** · depends-on: M0-EXT-01
+
+##### Implementation
+1. Integrates VK_NV_device_diagnostic_checkpoints and VK_AMD_buffer_marker extensions.
+2. kCmdWriteBufferMarkerAMD and kCmdSetCheckpointNV push stage markers before every draw call and compute dispatch:
+   - MARKER_0x01: Depth Pre-pass
+   - MARKER_0x02: G-Buffer Pass
+   - MARKER_0x03: Clustered Light Compute
+   - MARKER_0x04: Post-Processing / TAA
+3. On VK_ERROR_DEVICE_LOST, the engine intercepts the crash signal, reads back the last executed checkpoint from the GPU, writes a high-fidelity Windows Minidump (.dmp) containing the GPU stack trace, and logs the exact faulty shader name.
+
+
+### [M11-EXT-102] Multi-Channel Signed Distance Field (MSDF) Font Atlas & i18n Engine
+
+> **tags** · ui, rendering, localization, aaa
+> **tl;dr** · M11. Provides razor-sharp, resolution-independent UI typography and multi-language UTF-8 localization using GPU MSDF fragment rendering.
+> **ctx** · AAA Quality Standard. Standard bitmap text blurs when scaled or transformed, ruining UI polish on high-DPI displays.
+> **meta** · depends-on: M11-EXT-01
+
+##### Implementation
+1. Uses msdfgen to pre-render font glyphs into a 3-channel (RGB) Signed Distance Field texture atlas.
+2. GPU fragment shader samples MSDF texture and uses median filtering (max(min(r, g), min(max(r, g), b))) to calculate screen-pixel distance.
+3. Renders crisp vector text, drop shadows, and glow outlines at any resolution (1080p to 4K) with a single draw call.
+4. Dynamically streams UTF-8 glyphs into a 2048x2048 dynamic atlas texture to support CJK (Chinese, Japanese, Korean) and Cyrillic character sets.
