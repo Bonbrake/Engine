@@ -93,7 +93,7 @@ void main() {
 
 ---
 
-#### [M1-EXT-12] Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
+### [M1-EXT-12] Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
 
 **Systems Touched:** M1 MSDF font pipeline, `[M4.5-EXT-07]` texture synthesizer, Runtime Virtual Texture pages.
 

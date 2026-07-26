@@ -3,20 +3,20 @@
 
 | Milestone | JSON count | MD count | True max | Status |
 |-----------|-----------|----------|---------|--------|
-| M0 | 53 | 53 | 101 | OK |
+| M0 | 54 | 54 | 102 | OK |
 | M1 | 42 | 42 | 53 | OK |
 | M2 | 127 | 127 | 127 | OK |
 | M3 | 34 | 34 | 35 | OK |
 | M4 | 91 | 91 | 109 | OK |
 | M4.5 | 36 | 36 | 100 | OK |
 | M5 | 91 | 91 | 91 | OK |
-| M6 | 22 | 22 | 22 | OK |
+| M6 | 22 | 23 | 101 | REGEN |
 | M6.5 | 13 | 13 | 13 | OK |
 | M7 | 23 | 23 | 23 | OK |
 | M8 | 80 | 80 | 88 | OK |
 | M9 | 35 | 35 | 35 | OK |
 | M10 | 27 | 27 | 31 | OK |
-| M11 | 56 | 56 | 67 | OK |
+| M11 | 56 | 57 | 101 | REGEN |
 | M12 | 35 | 35 | 45 | OK |
 | M13 | 43 | 43 | 61 | OK |
 | M2.6 | 9 | 9 | 9 | OK |
@@ -33,15 +33,17 @@
 | M8.6 | 25 | 25 | 28 | OK |
 | M8.7 | 3 | 3 | 3 | OK |
 
-**Total JSON**: 983
-**Total MD**: 983
+**Total JSON**: 984
+**Total MD**: 986
 
 ## Warnings
-- None
+- M6: JSON count 22 != MD count 23; regenerating .index.json
+- M11: JSON count 56 != MD count 57; regenerating .index.json
 
 ## Regenerated JSON sidecars
 
-- None
+- M6
+- M11
 
 ## Sample titles
 
@@ -50,8 +52,8 @@
 | M0 | M0-EXT-1 | Systems Touched |
 | M0 | M0-EXT-2 | Persistent World-Epoch Clock with Deterministic Offline Fast-Forward |
 | M0 | M0-EXT-3 | M0/M1 render. TriangleRenderer::draw (TriangleRenderer.cpp:688-719) returns early on bridgeActive and draws per-entity vkCmdDrawIndexed+vkCmdPushConstants (:713 |
-| M1 | M1-EXT-1 | Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)* |
-| M1 | M1-EXT-2 | Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)* |
+| M1 | M1-EXT-1 | Systems Touched |
+| M1 | M1-EXT-2 | Systems Touched |
 | M1 | M1-EXT-3 | M1. QueryRadius/QueryCell defined (SpatialHash.cpp:151,179) but only called from unit test (Engine.cpp:651-664). |
 | M2 | M2-EXT-1 | M2.9. BulletComponent exists but grep projectile|ricochet|penetration → only data fields, no solver. |
 | M2 | M2-EXT-2 | M8.7. PerkPoints exists, no system. |

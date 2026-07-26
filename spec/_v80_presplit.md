@@ -1227,7 +1227,7 @@ Defaults apply.
 
 *Systems proposed in later design-iteration sessions, folded in here at their correct pipeline destination. IDs are stable — reference them (e.g. `M9-EXT-03`) when discussing this doc with the coding agent so everyone means the same system.*
 
-#### [M1-EXT-01] SpatialHash Uniform Grid Cell Bucketing Engine
+### [M1-EXT-01] SpatialHash Uniform Grid Cell Bucketing Engine
 
 ##### Systems Touched
 
@@ -1256,7 +1256,7 @@ uint64_t SpatialHashKey(float x, float z) {
 
 Invisible directly, but this is the shared broad-phase every proximity query in the game (horde crush, comms static, blood pooling, drafting) sits on top of — a bug here would ripple into all of them at once.
 
-#### [M1-EXT-02] Generational Resource Table Pointer Validator
+### [M1-EXT-02] Generational Resource Table Pointer Validator
 
 ##### Systems Touched
 
@@ -1282,7 +1282,7 @@ bool IsHandleValid(const Handle& h, const std::vector<uint32_t>& generations) {
 
 Rapid entity churn (a horde dying and respawning, items being picked up/dropped) never produces a "ghost" reference silently acting on the wrong live entity.
 
-#### [M1-EXT-03] Multi-Threaded Command Pool Matrix
+### [M1-EXT-03] Multi-Threaded Command Pool Matrix
 
 ##### Systems Touched
 
@@ -1309,7 +1309,7 @@ uint32_t GetPoolIndex(uint32_t frameResourceIndex, uint32_t threadCount, uint32_
 
 Invisible — this is what keeps multi-threaded draw-call recording race-free without a global lock that would otherwise serialize threads and cost frame time.
 
-#### [M1-EXT-04] Frame-Scoped Deletion Queue
+### [M1-EXT-04] Frame-Scoped Deletion Queue
 
 ##### Systems Touched
 
@@ -1335,7 +1335,7 @@ bool ReadyToPurge(uint64_t completedFenceValue, uint64_t resourceFenceValue) {
 
 No flickering/corrupted geometry from a resource being freed while the GPU is still mid-draw on it — a class of bug that's otherwise intermittent and hardware-dependent.
 
-#### [M1-EXT-05] Persistent-Mapped Staging Ring Buffer
+### [M1-EXT-05] Persistent-Mapped Staging Ring Buffer
 
 ##### Systems Touched
 
@@ -1362,7 +1362,7 @@ void* GetFrameStagingRegion(void* basePtr, size_t maxFrameSize, size_t totalPool
 
 Frequent small GPU uploads (per-frame UI text, dynamic material tweaks) never introduce a hitch from repeated map/unmap overhead.
 
-#### [M1-EXT-06] EnTT Archetype Component SPSC Mutation Queue Committer
+### [M1-EXT-06] EnTT Archetype Component SPSC Mutation Queue Committer
 
 ##### Systems Touched
 
@@ -1412,7 +1412,7 @@ struct alignas(64) SPSCMutationQueue {
 
 Invisible — this is what lets chunk streaming, physics cooking, and procedural generation run on background threads at all without randomly corrupting the entity registry under heavy load.
 
-#### [M1-EXT-07] Thread-Local Zero-Allocation Linear Page-Bump Arena
+### [M1-EXT-07] Thread-Local Zero-Allocation Linear Page-Bump Arena
 
 ##### Systems Touched
 
@@ -1442,8 +1442,9 @@ inline void* ArenaAllocateBump(BumpArena& arena, size_t size, size_t alignment =
 
 Invisible — this is what keeps pathfinding and raycast-heavy systems (horde AI at scale) from stalling on heap allocator locks mid-tick.
 
-#### [M1-EXT-08] Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
-#### [M1-EXT-10] Render-Graph Pass Dependency DAG Flattener *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-08] Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
+
+### [M1-EXT-10] Render-Graph Pass Dependency DAG Flattener *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 render graph. Linearizes the pass DAG into a valid submit order respecting resource read/write edges.
@@ -1463,7 +1464,8 @@ vector<Pass*> order=TopoSort(graph); // Kahn, priority tiebreak
 Render passes always execute in a valid order - no read-before-write hazards, no manual ordering.
 
 ---
-#### [M1-EXT-11] Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+### [M1-EXT-11] Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + M2.6 GPU culling. Memory/execution barrier between compute culling and the indirect draw that consumes its buffer.
@@ -1483,7 +1485,8 @@ vkCmdPipelineBarrier(cb, COMPUTE, DRAW, 0, 0,nullptr, 1,&bufBarrier, 0,nullptr);
 GPU culling + indirect draw stay correct across passes - no popped or duplicated instances.
 
 ---
-#### [M1-EXT-16] SoA Cache-Line Padding *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+
+### [M1-EXT-16] SoA Cache-Line Padding *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 ECS storage. Pads SoA component arrays to 64-byte cache lines to avoid false sharing / straddle.
@@ -1502,7 +1505,7 @@ auto* a = (T*)aligned_alloc(64, n*align(sizeof(T),64));
 ##### Player-Facing Impact
 Multithreaded ECS updates avoid cache-line contention - smoother frame under load.
 
-#### [M1-EXT-22] CVar System (ImGui-Backed) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-22] CVar System (ImGui-Backed) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + UI. Central console-variable registry with ImGui debug panel.
@@ -1524,7 +1527,7 @@ Tunables are live-editable in-dev - fast iteration on feel/perf.
 
 ---
 
-#### [M1-EXT-21] Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-21] Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + M5.1. Exposes skinning bone matrices via buffer device addresses for shader direct-read.
@@ -1546,7 +1549,7 @@ Skinning binds drop away - more animated characters for the same cost.
 
 ---
 
-#### [M1-EXT-20] EnTT Group-Backed Hot-Component Storage *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-20] EnTT Group-Backed Hot-Component Storage *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + EnTT. Uses EnTT groups for O(1) hot-component view iteration.
@@ -1568,7 +1571,7 @@ Hot-system iteration is near-free - big entity counts stay at 60fps.
 
 ---
 
-#### [M1-EXT-19] SoA Layout for Hot Components *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-19] SoA Layout for Hot Components *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 ECS. Hot components stored Structure-of-Arrays for cache-efficient iteration.
@@ -1590,7 +1593,7 @@ Hot systems iterate cache-friendly - less stall, more entities per ms.
 
 ---
 
-#### [M1-EXT-18] Material-Batched Mesh-Pass Rendering *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-18] Material-Batched Mesh-Pass Rendering *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + M4.5. Batches draw calls by material to cut state changes.
@@ -1612,7 +1615,7 @@ Far more draws per frame at the same cost - denser worlds run smooth.
 
 ---
 
-#### [M1-EXT-17] Deterministic Secondary Command-Buffer Merger *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-17] Deterministic Secondary Command-Buffer Merger *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1. Merges per-thread secondary command buffers into the primary in deterministic order.
@@ -1634,7 +1637,7 @@ Multi-threaded command recording stays deterministic - co-op/save replays match.
 
 ---
 
-#### [M1-EXT-15] GPU Query Pool Timestamp Profiler *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-15] GPU Query Pool Timestamp Profiler *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1. Timestamp queries via Vulkan query pool for GPU frame profiling.
@@ -1656,11 +1659,11 @@ You can see where GPU time goes per pass - real profiling, not guesses.
 
 ---
 
-#### [M1-EXT-13] Render-Graph Barrier Topological Sorter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-13] Render-Graph Barrier Topological Sorter *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ---
 
-#### [M1-EXT-28] GPU Software Occlusion Rasterizer (HZB Feeder) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-28] GPU Software Occlusion Rasterizer (HZB Feeder) *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + M4.6-EXT-06. CPU-side rasterizes occluders into a HZB feeder for early occlusion.
@@ -1682,7 +1685,7 @@ Distant hidden geometry is culled early - fewer draws, more FPS.
 
 ---
 
-#### [M1-EXT-27] Uniform-Grid Spatial Hash Broad-Phase *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-27] Uniform-Grid Spatial Hash Broad-Phase *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + M2.6. Uniform-grid broadphase as a CPU counterpart to GPU culling.
@@ -1704,7 +1707,7 @@ CPU broadphase stays cheap - physics/AI neighbor queries scale.
 
 ---
 
-#### [M1-EXT-26] Chunk-Boundary Spatial-Hash Transfer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-26] Chunk-Boundary Spatial-Hash Transfer *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + M2.6. Transfers spatial-hash ownership across streaming chunk boundaries.
@@ -1726,7 +1729,7 @@ Streaming chunks don't drop collisions at seams - no pop-through at boundaries.
 
 ---
 
-#### [M1-EXT-25] Descriptor Update Templates for Per-Frame Bindless Writes *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-25] Descriptor Update Templates for Per-Frame Bindless Writes *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + M4.5 bindless. Writes descriptor sets via update templates for fast per-frame binds.
@@ -1748,7 +1751,7 @@ Bindless replenishment is near-free - texture/resource churn stays cheap.
 
 ---
 
-#### [M1-EXT-24] Multi-Threaded Secondary Command Buffer Recording *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-24] Multi-Threaded Secondary Command Buffer Recording *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1 + enkiTS. Records secondary command buffers across worker threads.
@@ -1770,7 +1773,7 @@ Command recording parallelized - lower CPU frame cost on dense draws.
 
 ---
 
-#### [M1-EXT-23] Timeline Semaphores for Multi-Queue Sync *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
+### [M1-EXT-23] Timeline Semaphores for Multi-Queue Sync *(RECONSTRUCTED FROM CITATION CONTEXT — VERIFY)*
 
 ##### Systems Touched
 M1. Vulkan timeline semaphores sequence work across graphics/compute/transfer queues.
@@ -3887,7 +3890,7 @@ void WeldLodSeam(std::span<Vertex> fineEdge, std::span<const Vertex> coarseEdge,
 
 Walking toward the world's LOD horizon never reveals a visible crack or z-fighting seam where high-detail terrain meets its lower-detail neighbor — the transition is geometrically continuous, not just shaded to look that way.
 
-#### [M1-EXT-09] EnTT Concurrent Component Archetype View Iteration Cache
+### [M1-EXT-09] EnTT Concurrent Component Archetype View Iteration Cache
 
 ##### Systems Touched
 
@@ -12953,7 +12956,7 @@ void main() {
 
 ---
 
-#### [M1-EXT-12] Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
+### [M1-EXT-12] Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
 
 **Systems Touched:** M1 MSDF font pipeline, `[M4.5-EXT-07]` texture synthesizer, Runtime Virtual Texture pages.
 
@@ -15043,7 +15046,6 @@ Ethical telemetry.
 - Analytics & Privacy-Consent
 
 ## Milestone M1 — Appendix EXT additions (14)
-
 
 ### [M1-EXT-39] SpatialHash Query Has No Gameplay Consumer
 
@@ -32019,6 +32021,7 @@ of needing a later rewrite.
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-01] SpatialHash Uniform Grid Cell Bucketing Engine
 
 > **tags** · SpatialHash
@@ -32048,6 +32051,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-02] Generational Resource Table Pointer Validator
 
 > **tags** · general
@@ -32077,6 +32081,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-03] Multi-Threaded Command Pool Matrix
 
 > **tags** · general
@@ -32106,6 +32111,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-04] Frame-Scoped Deletion Queue
 
 > **tags** · general
@@ -32135,6 +32141,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-05] Persistent-Mapped Staging Ring Buffer
 
 > **tags** · general
@@ -32357,6 +32364,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-08] Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
 > **tags** · general
 > **tl;dr** · Dynamic Spatial Hash Cell Quadtree Subdivision Splitter
@@ -32385,6 +32393,7 @@ Invisible to players; maintains frame pacing under multi-threaded systems querie
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-10] Render-Graph Pass Dependency DAG Flattener
 
 > **tags** · DAG
@@ -32414,6 +32423,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-11] Compute-to-Indirect-Draw Execution Barrier
 
 > **tags** · general
@@ -32443,6 +32453,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-13] Render-Graph Barrier Topological Sorter
 
 > **tags** · general
@@ -32472,6 +32483,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-15] GPU Query Pool Timestamp Profiler
 
 > **tags** · GPU
@@ -32501,6 +32513,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-16] SoA Cache-Line Padding
 
 > **tags** · general
@@ -32530,6 +32543,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-17] Deterministic Secondary Command-Buffer Merger
 
 > **tags** · general
@@ -32559,6 +32573,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-18] Material-Batched Mesh-Pass Rendering
 
 > **tags** · general
@@ -32588,6 +32603,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-19] SoA Layout for Hot Components
 
 > **tags** · general
@@ -32617,6 +32633,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-20] EnTT Group-Backed Hot-Component Storage
 
 > **tags** · general
@@ -32646,6 +32663,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-21] Buffer Device Address for Skinned-Mesh Animation Data
 
 > **tags** · general
@@ -32675,6 +32693,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-22] CVar System (ImGui-Backed)
 
 > **tags** · CVar, ImGui
@@ -32704,6 +32723,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-23] Timeline Semaphores for Multi-Queue Sync
 
 > **tags** · general
@@ -32733,6 +32753,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-24] Multi-Threaded Secondary Command Buffer Recording
 
 > **tags** · general
@@ -32762,6 +32783,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-25] Descriptor Update Templates for Per-Frame Bindless Writes
 
 > **tags** · general
@@ -32791,6 +32813,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-26] Chunk-Boundary Spatial-Hash Transfer
 
 > **tags** · general
@@ -32820,6 +32843,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-27] Uniform-Grid Spatial Hash Broad-Phase
 
 > **tags** · general
@@ -32849,6 +32873,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-28] GPU Software Occlusion Rasterizer (HZB Feeder)
 
 > **tags** · GPU, HZB
@@ -32878,6 +32903,7 @@ No direct player impact — this is a render/engine optimization that maintains 
 ---
 
 <!-- From Archive M1 -->
+
 ### [M1-EXT-53] (provisional) Chunk Boundary Entity Transfer Queue
 
 > **tags** · general
@@ -49901,3 +49927,45 @@ World Matrix translated on CPU before GPU push constant submission: M_modelview 
    _MM_SET_ROUNDING_MODE(_MM_ROUND_NEAREST)
    _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON)
 3. Disable hardware Fused Multiply-Add (FMA) in physics math headers to guarantee identical SIMD precision on PC and mobile/console ARM CPUs.
+
+
+### [M0-EXT-102] Vulkan Memory Allocator (VMA) Async Defragmentation
+
+> **tags** · rendering, memory, stability
+> **tl;dr** · M0. Prevents Out-Of-Memory (OOM) crashes on 6GB VRAM floors during world chunk streaming by running a continuous, low-priority VMA defragmentation pass.
+> **ctx** · VRAM Fragmentation. Without this, a 6GB card will OOM after 20 minutes of 1km² chunk loading due to memory page swiss-cheesing.
+> **meta** · depends-on: M0-EXT-01
+
+##### Implementation
+1. Initialize maCreateAllocator with VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT.
+2. A background enkiTS job runs every 60 frames calling maBeginDefragmentation.
+3. The defrag pass targets buffer allocations, skipping pinned RenderTargets.
+4. If VRAM usage exceeds 4.5GB (75% of 6GB), the defrag aggressiveness multiplier increases.
+
+
+### [M6-EXT-101] Vulkan Compute Audio Raytracing Offload
+
+> **tags** · audio, rendering, optimization
+> **tl;dr** · M6. Offloads the GSound acoustic diffraction and portal-aware propagation calculations to the GPU via Vulkan Compute to protect the 33.3ms CPU frame budget.
+> **ctx** · Unconventional Audit. Running geometric audio propagation for 100+ zombies on the CPU would obliterate the 30 FPS Tier-0 floor.
+> **meta** · depends-on: M6-EXT-13
+
+##### Implementation
+1. The CPU constructs a low-resolution acoustic voxel grid representation of the chunk (derived from M4 chunk data).
+2. Pushed to a Vulkan Compute shader udio_propagate.comp.
+3. The GPU performs 10,000+ acoustic rays per frame, calculating portal occlusion and diffraction paths.
+4. Results are read back asynchronously 2 frames later (acceptable latency for audio) and fed into the FMOD/Wwise spatializer.
+
+
+### [M11-EXT-101] Sub-Tick Input Timestamping & Interpolation
+
+> **tags** · input, latency, networking
+> **tl;dr** · M11. Divorces input latency from the 30 FPS render loop by timestamping raw SDL3 inputs at the hardware interrupt level and applying fractional physics interpolation.
+> **ctx** · Unconventional Audit. A 30 FPS floor creates 33.3ms of input lag. This guarantees competitive shooter responsiveness even on Tier-0 hardware.
+> **meta** · depends-on: M11-EXT-01
+
+##### Implementation
+1. Intercepts SDL_EVENT_MOUSE_MOTION and SDL_EVENT_KEY_DOWN with sub-millisecond precision.
+2. When the 120Hz fixed physics step (M2) runs, it calculates the exact fractional offset between the input timestamp and the physics tick.
+3. Applies sub-tick transform interpolation to the player camera and weapon traces before the raycast is evaluated.
+4. Sends the timestamped fractional commands to the M12 networking layer for perfectly precise Client-Side Prediction rollback.

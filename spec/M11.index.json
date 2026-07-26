@@ -1,7 +1,7 @@
 [
   {
     "id": "M11-EXT-1",
-    "title": "Systems Touched",
+    "title": "M7/M2.8/M11. Separate SaveSchemaVersion / NetworkProtocolVersion / ModAPIVersion.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -10,7 +10,7 @@
   },
   {
     "id": "M11-EXT-2",
-    "title": "Systems Touched",
+    "title": "M11/MetaRegistry. bool ModWritable on entt::meta registration.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -19,7 +19,7 @@
   },
   {
     "id": "M11-EXT-3",
-    "title": "Systems Touched",
+    "title": "M11 (UI). grep screen.shake|hit.marker|kill.feed \u2192 0; M11 doesn't mention them.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -28,7 +28,7 @@
   },
   {
     "id": "M11-EXT-4",
-    "title": "Systems Touched",
+    "title": "Floating damage/status text in world space, pooled",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M11-EXT-10",
-    "title": "Systems Touched",
+    "title": "M7/M2.8/M11. Separate SaveSchemaVersion / NetworkProtocolVersion / ModAPIVersion.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M11-EXT-11",
-    "title": "Systems Touched",
+    "title": "M11. Every tunable param declared + versioned + moddable.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M11-EXT-12",
-    "title": "Systems Touched",
+    "title": "M11. Mods reference params by ID, not offsets.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M11-EXT-13",
-    "title": "Systems Touched",
+    "title": "M11. Mods can't set hp=-9999 silently.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M11-EXT-14",
-    "title": "Systems Touched",
+    "title": "M11. Named enums for mods, not raw ints.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M11-EXT-15",
-    "title": "Systems Touched",
+    "title": "M11. Expose only vetted functions; deny-by-default.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M11-EXT-16",
-    "title": "Systems Touched",
+    "title": "M11. Major=breaking (Fabric/Forge).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M11-EXT-17",
-    "title": "Systems Touched",
+    "title": "M11. Mod B needs mod A\u22651.2; conflict detection.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M11-EXT-18",
-    "title": "Systems Touched",
+    "title": "M11. Two mods override same param \u2192 warn/block.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M11-EXT-19",
-    "title": "Systems Touched",
+    "title": "M11/M0-EXT-28. Verify integrity; optional signed mods.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M11-EXT-20",
-    "title": "Systems Touched",
+    "title": "M11/MetaRegistry. bool ModWritable on entt::meta registration.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M11-EXT-21",
-    "title": "Systems Touched",
+    "title": "M11. Without full restart.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M11-EXT-22",
-    "title": "Systems Touched",
+    "title": "M11. base < modA < modB, last wins, traceable.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M11-EXT-23",
-    "title": "Systems Touched",
+    "title": "M11/M0-EXT-25. One bad mod doesn't crash engine.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M11-EXT-24",
-    "title": "Systems Touched",
+    "title": "M11/M12. Dev/mod commands to reload/query/list mods. Engine-debug surface, ship-disabled; not a player command prompt.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M11-EXT-25",
-    "title": "Systems Touched",
+    "title": "M11/V. Mod content enters V-checks before activation.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M11-EXT-26",
-    "title": "Systems Touched",
+    "title": "M11/F3. Mods add own string-table entries.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M11-EXT-27",
-    "title": "Systems Touched",
+    "title": "M11/V. Mod content enters V-checks before activation.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M11-EXT-28",
-    "title": "Systems Touched",
+    "title": "M11/M7. Mod A's save data doesn't collide with mod B.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M11-EXT-29",
-    "title": "Systems Touched",
+    "title": "M11. grep benchmark|perfHUD \u2192 0. Reuse Tracy + Vulkan timestamp pools; preset ladder feeding M0-EXT-23.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M11-EXT-30",
-    "title": "Systems Touched",
+    "title": "M11 (UI). grep screen.shake|hit.marker|kill.feed \u2192 0; M11 doesn't mention them.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M11-EXT-31",
-    "title": "Systems Touched",
+    "title": "M11. grep ModManager|LoadMod \u2192 0 (only static mods/ overlay).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M11-EXT-32",
-    "title": "Systems Touched",
+    "title": "M11. Auto-doc exposed ModAPI from code.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M11-EXT-33",
-    "title": "Systems Touched",
+    "title": "M11. Download\u2192verify\u2192install path.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M11-EXT-34",
-    "title": "Systems Touched",
+    "title": "Retained-mode main/pause/settings menus over MSDF text",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M11-EXT-35",
-    "title": "Systems Touched",
+    "title": "Grid/weight inventory + loot popup on search",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -316,7 +316,7 @@
   },
   {
     "id": "M11-EXT-36",
-    "title": "Systems Touched",
+    "title": "World map from generated POIs; fast-travel to discovered points",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -325,7 +325,7 @@
   },
   {
     "id": "M11-EXT-37",
-    "title": "Systems Touched",
+    "title": "Graphics/audio/controls settings persisted to config",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -334,7 +334,7 @@
   },
   {
     "id": "M11-EXT-38",
-    "title": "Systems Touched",
+    "title": "Gamepad navigation + virtual cursor for menus",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -343,7 +343,7 @@
   },
   {
     "id": "M11-EXT-39",
-    "title": "Systems Touched",
+    "title": "Trigger/controller rumble on fire/hit; intensity by event",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -352,7 +352,7 @@
   },
   {
     "id": "M11-EXT-40",
-    "title": "Systems Touched",
+    "title": "Floating damage/status text in world space, pooled",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -361,7 +361,7 @@
   },
   {
     "id": "M11-EXT-41",
-    "title": "Systems Touched",
+    "title": "Billboarded world UI (markers, names, objectives)",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -502,5 +502,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m11-ext-67"
+  },
+  {
+    "id": "M11-EXT-101",
+    "title": "M11. Divorces input latency from the 30 FPS render loop by timestamping raw SDL3 inputs at the hardware interrupt level and applying fractional physics interpolation.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m11-ext-101"
   }
 ]

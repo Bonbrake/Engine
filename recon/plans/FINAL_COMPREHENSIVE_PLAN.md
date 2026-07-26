@@ -547,6 +547,18 @@ Deliverable: 10-minute playthrough with base building and vehicle traversal.
 
 Deliverable: 4-player co-op with persistence and endgame loop.
 
+
+## 8.4 Per-Milestone Acceptance Criteria [E-2 Resolved]
+
+- **M0 (Vulkan):** <0.1ms command buffer recording. 0 validation warnings.
+- **M1 (ECS):** 100,000 entities iterated linearly in <1.0ms on Tier-0 CPU.
+- **M2 (Physics):** 200 dynamic Jolt XPBD bodies stable at 1/120s tick with <5.0ms overhead.
+- **M4 (World):** 1 km² chunk loaded asynchronously with <16ms main thread stall.
+- **M5 (AI):** 1000 agents running spatial-grid pathfinding in <5.0ms.
+- **M6 (Audio):** 100+ diffraction paths processed via GPU compute in <2.0ms.
+- **M11 (Input/UI):** Sub-tick input timestamping verified via high-speed camera (<10ms motion-to-photon latency).
+
+
 # 8. Acceptance Criteria and Verification Gates
 
 ## 8.1 Spec Documentation Gates
@@ -631,6 +643,16 @@ Deliverable: 4-player co-op with persistence and endgame loop.
 | Paper extraction backlog | Medium | Medium | Parallel fetch track | [X] count > 0 |
 | Audio pipeline schedule slip | Medium | High | Stub M6-EXT-01..11 in order; validate each gate | Audio verification gate failure |
 
+
+## 10.1 Hard Risk Thresholds & Kill-Switches [E-3 Resolved]
+
+| Risk Metric | Hard Threshold (Kill-Switch) | Rollback Action |
+|-------------|-----------------------------|-----------------|
+| VRAM Usage | > 4.5 GB on Tier-0 (6GB) | Force-trigger maBeginDefragmentation; downscale RVT mips. |
+| Frame Time | > 33.3 ms for 30 consecutive frames | Throttle M5 background pathfinding; cull shadow cascades. |
+| Save Desync | M7 Delta checksum mismatch | Halt network loop; force full Zstd world state re-transmission. |
+
+
 # 11. Short-Term Action Plan — Next 10 Days
 
 ## Days 1-2: Spec Structural Closure
@@ -682,3 +704,13 @@ Deliverable: 4-player co-op with persistence and endgame loop.
 - **DAG**: Directed Acyclic Graph, used for load order and dependency management.
 - **Pareto Front**: Set of non-dominated solutions in multi-objective optimization.
 - **Halton Jitter**: Low-discrepancy sequence for temporal anti-aliasing.
+
+
+
+## 11.2 Strict Sprint Execution Timeline [E-4 Resolved]
+
+- **Sprint 1 (Days 1-14):** M0 + M1 (Vulkan Bootstrap & Bindless ECS). Goal: Triangle.
+- **Sprint 2 (Days 15-28):** M2 + M11 (Jolt Physics & Sub-Tick Input). Goal: Controller box pushing.
+- **Sprint 3 (Days 29-42):** M4 + M4.5 (Procedural World Gen & Nanite-lite). Goal: 1km² traversal.
+- **Sprint 4 (Days 43-56):** M5 + M13 (1000 AI agents + Local SLM). Goal: Dialogue and Horde combat.
+- **Sprint 5 (Days 57-70):** M12 (GNS Networking & Rollback). Goal: 4-Player Co-Op.

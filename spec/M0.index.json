@@ -475,5 +475,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m0-ext-101"
+  },
+  {
+    "id": "M0-EXT-102",
+    "title": "M0. Prevents Out-Of-Memory (OOM) crashes on 6GB VRAM floors during world chunk streaming by running a continuous, low-priority VMA defragmentation pass.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-102"
   }
 ]
