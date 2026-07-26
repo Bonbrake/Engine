@@ -1,61 +1,61 @@
 [
   {
-    "id": "M10-EXT-01",
-    "title": "Hydraulic-Head Flux Solver for Saint-Venant Flooding **[MATH DONE]**",
+    "id": "M10-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m10-ext-01"
+    "anchor": "m10-ext-1"
   },
   {
-    "id": "M10-EXT-02",
-    "title": "Keplerian Cosmic Orbitals & Synchronized Shadow Vectors",
+    "id": "M10-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m10-ext-02"
+    "anchor": "m10-ext-2"
   },
   {
-    "id": "M10-EXT-03",
-    "title": "Bruneton-Nishita Atmospheric Scattering & SH Ambient Fill",
+    "id": "M10-EXT-3",
+    "title": "M10/M12. No-waypoint environmental triggers that offer quests on proximity.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m10-ext-03"
+    "anchor": "m10-ext-3"
   },
   {
-    "id": "M10-EXT-04",
-    "title": "Cryospheric Frost Nucleation & Snow Accumulation",
+    "id": "M10-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m10-ext-04"
+    "anchor": "m10-ext-4"
   },
   {
-    "id": "M10-EXT-05",
-    "title": "Navier-Stokes Meteorological Wind & Barometric Fronts",
+    "id": "M10-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m10-ext-05"
+    "anchor": "m10-ext-5"
   },
   {
-    "id": "M10-EXT-06",
-    "title": "Phenological Chlorophyll Cycles & Seasonal Canopy Thinning",
+    "id": "M10-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m10-ext-06"
+    "anchor": "m10-ext-6"
   },
   {
     "id": "M10-EXT-11",
-    "title": "Volumetric Cloud & Participating-Medium Scattering",
+    "title": "Volumetric Cloud & Participating-Medium Scattering *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -64,7 +64,7 @@
   },
   {
     "id": "M10-EXT-12",
-    "title": "HUD / UI Widgets",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -73,7 +73,7 @@
   },
   {
     "id": "M10-EXT-13",
-    "title": "Dev Console / Command System (Engine-Debug Only)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M10-EXT-14",
-    "title": "Screenshot / Photo Mode",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M10-EXT-15",
-    "title": "Build / Packaging / Installer",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M10-EXT-16",
-    "title": "Determinism CI Gate",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M10-EXT-17",
-    "title": "Spec\u2194Code Drift Checker",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M10-EXT-18",
-    "title": "Generation Debug Tooling (preview + seed explorer)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M10-EXT-19",
-    "title": "Mod-Package / Workshop Tooling",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M10-EXT-20",
-    "title": "Generation Benchmark Suite",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M10-EXT-21",
-    "title": "HDR Swapchain Output Encoding",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M10-EXT-22",
-    "title": "Tutorials / Contextual Hints",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M10-EXT-23",
-    "title": "Subtitles / Dialogue Display",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M10-EXT-24",
-    "title": "Minimap / Compass / Objective Tracker",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M10-EXT-25",
-    "title": "Achievements / Steam Integration",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M10-EXT-26",
-    "title": "Pause / Time-Scale System",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M10-EXT-27",
-    "title": "Lightning & Storm VFX",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M10-EXT-28",
-    "title": "Wind & Vegetation Sway",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M10-EXT-29",
-    "title": "Sky & Cloud Rendering",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M10-EXT-30",
-    "title": "Quest Discovery Cues",
+    "title": "M10/M12. No-waypoint environmental triggers that offer quests on proximity.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M10-EXT-31",
-    "title": "Region-Scale Streaming Page",
+    "title": "M10/M4. Lookahead (M4-EXT-50) pages by macro-climate region, not just chunk.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

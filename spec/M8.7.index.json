@@ -1,29 +1,29 @@
 [
   {
-    "id": "M8.7-EXT-01",
-    "title": "Placeholder Block",
+    "id": "M8.7-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.7-ext-01"
+    "anchor": "m8.7-ext-1"
   },
   {
-    "id": "M8.7-EXT-02",
-    "title": "Placeholder Block",
+    "id": "M8.7-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.7-ext-02"
+    "anchor": "m8.7-ext-2"
   },
   {
-    "id": "M8.7-EXT-03",
-    "title": "Placeholder Block",
+    "id": "M8.7-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.7-ext-03"
+    "anchor": "m8.7-ext-3"
   }
 ]

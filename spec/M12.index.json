@@ -1,43 +1,43 @@
 [
   {
-    "id": "M12-EXT-01",
-    "title": "Bitstream Delta-Encoded Network Serialization Packet Encoder",
+    "id": "M12-EXT-1",
+    "title": "Network Clock Sync & Tick-Drift Compensator *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m12-ext-01"
+    "anchor": "m12-ext-1"
   },
   {
-    "id": "M12-EXT-02",
-    "title": "Bitmask Packet Loss Sliding Window Acknowledgement Register",
+    "id": "M12-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m12-ext-02"
+    "anchor": "m12-ext-2"
   },
   {
-    "id": "M12-EXT-04",
-    "title": "Local Network-Relevancy Grid Culling Filter",
+    "id": "M12-EXT-4",
+    "title": "Player choices ripple through settlement/brand/NPC state; the world remembers and reacts. Emergence over deep simulation (DayZ lesson).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m12-ext-04"
+    "anchor": "m12-ext-4"
   },
   {
-    "id": "M12-EXT-07",
-    "title": "Network Clock Sync & Tick-Drift Compensator",
+    "id": "M12-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m12-ext-07"
+    "anchor": "m12-ext-7"
   },
   {
     "id": "M12-EXT-12",
-    "title": "Interest Management for Spatial Audio",
+    "title": "Caps concurrent voices by distance/importance; pairs with M12 reverb zones and chunk streaming.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -46,7 +46,7 @@
   },
   {
     "id": "M12-EXT-13",
-    "title": "Interest-Management Spatial Hash (Net Culling)",
+    "title": "Interest-Management Spatial Hash (Net Culling) *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -55,7 +55,7 @@
   },
   {
     "id": "M12-EXT-14",
-    "title": "Networking / Netcode Transport",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -64,7 +64,7 @@
   },
   {
     "id": "M12-EXT-15",
-    "title": "Voice Chat / Push-To-Talk",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -73,7 +73,7 @@
   },
   {
     "id": "M12-EXT-16",
-    "title": "Anti-Cheat / Server Authority",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M12-EXT-17",
-    "title": "Co-op Determinism Guard",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M12-EXT-18",
-    "title": "Matchmaking / Lobby / Session",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M12-EXT-19",
-    "title": "Lobby / Session Integrity",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M12-EXT-20",
-    "title": "Entity Interpolation",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M12-EXT-21",
-    "title": "Lag Compensation",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M12-EXT-22",
-    "title": "Dedicated Server Model",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M12-EXT-26",
-    "title": "Side-Quest System (200, constrained, NV-style multi-solution)",
+    "title": "M12. ~12 authored story-arc templates \u00d7 parameters \u2248 200 coherent roaming quests; **each major quest has \u22652 distinct solutions (fight/talk/sneak/bribe) in the NV model**.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M12-EXT-27",
-    "title": "Outpost-Clear-Loop",
+    "title": "M12/M8. Clear hostile site \u2192 becomes safe hub \u2192 horde defends it (M8-EXT-51).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M12-EXT-28",
-    "title": "Tragedy Beats (suicide-as-environmental-storytelling)",
+    "title": "M12. Author's call: suicide portrayed as tragic human reality via environmental storytelling (barricaded room, journal cut mid-thought).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M12-EXT-29",
-    "title": "Quest Placement Tool",
+    "title": "M12/M4. You place curated quests onto map POIs; validates biome-appropriate + discoverable.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M12-EXT-30",
-    "title": "Build Placement System",
+    "title": "M12/M3/M5. Player places barricades/walls (ghost-preview, snap, cost); nav re-bakes (M5).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M12-EXT-31",
-    "title": "Server Browser / World List",
+    "title": "M12. Lists dedicated servers (M12-EXT-22) + Forge worlds (M13-EXT-57); find community/shared maps.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M12-EXT-32",
-    "title": "Neutral Haven (Hidden Safe-Town + Casino)",
+    "title": "M12/M8/M4. Hidden faction-neutral town; NPCs don't kill unless provoked; casino = economy + choice.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M12-EXT-33",
-    "title": "War Map Overlay",
+    "title": "M12/M8. Map shows live faction-war fronts (M8-EXT-57) + contested/safe zones.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M12-EXT-34",
-    "title": "Permadeath + Endless",
+    "title": "M12. Character deleted on death; world persists. No NG+ \u2014 endless challenge.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M12-EXT-35",
-    "title": "Endgame Divergence Engine",
+    "title": "M12. World-state accumulates over long playthrough \u2192 triggers one of multiple endgame scenarios. Every playthrough ends differently.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M12-EXT-36",
-    "title": "Nuclear Ending (Metro 2033)",
+    "title": "M12. Player can trigger a missile launch that creates a massive crater + fallout zone. Permanent map scar.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M12-EXT-37",
-    "title": "Encounter Zones (Layered Density)",
+    "title": "Each region gets a curated density + threat budget so the world is never empty; cleared zones repopulate on cooldown, not instantly.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M12-EXT-38",
-    "title": "Threat-Scaled Loot Budget",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M12-EXT-39",
-    "title": "G-BASE: Player-Built Fortifications",
+    "title": "Player-placeable walls, spikes, sandbags, barricades, turrets; horde-night assaults them. The agency layer over settlement AI.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M12-EXT-40",
-    "title": "G-EMERGE: Emergent Storytelling",
+    "title": "Player choices ripple through settlement/brand/NPC state; the world remembers and reacts. Emergence over deep simulation (DayZ lesson).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M12-EXT-41",
-    "title": "No-Forced-Narrative Design Pillar",
+    "title": "The game never forces the player down a story, quest, or behavior. The only mandatory loop is survival; everything else is emergent and opt-in. Quests start *naturally* from world state \u2014 no accept prompt, no active tracking required, most are untimed with no penalty.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M12-EXT-42",
-    "title": "FO3 / NV-Style Free-Roam Movement & Direction-Agnostic Play",
+    "title": "Fallout 3 / New Vegas movement ethos: go any direction, the world responds, no corridor. Honors classic isometric roots (FO1/FO2) via optional tactical/top-down mode.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M12-EXT-43",
-    "title": "Engine Influences \u2014 Salvage the Useful, Reject the Hated",
+    "title": "Explicit Fallout lineage policy: steal FO3/NV strengths (free-roam, emergent faction war, companion legacy, player-driven consequence); salvage FO4/FO76's *useful* systems (settlement building, deep crafting, weapon modding, modding API) while rejecting their hated parts (FO4 precombine fragility \u2192 fixed in M4-EXT-101; FO76 always-online \u2192 blocked by local-first M7).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M12-EXT-44",
-    "title": "Natural-Start Quests (no accept, no tracker, mostly untimed)",
+    "title": "Quests begin from world events you witness or stumble into \u2014 no \"Accept?\" prompt, no mandatory tracker, no waypoint. Most are open-ended with no penalty for ignoring; a minority are timed with real consequences.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M12-EXT-45",
-    "title": "Living, Dynamic World (drastic map changes)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

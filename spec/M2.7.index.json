@@ -1,308 +1,227 @@
 [
   {
-    "id": "M2.7-EXT-01",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-01"
+    "anchor": "m2.7-ext-1"
   },
   {
-    "id": "M2.7-EXT-02",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-02"
+    "anchor": "m2.7-ext-2"
   },
   {
-    "id": "M2.7-EXT-03",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-03"
+    "anchor": "m2.7-ext-3"
   },
   {
-    "id": "M2.7-EXT-04",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-04"
+    "anchor": "m2.7-ext-4"
   },
   {
-    "id": "M2.7-EXT-05",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-05"
+    "anchor": "m2.7-ext-5"
   },
   {
-    "id": "M2.7-EXT-06",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-06"
+    "anchor": "m2.7-ext-6"
   },
   {
-    "id": "M2.7-EXT-07",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-07"
+    "anchor": "m2.7-ext-7"
   },
   {
-    "id": "M2.7-EXT-08",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-08"
+    "anchor": "m2.7-ext-8"
   },
   {
-    "id": "M2.7-EXT-09",
-    "title": "Placeholder Block",
+    "id": "M2.7-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-09"
+    "anchor": "m2.7-ext-9"
   },
   {
     "id": "M2.7-EXT-10",
-    "title": "Placeholder Block",
+    "title": "Biomechanical Muscle Snapback Momentum",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-10"
+    "anchor": "m2.7-ext-10"
   },
   {
     "id": "M2.7-EXT-11",
-    "title": "Placeholder Block",
+    "title": "Kinematic Door-Kick Hydraulic Ram Splitting",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-11"
+    "anchor": "m2.7-ext-11"
   },
   {
     "id": "M2.7-EXT-12",
-    "title": "Placeholder Block",
+    "title": "Tactical Clear-and-Vent Malfunctions (Rewarding Wear)",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-12"
+    "anchor": "m2.7-ext-12"
   },
   {
     "id": "M2.7-EXT-13",
-    "title": "Placeholder Block",
+    "title": "Latch-Shear Kinematic Door Piercing",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-13"
+    "anchor": "m2.7-ext-13"
   },
   {
     "id": "M2.7-EXT-14",
-    "title": "Placeholder Block",
+    "title": "Decoupled View-Matrix Camera with Inertialized Perspective Blending",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-14"
+    "anchor": "m2.7-ext-14"
   },
   {
     "id": "M2.7-EXT-15",
-    "title": "Placeholder Block",
+    "title": "Nested Weapon Component Rig with Two-Bone IK Arm Locking",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-15"
+    "anchor": "m2.7-ext-15"
   },
   {
     "id": "M2.7-EXT-16",
-    "title": "Placeholder Block",
+    "title": "Procedural Recoil Low-Discrepancy Sequence Cache *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-16"
+    "anchor": "m2.7-ext-16"
   },
   {
     "id": "M2.7-EXT-17",
-    "title": "Placeholder Block",
+    "title": "Parametric Gait-Warping Stride Adjuster *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-17"
-  },
-  {
-    "id": "M2.7-EXT-18",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-18"
-  },
-  {
-    "id": "M2.7-EXT-19",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-19"
-  },
-  {
-    "id": "M2.7-EXT-20",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-20"
+    "anchor": "m2.7-ext-17"
   },
   {
     "id": "M2.7-EXT-21",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-21"
+    "anchor": "m2.7-ext-21"
   },
   {
     "id": "M2.7-EXT-22",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-22"
+    "anchor": "m2.7-ext-22"
   },
   {
     "id": "M2.7-EXT-23",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-23"
+    "anchor": "m2.7-ext-23"
   },
   {
     "id": "M2.7-EXT-24",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-24"
-  },
-  {
-    "id": "M2.7-EXT-25",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-25"
-  },
-  {
-    "id": "M2.7-EXT-26",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-26"
-  },
-  {
-    "id": "M2.7-EXT-27",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-27"
-  },
-  {
-    "id": "M2.7-EXT-28",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-28"
-  },
-  {
-    "id": "M2.7-EXT-29",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-29"
-  },
-  {
-    "id": "M2.7-EXT-30",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M2.7-ext-30"
+    "anchor": "m2.7-ext-24"
   },
   {
     "id": "M2.7-EXT-31",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-31"
+    "anchor": "m2.7-ext-31"
   },
   {
     "id": "M2.7-EXT-32",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-32"
+    "anchor": "m2.7-ext-32"
   },
   {
     "id": "M2.7-EXT-33",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-33"
+    "anchor": "m2.7-ext-33"
   },
   {
     "id": "M2.7-EXT-34",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M2.7-ext-34"
+    "anchor": "m2.7-ext-34"
   }
 ]

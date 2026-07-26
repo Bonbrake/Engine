@@ -121,7 +121,7 @@ rows = []
 warnings = []
 regenerated = []
 
-for ms in required:
+for ms in required + sub_milestones:
     result = audit_milestone(ms)
     rows.append(result)
     if result["status"] == "REGEN":

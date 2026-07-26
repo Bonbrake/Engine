@@ -1,88 +1,88 @@
 [
   {
-    "id": "M1-EXT-01",
-    "title": "SpatialHash Uniform Grid Cell Bucketing Engine",
+    "id": "M1-EXT-1",
+    "title": "Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-01"
+    "anchor": "m1-ext-1"
   },
   {
-    "id": "M1-EXT-02",
-    "title": "Generational Resource Table Pointer Validator",
+    "id": "M1-EXT-2",
+    "title": "Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-02"
+    "anchor": "m1-ext-2"
   },
   {
-    "id": "M1-EXT-03",
-    "title": "Multi-Threaded Command Pool Matrix",
+    "id": "M1-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-03"
+    "anchor": "m1-ext-3"
   },
   {
-    "id": "M1-EXT-04",
-    "title": "Frame-Scoped Deletion Queue",
+    "id": "M1-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-04"
+    "anchor": "m1-ext-4"
   },
   {
-    "id": "M1-EXT-05",
-    "title": "Persistent-Mapped Staging Ring Buffer",
+    "id": "M1-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-05"
+    "anchor": "m1-ext-5"
   },
   {
-    "id": "M1-EXT-06",
-    "title": "EnTT Archetype Component SPSC Mutation Queue Committer",
+    "id": "M1-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-06"
+    "anchor": "m1-ext-6"
   },
   {
-    "id": "M1-EXT-07",
-    "title": "Thread-Local Zero-Allocation Linear Page-Bump Arena",
+    "id": "M1-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-07"
+    "anchor": "m1-ext-7"
   },
   {
-    "id": "M1-EXT-08",
-    "title": "Dynamic Spatial Hash Cell Quadtree Subdivision Splitter",
+    "id": "M1-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-08"
+    "anchor": "m1-ext-8"
   },
   {
-    "id": "M1-EXT-09",
-    "title": "EnTT Concurrent Component Archetype View Iteration Cache",
+    "id": "M1-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m1-ext-09"
+    "anchor": "m1-ext-9"
   },
   {
     "id": "M1-EXT-10",
-    "title": "Render-Graph Pass Dependency DAG Flattener",
+    "title": "Render-Graph Pass Dependency DAG Flattener *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M1-EXT-11",
-    "title": "Compute-to-Indirect-Draw Execution Barrier",
+    "title": "Compute-to-Indirect-Draw Execution Barrier *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M1-EXT-12",
-    "title": "Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface",
+    "title": "ts = QueryPool.GetTimestamp(pass); dt = ts_end - ts_start;",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M1-EXT-13",
-    "title": "Render-Graph Barrier Topological Sorter",
+    "title": "Render-Graph Barrier Topological Sorter *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M1-EXT-15",
-    "title": "GPU Query Pool Timestamp Profiler",
+    "title": "GPU Query Pool Timestamp Profiler *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M1-EXT-16",
-    "title": "SoA Cache-Line Padding",
+    "title": "SoA Cache-Line Padding *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M1-EXT-17",
-    "title": "Deterministic Secondary Command-Buffer Merger",
+    "title": "Deterministic Secondary Command-Buffer Merger *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M1-EXT-18",
-    "title": "Material-Batched Mesh-Pass Rendering",
+    "title": "Material-Batched Mesh-Pass Rendering *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M1-EXT-19",
-    "title": "SoA Layout for Hot Components",
+    "title": "SoA Layout for Hot Components *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M1-EXT-20",
-    "title": "EnTT Group-Backed Hot-Component Storage",
+    "title": "EnTT Group-Backed Hot-Component Storage *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M1-EXT-21",
-    "title": "Buffer Device Address for Skinned-Mesh Animation Data",
+    "title": "Buffer Device Address for Skinned-Mesh Animation Data *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M1-EXT-22",
-    "title": "CVar System (ImGui-Backed)",
+    "title": "CVar System (ImGui-Backed) *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M1-EXT-23",
-    "title": "Timeline Semaphores for Multi-Queue Sync",
+    "title": "Timeline Semaphores for Multi-Queue Sync *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M1-EXT-24",
-    "title": "Multi-Threaded Secondary Command Buffer Recording",
+    "title": "Multi-Threaded Secondary Command Buffer Recording *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M1-EXT-25",
-    "title": "Descriptor Update Templates for Per-Frame Bindless Writes",
+    "title": "Descriptor Update Templates for Per-Frame Bindless Writes *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M1-EXT-26",
-    "title": "Chunk-Boundary Spatial-Hash Transfer",
+    "title": "Chunk-Boundary Spatial-Hash Transfer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M1-EXT-27",
-    "title": "Uniform-Grid Spatial Hash Broad-Phase",
+    "title": "Uniform-Grid Spatial Hash Broad-Phase *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M1-EXT-28",
-    "title": "GPU Software Occlusion Rasterizer (HZB Feeder)",
+    "title": "GPU Software Occlusion Rasterizer (HZB Feeder) *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -243,98 +243,8 @@
     "anchor": "m1-ext-28"
   },
   {
-    "id": "M1-EXT-29",
-    "title": "Parent-Child Hierarchy",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-29"
-  },
-  {
-    "id": "M1-EXT-30",
-    "title": "EnTTCache Narrow Coverage",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-30"
-  },
-  {
-    "id": "M1-EXT-31",
-    "title": "Action Map / ActionState Layer",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-31"
-  },
-  {
-    "id": "M1-EXT-32",
-    "title": "Procedural Camera Rig",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-32"
-  },
-  {
-    "id": "M1-EXT-33",
-    "title": "Input-Rebinding Persistence",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-33"
-  },
-  {
-    "id": "M1-EXT-34",
-    "title": "M1 Exit Criteria Don't Reflect Reality",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-34"
-  },
-  {
-    "id": "M1-EXT-35",
-    "title": "EntityFactory Unknown-Component Warning",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-35"
-  },
-  {
-    "id": "M1-EXT-36",
-    "title": "Generational Table Headroom Check",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-36"
-  },
-  {
-    "id": "M1-EXT-37",
-    "title": "EnTTCache Round-Trip Test",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-37"
-  },
-  {
-    "id": "M1-EXT-38",
-    "title": "Action Map Persistence Format",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m1-ext-38"
-  },
-  {
     "id": "M1-EXT-39",
-    "title": "SpatialHash Query Has No Gameplay Consumer",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -343,7 +253,7 @@
   },
   {
     "id": "M1-EXT-40",
-    "title": "No Batched Raycast (RayBatchQuery)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -352,7 +262,7 @@
   },
   {
     "id": "M1-EXT-41",
-    "title": "Parent-Child Hierarchy",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -361,7 +271,7 @@
   },
   {
     "id": "M1-EXT-42",
-    "title": "EnTTCache Narrow Coverage",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -370,7 +280,7 @@
   },
   {
     "id": "M1-EXT-43",
-    "title": "Action Map / ActionState Layer",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -379,7 +289,7 @@
   },
   {
     "id": "M1-EXT-44",
-    "title": "Procedural Camera Rig",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -388,7 +298,7 @@
   },
   {
     "id": "M1-EXT-45",
-    "title": "Input-Rebinding Persistence",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -397,7 +307,7 @@
   },
   {
     "id": "M1-EXT-46",
-    "title": "M1 Exit Criteria Don't Reflect Reality",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -406,7 +316,7 @@
   },
   {
     "id": "M1-EXT-47",
-    "title": "EntityFactory Unknown-Component Warning",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -415,7 +325,7 @@
   },
   {
     "id": "M1-EXT-48",
-    "title": "Generational Table Headroom Check",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -424,7 +334,7 @@
   },
   {
     "id": "M1-EXT-49",
-    "title": "EnTTCache Round-Trip Test",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -433,7 +343,7 @@
   },
   {
     "id": "M1-EXT-50",
-    "title": "Action Map Persistence Format",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -442,7 +352,7 @@
   },
   {
     "id": "M1-EXT-51",
-    "title": "GPU Memory Budget & Defrag",
+    "title": "// Packs a 2m grid cell into one 64-bit key; floor() keeps negative-coordinate cells continuous",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -451,7 +361,7 @@
   },
   {
     "id": "M1-EXT-52",
-    "title": "Shader Variant/Permutation Manager",
+    "title": "// Packs a 2m grid cell into one 64-bit key; floor() keeps negative-coordinate cells continuous",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -460,7 +370,7 @@
   },
   {
     "id": "M1-EXT-53",
-    "title": "(provisional) Chunk Boundary Entity Transfer Queue",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

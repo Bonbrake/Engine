@@ -1,84 +1,84 @@
 [
   {
-    "id": "M9-EXT-01",
-    "title": "Fluid Momentum Traction Shear (Blood-Slick Viscosity)",
+    "id": "M9-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-01"
+    "anchor": "m9-ext-1"
   },
   {
-    "id": "M9-EXT-02",
-    "title": "Non-Linear Tire Slip Friction Heating (Thermal Traction Breakdown)",
+    "id": "M9-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-02"
+    "anchor": "m9-ext-2"
   },
   {
-    "id": "M9-EXT-03",
-    "title": "High-Velocity Wet-Silt Aquaplaning",
+    "id": "M9-EXT-3",
+    "title": "M9/M8. Attaching a part to a chassis is a hands-on welding minigame: keep the bead inside the tolerance band (metal) or drive fasteners on-mark (wood); quality sets joint strength.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-03"
+    "anchor": "m9-ext-3"
   },
   {
-    "id": "M9-EXT-04",
-    "title": "Non-Newtonian Mud Silt Advection (Soil Rut Tracking)",
+    "id": "M9-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-04"
+    "anchor": "m9-ext-4"
   },
   {
-    "id": "M9-EXT-05",
-    "title": "Aerodynamic Wind Lift & Side-Slip Force Vectoring (Chassis Loft)",
+    "id": "M9-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-05"
+    "anchor": "m9-ext-5"
   },
   {
-    "id": "M9-EXT-06",
-    "title": "Horde Continuum Fluid Drag (The Swarm Plow Solver)",
+    "id": "M9-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-06"
+    "anchor": "m9-ext-6"
   },
   {
-    "id": "M9-EXT-07",
-    "title": "Dynamic Skid-Mark Injection via Runtime Virtual Textures (RVT)",
+    "id": "M9-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-07"
+    "anchor": "m9-ext-7"
   },
   {
-    "id": "M9-EXT-08",
-    "title": "Open/Locked Axle Torque Differential Splitter",
+    "id": "M9-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-08"
+    "anchor": "m9-ext-8"
   },
   {
-    "id": "M9-EXT-09",
-    "title": "Volatile Fuel Tank Puncture Bernoulli Drainage",
+    "id": "M9-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m9-ext-09"
+    "anchor": "m9-ext-9"
   },
   {
     "id": "M9-EXT-10",
@@ -154,7 +154,7 @@
   },
   {
     "id": "M9-EXT-18",
-    "title": "Vehicle Convoy Long-Range Router",
+    "title": "Vehicle Convoy Long-Range Router *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M9-EXT-20",
-    "title": "Anti-Roll Torsional Suspension Stabilizer",
+    "title": "Anti-Roll Torsional Suspension Stabilizer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M9-EXT-21",
-    "title": "Fluid Hydrodynamic Wading Resistance Modulator",
+    "title": "Fluid Hydrodynamic Wading Resistance Modulator *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M9-EXT-23",
-    "title": "Day/Night, Weather & Atmosphere",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M9-EXT-24",
-    "title": "Vehicle Assembly / Customization",
+    "title": "M9/M8. Weld modular parts (engine/armor/wheels/boosters/zombie-smash) to car OR motorcycle chassis; parts modify M9 physics.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M9-EXT-25",
-    "title": "Universal Interactables",
+    "title": "M9. Player grabs/moves/welds ANY Jolt body (debris, corpses, props); weld-to-vehicle.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M9-EXT-26",
-    "title": "Vehicle Combat",
+    "title": "M9/M2. Shoot from vehicles \u2014 driver leans, passenger fires, recoil/aim while moving.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M9-EXT-27",
-    "title": "Death Race Custom Cars",
+    "title": "M9/M8. Weld weapons/guns/spikes onto vehicle frames. END-GAME hard content.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M9-EXT-28",
-    "title": "Vehicle Scarcity + Loot",
+    "title": "M9/M4. Every car starts broken; rare working ones are side-quest rewards. Hard to earn.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M9-EXT-29",
-    "title": "Fuel + Durability",
+    "title": "M9/M8. Finite gas; car/wheel durability degrades with use/combat; repair at settlement or roadside.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M9-EXT-30",
-    "title": "Welding Minigame (Steady-Bead + Material Variants)",
+    "title": "M9/M8. Attaching a part to a chassis is a hands-on welding minigame: keep the bead inside the tolerance band (metal) or drive fasteners on-mark (wood); quality sets joint strength.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M9-EXT-31",
-    "title": "Hotwire Minigame (NoPixel-Style)",
+    "title": "M9. Starting a dead car is a patience/observation minigame: read the loom, find the live + starter wires by color/audio cue, bridge them without shorting \u2014 wrong pair sparks, draws zombies.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M9-EXT-32",
-    "title": "Lockpick Minigame (Fallout-Harder)",
+    "title": "M9/M2. Picking a lock is a tension + pin-state puzzle: set each pin without over-lifting; one slip drops the pick and alerts. Harder and more contextual than Fallout.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M9-EXT-33",
-    "title": "Circuit Hack Minigame (Lockpick Sibling)",
+    "title": "M9/M2. Cracking a door control panel / drone / safe controller is a logic puzzle sibling to lockpicking: route a signal through the circuit node grid without tripping the alarm.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M9-EXT-34",
-    "title": "Pickpocket / Sleight Interaction",
+    "title": "M9/M2. Lifting items from NPCs is a timing/positioning interaction: stay behind, match their rhythm, grab \u2014 get caught and standing drops (M8-EXT-53).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M9-EXT-35",
-    "title": "Incendiary / Molotov (Fire as Weapon)",
+    "title": "M9/M8. A thrown molotov ignites a fuel pool that burns zombies and the environment; damage routed through existing fire physics (M8-EXT-24/30).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

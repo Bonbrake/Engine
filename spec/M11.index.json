@@ -1,88 +1,88 @@
 [
   {
-    "id": "M11-EXT-01",
-    "title": "Viewport-Isolated Haptic Waveform Summation",
+    "id": "M11-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-01"
+    "anchor": "m11-ext-1"
   },
   {
-    "id": "M11-EXT-02",
-    "title": "Adaptive Skeletal Trigger Strain Profiles",
+    "id": "M11-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-02"
+    "anchor": "m11-ext-2"
   },
   {
-    "id": "M11-EXT-03",
-    "title": "Raycast-Fan Fog-of-Reveal Navigation (Map/Minimap)",
+    "id": "M11-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-03"
+    "anchor": "m11-ext-3"
   },
   {
-    "id": "M11-EXT-04",
-    "title": "Diegetic Onboarding via Seeded Low-Severity Starter Outbreak",
+    "id": "M11-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-04"
+    "anchor": "m11-ext-4"
   },
   {
-    "id": "M11-EXT-05",
-    "title": "OKLab-Driven Accessibility Suite (Colorblind, Captions, Remapping)",
+    "id": "M11-EXT-5",
+    "title": "Renders off the planar surface map (M4-EXT-62) + hub POIs (M8.6-EXT-28); off-screen markers wrap to edges.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-05"
+    "anchor": "m11-ext-5"
   },
   {
-    "id": "M11-EXT-06",
-    "title": "Runtime String-Template Localization Pipeline",
+    "id": "M11-EXT-6",
+    "title": "M11. Metro-style minimal HUD; readouts embedded in world (watch, paper map, weapon state).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-06"
+    "anchor": "m11-ext-6"
   },
   {
-    "id": "M11-EXT-07",
-    "title": "MSDF Shaded Drop-Shadow Vector Signed Distance Field Generator",
+    "id": "M11-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-07"
+    "anchor": "m11-ext-7"
   },
   {
-    "id": "M11-EXT-08",
-    "title": "MSDF Vector Text Layout Geometry Batching Pipeline",
+    "id": "M11-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-08"
+    "anchor": "m11-ext-8"
   },
   {
-    "id": "M11-EXT-09",
-    "title": "UI Panel Atlasing & Nine-Slice Batching",
+    "id": "M11-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m11-ext-09"
+    "anchor": "m11-ext-9"
   },
   {
     "id": "M11-EXT-10",
-    "title": "Three-Way Version Contract",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M11-EXT-11",
-    "title": "Config Schema Registry",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M11-EXT-12",
-    "title": "Typed Parameter Handles",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M11-EXT-13",
-    "title": "Parameter Range/Clamp Enforcement",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M11-EXT-14",
-    "title": "Enum/Flag Registry",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M11-EXT-15",
-    "title": "Deliberate Mod API Surface",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M11-EXT-16",
-    "title": "ModAPI Semantic Versioning",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M11-EXT-17",
-    "title": "Mod Dependency Resolver",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M11-EXT-18",
-    "title": "Mod Incompatibility Detector",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M11-EXT-19",
-    "title": "Mod Checksum + Signature",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M11-EXT-20",
-    "title": "Mod Write-Allowlist",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M11-EXT-21",
-    "title": "Runtime Mod Enable/Disable + Reload",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M11-EXT-22",
-    "title": "Mod Override Layering",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M11-EXT-23",
-    "title": "Mod Error Isolation",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M11-EXT-24",
-    "title": "Mod Console Commands (Dev/Mod-Tooling Only)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M11-EXT-25",
-    "title": "Mod Validation Pipeline Hook",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M11-EXT-26",
-    "title": "Mod Localization Hooks",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M11-EXT-27",
-    "title": "Mod UI / Menu",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M11-EXT-28",
-    "title": "Mod Save-Namespace Isolation",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M11-EXT-29",
-    "title": "Benchmark / Perf HUD / Graphics Options",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M11-EXT-30",
-    "title": "Screen Shake / Hit Marker / Kill Feed",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M11-EXT-31",
-    "title": "Runtime Mod Manager",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M11-EXT-32",
-    "title": "Mod Documentation Generator",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M11-EXT-33",
-    "title": "Workshop / Store Integration Stub",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M11-EXT-34",
-    "title": "Main Menu & Pause Menu",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M11-EXT-35",
-    "title": "Inventory & Loot UI",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -316,7 +316,7 @@
   },
   {
     "id": "M11-EXT-36",
-    "title": "Map & Fast-Travel UI",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -325,7 +325,7 @@
   },
   {
     "id": "M11-EXT-37",
-    "title": "Settings & Options Menu",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -334,7 +334,7 @@
   },
   {
     "id": "M11-EXT-38",
-    "title": "Controller/Gamepad UI",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -343,7 +343,7 @@
   },
   {
     "id": "M11-EXT-39",
-    "title": "Haptics & Rumble",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -352,7 +352,7 @@
   },
   {
     "id": "M11-EXT-40",
-    "title": "Damage Numbers & Floating Text",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -361,7 +361,7 @@
   },
   {
     "id": "M11-EXT-41",
-    "title": "World Space UI (billboards)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -370,7 +370,7 @@
   },
   {
     "id": "M11-EXT-52",
-    "title": "World-Space POI Compass Ribbon",
+    "title": "Renders off the planar surface map (M4-EXT-62) + hub POIs (M8.6-EXT-28); off-screen markers wrap to edges.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -379,7 +379,7 @@
   },
   {
     "id": "M11-EXT-53",
-    "title": "Point-of-Interest (POI) Marker System",
+    "title": "Single POI registry consumed by M11-EXT-52 compass, M11 map, and M13 SLM story pins; M13-EXT-24 lore drops pins.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -388,7 +388,7 @@
   },
   {
     "id": "M11-EXT-54",
-    "title": "Lore Pin / SLM Broadcast Drop",
+    "title": "Consumes M13-EXT-24 lore and M13-EXT-36 broadcasts; drops a POI (M11-EXT-53) on notable objects.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -397,7 +397,7 @@
   },
   {
     "id": "M11-EXT-55",
-    "title": "Encounter Condition HUD Trigger",
+    "title": "Reads active encounter conditions (M5.4 events, M8.6 civil war) and shows a contextual alert.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -406,7 +406,7 @@
   },
   {
     "id": "M11-EXT-57",
-    "title": "Surface-Map Mini-Overlay (M4-EXT-62 Backed)",
+    "title": "Renders the local slice of the planar surface map (M4-EXT-62) under the compass (M11-EXT-52).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -415,7 +415,7 @@
   },
   {
     "id": "M11-EXT-58",
-    "title": "Rest / Hub HUD Indicator",
+    "title": "Mirrors M2.9 rest UI and M8.6-EXT-28 hub ownership; shows respec availability (M2-EXT-26).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -424,7 +424,7 @@
   },
   {
     "id": "M11-EXT-59",
-    "title": "Hub Fast-Travel Node",
+    "title": "Consumes M8.6-EXT-28 hub ownership and M2.9-EXT-24 rest UI; registers a travel POI (M11-EXT-53).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -433,7 +433,7 @@
   },
   {
     "id": "M11-EXT-60",
-    "title": "Diegetic No-HUD Mode",
+    "title": "M11. Metro-style minimal HUD; readouts embedded in world (watch, paper map, weapon state).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -442,7 +442,7 @@
   },
   {
     "id": "M11-EXT-61",
-    "title": "Quest Environmental Fragments",
+    "title": "M11/M12. Quest story delivered via object/blood/corpse/item-lore, not popups.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -451,7 +451,7 @@
   },
   {
     "id": "M11-EXT-62",
-    "title": "Dread Surface (Fear/Infection Feedback)",
+    "title": "M11/M10/M8. Surfaces fear scalar + infection clock as felt tension (vignette/pulse/audio swell), not HUD numbers.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -460,7 +460,7 @@
   },
   {
     "id": "M11-EXT-63",
-    "title": "Wristwatch + Dusk Alarm",
+    "title": "M11. Diegetic watch; dynamic alarm at dusk; toggleable; scavenged or spawn-chance. Inside, it's your only time cue.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -469,7 +469,7 @@
   },
   {
     "id": "M11-EXT-64",
-    "title": "Branching Quest System (NV-style multi-solution)",
+    "title": "Quests fork via 4 mechanics (fight/talk/sneak/bribe); standing+world-state written per branch.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -478,7 +478,7 @@
   },
   {
     "id": "M11-EXT-65",
-    "title": "G-DREAD: Tension Loop Design",
+    "title": "A design pillar that frames existing systems (darkness, infection, audio) as felt dread \u2014 not numbers. Dusk = the board-up moment (I Am Legend).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -487,7 +487,7 @@
   },
   {
     "id": "M11-EXT-66",
-    "title": "G-INFECTFEEL: Infection as Dread",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -496,7 +496,7 @@
   },
   {
     "id": "M11-EXT-67",
-    "title": "G-JUICE: Game Feel",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

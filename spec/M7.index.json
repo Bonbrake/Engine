@@ -1,88 +1,88 @@
 [
   {
-    "id": "M7-EXT-01",
-    "title": "The Corpse-Pile Flattening Engine (Dynamic Static Hulls)",
+    "id": "M7-EXT-1",
+    "title": "Binary Save Format Structural Schema Migrator *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-01"
+    "anchor": "m7-ext-1"
   },
   {
-    "id": "M7-EXT-02",
-    "title": "Electrochemical Oxidation Vector Blending (Structural Time-Lapse)",
+    "id": "M7-EXT-2",
+    "title": "Every world object gets a stable WorldRefID (chunk-based, not ECS entityId) so it survives reloads and co-op sessions unchanged.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-02"
+    "anchor": "m7-ext-2"
   },
   {
-    "id": "M7-EXT-03",
-    "title": "Submerged Corpse Buoyancy Re-Activation",
+    "id": "M7-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-03"
+    "anchor": "m7-ext-3"
   },
   {
-    "id": "M7-EXT-04",
-    "title": "Soft-Body Cloth, Tethered Rot-Cloth & Cosserat-Rod Vegetation (Jolt 5.6.0 Soft-Body Unlock)",
+    "id": "M7-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-04"
+    "anchor": "m7-ext-4"
   },
   {
-    "id": "M7-EXT-05",
-    "title": "Perishable Item Decay & Cook-Safety Integral (Food Spoilage & Cooking)",
+    "id": "M7-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-05"
+    "anchor": "m7-ext-5"
   },
   {
-    "id": "M7-EXT-06",
-    "title": "Player-Facing Save Slot & Autosave UI Layer",
+    "id": "M7-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-06"
+    "anchor": "m7-ext-6"
   },
   {
-    "id": "M7-EXT-07",
-    "title": "Hierarchical Delta-State Persistence (Procedural Seed-Diff Engine)",
+    "id": "M7-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-07"
+    "anchor": "m7-ext-7"
   },
   {
-    "id": "M7-EXT-08",
-    "title": "Zstandard Custom Dictionary Static Compiler",
+    "id": "M7-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-08"
+    "anchor": "m7-ext-8"
   },
   {
-    "id": "M7-EXT-09",
-    "title": "Atomic File-Swap Append-Only State Transaction Logger",
+    "id": "M7-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m7-ext-09"
+    "anchor": "m7-ext-9"
   },
   {
     "id": "M7-EXT-10",
-    "title": "Binary Save Format Structural Schema Migrator",
+    "title": "Binary Save Format Structural Schema Migrator *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M7-EXT-11",
-    "title": "Zstd Save-Compression & Streaming Store",
+    "title": "Zstd Save-Compression & Streaming Store *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M7-EXT-12",
-    "title": "Save Compression (zstd)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M7-EXT-13",
-    "title": "Asset Checksum Integrity",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M7-EXT-14",
-    "title": "Telemetry Tap + Consent Gate",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M7-EXT-15",
-    "title": "Localization / Accessibility String-Table",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M7-EXT-16",
-    "title": "Save Corruption Recovery",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M7-EXT-17",
-    "title": "Replay / Demo Record",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M7-EXT-18",
-    "title": "Save Encryption & Anti-Edit",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M7-EXT-19",
-    "title": "Backward-Save Compatibility",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M7-EXT-20",
-    "title": "Stable WorldRefID Registry",
+    "title": "Every world object gets a stable WorldRefID (chunk-based, not ECS entityId) so it survives reloads and co-op sessions unchanged.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M7-EXT-21",
-    "title": "Persistent Chunk Change-Buffer (exact-spot store)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M7-EXT-22",
-    "title": "Bit-Exact World Transform Determinism",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M7-EXT-23",
-    "title": "WorldMemory (RDR2-style reactivity, no popups)",
+    "title": "Systems remember player actions across sessions; NPCs reference past deeds without UI popups \u2014 you see it in their tone and behavior.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

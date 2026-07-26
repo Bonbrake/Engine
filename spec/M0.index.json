@@ -1,84 +1,84 @@
 [
   {
-    "id": "M0-EXT-01",
-    "title": "Hardware-Topology enkiTS Pinning Allocator",
+    "id": "M0-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-01"
+    "anchor": "m0-ext-1"
   },
   {
-    "id": "M0-EXT-02",
-    "title": "Continuous Driver-Side Shader Object State Manager",
+    "id": "M0-EXT-2",
+    "title": "Persistent World-Epoch Clock with Deterministic Offline Fast-Forward",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-02"
+    "anchor": "m0-ext-2"
   },
   {
-    "id": "M0-EXT-03",
-    "title": "Disk-Persisted Pipeline Cache Header Validator",
+    "id": "M0-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-03"
+    "anchor": "m0-ext-3"
   },
   {
-    "id": "M0-EXT-04",
-    "title": "Asynchronous Native OS File Handle Ring Buffer",
+    "id": "M0-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-04"
+    "anchor": "m0-ext-4"
   },
   {
-    "id": "M0-EXT-05",
-    "title": "Discrete GPU Memory-Budget Tracker",
+    "id": "M0-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-05"
+    "anchor": "m0-ext-5"
   },
   {
-    "id": "M0-EXT-06",
-    "title": "Cross-Queue Vulkan Dependency Hazard Validation Layer",
+    "id": "M0-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-06"
+    "anchor": "m0-ext-6"
   },
   {
-    "id": "M0-EXT-07",
-    "title": "Device-Agnostic Work-Stealing Job Scheduler Fiber Yield Hook",
+    "id": "M0-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-07"
+    "anchor": "m0-ext-7"
   },
   {
-    "id": "M0-EXT-08",
-    "title": "Vulkan Descriptor Indexing Bindless Storage Handle Page Allocator",
+    "id": "M0-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-08"
+    "anchor": "m0-ext-8"
   },
   {
-    "id": "M0-EXT-09",
-    "title": "Host-Side Command Queue Swapchain Frame-Pacing Interceptor",
+    "id": "M0-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m0-ext-09"
+    "anchor": "m0-ext-9"
   },
   {
     "id": "M0-EXT-10",
@@ -253,7 +253,7 @@
   },
   {
     "id": "M0-EXT-30",
-    "title": "Game Draw Path Bypasses Cull/Indirect (demo-only)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M0-EXT-31",
-    "title": "Hardcoded 100-Entity Cap",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M0-EXT-32",
-    "title": "Hi-Z Depth Pyramid Has No Producer",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M0-EXT-33",
-    "title": "Orphaned Staging / Frame-Deletion Systems",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M0-EXT-34",
-    "title": "No Async Shader Compile + Watchdog",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M0-EXT-35",
-    "title": "SoA Hot-Component Layout",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M0-EXT-36",
-    "title": "Meshlet / Mesh-Shader Pipeline",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -316,7 +316,7 @@
   },
   {
     "id": "M0-EXT-37",
-    "title": "Parallel Secondary Command-Buffer Recording",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -325,7 +325,7 @@
   },
   {
     "id": "M0-EXT-38",
-    "title": "Occlusion Query Double-Buffering",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -334,7 +334,7 @@
   },
   {
     "id": "M0-EXT-39",
-    "title": "Parallel-Deterministic PRNG Core",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -351,8 +351,17 @@
     "anchor": "m0-ext-40"
   },
   {
+    "id": "M0-EXT-41",
+    "title": "Systems Touched",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-41"
+  },
+  {
     "id": "M0-EXT-42",
-    "title": "Frame-Deletion Queue Wiring",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -361,7 +370,7 @@
   },
   {
     "id": "M0-EXT-43",
-    "title": "GPU Validation in Release Builds",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -370,7 +379,7 @@
   },
   {
     "id": "M0-EXT-44",
-    "title": "Release Build Sanitizer Path",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -379,7 +388,7 @@
   },
   {
     "id": "M0-EXT-45",
-    "title": "Descriptor-Set Fragmentation Guard",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -388,7 +397,7 @@
   },
   {
     "id": "M0-EXT-46",
-    "title": "Secondary CB on Game Path",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -397,7 +406,7 @@
   },
   {
     "id": "M0-EXT-47",
-    "title": "Platform Support (Linux/macOS/console)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -406,7 +415,7 @@
   },
   {
     "id": "M0-EXT-48",
-    "title": "Build & Packaging Pipeline",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -415,7 +424,7 @@
   },
   {
     "id": "M0-EXT-49",
-    "title": "Automated Test Matrix (unit/integration)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -424,7 +433,7 @@
   },
   {
     "id": "M0-EXT-50",
-    "title": "Performance Budget & Profiling Dashboard",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -433,7 +442,7 @@
   },
   {
     "id": "M0-EXT-51",
-    "title": "Anti-Tamper & Memory Integrity",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -442,7 +451,7 @@
   },
   {
     "id": "M0-EXT-52",
-    "title": "Crash Reporter & Minidump Upload",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -451,7 +460,7 @@
   },
   {
     "id": "M0-EXT-53",
-    "title": "Analytics & Privacy-Consent",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

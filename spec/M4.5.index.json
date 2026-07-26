@@ -1,84 +1,84 @@
 [
   {
-    "id": "M4.5-EXT-01",
-    "title": "Rayleigh-Scattering Volumetric Cone Attenuation (Flashlight Shadowing)",
+    "id": "M4.5-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-01"
+    "anchor": "m4.5-ext-1"
   },
   {
-    "id": "M4.5-EXT-02",
-    "title": "Post-Processing Photopupillary Luminance Tracking",
+    "id": "M4.5-EXT-2",
+    "title": "Compute Skinning Vertex Tangent-Space Recomputer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-02"
+    "anchor": "m4.5-ext-2"
   },
   {
-    "id": "M4.5-EXT-03",
-    "title": "Ocular Afterimage Retinal Bleach Compute Shader",
+    "id": "M4.5-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-03"
+    "anchor": "m4.5-ext-3"
   },
   {
-    "id": "M4.5-EXT-04",
-    "title": "Thin-Film Specular Wetness Shading",
+    "id": "M4.5-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-04"
+    "anchor": "m4.5-ext-4"
   },
   {
-    "id": "M4.5-EXT-05",
-    "title": "Retinal Flash-Blindness Contrast Silhouette Tracking",
+    "id": "M4.5-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-05"
+    "anchor": "m4.5-ext-5"
   },
   {
-    "id": "M4.5-EXT-06",
-    "title": "Fresnel-Driven Multi-Layer Surface Saturation Shading",
+    "id": "M4.5-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-06"
+    "anchor": "m4.5-ext-6"
   },
   {
-    "id": "M4.5-EXT-07",
-    "title": "Compute-Shader Procedural Texture Synthesizer Pipeline",
+    "id": "M4.5-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-07"
+    "anchor": "m4.5-ext-7"
   },
   {
-    "id": "M4.5-EXT-08",
-    "title": "Two-Pass GPU-Driven Cluster Occlusion Culling (HZB Culling)",
+    "id": "M4.5-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-08"
+    "anchor": "m4.5-ext-8"
   },
   {
-    "id": "M4.5-EXT-09",
-    "title": "Bindless Material Shader Virtualization (Permutation Guard)",
+    "id": "M4.5-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m4.5-ext-09"
+    "anchor": "m4.5-ext-9"
   },
   {
     "id": "M4.5-EXT-10",
@@ -118,7 +118,7 @@
   },
   {
     "id": "M4.5-EXT-14",
-    "title": "Compute Skinning Vertex Tangent-Space Recomputer",
+    "title": "Compute Skinning Vertex Tangent-Space Recomputer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M4.5-EXT-15",
-    "title": "Hysteresis-Gated TAA Variance Clamper",
+    "title": "Hysteresis-Gated TAA Variance Clamper *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M4.5-EXT-16",
-    "title": "Software Micro-Polygon Voxel Rasterizer (compute)",
+    "title": "Software Micro-Polygon Voxel Rasterizer (compute) *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M4.5-EXT-17",
-    "title": "Directional Ambient Visibility Field Cache",
+    "title": "Directional Ambient Visibility Field Cache *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M4.5-EXT-18",
-    "title": "Transient Skinned Vertex Cache for Visibility Buffer",
+    "title": "Transient Skinned Vertex Cache for Visibility Buffer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M4.5-EXT-20",
-    "title": "Diffuse + Translucent Medium Light (Burley/Kalisto Diffuse, Beer-Lambert Extinction)",
+    "title": "Beer-Lambert Translucent Medium Light Extinction",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M4.5-EXT-21",
-    "title": "RVT Feedback Buffer & Cache Invalidation",
+    "title": "RVT Feedback Buffer & Cache Invalidation *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M4.5-EXT-22",
-    "title": "GBuffer Base-Color Full-Precision Mandate (no 16-bit crush)",
+    "title": "Base-color/albedo carried at full material-source precision through the",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M4.5-EXT-23",
-    "title": "Depth-Prepass Discipline (depth-only, 1-BC4 mask, no pixel-shader draws)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M4.5-EXT-24",
-    "title": "Subpass-Less Explicit Load/Store Resolution Barriers",
+    "title": "Subpass-Less Explicit Load/Store Resolution Barriers *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M4.5-EXT-25",
-    "title": "Specialization Constants for Bindless Material Uber-Shader",
+    "title": "Specialization Constants for Bindless Material Uber-Shader *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M4.5-EXT-26",
-    "title": "Runtime Virtual Texture (RVT) Base System",
+    "title": "Runtime Virtual Texture (RVT) Base System *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M4.5-EXT-32",
-    "title": "Forward-Rendered Skin/Hair Path (not deferred)",
+    "title": "Skin and hair are FORWARD-rendered (opaque world = tiled deferred). VERIFIER:",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M4.5-EXT-33",
-    "title": "Filmic/ACES Tonemapper (crisp, not blur-mask)",
+    "title": "Ship a proper filmic (ACES/AgX-style) tonemapper as the default; NOT the engine",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M4.5-EXT-34",
-    "title": "MSAA Edge-Detection Stencil (stable edges, no temporal smear)",
+    "title": "Custom edge-detection stencil marks geometric edges so MSAA shades them at",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M4.5-EXT-35",
-    "title": "Subsurface Scattering LUT (cheap, rich skin)",
+    "title": "Ship a proper filmic (ACES/AgX-style) tonemapper as the default; NOT the engine",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],

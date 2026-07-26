@@ -1,254 +1,227 @@
 [
   {
-    "id": "M8.6-EXT-01",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-01"
+    "anchor": "m8.6-ext-1"
   },
   {
-    "id": "M8.6-EXT-02",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-02"
+    "anchor": "m8.6-ext-2"
   },
   {
-    "id": "M8.6-EXT-03",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-03"
+    "anchor": "m8.6-ext-3"
   },
   {
-    "id": "M8.6-EXT-04",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-04"
+    "anchor": "m8.6-ext-4"
   },
   {
-    "id": "M8.6-EXT-05",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-05"
+    "anchor": "m8.6-ext-5"
   },
   {
-    "id": "M8.6-EXT-06",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-06"
+    "anchor": "m8.6-ext-6"
   },
   {
-    "id": "M8.6-EXT-07",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-07"
+    "anchor": "m8.6-ext-7"
   },
   {
-    "id": "M8.6-EXT-08",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-08"
+    "anchor": "m8.6-ext-8"
   },
   {
-    "id": "M8.6-EXT-09",
-    "title": "Placeholder Block",
+    "id": "M8.6-EXT-9",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-09"
+    "anchor": "m8.6-ext-9"
   },
   {
     "id": "M8.6-EXT-10",
-    "title": "Placeholder Block",
+    "title": "Settlement NavMesh from GA Layout *(SOURCED FROM PLAN FILE)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-10"
+    "anchor": "m8.6-ext-10"
   },
   {
     "id": "M8.6-EXT-11",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-11"
+    "anchor": "m8.6-ext-11"
   },
   {
     "id": "M8.6-EXT-12",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-12"
+    "anchor": "m8.6-ext-12"
   },
   {
     "id": "M8.6-EXT-13",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-13"
+    "anchor": "m8.6-ext-13"
   },
   {
     "id": "M8.6-EXT-14",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-14"
+    "anchor": "m8.6-ext-14"
   },
   {
     "id": "M8.6-EXT-15",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-15"
+    "anchor": "m8.6-ext-15"
   },
   {
     "id": "M8.6-EXT-16",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-16"
+    "anchor": "m8.6-ext-16"
   },
   {
     "id": "M8.6-EXT-17",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-17"
-  },
-  {
-    "id": "M8.6-EXT-18",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M8.6-ext-18"
-  },
-  {
-    "id": "M8.6-EXT-19",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M8.6-ext-19"
-  },
-  {
-    "id": "M8.6-EXT-20",
-    "title": "Placeholder Block",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "M8.6-ext-20"
+    "anchor": "m8.6-ext-17"
   },
   {
     "id": "M8.6-EXT-21",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-21"
+    "anchor": "m8.6-ext-21"
   },
   {
     "id": "M8.6-EXT-22",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-22"
+    "anchor": "m8.6-ext-22"
   },
   {
     "id": "M8.6-EXT-23",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-23"
+    "anchor": "m8.6-ext-23"
   },
   {
     "id": "M8.6-EXT-24",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-24"
+    "anchor": "m8.6-ext-24"
   },
   {
     "id": "M8.6-EXT-25",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-25"
+    "anchor": "m8.6-ext-25"
   },
   {
     "id": "M8.6-EXT-26",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-26"
+    "anchor": "m8.6-ext-26"
   },
   {
     "id": "M8.6-EXT-27",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-27"
+    "anchor": "m8.6-ext-27"
   },
   {
     "id": "M8.6-EXT-28",
-    "title": "Placeholder Block",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "M8.6-ext-28"
+    "anchor": "m8.6-ext-28"
   }
 ]

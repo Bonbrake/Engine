@@ -1,88 +1,88 @@
 [
   {
-    "id": "M5-EXT-01",
-    "title": "Asynchronous Tile-Voxelized NavMesh Baker",
+    "id": "M5-EXT-1",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-01"
+    "anchor": "m5-ext-1"
   },
   {
-    "id": "M5-EXT-02",
-    "title": "Dual-Quaternion GPU Compute Skinning",
+    "id": "M5-EXT-2",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-02"
+    "anchor": "m5-ext-2"
   },
   {
-    "id": "M5-EXT-03",
-    "title": "Dynamic Logistic Spawn Pacing",
+    "id": "M5-EXT-3",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-03"
+    "anchor": "m5-ext-3"
   },
   {
-    "id": "M5-EXT-04",
-    "title": "Perimeter Illumination Repulsion",
+    "id": "M5-EXT-4",
+    "title": "Blends M10 (Weather/Wind vectors) with M5.3 (SNR perception filtering) and M6 (Acoustic audio events).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-04"
+    "anchor": "m5-ext-4"
   },
   {
-    "id": "M5-EXT-05",
-    "title": "Hydrostatic Velocity Penalties",
+    "id": "M5-EXT-5",
+    "title": "M5.4 fear field (RD). Welds RD grid boundaries across chunk seams so the field is continuous.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-05"
+    "anchor": "m5-ext-5"
   },
   {
-    "id": "M5-EXT-06",
-    "title": "AI Behavior / Utility System",
+    "id": "M5-EXT-6",
+    "title": "M5/M8. Spawns/scales zombie waves; uses M8-EXT-32 funnel pathing; co-op-aware.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-06"
+    "anchor": "m5-ext-6"
   },
   {
-    "id": "M5-EXT-07",
-    "title": "Navigation / Pathfinding",
+    "id": "M5-EXT-7",
+    "title": "Anatomical Hit-Volume SDF Gradients \u2014 M5-EXT-70.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-07"
+    "anchor": "m5-ext-7"
   },
   {
-    "id": "M5-EXT-08",
-    "title": "Procedural Animation (physics/IK)",
+    "id": "M5-EXT-8",
+    "title": "Constraint-Weight Blending (Animated \u2194 Procedural) \u2014 M5-EXT-80.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-08"
+    "anchor": "m5-ext-8"
   },
   {
-    "id": "M5-EXT-09",
-    "title": "AI Perception System",
+    "id": "M5-EXT-9",
+    "title": "Confidence-Gated Stealth Strikes \u2014 M5-EXT-90.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m5-ext-09"
+    "anchor": "m5-ext-9"
   },
   {
     "id": "M5-EXT-10",
-    "title": "AI Director (horde pacing)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M5-EXT-11",
-    "title": "Horde Emergence / Spawn Waves",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M5-EXT-12",
-    "title": "Zombie Facing / Emerge Animation",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M5-EXT-13",
-    "title": "Zombie FSM States",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M5-EXT-14",
-    "title": "Hearing Perception (directional cone + freq)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M5-EXT-15",
-    "title": "Short-Term Memory & Investigation",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M5-EXT-16",
-    "title": "Horde Merge & Split Behavior",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M5-EXT-17",
-    "title": "Aerodynamic Wake Slipstream Horde Slingshot",
+    "title": "Links M9 vehicle chassis velocity tracking fields straight to M5.1 Reynolds boid steering arrays.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M5-EXT-18",
-    "title": "Player Character Generation (Uninfected-Mode Phenotype Pipeline)",
+    "title": "Runs the existing M5.1 zombie phenotype/bio-weight generator with the infection-mutation pass disabled \u2014 one canonical procedural humanoid generator for play...",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M5-EXT-19",
-    "title": "Topology-Invariant Master Rig with Deformation-Transfer Binding",
+    "title": "Upgrades M5.1 zombie variation routines and feeds bind data into M5.2 procedural animation and M5.2's existing Dual-Quaternion compute skinning.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M5-EXT-20",
-    "title": "Anatomical Hit-Volume SDF Gradients",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M5-EXT-21",
-    "title": "Heat-Diffusion Automatic Rigging & PSOLA Phenotype Vocalization",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M5-EXT-23",
-    "title": "Optimal Reciprocal Collision Avoidance (ORCA) Solver",
+    "title": "M5.1/M5.3 + M5.4. Local collision-avoidance velocity for agents (companions, animals, crowds).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M5-EXT-24",
-    "title": "Atmosphere Volumetric Scattering Pass",
+    "title": "Extends M5.1 atmosphere; scatters light through zone-tagged (M4-EXT-63) air; M13-EXT-53 lore ambiance.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M5-EXT-25",
-    "title": "Procedural Joint Compliance Degradation (Dynamic Muscle Crippling)",
+    "title": "Expands M5.2 (Procedural Animation / Active Ragdolls) and interfaces with M2.9 Ballistics.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M5-EXT-26",
-    "title": "Zombie Tissue Rigor Mortis Lifecycle Decay",
+    "title": "Intersects M5.1 zombie bio phenotypes with M5.2 Active Ragdoll joint tracking loops.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M5-EXT-27",
-    "title": "Biomechanical Joint Luxation Limits",
+    "title": "Deepens M5.2 (Active Ragdolls) and interfaces with Jolt constraint friction callbacks.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M5-EXT-28",
-    "title": "Centrifugal Kinetic Limb Flail",
+    "title": "Expands M5.2 active ragdoll constraints using Jolt contact impulse manifolds.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M5-EXT-29",
-    "title": "Control-Rig-Style Procedural Pose Override Layer",
+    "title": "Sits downstream of caps.annMotionMatching (M5.2 above) in the per-frame pose pipeline. Intended chain: Motion Matching \u2192 Upper-Body Override ([K-EXT-01], App...",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M5-EXT-30",
-    "title": "Constraint-Weight Blending (Animated \u2194 Procedural)",
+    "title": "Per-joint blend weight consumed by the procedural override layer (M5.2-EXT-05) above.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M5-EXT-31",
-    "title": "Ragdoll-to-Animation Recovery Blend",
+    "title": "Bridges M5.2's Active Ragdoll Dynamics (existing bullet above) back to Motion Matching once a knocked-down entity is ready to stand.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M5-EXT-32",
-    "title": "IK Rig Asset (Per-Skeleton Bone-Chain / End-Effector Definition)",
+    "title": "Consumed by the procedural override layer (M5.2-EXT-05) and motion-warping (M5.2-EXT-09) below, for any feature that needs to resolve an end-effector target ...",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M5-EXT-33",
-    "title": "Motion-Warping for Target Alignment",
+    "title": "Consumes the IK Rig asset (M5.2-EXT-08, flagged above) and blends through the procedural override layer (M5.2-EXT-05) for melee-hit alignment, vault-landing ...",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,7 +298,7 @@
   },
   {
     "id": "M5-EXT-34",
-    "title": "Physics-Based Secondary Motion Post-Process (Spring-Damper Attachments)",
+    "title": "Runs as the final stage of the pose pipeline \u2014 after Motion Matching, the procedural override layer (M5.2-EXT-05), and ragdoll blending \u2014 for non-simulated a...",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -307,7 +307,7 @@
   },
   {
     "id": "M5-EXT-35",
-    "title": "Asynchronous Fixed-Block Humanoid Rig Matrix Pool Allocator",
+    "title": "Backs skeletal bone-transform storage for every humanoid entity (zombies, companions, players) across M5.2's animation pipeline \u2014 eliminates heap allocation ...",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -325,7 +325,7 @@
   },
   {
     "id": "M5-EXT-37",
-    "title": "(provisional) IK Rig Metadata Serialization Loader *(SOURCED FROM PLAN FILE)*",
+    "title": "Consumed by M5.2-EXT-08 (IK Rig Asset struct) + M5.2-EXT-09 (Motion-Warping target). Feeds every end-effector consumer in M5.2 (melee-hit align, vault landin...",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -334,7 +334,7 @@
   },
   {
     "id": "M5-EXT-38",
-    "title": "XPBD Rope/Tether Constraint *(SOURCED FROM PLAN FILE)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -343,7 +343,7 @@
   },
   {
     "id": "M5-EXT-39",
-    "title": "Supersonic Scent-Wake Cones (Aerodynamic Scent Compression)",
+    "title": "Modifies spatial distribution rules for the Atmospheric Gaussian Plume Scent Dispersion grid.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -352,7 +352,7 @@
   },
   {
     "id": "M5-EXT-40",
-    "title": "Atmospheric Convection Acoustic Refraction (Wind-Gated Hearing Filters)",
+    "title": "Blends M10 (Weather/Wind vectors) with M5.3 (SNR perception filtering) and M6 (Acoustic audio events).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -361,7 +361,7 @@
   },
   {
     "id": "M5-EXT-41",
-    "title": "Volatile Scent-Evaporation Thermal Grids",
+    "title": "Extends M5.3 Atmospheric Gaussian Scent Plume Dispersion matrices.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -370,7 +370,7 @@
   },
   {
     "id": "M5-EXT-42",
-    "title": "Volumetric Scent-Cloud Domain Warping (Wind Blaster)",
+    "title": "Modifies M5.3 Atmospheric Gaussian Scent Plume cells during explosive events.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -379,7 +379,7 @@
   },
   {
     "id": "M5-EXT-43",
-    "title": "Aerodynamic Scent-Plume Mass Displacement",
+    "title": "Deepens M5.3 Atmospheric Gaussian Scent Plume cell updates using M10 wind pathways.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -388,7 +388,7 @@
   },
   {
     "id": "M5-EXT-44",
-    "title": "Volatile Scent-Suppression Atmospheric Aerosol Diffusion Grid",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -406,7 +406,7 @@
   },
   {
     "id": "M5-EXT-46",
-    "title": "Visual Occlusion Sector Ray-March Pre-Filter",
+    "title": "M5.3 + M5.4. Ray-marches visibility sectors pre-frame to pre-cull AI that can't see the player.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -415,7 +415,7 @@
   },
   {
     "id": "M5-EXT-47",
-    "title": "Volumetric Boid Compression Stampede Crush",
+    "title": "Enhances M5.4 reaction-diffusion fields and M5.1 Reynolds boid flocking parameters.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -424,7 +424,7 @@
   },
   {
     "id": "M5-EXT-48",
-    "title": "Over-Mantle Tumbling Torque Vectoring",
+    "title": "Integrates M5.4 horde steering pressure variables directly into M2.9 procedural vaulting routines.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -442,7 +442,7 @@
   },
   {
     "id": "M5-EXT-50",
-    "title": "Reaction-Diffusion Grid Sub-sampled Boundary Welder",
+    "title": "M5.4 fear field (RD). Welds RD grid boundaries across chunk seams so the field is continuous.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -451,7 +451,7 @@
   },
   {
     "id": "M5-EXT-51",
-    "title": "Hierarchical A* Macro-Cell Long-Range Road-Graph Router",
+    "title": "M5.4 horde + M8.5 caravan routing. Hierarchical A* over the macro road-graph for off-screen long-range routing.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -460,7 +460,7 @@
   },
   {
     "id": "M5-EXT-52",
-    "title": "Holling Type II Cannibalism Feeding Satiator",
+    "title": "M5.4 cannibal factions. Models feeding satiation (Holling Type II) so factions stop at capacity.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -469,7 +469,7 @@
   },
   {
     "id": "M5-EXT-53",
-    "title": "Fear-Field Diffusion via Spatial Hash",
+    "title": "M5.4 + M1-EXT-27. Diffuses the fear/reaction-diffusion field over a spatial hash.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -478,7 +478,7 @@
   },
   {
     "id": "M5-EXT-54",
-    "title": "Cannibalism / World-State Morality Flag",
+    "title": "Emits M13-EXT-31 broadcast and shifts M8.6-EXT-13/-24 faction standing; major moral node.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -487,7 +487,7 @@
   },
   {
     "id": "M5-EXT-55",
-    "title": "Noise-Field Encounter Trigger",
+    "title": "Drives M8 spawns and M5.4-EXT-16 graph edges; couples to M4-EXT-59 road network.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -496,7 +496,7 @@
   },
   {
     "id": "M5-EXT-56",
-    "title": "Encounter Spawn Budget / Cap",
+    "title": "Bounds M8 spawns and M12-EXT-12 voices; shares M5.4-EXT-16 event graph budget.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -505,7 +505,7 @@
   },
   {
     "id": "M5-EXT-57",
-    "title": "Event\u2192Encounter Graph Resolver",
+    "title": "Central resolver: events \u2192 encounter requests (M5.4-EXT-13) placed via M4 graphs; M5.1/M13 ambiance.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -514,7 +514,7 @@
   },
   {
     "id": "M5-EXT-58",
-    "title": "Moral-Choice \u2192 Faction Edge Writer",
+    "title": "Consumes M13-EXT-31/32 morals + M13-EXT-36 broadcasts; mutates M8.6-EXT-13 reputation edges.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -523,7 +523,7 @@
   },
   {
     "id": "M5-EXT-59",
-    "title": "RETIRED \u2014 Secondary Road Graph (do not instantiate)",
+    "title": "Intentionally excluded per _RETIRED.md; M4-EXT-59 is the canonical road graph. Listed for traceability only.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -532,7 +532,7 @@
   },
   {
     "id": "M5-EXT-60",
-    "title": "Horde Director",
+    "title": "M5/M8. Spawns/scales zombie waves; uses M8-EXT-32 funnel pathing; co-op-aware.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -541,7 +541,7 @@
   },
   {
     "id": "M5-EXT-61",
-    "title": "Navmesh / A* Pathfinding",
+    "title": "M5. Terrain-adaptive navmesh + A*; zombies fall/jump/avoid obstacles.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -550,7 +550,7 @@
   },
   {
     "id": "M5-EXT-62",
-    "title": "Wildlife Ecosystem",
+    "title": "M5. Ambient animals (scavengers, infected beasts) for life + food + dread.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -559,7 +559,7 @@
   },
   {
     "id": "M5-EXT-63",
-    "title": "World-State Director",
+    "title": "M5. Director drives events based on world-state, not just player state. Famine, plague, migration, mega-horde.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -568,7 +568,7 @@
   },
   {
     "id": "M5-EXT-64",
-    "title": "Sleeper Zombie Spawn & Wake System",
+    "title": "A fraction of interior zombies spawn Dormant (slumped/leaning); they wake on sound, proximity, light, or damage. Buildings are unpredictable.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -577,7 +577,7 @@
   },
   {
     "id": "M5-EXT-65",
-    "title": "Zombie Scent / Pheromone Trail",
+    "title": "Player blood, open wounds, and sweat emit a scent value diffused downwind; zombies chemotax up the gradient. Rain and water wash it away.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -586,7 +586,7 @@
   },
   {
     "id": "M5-EXT-66",
-    "title": "Stealth Approach System",
+    "title": "Player noise + visibility meters gate detection; crouch/prone + cover + hold-breath enable silent takedowns on unaware zombies.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -595,7 +595,7 @@
   },
   {
     "id": "M5-EXT-67",
-    "title": "Aerodynamic Wake Slipstream Horde Slingshot",
+    "title": "Aerodynamic Wake Slipstream Horde Slingshot \u2014 M5-EXT-67.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -604,7 +604,7 @@
   },
   {
     "id": "M5-EXT-68",
-    "title": "Player Character Generation (Uninfected-Mode Phenotype Pipeline)",
+    "title": "Player Character Generation (Uninfected-Mode Phenotype Pipeline) \u2014 M5-EXT-68.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -613,7 +613,7 @@
   },
   {
     "id": "M5-EXT-69",
-    "title": "Topology-Invariant Master Rig with Deformation-Transfer Binding",
+    "title": "Topology-Invariant Master Rig with Deformation-Transfer Binding \u2014 M5-EXT-69.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -622,7 +622,7 @@
   },
   {
     "id": "M5-EXT-70",
-    "title": "Anatomical Hit-Volume SDF Gradients",
+    "title": "Anatomical Hit-Volume SDF Gradients \u2014 M5-EXT-70.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -631,7 +631,7 @@
   },
   {
     "id": "M5-EXT-71",
-    "title": "Heat-Diffusion Automatic Rigging & PSOLA Phenotype Vocalization",
+    "title": "Heat-Diffusion Automatic Rigging & PSOLA Phenotype Vocalization \u2014 M5-EXT-71.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -640,7 +640,7 @@
   },
   {
     "id": "M5-EXT-72",
-    "title": "Screamer Convergence & Holling Type II Cannibalism Feeding",
+    "title": "Screamer Convergence & Holling Type II Cannibalism Feeding \u2014 M5-EXT-72.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -649,7 +649,7 @@
   },
   {
     "id": "M5-EXT-73",
-    "title": "Optimal Reciprocal Collision Avoidance (ORCA) Solver",
+    "title": "Optimal Reciprocal Collision Avoidance (ORCA) Solver \u2014 M5-EXT-73.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -658,7 +658,7 @@
   },
   {
     "id": "M5-EXT-74",
-    "title": "Undergrowth Occlusion",
+    "title": "Undergrowth Occlusion \u2014 M5-EXT-74.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -667,7 +667,7 @@
   },
   {
     "id": "M5-EXT-75",
-    "title": "Procedural Joint Compliance Degradation (Dynamic Muscle Crippling)",
+    "title": "Procedural Joint Compliance Degradation (Dynamic Muscle Crippling) \u2014 M5-EXT-75.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -676,7 +676,7 @@
   },
   {
     "id": "M5-EXT-76",
-    "title": "Zombie Tissue Rigor Mortis Lifecycle Decay",
+    "title": "Zombie Tissue Rigor Mortis Lifecycle Decay \u2014 M5-EXT-76.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -685,7 +685,7 @@
   },
   {
     "id": "M5-EXT-77",
-    "title": "Biomechanical Joint Luxation Limits",
+    "title": "Biomechanical Joint Luxation Limits \u2014 M5-EXT-77.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -694,7 +694,7 @@
   },
   {
     "id": "M5-EXT-78",
-    "title": "Centrifugal Kinetic Limb Flail",
+    "title": "Centrifugal Kinetic Limb Flail \u2014 M5-EXT-78.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -703,7 +703,7 @@
   },
   {
     "id": "M5-EXT-79",
-    "title": "Control-Rig-Style Procedural Pose Override Layer",
+    "title": "Control-Rig-Style Procedural Pose Override Layer \u2014 M5-EXT-79.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -712,7 +712,7 @@
   },
   {
     "id": "M5-EXT-80",
-    "title": "Constraint-Weight Blending (Animated \u2194 Procedural)",
+    "title": "Constraint-Weight Blending (Animated \u2194 Procedural) \u2014 M5-EXT-80.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -721,7 +721,7 @@
   },
   {
     "id": "M5-EXT-81",
-    "title": "Ragdoll-to-Animation Recovery Blend",
+    "title": "Ragdoll-to-Animation Recovery Blend \u2014 M5-EXT-81.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -730,7 +730,7 @@
   },
   {
     "id": "M5-EXT-82",
-    "title": "IK Rig Asset (Per-Skeleton Bone-Chain / End-Effector Definition)",
+    "title": "IK Rig Asset (Per-Skeleton Bone-Chain / End-Effector Definition) \u2014 M5-EXT-82.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -739,7 +739,7 @@
   },
   {
     "id": "M5-EXT-83",
-    "title": "Motion-Warping for Target Alignment",
+    "title": "Motion-Warping for Target Alignment \u2014 M5-EXT-83.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -748,7 +748,7 @@
   },
   {
     "id": "M5-EXT-84",
-    "title": "Physics-Based Secondary Motion Post-Process (Spring-Damper Attachments)",
+    "title": "Physics-Based Secondary Motion Post-Process (Spring-Damper Attachments) \u2014 M5-EXT-84.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -757,7 +757,7 @@
   },
   {
     "id": "M5-EXT-85",
-    "title": "Asynchronous Fixed-Block Humanoid Rig Matrix Pool Allocator",
+    "title": "Asynchronous Fixed-Block Humanoid Rig Matrix Pool Allocator \u2014 M5-EXT-85.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -766,7 +766,7 @@
   },
   {
     "id": "M5-EXT-86",
-    "title": "Skeletal Joint Yield Torque Bone Fracturing Filter",
+    "title": "Skeletal Joint Yield Torque Bone Fracturing Filter \u2014 M5-EXT-86.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -775,7 +775,7 @@
   },
   {
     "id": "M5-EXT-87",
-    "title": "(provisional) IK Rig Metadata Serialization Loader *(SOURCED FROM PLAN FILE)*",
+    "title": "(provisional) IK Rig Metadata Serialization Loader *(SOURCED FROM PLAN FILE)* \u2014 M5-EXT-87.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -784,7 +784,7 @@
   },
   {
     "id": "M5-EXT-88",
-    "title": "XPBD Rope/Tether Constraint *(SOURCED FROM PLAN FILE)*",
+    "title": "XPBD Rope/Tether Constraint *(SOURCED FROM PLAN FILE)* \u2014 M5-EXT-88.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -793,7 +793,7 @@
   },
   {
     "id": "M5-EXT-89",
-    "title": "Kinematic Character Ledge-Locking Coordinate Re-Baser",
+    "title": "Kinematic Character Ledge-Locking Coordinate Re-Baser \u2014 M5-EXT-89.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -802,7 +802,7 @@
   },
   {
     "id": "M5-EXT-90",
-    "title": "> **tags** \u00b7 m5.3, system",
+    "title": "Confidence-Gated Stealth Strikes \u2014 M5-EXT-90.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
