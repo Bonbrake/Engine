@@ -49969,3 +49969,18 @@ World Matrix translated on CPU before GPU push constant submission: M_modelview 
 2. When the 120Hz fixed physics step (M2) runs, it calculates the exact fractional offset between the input timestamp and the physics tick.
 3. Applies sub-tick transform interpolation to the player camera and weapon traces before the raycast is evaluated.
 4. Sends the timestamped fractional commands to the M12 networking layer for perfectly precise Client-Side Prediction rollback.
+
+
+### [M0-EXT-105] Lock-Free Directory Watcher & Live Asset Hot-Reloading
+
+> **tags** · assets, reloading, tools, aaa
+> **tl;dr** · M0. Intercepts file system modifications on disk and atomically hot-swaps shaders, textures, scripts, and UI layouts in VRAM without restarting the engine.
+> **ctx** · Developer & Modder Velocity. Restarts destroy iteration loop speed. Live hot-swapping enables sub-second visual feedback.
+> **meta** · depends-on: M0-EXT-01
+
+##### Implementation
+1. Background worker thread executes ReadDirectoryChangesW with an I/O Completion Port (IOCP) watching ssets/ and shaders/.
+2. File change event debounces for 50ms to prevent partial file write locks.
+3. Shader compiler recompiles modified GLSL to SPIR-V. If compilation succeeds, creates new VkPipeline.
+4. Uses double-buffered resource handles (slot_idx ^ 1). Atomic CAS replaces active descriptor set pointer.
+5. Old resource handle is pushed to a deferred deletion queue and destroyed 3 frames later when Vulkan fence clears.

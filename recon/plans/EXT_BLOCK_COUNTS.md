@@ -3,20 +3,20 @@
 
 | Milestone | JSON count | MD count | True max | Status |
 |-----------|-----------|----------|---------|--------|
-| M0 | 54 | 54 | 102 | OK |
+| M0 | 55 | 55 | 105 | OK |
 | M1 | 42 | 42 | 53 | OK |
 | M2 | 127 | 127 | 127 | OK |
 | M3 | 34 | 34 | 35 | OK |
 | M4 | 91 | 91 | 109 | OK |
 | M4.5 | 36 | 36 | 100 | OK |
 | M5 | 91 | 91 | 91 | OK |
-| M6 | 22 | 23 | 101 | REGEN |
+| M6 | 23 | 23 | 101 | OK |
 | M6.5 | 13 | 13 | 13 | OK |
 | M7 | 23 | 23 | 23 | OK |
 | M8 | 80 | 80 | 88 | OK |
 | M9 | 35 | 35 | 35 | OK |
 | M10 | 27 | 27 | 31 | OK |
-| M11 | 56 | 57 | 101 | REGEN |
+| M11 | 57 | 57 | 101 | OK |
 | M12 | 35 | 35 | 45 | OK |
 | M13 | 43 | 43 | 61 | OK |
 | M2.6 | 9 | 9 | 9 | OK |
@@ -33,17 +33,15 @@
 | M8.6 | 25 | 25 | 28 | OK |
 | M8.7 | 3 | 3 | 3 | OK |
 
-**Total JSON**: 984
-**Total MD**: 986
+**Total JSON**: 987
+**Total MD**: 987
 
 ## Warnings
-- M6: JSON count 22 != MD count 23; regenerating .index.json
-- M11: JSON count 56 != MD count 57; regenerating .index.json
+- None
 
 ## Regenerated JSON sidecars
 
-- M6
-- M11
+- None
 
 ## Sample titles
 
