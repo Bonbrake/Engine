@@ -250,5 +250,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m6-ext-106"
+  },
+  {
+    "id": "M6-EXT-107",
+    "title": "M6. Applies material-specific frequency absorption coefficients (wood vs concrete vs glass) to sound rays for hyper-realistic audio muffling.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m6-ext-107"
   }
 ]

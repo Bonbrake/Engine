@@ -331,5 +331,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m12-ext-102"
+  },
+  {
+    "id": "M12-EXT-103",
+    "title": "M12. Prevents player rubberbanding during co-op network ping spikes (30ms to 150ms) using adaptive jitter buffering and Hermite position extrapolation.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m12-ext-103"
   }
 ]

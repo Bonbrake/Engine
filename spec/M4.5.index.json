@@ -439,5 +439,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m4.5-ext-116"
+  },
+  {
+    "id": "M4.5-EXT-117",
+    "title": "M4.5. Caches static building and terrain shadow maps into a persistent 8K shadow atlas, re-rendering only dynamic entities (zombies/players) to save 40% shadow rasterization cost.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-117"
   }
 ]

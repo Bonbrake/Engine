@@ -486,6 +486,15 @@
     "anchor": "m0-ext-102"
   },
   {
+    "id": "M0-EXT-103",
+    "title": "Systems Touched",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-103"
+  },
+  {
     "id": "M0-EXT-105",
     "title": "M0. Intercepts file system modifications on disk and atomically hot-swaps shaders, textures, scripts, and UI layouts in VRAM without restarting the engine.",
     "cluster": "A",
@@ -529,5 +538,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m0-ext-109"
+  },
+  {
+    "id": "M0-EXT-110",
+    "title": "M0. Compiles mesh shader pipelines asynchronously on background threads while displaying low-detail fallback LOD meshes to eliminate loading hitches.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-110"
   }
 ]
