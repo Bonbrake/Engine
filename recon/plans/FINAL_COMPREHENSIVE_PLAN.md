@@ -125,27 +125,27 @@ Discipline:
 
 | # | Paper | Status | Exact Block Mapping | Primary Lesson(s) |
 |---|-------|--------|---------------------|-------------------|
-| 1 | PCG in Games Survey + LLM | [X] | M4-EXT-*, M13-EXT-* | LLM-as-PCG-supervisor; hybrid MCTS/noise POI layout |
-| 2 | Generative Agents | [X] | M5-EXT-*, M13-EXT-* | Observation stream, reflection layer, dynamic retrieval; 25-agent benchmark |
+| 1 | PCG in Games Survey + LLM | [S] | M4-EXT-*, M13-EXT-* | LLM-as-PCG-supervisor; hybrid MCTS/noise POI layout |
+| 2 | Generative Agents | [S] | M5-EXT-*, M13-EXT-* | Observation stream, reflection layer, dynamic retrieval; 25-agent benchmark |
 | 3 | ProcGen/Rendering Thesis | [X] | M4-EXT-*, M4.5-EXT-* | Region-based hierarchy, cached/runtime terrain, impostor vegetation |
-| 4 | Aokana GPU Voxel | [X] | M4.5-EXT-*, M1-EXT-*, M13-EXT-* | SVDAG compression, hybrid voxel-plus-mesh, LOD streaming |
+| 4 | Aokana GPU Voxel | [S] | M4.5-EXT-*, M1-EXT-*, M13-EXT-* | SVDAG compression, hybrid voxel-plus-mesh, LOD streaming |
 | 5 | Player Agency | [X] | M5-EXT-*, M11-EXT-* | Persistent systemic consequence; avoid false-choice trees |
 | 6 | DDA Systematic Review | [X] | M5-EXT-*, M11-EXT-* | Rule-based director preferred over opaque ML for shipping |
 | 7 | Real-Time Fracturing | [X] | M3-EXT-* | Material-dependent fracture response; prefracture small objects |
 | 8 | Environmental Storytelling | [X] | M11-EXT-* | Embedded/emergent/interpretive narrative layers |
 | 9 | Boids/Swarm Intelligence | [X] | M5-EXT-* | Fully decentralized horde control; scent/sound goal rule add-on |
 | 10 | GSound | [X] | M6-EXT-*, M13-EXT-* | Geometric audio with portal-aware diffraction; 10-20 Hz cadence |
-| 11 | Tension Space Analysis | [X] | M5-EXT-*, M11-EXT-* | Tension = player options minus threat; state-machine pacing |
+| 11 | Tension Space Analysis | [S] | M5-EXT-*, M11-EXT-* | Tension = player options minus threat; state-machine pacing |
 | 12 | Player-Driven Emergence | [X] | M11-EXT-*, M5-EXT-* | Runtime telemetry exposes dead narrative branches |
-| 13 | Concordia | [X] | M5-EXT-*, M12-EXT-* | GM-layer action validation; physical/social/digital state spaces |
+| 13 | Concordia | [S] | M5-EXT-*, M12-EXT-* | GM-layer action validation; physical/social/digital state spaces |
 | 14 | LLM Game Agents Survey | [X] | M5-EXT-* | 6-component NPC architecture; tiered memory bottleneck |
-| 15 | Closing the Loop | [X] | M11-EXT-*, M13-EXT-*, M5-EXT-* | Sense-model-adapt loop; ~30s cadence; four-phase pacing |
-| 16 | Agents' Room | [X] | M11-EXT-*, M13-EXT-* | Narrative grammar chain: EventType → NPCSelector → OutcomeResolver → FlavorWriter |
+| 15 | Closing the Loop | [S] | M11-EXT-*, M13-EXT-*, M5-EXT-* | Sense-model-adapt loop; ~30s cadence; four-phase pacing |
+| 16 | Agents' Room | [S] | M11-EXT-*, M13-EXT-* | Narrative grammar chain: EventType → NPCSelector → OutcomeResolver → FlavorWriter |
 | 17 | Procedural Animation/Parkour | [X] | M5-EXT-* | Motion matching + IK post-process unified locomotion state machine |
-| 18 | Save Game Serialization | [X] | M7-EXT-* | SoA layout, delta compression, periodic full checkpoint, schema versioning |
-| 19 | Game Economy Balancing EA | [X] | M8-EXT-*, M13-EXT-* | Offline Pareto-optimized economy; per-save seeded variation |
+| 18 | Save Game Serialization | [S] | M7-EXT-* | SoA layout, delta compression, periodic full checkpoint, schema versioning |
+| 19 | Game Economy Balancing EA | [S] | M8-EXT-*, M13-EXT-* | Offline Pareto-optimized economy; per-save seeded variation |
 | 20 | Removing the HUD | [S] | M11-EXT-* | Diegetic HUD only; contextual information only |
-| 21 | Modular Quest Generation CONAN | [X] | M11-EXT-*, M13-EXT-* | Planner-based quests validated against world state |
+| 21 | Modular Quest Generation CONAN | [S] | M11-EXT-*, M13-EXT-* | Planner-based quests validated against world state |
 | 22 | Modulith | [X] | M7-EXT-*, M13-EXT-* | DAG load order with cycle detection, capability sandbox, versioned mod API |
 | 23 | Aim Assist Console Shooters | [X] | M11-EXT-* | Dual-zone controller response; gyro-first input; rotational assist |
 | 24 | Intersection-Free Rigid Body | [S] | M2-EXT-*, M9-EXT-* | Curved-trajectory CCD; barrier stiffness from surface material |
@@ -164,7 +164,7 @@ Discipline:
 | 37 | Bayesian Reputation | [S] | M5-EXT-*, M11-EXT-* | Bayesian reputation with gossip; threshold-gated dialogue |
 | 38 | Faction Systems | [S] | M8-EXT-*, M11-EXT-* | Faction values over allegiance; belief-state gating for cooperation/expulsion |
 | 39 | Daylight Model | [S] | M10-EXT-* | Analytic sun position; turbidity sky model; sky-zenix aerial perspective |
-| 40 | Cine-AI | [X] | M11-EXT-*, M13-EXT-* | Camera idioms as director style; runtime shot interpolation by gameplay moment |
+| 40 | Cine-AI | [S] | M11-EXT-*, M13-EXT-* | Camera idioms as director style; runtime shot interpolation by gameplay moment |
 | 41 | Neural Layered BRDF | [S] | M3-EXT-* | Neural layered BRDF atlas; thin-film interference as extra input |
 | 42 | Ballistic Trajectories | [S] | M2-EXT-*, M3-EXT-* | Closed-form ballistic drag per caliber; intercept-angle lead prediction |
 | 43 | Fast Weather Simulation | [S] | M10-EXT-* | City-block weather cells |
