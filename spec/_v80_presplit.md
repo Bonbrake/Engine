@@ -50084,17 +50084,18 @@ World Matrix translated on CPU before GPU push constant submission: M_modelview 
 3. The cache updates dynamically online as environmental geometry or lighting changes, requiring zero offline lightmap baking.
 
 
-### [M5-EXT-102] Mamba State-Space Model (SSM) NPC Long-Horizon Memory
+### [M5-EXT-102] Native C++ Latent State Matrix & llama.cpp NPC Memory
 
-> **tags** · ai, npcs, memory, mamba, ssm, aaa
-> **tl;dr** · M5. Replaces Transformer quadratic O(N^2) memory with Mamba State-Space O(N) linear context scaling for long-horizon NPC memory recall.
-> **ctx** · 2024 AI Standard (Paper 55). Enables NPCs to remember player choices across weeks of gameplay without memory or compute explosions.
+> **tags** · ai, npcs, memory, llamacpp, cpp, aaa
+> **tl;dr** · M5. Replaces heavy external LLM models with embedded llama.cpp C++ API (Qwen-2.5-3B-GGUF) and in-memory C++ Latent State Matrices.
+> **ctx** · Hardware Reality Audit. Eliminates external Mamba model dependencies, running local NPC memory directly inside C++ with zero external daemons.
 > **meta** · depends-on: M5-EXT-01
 
 ##### Implementation
-1. Formulates NPC dialogue and event memory as a Selective State-Space Model ($h_t = A h_{t-1} + B x_t$).
-2. Compresses past interactions, betrayal history, and quest state into a fixed-size latent state vector $h_t$.
-3. Evaluates inference in linear $O(N)$ time on CPU/GPU, enabling 100+ active story NPCs with infinite memory recall.
+1. Embeds llama.cpp directly as a static C++ library (libllama.a / llama.dll).
+2. Runs lightweight 3B GGUF models (Qwen-2.5-3B-Q4_K_M) requiring only 2GB VRAM / RAM.
+3. NPC memory is encoded as a compact 256-float dynamic C++ Latent State Matrix ({t} = lpha H_{t-1} + (1-lpha) X_t$).
+4. Evaluates NPC memory queries natively in CPU SIMD registers without external Python or server dependencies.
 
 
 ### [M2-EXT-103] Speculative Continuous Collision Detection (CCD)
@@ -50497,7 +50498,8 @@ World Matrix translated on CPU before GPU push constant submission: M_modelview 
 ##### Implementation
 1. Evaluates Tessendorf Fast Fourier Transform (FFT) wave spectrums on GPU in `water_fft.comp`.
 2. Computes water surface height and velocity vectors in a shared GPU/CPU buffer.
-3. Jolt physics integrates Archimedes buoyancy forces $\mathbf{F}_{buoyant} = ho V_{submerged} \mathbf{g}$ across submerged mesh colliders, floating vehicles, and drowning zombies.
+3. Jolt physics integrates Archimedes buoyancy forces $\mathbf{F}_{buoyant} = 
+ho V_{submerged} \mathbf{g}$ across submerged mesh colliders, floating vehicles, and drowning zombies.
 
 
 ### [M4-EXT-107] GPU Geometry Clipmaps for Seamless Infinite Terrain

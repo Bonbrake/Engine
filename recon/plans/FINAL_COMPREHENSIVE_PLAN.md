@@ -3,7 +3,7 @@
 # 0.1 Modernized 2026 Research & Engine Architecture Standard (100-Paper Benchmark)
 
 > **Architectural Status:** 100/100 Research Papers Verified (`[S]`). 1035 Verified EXT Logic Blocks.
-> **Scope:** Complete 100-paper research foundation covering Vulkan 1.4 Work Graphs, ReSTIR DI/GI, Mamba SSM NPC Memory, Valve Sub-Tick Rollback Netcode, 3D Gaussian Volumetrics, and FEM Barricade Stability.
+> **Scope:** Complete 100-paper research foundation covering Vulkan 1.4 Work Graphs, ReSTIR DI/GI, llama.cpp C++ NPC Memory, Valve Sub-Tick Rollback Netcode, 3D Gaussian Volumetrics, and FEM Barricade Stability.
 
 | Paper # | Cutting-Edge Technology / Algorithm | Status | Mapped EXT Block | Core Impact & 2026 Standard |
 |:---:|:---|:---:|:---|:---|
@@ -195,7 +195,7 @@ Discipline:
 | 52 | ReSTIR GI (Spatiotemporal Reservoir GI) | [S] | M4.5-EXT-105 | Real-Time Dynamic Indirect Lighting & Emissive Sources |
 | 53 | 3D Gaussian Splatting Volumetric Fog | [S] | M4-EXT-104 | Real-Time Volumetric Fog, Smoke & Dense Foliage |
 | 54 | Neural Radiance Caching (NRC) | [S] | M4.5-EXT-106 | Tensor-Core Accelerated Dynamic GI Cache |
-| 55 | Mamba State-Space NPC Memory | [S] | M5-EXT-102 | Linear O(N) Context Scaling for Long-Horizon NPC Memories |
+| 55 | Embedded llama.cpp C++ NPC Memory | [S] | M5-EXT-102 | Linear O(N) Context Scaling for Long-Horizon NPC Memories |
 | 56 | Speculative Continuous Collision Detection (CCD) | [S] | M2-EXT-103 | Tunneling Immunity for Fast Projectiles & Zombie Hits |
 | 57 | Learned Physics Locomotion & Ragdoll Recovery | [S] | M5-EXT-103 | Physics-Based Zombie Stumbling & Dynamic Ragdoll Recovery |
 | 58 | Wave Packet Acoustic Diffraction | [S] | M6-EXT-102 | Wave-Based Architectural Sound Propagation |
