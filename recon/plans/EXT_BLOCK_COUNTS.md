@@ -6,7 +6,7 @@
 | M0 | 62 | 62 | 111 | OK |
 | M1 | 43 | 43 | 101 | OK |
 | M2 | 127 | 127 | 127 | OK |
-| M3 | 37 | 38 | 104 | REGEN |
+| M3 | 38 | 38 | 104 | OK |
 | M4 | 91 | 91 | 109 | OK |
 | M4.5 | 51 | 51 | 118 | OK |
 | M5 | 98 | 98 | 108 | OK |
@@ -18,7 +18,7 @@
 | M10 | 27 | 27 | 31 | OK |
 | M11 | 60 | 60 | 105 | OK |
 | M12 | 38 | 38 | 103 | OK |
-| M13 | 43 | 43 | 101 | OK |
+| M13 | 44 | 44 | 101 | OK |
 | M2.6 | 9 | 9 | 9 | OK |
 | M2.7 | 25 | 25 | 34 | OK |
 | M2.8 | 10 | 10 | 10 | OK |
@@ -33,15 +33,15 @@
 | M8.6 | 25 | 25 | 28 | OK |
 | M8.7 | 3 | 3 | 3 | OK |
 
-**Total JSON**: 1038
-**Total MD**: 1039
+**Total JSON**: 1040
+**Total MD**: 1040
 
 ## Warnings
-- M3: JSON count 37 != MD count 38; regenerating .index.json
+- None
 
 ## Regenerated JSON sidecars
 
-- M3
+- None
 
 ## Sample titles
 

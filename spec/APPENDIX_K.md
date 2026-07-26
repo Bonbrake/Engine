@@ -498,3 +498,17 @@ void main() {
 * **Structural Fatigue-Life Scrap Salvage Router** (`update.txt` #34) — the doc's existing `StructuralFatigue`/`TickFatigue()` Palmgren-Miner accumulator (canonical since `[M3-EXT-06]`) already drives the M9 vehicle-fatigue consumer path, and `[K-EXT-11]`'s ~90% non-functional-wreck spawn rate already implements this proposal's scarcity outcome; a second salvage-state router would be a fourth parallel wear model, exactly the class of bug the front-matter audit (item #6, `BarrelHeat`) already warns against for shared structs.
 
 ---
+
+
+## Appendix K
+
+### [K-EXT-22] (provisional) Spatiotemporal Blue-Noise Jitter Array Interleaver
+
+> **tags** · rendering, raytracing, denoise, aaa
+> **tl;dr** · K. Fleshes the Spatiotemporal Blue-Noise Jitter Array Interleaver: deterministic low-discrepancy per-frame offsets for hybrid ray-tracing denoise, the jitter half that M4.5's denoiser consumes but never specifies how the per-frame sequence is generated/ordered.
+> **ctx** · Production Engine Audit. Missing implementation for the blue-noise offsets.
+> **meta** · depends-on: M4.5-EXT-01
+
+##### Implementation
+1. Precomputes a 128x128 2D Blue Noise texture array for spatiotemporal ray offsetting.
+2. Modulates ray directions per frame using golden ratio Halton sequencing.

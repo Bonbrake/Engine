@@ -3368,3 +3368,8 @@ Saves stay small and load fast even with a huge explored world — the 12 GB RAM
 ## Appendix N — Archive Deep-Dive Integration (410 Extended Systems)
 
 <!-- From Archive M0 -->
+
+## Milestone M13 — Post-Launch / Metagame
+
+
+## Milestone M13

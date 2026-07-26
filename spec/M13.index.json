@@ -126,6 +126,15 @@
     "anchor": "m13-ext-14"
   },
   {
+    "id": "M13-EXT-15",
+    "title": "M13. SLM Broadcast Text Determinism Seeder ensures that identically seeded game instances yield identical LLM token output streams.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m13-ext-15"
+  },
+  {
     "id": "M13-EXT-16",
     "title": "M13/M4/M5. MiniCPM5-1B at content-build time, never per-tick (arxiv 2601.23206).",
     "cluster": "A",

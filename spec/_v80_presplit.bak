@@ -37185,7 +37185,7 @@ All texture atlases for authored and procedural POIs must use BC4/BC5/BC7 hardwa
 > **tags** · ai, narrative, authored
 > **tl;dr** · M5. Bypasses the procedural LLM personality generator for 20-30 specific UUIDs to enforce hand-authored story constraints.
 > **ctx** · Game Concept Parity. Pure procedural NPCs will drift. This guarantees faction leaders and story critical NPCs strictly follow authored arcs.
-> **meta** · depends-on: M13-EXT-30
+> **meta** · depends-on: M13-EXT-01
 
 ##### Implementation
 When AgentFactory spawns an NPC, it checks uuid against hero_registry.json. If matched, it injects a fixed system_prompt and a locked memory_core that the LLM cannot overwrite or hallucinate away.
@@ -38120,3 +38120,35 @@ abla C$.
 ##### Implementation
 1. Entities >50m away use a simple NavMesh A* distance heuristic ($dB \propto rac{1}{r^2}$).
 2. Entities <50m invoke the GPU wave packet acoustic raytracer for true material muffling (`M6-EXT-107`) and diffraction.
+
+
+## Appendix K
+
+### [K-EXT-22] (provisional) Spatiotemporal Blue-Noise Jitter Array Interleaver
+
+> **tags** · rendering, raytracing, denoise, aaa
+> **tl;dr** · K. Fleshes the Spatiotemporal Blue-Noise Jitter Array Interleaver: deterministic low-discrepancy per-frame offsets for hybrid ray-tracing denoise, the jitter half that M4.5's denoiser consumes but never specifies how the per-frame sequence is generated/ordered.
+> **ctx** · Production Engine Audit. Missing implementation for the blue-noise offsets.
+> **meta** · depends-on: M4.5-EXT-01
+
+##### Implementation
+1. Precomputes a 128x128 2D Blue Noise texture array for spatiotemporal ray offsetting.
+2. Modulates ray directions per frame using golden ratio Halton sequencing.
+
+
+## Milestone M13 — Post-Launch / Metagame
+
+## Milestone M13
+
+## M13 — 
+
+### [M13-EXT-15] SLM Broadcast Text Determinism Seeder *(RECONSTRUCTED FROM CITATION CONTEXT ? VERIFY)*
+
+> **tags** · ai, narrative, determinism, aaa
+> **tl;dr** · M13. SLM Broadcast Text Determinism Seeder ensures that identically seeded game instances yield identical LLM token output streams.
+> **ctx** · Production Engine Audit. Missing implementation.
+> **meta** · depends-on: M13-EXT-01
+
+##### Implementation
+1. Seeds the `llama.cpp` RNG via the engine's global determinism tick.
+2. Applies temperature 0.0 with deterministic sampling for reproducible dialogue.
