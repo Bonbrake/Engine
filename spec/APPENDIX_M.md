@@ -708,16 +708,28 @@ void main() {
 
 ### [M1-EXT-12] Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface
 
-**Systems Touched:** M1 MSDF font pipeline, `[M4.5-EXT-07]` texture synthesizer, Runtime Virtual Texture pages.
+> **tags** · MSDF, RVT
+> **tl;dr** · Every consumer of M1's SoA Transform component — skinning, indirect draw,
+> **ctx** · Dynamic MSDF Font Glyph Rasterizer & RVT Cache Interface -- Every consumer of M1's SoA Transform component — skinning, indirect draw,
+> **meta** · depends-on: M1-EXT-30, M1-EXT-31, M1-EXT-32, M1-EXT-33, M1-EXT-34, M1-EXT-35, M1-EXT-36, M1-EXT-37, M1-EXT-38 · depended-by: -
 
-**How It Works:** Rasterizes novel text (procedurally generated signage, or M13 SLM-generated text if you keep that system) into MSDF glyph pages on the fly via `VK_EXT_host_image_copy`, rather than requiring every possible string pre-baked into a font atlas.
+##### Systems Touched
+World-space rendering of entities whose authority lives in a moving/streaming origin (large-world double-precision root).
 
-**Conditional note:** this only earns its place if you keep some form of runtime-generated text (dynamic signage, mission text). If you cut or shelve M13's text-generation features, this has no consumer and should wait.
+##### Math
+GPU position relative to current origin: `Position_gpu = float3(Position_authority - Origin_current)`. Keeps float precision near the camera while authority stays in `double`.
 
-**Player-Facing Impact:** Signage/UI text can be generated at runtime instead of only from a fixed pre-authored string table.
+##### Algorithm
+1. Each frame, compute `Origin_current` (streaming root). 2. Cast each entity's `double` authority position to `float` relative to origin via CastPositionForGPU. 3. Shaders render in origin-local space; CPU keeps `double` truth.
 
----
+##### Examples
+-
 
+##### Failure Modes
+-
+
+##### Player-Facing Impact
+No direct player impact — this is a render/engine optimization that maintains frame pacing and determinism behind the scenes.
 
 ### [M1-EXT-29] Double-Precision Authoritative Transform with Float Upload Cast
 
