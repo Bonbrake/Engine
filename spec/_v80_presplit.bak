@@ -49984,3 +49984,17 @@ World Matrix translated on CPU before GPU push constant submission: M_modelview 
 3. Shader compiler recompiles modified GLSL to SPIR-V. If compilation succeeds, creates new VkPipeline.
 4. Uses double-buffered resource handles (slot_idx ^ 1). Atomic CAS replaces active descriptor set pointer.
 5. Old resource handle is pushed to a deferred deletion queue and destroyed 3 frames later when Vulkan fence clears.
+
+
+### [M4-EXT-103] Runtime Virtual Texture (RVT) Persistent Gore & Decal Splatter Pipeline
+
+> **tags** · rendering, rvt, decals, gore, aaa
+> **tl;dr** · M4. Projects blood splatters, bullet impacts, and scorch marks directly into Runtime Virtual Textures (RVT) for infinite persistent decals at 0 extra draw calls.
+> **ctx** · Zombie Survival AAA Standard. Rendering thousands of individual decal meshes during zombie horde massacres degrades draw call performance.
+> **meta** · depends-on: M4-EXT-01
+
+##### Implementation
+1. Decal projection volume (oriented bounding box) is evaluated in a Compute Shader decal_project.comp.
+2. Intersects decal box with the terrain and static mesh Runtime Virtual Texture (RVT) page atlas.
+3. Bakes albedo, normal perturbation, and roughness channels directly into the active RVT physical page memory.
+4. Once written to the RVT page, the decal is permanently saved into the chunk texture cache with zero runtime draw call overhead during subsequent rendering passes.
