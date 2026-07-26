@@ -1,7 +1,7 @@
 [
   {
     "id": "M6-EXT-1",
-    "title": "Ray-Traced Acoustic Diffraction Node Topology Cache *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "SoLoud (easy, light); positional + occlusion via `RayBatchQuery` (M1-002).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M6-EXT-10",
-    "title": "Acoustic Convection Wave Refraction Filter *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M6 audio. Refracts sound waves by wind/convection so distant audio bends with weather.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M6-EXT-11",
-    "title": "Voxel-Cone Acoustic Occlusion & Material Absorption",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M6-EXT-12",
-    "title": "Convolution-Reverb from Voxel Occlusion *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M6 + M3/M4.5. Builds convolution reverb IR from the voxel/occlusion field.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -259,5 +259,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m6-ext-107"
+  },
+  {
+    "id": "M6-EXT-108",
+    "title": "M6. Switches to cheap A* distance sound attenuation for distant zombies, reserving true modal wave packet DSP raytracing for entities within 50 meters.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m6-ext-108"
   }
 ]

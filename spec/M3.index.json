@@ -1,7 +1,7 @@
 [
   {
     "id": "M3-EXT-1",
-    "title": "Spherical-Harmonics Visibility Pre-Filter Grid *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M2.6/M3. grep Terrain|Foliage \u2192 0 (false positives in Engine). Open world has no ground.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -73,7 +73,7 @@
   },
   {
     "id": "M3-EXT-10",
-    "title": "Spherical-Harmonics Visibility Pre-Filter Grid *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M3 + M4.5-EXT-17. Pre-filters visibility into an SH grid for cheap indirect/occlusion queries.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M3-EXT-11",
-    "title": "Fracture-Debris Broad-Phase Reuse *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M3 + M2.6. Reuses the broadphase for fracture-debris collision instead of a second pass.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -331,5 +331,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m3-ext-103"
+  },
+  {
+    "id": "M3-EXT-104",
+    "title": "M3. Dynamically regenerates localized 16x16 NavMesh tiles when FEM structural failure destroys barricades or walls.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m3-ext-104"
   }
 ]

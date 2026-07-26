@@ -10,7 +10,7 @@
   },
   {
     "id": "M0-EXT-2",
-    "title": "Persistent World-Epoch Clock with Deterministic Offline Fast-Forward",
+    "title": "M2.8/M12 co-op \u2014 extends the existing Aftermath/RGD crash-dump path",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M0-EXT-10",
-    "title": "Vulkan 1.4 Pipeline Layout Structural Compatibility Validator",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M0-EXT-11",
-    "title": "Asynchronous SPIR-V Shader Cache Garbage Collector",
+    "title": "M0 shader cache. Async GC of stale SPIR-V cache entries so the cache never grows unbounded.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M0-EXT-12",
-    "title": "Compute-Worker Thread-Affinity Bitmask Allocator",
+    "title": "M0 + enkiTS. Pins compute workers to a CPU affinity bitmask for cache locality / NUMA.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M0-EXT-13",
-    "title": "Capability Probe & Feature-Tier Detection",
+    "title": "Boot-time GPU/API capability probe feeding the tier ladder (M0-EXT-01..12). Maps detected caps to a feature tier consumed by M4.5/M4.6 quality selection.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M0-EXT-15",
-    "title": "Minimal Action-Map Input Resolution Layer",
+    "title": "Every early input consumer, MOST URGENTLY the debug fly-camera currently",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M0-EXT-16",
-    "title": "ENGINE_DETERMINISM_MODE Compile Guard & CI Assertion",
+    "title": "M2.8 (deterministic co-op) \u2014 establishes the constraint at the layer",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M0-EXT-17",
-    "title": "Split Save-Schema / Network-Protocol Version Fields",
+    "title": "M7 (persistence) and M12 (networked co-op) \u2014 declared independently now",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M0-EXT-18",
-    "title": "Atomic Write-Temp-Then-Rename Save I/O",
+    "title": "M7 persistence \u2014 every save write, going forward.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M0-EXT-19",
-    "title": "Platform User-Data Directory Resolution via AssetPath",
+    "title": "Extends the existing AssetPath resolver (M0) to also resolve a",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M0-EXT-20",
-    "title": "Cross-Machine Crash Correlation Tag",
+    "title": "M2.8/M12 co-op \u2014 extends the existing Aftermath/RGD crash-dump path",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M0-EXT-21",
-    "title": "Persistent World-Epoch Clock with Deterministic Offline Fast-Forward",
+    "title": "M7 (persistence) and every future decay/weather system \u2014 declared at",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M0-EXT-22",
-    "title": "Monotonic-vs-Wall-Clock Tamper Cross-Check",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M0-EXT-23",
-    "title": "Extended Adaptive-Quality Watchdog",
+    "title": "Builds directly on the existing frame-pacing EMA (M0-EXT-09) \u2014 adds a",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M0-EXT-24",
-    "title": "Single-Instance Boot Lock",
+    "title": "Boot sequence \u2014 prevents two copies of the game writing to the same",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M0-EXT-25",
-    "title": "Per-Fiber Exception Containment for enkiTS Jobs",
+    "title": "Every background job dispatched through enkiTS \u2014 a bad chunk-gen task",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M0-EXT-26",
-    "title": "Shader-Compile Timeout & Safe-Mode Boot Fallback",
+    "title": "M1's async shader compilation path, and M0's pipeline-cache/mod",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M0-EXT-27",
-    "title": "Foreground/Background I/O and Thread Priority Tiers",
+    "title": "Extends the existing file-handle ring buffer (M0-EXT-04) and enkiTS",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M0-EXT-28",
-    "title": "AssetPath Checksum Integrity Validation",
+    "title": "Extends the existing AssetPath resolver (M0) \u2014 every load, mod or",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M0-EXT-29",
-    "title": "HDR Color-Space & DPI-Scale Swapchain Setup",
+    "title": "Swapchain creation (M0) and UI layout math (M11, later) \u2014 declared now",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -487,7 +487,7 @@
   },
   {
     "id": "M0-EXT-103",
-    "title": "Systems Touched",
+    "title": "M0. Pre-warms the Vulkan `VkPipelineCache` on background threads during loading screens to ensure 99% of PSOs are ready on frame 1.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -547,5 +547,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m0-ext-110"
+  },
+  {
+    "id": "M0-EXT-111",
+    "title": "M0. Pre-warms the Vulkan `VkPipelineCache` on background threads during loading screens to ensure 99% of PSOs are ready on frame 1.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-111"
   }
 ]

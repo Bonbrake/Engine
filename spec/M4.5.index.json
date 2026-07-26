@@ -10,7 +10,7 @@
   },
   {
     "id": "M4.5-EXT-2",
-    "title": "Compute Skinning Vertex Tangent-Space Recomputer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -19,7 +19,7 @@
   },
   {
     "id": "M4.5-EXT-3",
-    "title": "Systems Touched",
+    "title": "Distant static meshes (buildings, ruined vehicles) currently pop or draw full geometry. Generates octahedral-impostor atlases per mesh at bake time; sampled bey",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M4.5-EXT-10",
-    "title": "Global Distance Field Generation for Volumetric Shadow Proxies (SDF Shadows)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M4.5-EXT-11",
-    "title": "Multi-Sampled Depth Derivative Silhouette Reconstruction Filter",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M4.5-EXT-12",
-    "title": "Visibility Buffer Material-Classification Wavefront Compactor Pass",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M4.5-EXT-13",
-    "title": "Cluster Depth-Bounds Frustum Voxelizer for Virtual Shadow Maps",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M4.5-EXT-14",
-    "title": "Compute Skinning Vertex Tangent-Space Recomputer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5 + M5.1. Recomputes vertex tangent space after skinning on compute so normal mapping stays correct.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M4.5-EXT-15",
-    "title": "Hysteresis-Gated TAA Variance Clamper *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5 + M0-EXT-40. Clamps TAA temporal variance with hysteresis to kill ghosting without losing detail.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M4.5-EXT-16",
-    "title": "Software Micro-Polygon Voxel Rasterizer (compute) *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5 + M2.6. Computes micro-polygon voxelization for destruction/footprint detail without a hardware path.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M4.5-EXT-17",
-    "title": "Directional Ambient Visibility Field Cache *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5 + M6. Caches a directional ambient visibility field so GI + audio occlusion query cheaply.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M4.5-EXT-18",
-    "title": "Transient Skinned Vertex Cache for Visibility Buffer *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5 + M1 visibility buffer. Caches transient skinned vertices for the visibility buffer within a frame.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M4.5-EXT-19",
-    "title": "Anisotropic Micro-Surface Optics & Heiligenschein Retroreflection",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M4.5-EXT-20",
-    "title": "Beer-Lambert Translucent Medium Light Extinction",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M4.5-EXT-21",
-    "title": "RVT Feedback Buffer & Cache Invalidation *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5 + M4.5-EXT-26 RVT. Feedback buffer drives RVT page (un)loading + invalidation.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M4.5-EXT-24",
-    "title": "Subpass-Less Explicit Load/Store Resolution Barriers *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5. Explicit load/store ops + barriers replace subpasses for flexible pass resolution.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M4.5-EXT-25",
-    "title": "Specialization Constants for Bindless Material Uber-Shader *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "M4.5 + M1-EXT-25 bindless. Drives the material uber-shader via specialization constants.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M4.5-EXT-26",
-    "title": "Runtime Virtual Texture (RVT) Base System *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
+    "title": "Base-color/albedo carried at full material-source precision through the",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M4.5-EXT-27",
-    "title": "Scalable Ambient Obscurance (SSAO) *(SOURCED FROM PLAN FILE)*",
+    "title": "Tier-1 quality ladder. Reads G-Buffer depth+normal from M4.5 deferred pass. Outputs occlusion term multiplied into ambient/SH fill (complements M10-EXT-03 SH am",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M4.5-EXT-28",
-    "title": "Screen-Space Reflections (SSR) *(SOURCED FROM PLAN FILE)*",
+    "title": "Absent as a system previously. Reads G-Buffer depth+normal+rough/metal; writes reflection sample for M4.5 lighting resolve. Tier-1/2 (Tier-0 uses baked env appr",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M4.5-EXT-29",
-    "title": "Screen-Space Global Illumination (SSGI) Fallback *(SOURCED FROM PLAN FILE)*",
+    "title": "ReSTIR GI is Tier-2 only. This is Tier-0/1 approximation: screen-space diffuse bounces reusing same G-Buffer+HZB+temporal denoiser M4.5-EXT-15. Not a ReSTIR rep",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M4.5-EXT-30",
-    "title": "Impostor LOD (Octahedral) for Distant Meshes *(SOURCED FROM PLAN FILE)*",
+    "title": "Distant static meshes (buildings, ruined vehicles) currently pop or draw full geometry. Generates octahedral-impostor atlases per mesh at bake time; sampled bey",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M4.5-EXT-31",
-    "title": "Signed Distance Field (SDF) Shadow Cascade *(SOURCED FROM PLAN FILE)*",
+    "title": "Only passing mention previously. Builds sparse clipmap SDF of nearby opaque geometry from depth buffer (or baked mesh SDFs) for cheap soft long-range shadows +",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -448,5 +448,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m4.5-ext-117"
+  },
+  {
+    "id": "M4.5-EXT-118",
+    "title": "M4.5. Moves 10,000+ entity bounding-box frustum culling entirely to the GPU via Compute Shaders, filling `VkDrawIndexedIndirectCommand` buffers.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-118"
   }
 ]

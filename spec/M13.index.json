@@ -37,7 +37,7 @@
   },
   {
     "id": "M13-EXT-5",
-    "title": "Systems Touched",
+    "title": "Projec",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M13-EXT-10",
-    "title": "Jury-Rigged Weapon Mod Descriptors",
+    "title": "M8 crafting/attachment system, item tooltip UI.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M13-EXT-11",
-    "title": "Hardware Backend Auto-Detection & Async Compute Queue Isolation",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M13-EXT-12",
-    "title": "Attenuated Narrative Radio Scrambler",
+    "title": "M2.8-EXT-01's radio-frequency signal attenuation (comms static physics), M6 acoustic propagation, faction/survivor radio chatter text.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M13-EXT-13",
-    "title": "Survivor Behavior-Tree Flavor Advisor",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -124,15 +124,6 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m13-ext-14"
-  },
-  {
-    "id": "M13-EXT-15",
-    "title": "SLM Broadcast Text Determinism Seeder *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
-    "cluster": "A",
-    "depends_on": [],
-    "depended_by": [],
-    "line": 0,
-    "anchor": "m13-ext-15"
   },
   {
     "id": "M13-EXT-16",
@@ -316,7 +307,7 @@
   },
   {
     "id": "M13-EXT-53",
-    "title": "Systems Touched",
+    "title": "M13. Monitors SLM-generated narrative output for repetition/drought; injects fresh seeds + bans repeats so world text never goes stale.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
