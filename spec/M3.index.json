@@ -1,79 +1,79 @@
 [
   {
-    "id": "M3-EXT-01",
-    "title": "Structural Fatigue Cycle Creep (Palmgren-Miner Wear)",
+    "id": "M3-EXT-1",
+    "title": "Spherical-Harmonics Visibility Pre-Filter Grid *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-01"
+    "anchor": "m3-ext-1"
   },
   {
-    "id": "M3-EXT-02",
-    "title": "Piezoluminescent Strain Shaders for Impending Structural Collapse",
+    "id": "M3-EXT-2",
+    "title": "M4/V. Every POI reachable from roads.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-02"
+    "anchor": "m3-ext-2"
   },
   {
-    "id": "M3-EXT-03",
-    "title": "Structural Truss Resonance Audio Leak",
+    "id": "M3-EXT-3",
+    "title": "M4/T98. 10k seeds gen in CI to catch rare crashes.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-03"
+    "anchor": "m3-ext-3"
   },
   {
-    "id": "M3-EXT-04",
-    "title": "Hydrocarbon Slipstream Flame-Trail Splitting",
+    "id": "M3-EXT-4",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-04"
+    "anchor": "m3-ext-4"
   },
   {
-    "id": "M3-EXT-05",
-    "title": "Rayleigh Surface Wave Ground-Slam Propagation",
+    "id": "M3-EXT-5",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-05"
+    "anchor": "m3-ext-5"
   },
   {
-    "id": "M3-EXT-06",
-    "title": "Shared Fatigue-Life Wear (Weapons & Vehicle Panels)",
+    "id": "M3-EXT-6",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-06"
+    "anchor": "m3-ext-6"
   },
   {
-    "id": "M3-EXT-07",
-    "title": "Multi-Layer Structural Degradation & Stress-Tensor Cracking",
+    "id": "M3-EXT-7",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-07"
+    "anchor": "m3-ext-7"
   },
   {
-    "id": "M3-EXT-08",
-    "title": "Chemical Weathering & Particulate Deposition Tracker",
+    "id": "M3-EXT-8",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
-    "anchor": "m3-ext-08"
+    "anchor": "m3-ext-8"
   },
   {
     "id": "M3-EXT-10",
-    "title": "Spherical-Harmonics Visibility Pre-Filter Grid",
+    "title": "Spherical-Harmonics Visibility Pre-Filter Grid *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M3-EXT-11",
-    "title": "Fracture-Debris Broad-Phase Reuse",
+    "title": "Fracture-Debris Broad-Phase Reuse *(RECONSTRUCTED FROM CITATION CONTEXT \u2014 VERIFY)*",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M3-EXT-12",
-    "title": "Terrain / World Geometry",
+    "title": "M2.6/M3. grep Terrain|Foliage \u2192 0 (false positives in Engine). Open world has no ground.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M3-EXT-13",
-    "title": "Streaming / LOD / Mip-Streaming",
+    "title": "M2.6/M3. grep Streaming|LOD \u2192 0 (only EventBus comment). Horde + open world need both.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M3-EXT-14",
-    "title": "Cascaded Shadow Map Decision",
+    "title": "M0/M3/M4. \"Shadow map\" spec'd (10 hits) but \"cascaded\"/CSM = 0. Low-moon night needs CSM.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M3-EXT-15",
-    "title": "Mipmap Generation on Load",
+    "title": "M0/M4. Spec mipmap \u2192 0, code \u2192 0.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M3-EXT-16",
-    "title": "Post-Generation Sanity Checker",
+    "title": "M4/V. Validate geometry reachability, no floating/overlapping (PCG survey).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M3-EXT-17",
-    "title": "Collision/Occlusion Sanity",
+    "title": "M4/physics. Generated colliders don't trap player or leave gaps.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M3-EXT-18",
-    "title": "Navmesh Feasibility Check",
+    "title": "M4/M5. Generated geometry is pathable; else regenerate.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M3-EXT-19",
-    "title": "Loot/Spawn Density Sanity",
+    "title": "M4/M5.4. Not 0, not 500 in one room.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M3-EXT-20",
-    "title": "POI Connectivity Check",
+    "title": "M4/V. Every POI reachable from roads.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M3-EXT-21",
-    "title": "Mod Content Validator (V-section entry)",
+    "title": "M11/V. Runs mod data through sanity checks before load.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M3-EXT-22",
-    "title": "Soft-Fail on Invalid Gen",
+    "title": "M4/M11. Skip + log + fallback, don't crash.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M3-EXT-23",
-    "title": "Generation Regression Corpus",
+    "title": "M4/T98. Curated seeds asserted stable across versions.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M3-EXT-24",
-    "title": "Degenerate-Triangle Filter",
+    "title": "M4/render. Drop zero-area tris from gen.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M3-EXT-25",
-    "title": "Asset Fallback Chain",
+    "title": "M4/AssetManager. Missing asset \u2192 default, not crash.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M3-EXT-26",
-    "title": "Bounds/Extent Validator",
+    "title": "M4. Entities inside chunk bounds.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M3-EXT-27",
-    "title": "Duplicate-Entity Detector",
+    "title": "M4. Gen doesn't spawn 2 entities same spot.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M3-EXT-28",
-    "title": "Validation Severity Levels",
+    "title": "M11/V. Error vs warning vs info for mod UX.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M3-EXT-29",
-    "title": "Generated-Content Hash",
+    "title": "M4/M7. Every generated chunk carries a content hash verified on load to detect version drift, corruption, or external edits.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M3-EXT-30",
-    "title": "Stress-Seed Suite",
+    "title": "M4/T98. 10k seeds gen in CI to catch rare crashes.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -262,7 +262,7 @@
   },
   {
     "id": "M3-EXT-31",
-    "title": "Human-Readable Validation Report",
+    "title": "M4/M11. Modders see WHY content failed.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -271,7 +271,7 @@
   },
   {
     "id": "M3-EXT-32",
-    "title": "Macro-Destruction / Structural Graphs",
+    "title": "Buildings as node/edge graphs; destruction severs edges \u2192 collapse.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -280,7 +280,7 @@
   },
   {
     "id": "M3-EXT-33",
-    "title": "Foliage / Vegetation Scatter",
+    "title": "M2.6/M3. grep Foliage|Vegetation \u2192 0.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -289,7 +289,7 @@
   },
   {
     "id": "M3-EXT-34",
-    "title": "Texture Streaming Decision (VT vs mip)",
+    "title": "M3/M4. Virtual texturing (0) vs mip-streaming (planned).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -298,11 +298,29 @@
   },
   {
     "id": "M3-EXT-35",
-    "title": "Material Permutation System",
+    "title": "Permutation-key \u2192 pipeline map; compile on demand.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
     "line": 0,
     "anchor": "m3-ext-35"
+  },
+  {
+    "id": "M3-EXT-101",
+    "title": "M3. Enables real-time CSG voxel carving for wall breaching, trench digging, and explosive cratering using GPU compute shaders.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m3-ext-101"
+  },
+  {
+    "id": "M3-EXT-102",
+    "title": "M3. Evaluates structural stress on player-built fortifications using Finite Element Method (FEM) beam analysis under zombie horde pressure.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m3-ext-102"
   }
 ]

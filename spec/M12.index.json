@@ -10,7 +10,7 @@
   },
   {
     "id": "M12-EXT-2",
-    "title": "Systems Touched",
+    "title": "Render entities at interpolated state between last two server snapshots",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -55,7 +55,7 @@
   },
   {
     "id": "M12-EXT-14",
-    "title": "Systems Touched",
+    "title": "M12. grep Network|Socket|ENet|Udp \u2192 0. M2.8 co-op has zero transport.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -64,7 +64,7 @@
   },
   {
     "id": "M12-EXT-15",
-    "title": "Systems Touched",
+    "title": "M12. grep voice|PushToTalk \u2192 0 in spec and code.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -73,7 +73,7 @@
   },
   {
     "id": "M12-EXT-16",
-    "title": "Systems Touched",
+    "title": "M2.8/M12. grep anti.cheat|serverAuth \u2192 0. Deterministic co-op needs a trust boundary.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M12-EXT-17",
-    "title": "Systems Touched",
+    "title": "M2.8/M12. ENGINE_DETERMINISM_MODE (M0-010) must be enforced for netplay.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M12-EXT-18",
-    "title": "Systems Touched",
+    "title": "Session browser + invite; uses net transport.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M12-EXT-19",
-    "title": "Systems Touched",
+    "title": "M12. Session state authority.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M12-EXT-20",
-    "title": "Systems Touched",
+    "title": "Render entities at interpolated state between last two server snapshots",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M12-EXT-21",
-    "title": "Systems Touched",
+    "title": "Rewind server state to shooter's ping when resolving hits",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -127,7 +127,7 @@
   },
   {
     "id": "M12-EXT-22",
-    "title": "Systems Touched",
+    "title": "Headless server build with no renderer; clients connect",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -313,5 +313,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m12-ext-45"
+  },
+  {
+    "id": "M12-EXT-101",
+    "title": "M12. Implements delta-compressed snapshot serialization with sub-tick input reconstruction for lag-free 4-player co-op.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m12-ext-101"
   }
 ]

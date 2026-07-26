@@ -511,5 +511,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m11-ext-101"
+  },
+  {
+    "id": "M11-EXT-103",
+    "title": "M11. Drives real-time 3D facial expressions and lip-sync blend-shapes directly from local SLM sentiment analysis scores.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m11-ext-103"
+  },
+  {
+    "id": "M11-EXT-104",
+    "title": "M11. Generates procedural quests dynamically based on real-time player resource deficits and base survivor needs.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m11-ext-104"
   }
 ]

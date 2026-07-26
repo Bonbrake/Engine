@@ -223,5 +223,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m6-ext-103"
+  },
+  {
+    "id": "M6-EXT-104",
+    "title": "M6. Convolves 3D sound sources with Head-Related Transfer Functions (HRTF) using Vulkan Compute for true binaural 3D positional audio.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m6-ext-104"
   }
 ]

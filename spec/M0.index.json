@@ -493,5 +493,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m0-ext-105"
+  },
+  {
+    "id": "M0-EXT-106",
+    "title": "M0. Offloads command buffer recording directly to the GPU using Vulkan Work Graphs (`VK_AMDX_shader_enqueue`), eliminating CPU submission bottlenecks.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-106"
+  },
+  {
+    "id": "M0-EXT-107",
+    "title": "M0. Interpolates intermediate frames using hardware optical flow vectors, boosting Tier-0 performance from 30 FPS floor to 60 FPS output.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-107"
   }
 ]

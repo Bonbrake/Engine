@@ -349,5 +349,50 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m4.5-ext-106"
+  },
+  {
+    "id": "M4.5-EXT-107",
+    "title": "M4.5. Encodes meshlet geometry using cluster DAG quantization and direct GPU hardware ray-tracing acceleration structure instancing.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-107"
+  },
+  {
+    "id": "M4.5-EXT-108",
+    "title": "M4.5. Reorders incoherent ray tracing hits on the GPU warp level to maximize SIMD execution efficiency and eliminate divergence stalls.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-108"
+  },
+  {
+    "id": "M4.5-EXT-109",
+    "title": "M4.5. Renders millions of dynamic emissive light sources (muzzle flashes, fires, flares) in real-time using spatiotemporal reservoir sampling.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-109"
+  },
+  {
+    "id": "M4.5-EXT-110",
+    "title": "M4.5. Eliminates invisible geometry in dense urban environments using a two-pass Hierarchical Z-Buffer (Hi-Z) occlusion culling compute shader.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-110"
+  },
+  {
+    "id": "M4.5-EXT-111",
+    "title": "M4.5. Dynamically adapts SSAO/GTAO ray sampling rates based on screen-space velocity and ambient light luminance.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-111"
   }
 ]

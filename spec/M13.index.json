@@ -10,7 +10,7 @@
   },
   {
     "id": "M13-EXT-2",
-    "title": "Systems Touched",
+    "title": "M13. Same seed+template \u2192 cached output.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -46,7 +46,7 @@
   },
   {
     "id": "M13-EXT-6",
-    "title": "Systems Touched",
+    "title": "SLM emits NPC dialogue + branch options from world state",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M13-EXT-16",
-    "title": "Systems Touched",
+    "title": "M13/M4/M5. MiniCPM5-1B at content-build time, never per-tick (arxiv 2601.23206).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M13-EXT-17",
-    "title": "Systems Touched",
+    "title": "M13. Seed templates \u2192 archetypes, loot flavor, weather, dialogue.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M13-EXT-18",
-    "title": "Systems Touched",
+    "title": "M13/V. SLM emits parseable JSON/config, not prose.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M13-EXT-19",
-    "title": "Systems Touched",
+    "title": "M13/V. SLM content also passes V-checks.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M13-EXT-20",
-    "title": "Systems Touched",
+    "title": "M13. Same seed+template \u2192 cached output.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M13-EXT-21",
-    "title": "Systems Touched",
+    "title": "M13. Same input \u2192 same output; lock temp/top_p.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -190,7 +190,7 @@
   },
   {
     "id": "M13-EXT-22",
-    "title": "Systems Touched",
+    "title": "M13. If model absent, use template defaults.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -199,7 +199,7 @@
   },
   {
     "id": "M13-EXT-23",
-    "title": "Systems Touched",
+    "title": "M13/M11. Mark content as SLM-generated.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -208,7 +208,7 @@
   },
   {
     "id": "M13-EXT-24",
-    "title": "Systems Touched",
+    "title": "SLM generates quest giver lines + objective text from state; schema-validated. Reads `lorePin` from dressed POIs (M4-EXT-32) for environmental storytelling.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -217,7 +217,7 @@
   },
   {
     "id": "M13-EXT-25",
-    "title": "Systems Touched",
+    "title": "SLM emits NPC dialogue + branch options from world state",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -226,7 +226,7 @@
   },
   {
     "id": "M13-EXT-26",
-    "title": "Systems Touched",
+    "title": "SLM writes environmental lore (notes, graffiti, broadcasts)",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -235,7 +235,7 @@
   },
   {
     "id": "M13-EXT-27",
-    "title": "Systems Touched",
+    "title": "SLM suggests perk/loadout from playstyle + telemetry",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -244,7 +244,7 @@
   },
   {
     "id": "M13-EXT-28",
-    "title": "Systems Touched",
+    "title": "SLM output passed through a filter for unsafe/format violations before use",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -370,7 +370,7 @@
   },
   {
     "id": "M13-EXT-60",
-    "title": "Systems Touched",
+    "title": "SLM emits NPC dialogue + branch options from world state",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -385,5 +385,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m13-ext-61"
+  },
+  {
+    "id": "M13-EXT-101",
+    "title": "M13. Connects the local SLM (Qwen3-Coder) to an in-memory vector database containing world state and NPC backstory for zero-hallucination dialogue.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m13-ext-101"
   }
 ]

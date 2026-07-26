@@ -10,7 +10,7 @@
   },
   {
     "id": "M8-EXT-2",
-    "title": "Lightweight Reynolds boid flocking (already used for zombie crowd movement and drafting in M5.1) applied to fish inside existing Jolt water volumes. Contaminati",
+    "title": "M8.6. Settlements spawn persistent + procedural resident NPCs with roles, daily loops, and personal plots \u2014 the world feels alive.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -37,7 +37,7 @@
   },
   {
     "id": "M8-EXT-5",
-    "title": "M8/M12. Quest/play choices mutate settlement/brand state + Appendix A narrative.",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M8-EXT-11",
-    "title": "Systems Touched",
+    "title": "Items/weapons as data defs (fire-rate/reload/recoil); SLM generates balanced stats (M13).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M8-EXT-12",
-    "title": "Systems Touched",
+    "title": "Items stack by type up to max; fixed slot grid or weight-based",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -109,7 +109,7 @@
   },
   {
     "id": "M8-EXT-13",
-    "title": "Systems Touched",
+    "title": "Ammo types (FMJ/HP/AP) with tradeoffs; craft from components",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -118,7 +118,7 @@
   },
   {
     "id": "M8-EXT-14",
-    "title": "Systems Touched",
+    "title": "M8.5. NPC vendors buy/sell with price modifiers driven by faction standing (M8-EXT-53), social tier (M8-EXT-62), and regional supply (M8.5 elastic model + M8-EXT-61 trade routes).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M8-EXT-16",
-    "title": "Systems Touched",
+    "title": "M8.6. Settlements spawn persistent + procedural resident NPCs with roles, daily loops, and personal plots \u2014 the world feels alive.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M8-EXT-17",
-    "title": "Systems Touched",
+    "title": "M8.7. Perks form a DAG with prerequisites; survivors (M2-EXT-18) and the player specialize by spending points unlocked via M8-EXT-18 XP.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -172,7 +172,7 @@
   },
   {
     "id": "M8-EXT-20",
-    "title": "Lightweight Reynolds boid flocking (already used for zombie crowd movement and drafting in M5.1) applied to fish inside existing Jolt water volumes. Contaminati",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -181,7 +181,7 @@
   },
   {
     "id": "M8-EXT-21",
-    "title": "Runs the existing M5.1 Weighted Consideration Utility AI stack with the faction flag flipped, plus a command-override layer. Extends M8.5's existing Bayesian Co",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -253,7 +253,7 @@
   },
   {
     "id": "M8-EXT-29",
-    "title": "Reuses the exact CableSpanComponent/CheckCableSnap() pattern declared in [M8-EXT-26], adding a third CableRole::Barricade value rather than new constraint code.",
+    "title": "M8.6. Settlements spawn persistent + procedural resident NPCs with roles, daily loops, and personal plots \u2014 the world feels alive.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -424,7 +424,7 @@
   },
   {
     "id": "M8-EXT-56",
-    "title": "M8/M2. Mood/needs; push too far \u2192 break (panic/desert/lash-out). RimWorld-inspired.",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -469,7 +469,7 @@
   },
   {
     "id": "M8-EXT-61",
-    "title": "M8. Visible roads connect settlements; goods flow; player can protect, block, or establish routes.",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -478,7 +478,7 @@
   },
   {
     "id": "M8-EXT-62",
-    "title": "M8. Settlements have class tiers (elite/mid/shanty) driven by wealth + power; determines plots, housing, quests.",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -505,7 +505,7 @@
   },
   {
     "id": "M8-EXT-65",
-    "title": "M8. NPCs run autonomous daily routines (work/social/sleep) that build their personal plot over time.",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -718,5 +718,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m8-ext-88"
+  },
+  {
+    "id": "M8-EXT-101",
+    "title": "M8. Provides modular vehicle customization, engine part degradation, and real-time tire friction dynamics in open-world survival.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m8-ext-101"
+  },
+  {
+    "id": "M8-EXT-102",
+    "title": "M8. Models airborne and waterborne zombie virus propagation using a dynamic SEIR epidemiology simulation coupled with weather maps.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m8-ext-102"
   }
 ]

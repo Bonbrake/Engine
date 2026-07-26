@@ -844,5 +844,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m5-ext-104"
+  },
+  {
+    "id": "M5-EXT-105",
+    "title": "M5. Executes Jump Point Search Plus (JPS+) with SIMD grid caching to route 10,000+ zombie swarm agents in <2.0ms CPU budget.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-105"
+  },
+  {
+    "id": "M5-EXT-106",
+    "title": "M5. Regulates horde intensity waves and dynamic supply spawns based on real-time 4-player survivor stress telemetry.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-106"
   }
 ]
