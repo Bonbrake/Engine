@@ -313,5 +313,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m4.5-ext-35"
+  },
+  {
+    "id": "M4.5-EXT-100",
+    "title": "M4.5. Strict visual budgets and anti-slop guardrails based on Threat Interactive primary-source research.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-100"
   }
 ]

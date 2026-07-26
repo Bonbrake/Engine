@@ -49784,3 +49784,84 @@ The two co-op determinism features are complementary, not redundant: M2.8-EXT-02
 
 ##### Player-Facing Impact
 Extended multiplayer survival sessions stay perfectly synchronized. Long projectile trajectories and terrain navigation choices never drift or trigger network desync reconciliations, even when mixing different CPU families in the same session.
+
+
+### [M4-EXT-92] Anchor POI Template Injector
+
+> **tags** · world-gen, authored, design
+> **tl;dr** · M4. Injects 10-15 pre-baked building footprints per 1km² into the WFC solver to guarantee hand-authored narrative anchor locations.
+> **ctx** · Game Concept Parity. WFC alone cannot guarantee story pacing. This forces procedural roads and generic plots to route around fixed, hand-authored anchor rooms (e.g., survivor camps, boss arenas).
+> **meta** · depends-on: M4-EXT-08
+
+##### Systems Touched
+WFC 3D constraint solver, POI macro-graph welder.
+
+##### Math
+P(anchor_poi) = 1.0 if distance(player_spawn, chunk) > threshold_tier_1.
+Grid cells occupied by nchor_template.gltf are marked is_fixed = true before WFC resolution begins.
+
+##### Implementation
+1. Load nchor_poi_list.json containing authored room layouts.
+2. Select 10-15 random but valid (elevation-tested) anchor points per 1km² chunk.
+3. Mark those cells as solved.
+4. Run standard procedural WFC to fill the remaining space.
+
+##### Threat Interactive Guardrail — Streaming & Compression
+All texture atlases for authored and procedural POIs must use BC4/BC5/BC7 hardware compression. M4 must guarantee silhouette and material-identity preservation at distance, without relying on TAA to fake distant detail.
+
+
+### [M4.5-EXT-100] Threat Interactive Visual Guardrails
+
+> **tags** · rendering, optimization, guardrail
+> **tl;dr** · M4.5. Strict visual budgets and anti-slop guardrails based on Threat Interactive primary-source research.
+> **ctx** · Prevents the regression of 9th-gen graphics where TAA is used to hide underlying rendering incompetence.
+> **meta** · depends-on: M4.5-EXT-20
+
+##### Guardrails
+- **Anti-TAA-Abuse:** Smearing past frames (TAA) to fake optimization is strictly banned. TAA is for anti-aliasing ONLY, not for hiding low-res specular aliasing or broken shadows.
+- **Kalisto BRDF Cap:** Because the Kalisto/Burley BRDF repurposes GBuffer channels, the engine enforces a strict cap of 255 simultaneous subsurface-BRDF materials on screen.
+- **Material Sampling Budget:** Material shaders are limited to a maximum of 3-4 texture samples for complex materials to preserve GPU utilization and memory bandwidth.
+
+
+### [M5-EXT-91] Fixed-Personality Hero NPC Registry
+
+> **tags** · ai, narrative, authored
+> **tl;dr** · M5. Bypasses the procedural LLM personality generator for 20-30 specific UUIDs to enforce hand-authored story constraints.
+> **ctx** · Game Concept Parity. Pure procedural NPCs will drift. This guarantees faction leaders and story critical NPCs strictly follow authored arcs.
+> **meta** · depends-on: M13-EXT-30
+
+##### Implementation
+When AgentFactory spawns an NPC, it checks uuid against hero_registry.json. If matched, it injects a fixed system_prompt and a locked memory_core that the LLM cannot overwrite or hallucinate away.
+
+
+### [M8-EXT-81] Unique / Legendary Item Fixed-Seed Registry
+
+> **tags** · economy, authored
+> **tl;dr** · M8. Fixed-seed item overrides that bypass the Pareto-optimized procedural generator to inject hand-authored stats and lore.
+> **ctx** · Game Concept Parity. Ensures 50-100 legendary items always exist with precise, hand-tuned balance and authored descriptions.
+> **meta** · depends-on: M8-EXT-09
+
+##### Implementation
+The item spawner intercepts generation for specific rarity tiers. It loads legendary_items.json which dictates exact mesh attachments, stat profiles, and flavor text, ignoring the procedural affix tables.
+
+
+### [M11-EXT-57] Authored Macro-Quest State Machine
+
+> **tags** · quests, narrative, authored
+> **tl;dr** · M11. A deterministic state machine overriding the procedural quest planner to enforce 5-10 authored story chains.
+> **ctx** · Game Concept Parity.
+> **meta** · depends-on: M11-EXT-30
+
+##### Implementation
+Sits above the procedural planner. Tracks player progression through Start -> Middle -> End nodes. Triggers procedural sub-quests (fetch, kill) as filler between hard-coded narrative beats.
+
+
+### [M11-EXT-58] Narrative Diorama Set-Piece Placer
+
+> **tags** · storytelling, authored
+> **tl;dr** · M11. Hooks into World Gen to place 20-30 exact environmental storytelling groupings (corpses, notes, blood).
+> **ctx** · Game Concept Parity.
+> **meta** · depends-on: M4-EXT-92
+
+##### Implementation
+Validates an interior bounding box and spawns a pre-baked .gltf diorama template (e.g., a barricaded door + 3 skeletons + an audio log), overriding procedural scatter.

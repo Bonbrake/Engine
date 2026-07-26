@@ -28,7 +28,7 @@
   },
   {
     "id": "M5-EXT-4",
-    "title": "Blends M10 (Weather/Wind vectors) with M5.3 (SNR perception filtering) and M6 (Acoustic audio events).",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -82,7 +82,7 @@
   },
   {
     "id": "M5-EXT-10",
-    "title": "Systems Touched",
+    "title": "Config-driven density curve; SLM telemetry-Director tunes it (M13 + M7 telemetry).",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -91,7 +91,7 @@
   },
   {
     "id": "M5-EXT-11",
-    "title": "Systems Touched",
+    "title": "Director emits spawn waves from pressure + telemetry.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -100,7 +100,7 @@
   },
   {
     "id": "M5-EXT-12",
-    "title": "Systems Touched",
+    "title": "M2/M5.2. Zombies must face player + emerge.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -136,7 +136,7 @@
   },
   {
     "id": "M5-EXT-16",
-    "title": "Systems Touched",
+    "title": "Nearby zombies form a horde (shared target); horde splits when targets diverge",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -145,7 +145,7 @@
   },
   {
     "id": "M5-EXT-17",
-    "title": "Links M9 vehicle chassis velocity tracking fields straight to M5.1 Reynolds boid steering arrays.",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -154,7 +154,7 @@
   },
   {
     "id": "M5-EXT-18",
-    "title": "Runs the existing M5.1 zombie phenotype/bio-weight generator with the infection-mutation pass disabled \u2014 one canonical procedural humanoid generator for play...",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -163,7 +163,7 @@
   },
   {
     "id": "M5-EXT-19",
-    "title": "Upgrades M5.1 zombie variation routines and feeds bind data into M5.2 procedural animation and M5.2's existing Dual-Quaternion compute skinning.",
+    "title": "Sound events propagate as attenuated spheres; zombies hear via a forward-biased hearing cone with frequency-weighted range. Back-facing sounds penalized.",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -433,7 +433,7 @@
   },
   {
     "id": "M5-EXT-49",
-    "title": "Emergent Difficulty via Director Pacing & Outbreak Feedback (No Difficulty Setting)",
+    "title": "Systems Touched",
     "cluster": "A",
     "depends_on": [],
     "depended_by": [],
@@ -808,5 +808,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m5-ext-90"
+  },
+  {
+    "id": "M5-EXT-91",
+    "title": "M5. Bypasses the procedural LLM personality generator for 20-30 specific UUIDs to enforce hand-authored story constraints.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-91"
   }
 ]
