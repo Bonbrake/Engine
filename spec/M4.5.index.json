@@ -394,5 +394,50 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m4.5-ext-111"
+  },
+  {
+    "id": "M4.5-EXT-112",
+    "title": "M4.5. Simulates dynamic tree trunk bending, branch swaying, and grass leaf turbulence under storm winds using compute shaders.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-112"
+  },
+  {
+    "id": "M4.5-EXT-113",
+    "title": "M4.5. Simulates realistic skin translucency, ear rim light diffusion, and blood-vessel scattering on survivors and zombies using screen-space blurring.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-113"
+  },
+  {
+    "id": "M4.5-EXT-114",
+    "title": "M4.5. Renders realistic glossy reflections on wet asphalt, rain puddles, and glass windows using Hi-Z ray-marched screen-space reflections.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-114"
+  },
+  {
+    "id": "M4.5-EXT-115",
+    "title": "M4.5. Resolves sorting artifacts for overlapping glass, smoke, water, and transparent particles using GPU Fragment Linked Lists.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-115"
+  },
+  {
+    "id": "M4.5-EXT-116",
+    "title": "M4.5. Renders dynamic penumbra soft shadows for sun, streetlights, and torchlights using Percentage-Closer Soft Shadows (PCSS).",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m4.5-ext-116"
   }
 ]

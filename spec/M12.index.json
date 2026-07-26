@@ -322,5 +322,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m12-ext-101"
+  },
+  {
+    "id": "M12-EXT-102",
+    "title": "M12. Performs server-side history rewinds to verify player gunshots and melee hits in laggy multiplayer co-op sessions.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m12-ext-102"
   }
 ]

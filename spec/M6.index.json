@@ -232,5 +232,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m6-ext-104"
+  },
+  {
+    "id": "M6-EXT-105",
+    "title": "M6. Generates procedural impact audio (metal clanging, wood splintering, glass shattering) directly from Jolt collision impulse vectors.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m6-ext-105"
+  },
+  {
+    "id": "M6-EXT-106",
+    "title": "M6. Simulates realistic sound dampening through closed doors, concrete walls, and barricades using acoustic distance fields.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m6-ext-106"
   }
 ]

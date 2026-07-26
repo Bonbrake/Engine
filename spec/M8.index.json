@@ -736,5 +736,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m8-ext-102"
+  },
+  {
+    "id": "M8-EXT-103",
+    "title": "M8. Simulates survivor faction politics, trust decay, and procedural alliance shifts based on player trade and conflict choices.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m8-ext-103"
+  },
+  {
+    "id": "M8-EXT-104",
+    "title": "M8. Modular weapon attachment system with realistic bullet velocity, drag coefficients, and armor penetration physics.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m8-ext-104"
   }
 ]

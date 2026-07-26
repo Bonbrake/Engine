@@ -529,5 +529,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m11-ext-104"
+  },
+  {
+    "id": "M11-EXT-105",
+    "title": "M11. Grid-based item inventory management with real-time weight encumbrance physics affecting player stamina and movement speed.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m11-ext-105"
   }
 ]

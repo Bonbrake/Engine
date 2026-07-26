@@ -511,5 +511,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m0-ext-107"
+  },
+  {
+    "id": "M0-EXT-108",
+    "title": "M0. Completely eliminates CPU descriptor set binding overhead using Vulkan 1.4 `VK_EXT_descriptor_buffer` extensions.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-108"
+  },
+  {
+    "id": "M0-EXT-109",
+    "title": "M0. Enforces 100% mechanical parity between C++ engine source code, markdown spec files, and sidecar JSON indices in automated CI.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m0-ext-109"
   }
 ]

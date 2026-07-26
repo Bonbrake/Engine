@@ -862,5 +862,23 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m5-ext-106"
+  },
+  {
+    "id": "M5-EXT-107",
+    "title": "M5. Combines Hierarchical Behavior Trees with Utility AI evaluations to drive special infected zombie mutations (Tank, Runner, Spitter).",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-107"
+  },
+  {
+    "id": "M5-EXT-108",
+    "title": "M5. Simulates player scent and blood odor diffusion in air, luring distant zombie swarms upwind toward wounded players.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m5-ext-108"
   }
 ]

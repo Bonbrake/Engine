@@ -322,5 +322,14 @@
     "depended_by": [],
     "line": 0,
     "anchor": "m3-ext-102"
+  },
+  {
+    "id": "M3-EXT-103",
+    "title": "M3. Simulates dynamic fire spreading across wooden structures, trees, foliage, and zombies based on heat transfer equations.",
+    "cluster": "A",
+    "depends_on": [],
+    "depended_by": [],
+    "line": 0,
+    "anchor": "m3-ext-103"
   }
 ]
