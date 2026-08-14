@@ -1,0 +1,202 @@
+PROVISIONAL PATCH — NOT YET VERIFIED
+=====================================
+IDs below have NOT been swept against the Desktop draft files. This
+worker's scope is also the MOST likely to already overlap with
+teq-v78-procedural-gapfill-draft.md (SLM/procedural content) — check
+that file's actual contents before merging any of this, not just its
+filename. Re-check live IDs in the actual v78 file before merging;
+renumber if anything collides.
+
+VERIFIED (2026-07-14): MiniCPM5-1B config.json pulled from
+openbmb/MiniCPM5-1B on Hugging Face and confirmed. It is a GQA Llama
+architecture — `hidden_size=1536`, `num_attention_heads=16`,
+`head_dim=128`, `num_key_value_heads=2` (8:1 GQA), `intermediate_size=4608`,
+`num_hidden_layers=24`, `vocab_size=130560`, `max_position_embeddings=131072`,
+bf16. The earlier "16 heads × 128 = 2048 ≠ 1536, so inconsistent" worry was
+wrong: under GQA the query-head count need not divide hidden_size by
+head_dim in the vanilla-MHA sense — `16 × 128 = 2048` query dims with KV
+collapsed to 2 heads is a normal GQA layout. [M1-EXT-36]/[M1-EXT-37] below
+may cite these numbers directly; no blocking question remains.
+=====================================
+
+## [M0-EXT-28] AssetPath Checksum Integrity Validation
+
+##### Systems Touched
+Extends the existing `AssetPath` resolver (M0) — every load, mod or
+otherwise.
+
+##### How It Works
+A hash (CRC32/xxHash) is checked against a manifest at load time; a
+mismatch fails loud and safe instead of silently loading a corrupted or
+tampered asset.
+
+##### Reference Implementation
+```cpp
+bool ValidateAssetChecksum(const std::vector<uint8_t>& data, uint64_t expectedHash) {
+    return XxHash64(data.data(), data.size()) == expectedHash;
+}
+```
+
+##### Player-Facing Impact
+A corrupted texture, mesh, or mod file never silently loads as garbage.
+
+---
+
+## [M1-EXT-34] Procedurally-Generated Localization/Accessibility String-Table Pipeline
+
+##### Systems Touched
+M1's existing MSDF font pipeline (no rendering-path change needed) and
+M13's MiniCPM5-1B integration, pulled forward as an offline content-gen
+tool rather than waiting for M13's own milestone.
+
+##### How It Works
+All player-facing strings (subtitles, UI, colorblind-mode labels) route
+through a string-table keyed by ID. The table's *content* is generated
+OFFLINE, at build/content-generation time — never per-tick — by running
+MiniCPM5-1B over a small set of seed templates, using the same
+`enable_thinking=False` + fixed `temperature=0.7`/`top_p=0.95` discipline
+already locked in for M13. This keeps the zero-hand-authored-content rule
+intact while producing real text instead of placeholders. The MSDF
+pipeline renders whatever the table resolves to, unchanged.
+
+##### Reference Implementation
+```cpp
+// Offline tool, not runtime code:
+// for each seed template in localization_seeds.json:
+//   call MiniCPM5-1B (enable_thinking=False, temperature=0.7, top_p=0.95)
+//   write generated variant into strings_<locale>.json keyed by string ID
+```
+
+##### Player-Facing Impact
+Subtitles, UI text, and accessibility labels exist in real, varied form
+without hand-authoring a single line.
+
+---
+
+## [M0-EXT-29] HDR Color-Space & DPI-Scale Swapchain Setup
+
+##### Systems Touched
+Swapchain creation (M0) and UI layout math (M11, later) — declared now
+so color-space/DPI handling isn't retrofitted per-render-pass.
+
+##### How It Works
+Swapchain color space and a DPI-scale factor are read once at boot and
+threaded through UI layout math from the start, rather than assuming SDR
+everywhere.
+
+##### Reference Implementation
+```cpp
+struct DisplayConfig { VkColorSpaceKHR colorSpace; float dpiScale; };
+```
+
+##### Player-Facing Impact
+HDR displays and high-DPI/multi-monitor setups render correctly instead
+of needing a later rewrite.
+
+---
+
+## [M1-EXT-35] EventBus Telemetry Tap with Consent Gate
+
+##### Systems Touched
+The (future) EventBus (M2) — a lightweight tap added now so meaningful
+gameplay events (death, horde-encounter size, resource-scarcity moment)
+post to a ring buffer, gated by explicit player consent.
+
+##### How It Works
+A boot-time consent flag must be true before the tap writes anything.
+When enabled, events post to a bounded ring buffer for later
+(batched, offline) consumption by [M1-EXT-36].
+
+##### Reference Implementation
+```cpp
+struct TelemetryEvent { uint32_t eventType; float value; uint64_t tick; };
+bool g_telemetryConsentGranted = false; // set only via explicit settings toggle
+
+void PostTelemetryEvent(RingBuffer<TelemetryEvent>& buffer, TelemetryEvent evt) {
+    if (!g_telemetryConsentGranted) return;
+    buffer.Push(evt);
+}
+```
+
+##### Player-Facing Impact
+Nothing leaves the machine or gets recorded without an explicit opt-in.
+
+---
+
+## [M1-EXT-36] Offline MiniCPM5-1B Difficulty Director Pass
+
+##### Systems Touched
+Consumes [M1-EXT-35]'s telemetry ring buffer; adjusts existing
+data-driven spawn-density/loot-scarcity curves. NEVER touches gameplay
+code directly — only the config values that already exist.
+
+##### How It Works
+Batched every few in-game hours (not per-tick), MiniCPM5-1B reasons over
+aggregated telemetry and proposes adjustments to existing tunable
+curves. This is what actually makes "no difficulty sliders, one tuned
+experience" true rather than aspirational, using infrastructure this doc
+already spec's for M13.
+
+##### Reference Implementation
+```cpp
+// Offline/background batch job, not per-tick:
+// aggregate TelemetryEvent buffer over N in-game hours ->
+// prompt MiniCPM5-1B (enable_thinking=False, temperature=0.7, top_p=0.95) with
+// aggregated stats -> parse suggested curve deltas -> write to existing
+// spawn_density.json / loot_scarcity.json config, never to code.
+```
+
+##### Player-Facing Impact
+Difficulty actually adapts to how the player is really doing, without a
+visible slider and without the model ever writing code.
+
+---
+
+## [M1-EXT-37] Offline MiniCPM5-1B Zombie Archetype Behavior Synthesis
+
+##### Systems Touched
+Feeds M5.1's already-planned procedural zombie variation. Offline
+content-gen only — zero runtime inference cost, zero hand-authored
+scripts.
+
+##### How It Works
+MiniCPM5-1B synthesizes behavior-tree parameter sets / utility-AI weight
+tables per zombie archetype at content-generation time, consumed as data
+by M5.1's runtime systems exactly like any other procedurally-generated
+config.
+
+##### Reference Implementation
+```cpp
+// Offline tool:
+// for each archetype seed -> MiniCPM5-1B generates a parameter table
+// (aggression weight, wander radius, group-cohesion factor, etc.) ->
+// written to archetype_<name>.json, consumed at runtime as plain data.
+```
+
+##### Player-Facing Impact
+Varied, expressive zombie behavior without a scripting VM and without
+hand-authored behavior trees.
+
+---
+
+## [M1-EXT-38] ModWritable Allowlist Flag on MetaRegistry Registration
+
+##### Systems Touched
+Closes the gap the existing doc already flags as deferred in the Dev
+Inspector section (MetaRegistry.cpp).
+
+##### How It Works
+Adds an explicit `ModWritable: bool` flag to each component's existing
+`entt::meta` registration call, rather than leaving every registered
+field implicitly editable.
+
+##### Reference Implementation
+```cpp
+// In MetaRegistry.cpp, alongside the existing registration calls:
+entt::meta<Transform>().data<&Transform::position>("position"_hs)
+    .prop("ModWritable"_hs, false); // explicit allowlist, not implicit open access
+```
+
+##### Player-Facing Impact
+Mods can't rewrite fields like StableId and desync a save — closes a gap
+the doc itself already called out as unresolved.
