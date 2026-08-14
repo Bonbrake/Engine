@@ -1,6 +1,6 @@
 # ZombieEngine EXT Index
 
-> 1080 EXT blocks across 33 files. Each `ID | file | line`.
+> 1040 EXT blocks across 33 files. Each `ID | file | line`. (Authoritative count — `recon/plans/EXT_BLOCK_COUNTS.md`, regenerated 2026-08-13.)
 
 ## K
 - `K-EXT-01` → `APPENDIX_K.md` (L28)

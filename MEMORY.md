@@ -1,7 +1,7 @@
 # ZombieEngine — Cross-Session Memory (Hermes Agent)
 
 ## Last Session Summary (2026-07-18)
-**Branch**: `spec/m0-parity-reformat`  
+**Branch**: `main` (current HEAD; `spec/m0-parity-reformat` is the historical consolidation branch)  
 **HEAD**: `6a296b6` (M2.7: 19/19 GO-1 blocks merged, 16/16 PASS)  
 **Verifier**: `scripts/verify_m0_parity.py` — **16/16 OK**
 

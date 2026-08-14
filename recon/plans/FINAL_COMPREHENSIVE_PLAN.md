@@ -2,7 +2,7 @@
 
 # 0.1 Modernized 2026 Research & Engine Architecture Standard (100-Paper Benchmark)
 
-> **Architectural Status:** 100/100 Research Papers Verified (`[S]`). 1035 Verified EXT Logic Blocks.
+> **Architectural Status:** 100/100 Research Papers Verified (`[S]`). 1040 Verified EXT Logic Blocks (authoritative count — `recon/plans/EXT_BLOCK_COUNTS.md`, 2026-08-13).
 > **Scope:** Complete 100-paper research foundation covering Vulkan 1.4 Work Graphs, ReSTIR DI/GI, llama.cpp C++ NPC Memory, Valve Sub-Tick Rollback Netcode, 3D Gaussian Volumetrics, and FEM Barricade Stability.
 
 | Paper # | Cutting-Edge Technology / Algorithm | Status | Mapped EXT Block | Core Impact & 2026 Standard |

@@ -1,9 +1,11 @@
 # The Endless Quarantine — Engine Status
 
 > **Canonical spec:** `spec/` (per-milestone M0-parity working set, the live source of truth for every `[Mx-EXT-nn]` block). The v79 pre-split master plan and old Antigravity working files are archived under `archive/docs/` and `archive/old_milestones/`. Binding agent rules live in `.hermes.md`.
+>
+> **Reconciled plan index:** [`PLAN.md`](../PLAN.md) (repo root) resolves *where "the plan" lives* and disambiguates `spec/`, `recon/plans/FINAL_COMPREHENSIVE_PLAN.md`, and the historical `USETHISITSV79.md`. Open it first on a fresh session if the document hierarchy is unclear.
 
 ## Active Branch
-`spec/m0-parity-reformat`
+`main` (current HEAD). `spec/m0-parity-reformat` is the historical consolidation branch that held these milestones before merge.
 
 ## Current Milestone
 **M2.6 — Phase 1 COMPLETE** ✅  
@@ -78,7 +80,7 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 
 ## Last Verified Build
 - Branch: `spec/m0-parity-reformat`
-- Spec corpus: **1,224 EXT blocks** across 16 milestone files (M0-M13 + M4.5 + M6.5), grep-verified 2026-07-20
+- Spec corpus: **1,040 EXT blocks** (authoritative — `recon/plans/EXT_BLOCK_COUNTS.md`, regenerated 2026-08-13 via `scripts/verify_ext_block_counts.py`). The prior 1,224 figure was a 2026-07-20 grep snapshot of 16 milestone files; the canonical count across all 33 spec files is 1,040.
 - Structural integrity: **PASS** — `scripts/verify_m0_parity.py` reports all 16 milestone files OK. 17 JSON sidecars regenerated + consistent.
 - Engine build: 8 milestone modules still header-only stubs (ai, audio, modding, net, save, slm, ui, world); render/core/debug/ecs/physics built. `ZombieEngineTests` + `focus_probe` targets defined.
 - Last headless run: commit `83c0d43` (2026-07-20) — M4.5-EXT-33 AgX tonemap + RTSS workaround.

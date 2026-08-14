@@ -56,7 +56,7 @@ index: see llms.txt or the <details> block index below
 - **Output:** `build/ZombieEngine.exe` (14+ MB debug build, 39+ translation units)
 
 ## Verification tooling
-- `scripts/verify_m0_parity.py` — structural spec verifier (1,224 EXT blocks, all pass)
+- `scripts/verify_m0_parity.py` — structural spec verifier (1,040 EXT blocks, all pass)
 - `recon/check_versions.py` — dependency freshness checker (queries vcpkg + GitHub APIs)
 - 3-pass verify discipline: read-verify → build-verify (MSVC compile) → functional-verify (standalone test run)
 
