@@ -2,6 +2,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/AudioEngine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AudioPropagation.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AudioVoice.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/BodycamAcoustics.cpp
 )
 
 add_library(ze-audio OBJECT ${SOURCE_FILES})

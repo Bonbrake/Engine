@@ -1,4 +1,4 @@
-set(SHADERS simple.vert simple.frag simple_mesh.vert cull.comp depth_pyramid.comp tonemap.vert tonemap.frag)
+set(SHADERS simple.vert simple.frag simple_mesh.vert pbr.vert pbr.frag cull.comp depth_pyramid.comp tonemap.vert tonemap.frag)
 set(SHADER_SPV_FILES "")
 foreach(SHADER ${SHADERS})
     set(INPUT "${CMAKE_SOURCE_DIR}/shaders/${SHADER}")

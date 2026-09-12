@@ -1,30 +1,30 @@
 # Appendix Execution Map
 > Rebuilt from live spec/*.md files.
-> Block count: 813 across 16 milestones
+> Block count: 865 across 16 milestones
 > Rule: all IDs verified against disk; do not hardcode without grep check
 
 ## 1. Milestone block inventory
 
 | Milestone | Blocks | Max EXT | Sample blocks |
 |-----------|--------|---------|---------------|
-| M0 | 51 | 53 | M0-EXT-01: Hardware-Topology enkiTS Pinning Allocator; M0-EXT-02: Continuous Driver-Side Shader Object State Manager; M0-EXT-03: Disk-Persisted Pipeline Cache Header Validator |
-| M1 | 52 | 53 | M1-EXT-01: SpatialHash Uniform Grid Cell Bucketing Engine; M1-EXT-02: Generational Resource Table Pointer Validator; M1-EXT-03: Multi-Threaded Command Pool Matrix |
+| M0 | 62 | 111 | M0-EXT-01: Hardware-Topology enkiTS Pinning Allocator; M0-EXT-02: Continuous Driver-Side Shader Object State Manager; M0-EXT-03: Disk-Persisted Pipeline Cache Header Validator |
+| M1 | 43 | 101 | M1-EXT-01: SpatialHash Uniform Grid Cell Bucketing Engine; M1-EXT-02: Generational Resource Table Pointer Validator; M1-EXT-03: Multi-Threaded Command Pool Matrix |
 | M2 | 127 | 127 | M2-EXT-01: Asynchronous Collision Cooking & Proxy Primitive Swapping Queue; M2-EXT-02: Jolt Physics Multi-Body Rigid Island Sleep Event Bus Bridge; M2-EXT-03: Continuous Narrow-Phase Contact Point Query Collector Cache |
-| M3 | 34 | 35 | M3-EXT-01: Structural Fatigue Cycle Creep (Palmgren-Miner Wear); M3-EXT-02: Piezoluminescent Strain Shaders for Impending Structural Collapse; M3-EXT-03: Structural Truss Resonance Audio Leak |
+| M3 | 38 | 104 | M3-EXT-01: Structural Fatigue Cycle Creep (Palmgren-Miner Wear); M3-EXT-02: Piezoluminescent Strain Shaders for Impending Structural Collapse; M3-EXT-03: Structural Truss Resonance Audio Leak |
 | M4 | 91 | 109 | M4-EXT-01: Hierarchical Global Macro-Graph Constraint Pass; M4-EXT-02: Asynchronous Quadric Error Meshlet Decimation (Runtime Procedural LODs); M4-EXT-03: Hierarchical WFC Multi-Grid Graph Layering (Contradiction Guard) |
-| M4.5 | 35 | 35 | M4.5-EXT-01: Rayleigh-Scattering Volumetric Cone Attenuation (Flashlight Shadowing); M4.5-EXT-02: Post-Processing Photopupillary Luminance Tracking; M4.5-EXT-03: Ocular Afterimage Retinal Bleach Compute Shader |
-| M5 | 90 | 90 | M5-EXT-01: Asynchronous Tile-Voxelized NavMesh Baker; M5-EXT-02: Dual-Quaternion GPU Compute Skinning; M5-EXT-03: Dynamic Logistic Spawn Pacing |
-| M6 | 22 | 22 | M6-EXT-01: Acoustic Doppler-Shift Pitch Modulator; M6-EXT-02: Footstep Impact Acoustic Resonance; M6-EXT-03: Acoustic Echo-Location Decoy Sound Mirroring |
+| M4.5 | 51 | 118 | M4.5-EXT-01: Rayleigh-Scattering Volumetric Cone Attenuation (Flashlight Shadowing); M4.5-EXT-02: Post-Processing Photopupillary Luminance Tracking; M4.5-EXT-03: Ocular Afterimage Retinal Bleach Compute Shader |
+| M5 | 98 | 108 | M5-EXT-01: Asynchronous Tile-Voxelized NavMesh Baker; M5-EXT-02: Dual-Quaternion GPU Compute Skinning; M5-EXT-03: Dynamic Logistic Spawn Pacing |
+| M6 | 30 | 108 | M6-EXT-01: Acoustic Doppler-Shift Pitch Modulator; M6-EXT-02: Footstep Impact Acoustic Resonance; M6-EXT-03: Acoustic Echo-Location Decoy Sound Mirroring |
 | M6.5 | 13 | 13 | M6.5-EXT-01: Shockwave Hydro-Cavitation (Gore Fragmentation Dispersal); M6.5-EXT-02: Capillary Spatter Impact Angle Projection; M6.5-EXT-03: Venturi-Effect Smoke Drafting |
-| M7 | 23 | 23 | M7-EXT-01: The Corpse-Pile Flattening Engine (Dynamic Static Hulls); M7-EXT-02: Electrochemical Oxidation Vector Blending (Structural Time-Lapse); M7-EXT-03: Submerged Corpse Buoyancy Re-Activation |
-| M8 | 80 | 88 | M8-EXT-01: Brand-Gated Thermal Ammo Cook-Off; M8-EXT-02: Property-Matching Crafting & Derived Item Stats; M8-EXT-03: Secondary Illness via Reparameterized SEIR (Sepsis, Dysentery, Tetanus) |
+| M7 | 24 | 101 | M7-EXT-01: The Corpse-Pile Flattening Engine (Dynamic Static Hulls); M7-EXT-02: Electrochemical Oxidation Vector Blending (Structural Time-Lapse); M7-EXT-03: Submerged Corpse Buoyancy Re-Activation |
+| M8 | 84 | 104 | M8-EXT-01: Brand-Gated Thermal Ammo Cook-Off; M8-EXT-02: Property-Matching Crafting & Derived Item Stats; M8-EXT-03: Secondary Illness via Reparameterized SEIR (Sepsis, Dysentery, Tetanus) |
 | M9 | 35 | 35 | M9-EXT-01: Fluid Momentum Traction Shear (Blood-Slick Viscosity); M9-EXT-02: Non-Linear Tire Slip Friction Heating (Thermal Traction Breakdown); M9-EXT-03: High-Velocity Wet-Silt Aquaplaning |
 | M10 | 27 | 31 | M10-EXT-01: Hydraulic-Head Flux Solver for Saint-Venant Flooding **[MATH DONE]**; M10-EXT-02: Keplerian Cosmic Orbitals & Synchronized Shadow Vectors; M10-EXT-03: Bruneton-Nishita Atmospheric Scattering & SH Ambient Fill |
-| M11 | 56 | 67 | M11-EXT-01: Viewport-Isolated Haptic Waveform Summation; M11-EXT-02: Adaptive Skeletal Trigger Strain Profiles; M11-EXT-03: Raycast-Fan Fog-of-Reveal Navigation (Map/Minimap) |
-| M12 | 35 | 45 | M12-EXT-01: Bitstream Delta-Encoded Network Serialization Packet Encoder; M12-EXT-02: Bitmask Packet Loss Sliding Window Acknowledgement Register; M12-EXT-04: Local Network-Relevancy Grid Culling Filter |
-| M13 | 42 | 61 | M13-EXT-01: Procedural Mission & Bounty Director; M13-EXT-02: Infected Mutation Forensic Log; M13-EXT-03: Dynamic Graveyard & Memorial Wall Epitaphs |
+| M11 | 60 | 105 | M11-EXT-01: Viewport-Isolated Haptic Waveform Summation; M11-EXT-02: Adaptive Skeletal Trigger Strain Profiles; M11-EXT-03: Raycast-Fan Fog-of-Reveal Navigation (Map/Minimap) |
+| M12 | 38 | 103 | M12-EXT-01: Bitstream Delta-Encoded Network Serialization Packet Encoder; M12-EXT-02: Bitmask Packet Loss Sliding Window Acknowledgement Register; M12-EXT-04: Local Network-Relevancy Grid Culling Filter |
+| M13 | 44 | 101 | M13-EXT-01: Procedural Mission & Bounty Director; M13-EXT-02: Infected Mutation Forensic Log; M13-EXT-03: Dynamic Graveyard & Memorial Wall Epitaphs |
 
-**Total blocks**: 813
+**Total blocks**: 865
 
 ## 2. Dependency order
 
@@ -32,22 +32,22 @@ Execute blocks in milestone order; within each milestone, EXT-ID order is depend
 Cross-milestone deps are declared in each block's `depends-on` metadata.
 
 Verified execution order:
-- M0: 51 blocks
-- M1: 52 blocks
+- M0: 62 blocks
+- M1: 43 blocks
 - M2: 127 blocks
-- M3: 34 blocks
+- M3: 38 blocks
 - M4: 91 blocks
-- M4.5: 35 blocks
-- M5: 90 blocks
-- M6: 22 blocks
+- M4.5: 51 blocks
+- M5: 98 blocks
+- M6: 30 blocks
 - M6.5: 13 blocks
-- M7: 23 blocks
-- M8: 80 blocks
+- M7: 24 blocks
+- M8: 84 blocks
 - M9: 35 blocks
 - M10: 27 blocks
-- M11: 56 blocks
-- M12: 35 blocks
-- M13: 42 blocks
+- M11: 60 blocks
+- M12: 38 blocks
+- M13: 44 blocks
 
 ## 3. Acceptance tests
 

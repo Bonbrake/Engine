@@ -1,6 +1,7 @@
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/BiomeGraph.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ChunkStreamer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ItemPersistence.cpp
 )
 
 add_library(ze-world OBJECT ${SOURCE_FILES})

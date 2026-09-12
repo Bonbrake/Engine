@@ -8,8 +8,10 @@
 `main` (current HEAD). `spec/m0-parity-reformat` is the historical consolidation branch that held these milestones before merge.
 
 ## Current Milestone
-**M2.6 — Phase 1 COMPLETE** ✅  
-Transform double-precision (dvec3/dquat/dvec3); B2 (silent double→float truncation) closed at physics write-back + persistence boundary. Sector size 512 frozen through M4.
+**Stage 1 (Tier 1): 3D Model & Lights** 🎯 (Stage 0 / M0–M2 Core Verified ✅)  
+- **Canonical Master Refactor Plan:** [`docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md`](../plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md) (v8.2 — 198 concrete features across 6 Plain-English Stages).
+- **Validation Pipeline:** `scripts\test_all.cmd` (Build + Headless `HEADLESS_BOOT_OK` + Sanity Harness + Catch2 76 tests + EXT 1,040 blocks + Plan v8.0 DAG).
+- **Current Active Target:** `T1-01` glTF mesh loading (`fastgltf`) + `T1-03` PBR metallic-roughness shader.
 
 ---
 
@@ -79,15 +81,14 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 ---
 
 ## Last Verified Build
-- Branch: `spec/m0-parity-reformat`
-- Spec corpus: **1,040 EXT blocks** (authoritative — `recon/plans/EXT_BLOCK_COUNTS.md`, regenerated 2026-08-13 via `scripts/verify_ext_block_counts.py`). The prior 1,224 figure was a 2026-07-20 grep snapshot of 16 milestone files; the canonical count across all 33 spec files is 1,040.
-- Structural integrity: **PASS** — `scripts/verify_m0_parity.py` reports all 16 milestone files OK. 17 JSON sidecars regenerated + consistent.
-- Engine build: 8 milestone modules still header-only stubs (ai, audio, modding, net, save, slm, ui, world); render/core/debug/ecs/physics built. `ZombieEngineTests` + `focus_probe` targets defined.
-- Last headless run: commit `83c0d43` (2026-07-20) — M4.5-EXT-33 AgX tonemap + RTSS workaround.
-- GPU: NVIDIA GeForce RTX 2070 SUPER
-
-## Capability Tier (RTX 2070 Super)
-- descriptorBuffer ✅ | shaderObject ✅ | unifiedImageLayouts ✅ | meshShaders ✅ | rtPipeline ❌ | queryTimestamps ✅
+- Branch: `main`
+- Master Refactor Plan: **198 concrete features across 6 Plain-English Stages + 6 Console Ports (v8.2)** (verified 0-cycle DAG, 0 dangling, 100% mirror parity via `scripts/verify_plan_v8.py`).
+- Spec corpus: **1,040 EXT blocks** (authoritative — `recon/plans/EXT_BLOCK_COUNTS.md`, verified via `scripts/verify_ext_block_counts.py`).
+- Full Subsystem Test Suite: **76 test cases, 259 assertions** (`build\tests\ZombieEngineTests.exe` — 75 passed, 1 skipped for headless video, 0 failures).
+- Headless Boot: **`HEADLESS_BOOT_OK` (Zero validation layer exceptions)** via `build\EndlessQuarantine.exe --headless`.
+- Capability Tier (RTX 2070 Super):
+  - `descriptorBuffer` ✅ | `shaderObject` ✅ | `unifiedImageLayouts` ✅ | `meshShaders` ✅ | `rtPipeline` ✅ | `queryTimestamps` ✅ (Hardware RT Pipeline via dedicated Turing RT Cores, `rtPipeline=1` verified in headless boot log).
+- In-Game AI Director: **Dual-Core Architecture Locked** — Left 4 Dead 2 mathematical intensity pacing state machine (60Hz tick) coupled with asynchronous `Qwen2.5-3B-Instruct` (Q4_K_M GGUF, ~1.9 GB) on `SlmThread`. 8 GB VRAM baseline (6.2 GB hard cap), 6 GB minimum floor (5.0 GB hard cap).
 
 ## Commits This Pass (spec/m0-parity-reformat, 25 commits)
 - `83c0d43` — [M4.5-EXT-33] Work around RTSS swapchain STORAGE_BIT injection

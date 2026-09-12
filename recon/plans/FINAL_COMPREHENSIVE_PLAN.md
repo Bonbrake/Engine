@@ -50,7 +50,7 @@
 
 ---
 
-## 1.1 Structural Gaps — NOT YET FIXED
+## 1.1 Structural Gaps — RECONCILED STATUS
 
 | ID | Gap | Severity | Status |
 |----|-----|----------|--------|
@@ -92,7 +92,7 @@ Preferred dev target: 60 FPS on RTX 2070 SUPER.
 | AI | 5.0 ms | 200 zombies + scent diffusion + director |
 | Animation | 2.0 ms | Motion matching retarget + IK post-process |
 | Audio | 0.5 ms | Propagation, mixing, voice culling |
-| Headroom | 5.3 ms | EnkiTS scheduling, OS jitter, debug overhead |
+| Headroom | 7.8 ms | EnkiTS scheduling, OS jitter, debug overhead (reconciles 33.3 ms sum) |
 | Total | 33.3 ms | 30 FPS floor on Tier-0; 16.7 ms headroom on Tier-1 |
 
 ## 2.2 Memory Budgets
@@ -577,7 +577,7 @@ Deliverable: 4-player co-op with persistence and endgame loop.
 
 ## 8.5 Strict AAA Tier-0 6GB VRAM Allocation Ledger
 
-To guarantee zero Out-Of-Memory (OOM) crashes on Tier-0 target hardware (RTX 2070 Super / 6GB VRAM), memory allocations are strictly partitioned and enforced via VMA pools:
+To guarantee zero Out-Of-Memory (OOM) crashes on Tier-0 target hardware (RTX 2060 6GB floor / RTX 2070 SUPER 8GB dev target), memory allocations are strictly partitioned and enforced via VMA pools:
 
 | Allocation Category | VRAM Budget | Purpose & Target Assets | Hard Limit Action |
 |---------------------|-------------|-------------------------|-------------------|

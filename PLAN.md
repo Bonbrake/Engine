@@ -20,16 +20,15 @@ each serving a different purpose. The contradiction came from four files each ca
 | Tier | Document | Role | Read it for… |
 |------|----------|------|--------------| 
 | **0 — Reconciled index** | `PLAN.md` (this file, repo root) | Disambiguates the docs below | "Which file is the plan?", contradiction history |
-| **1 — Milestone working set** | `spec/` (M0–M13, M4.5, M6.5, sub-milestones) + `spec/ROADMAP.md` + `spec/_INDEX.md` | **What** to build, **in what order** | The live build map and per-milestone acceptance criteria |
+| **1 — Milestone working set** | `spec/` (M0–M13, M4.5, M6.5, sub-milestones) + `spec/ROADMAP.md` + `spec/_INDEX.md` | **What** to build, **in what order** | The live build map and per-milestone acceptance criteria (1,040 verified EXT blocks) |
 | **2 — Master blueprint (research/architecture)** | `recon/plans/FINAL_COMPREHENSIVE_PLAN.md` | Definitive Program Plan: 100-paper research benchmark, EXT architecture, verification gates | Rationale, architecture decisions, research citations |
-| **2b — Master Refactor Spec (v8.0)** | `docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` *(also at `C:\Users\jakeb\Documents\Plans\`)* | **87 deduplicated features across 6 buildable tiers**, resolved technology decisions, VRAM budgets, thread affinity, gate criteria | The buildable roadmap — what to build next and in what order |
+| **2b — Master Refactor Spec (v8.0)** | `docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` *(also at `C:\Users\jakeb\Documents\Plans\`)* | **198 concrete features across 6 Plain-English Stages + 6 Console Ports (v8.2)**, verified 0-cycle DAG, local couch co-op in Stage 3, dual VRAM budgets (6GB/8GB), thread affinity | The authoritative buildable roadmap — what to build next and in what order |
 | **2c — Historical Refactor Spec (v7.0)** | `C:\Users\jakeb\Documents\Plans\ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v7.0.md` | Archived 480-part execution spec (superseded by v8.0 deduplication audit) | Deep algorithmic reference; do NOT use as build roadmap |
 | **3 — Current position** | `docs/status/STATUS.md` | Session-independent record of where the project actually stands | "What's done / open right now?" |
 | **4 — Historical origin** | `docs/legacy-desktop/ZombieEngine-Plan/USETHISITSV79.md` | The v79 pre-split master spec the milestones were split from (rescued from Desktop) | Cross-reference only; archived by `STATUS.md` |
 
-**Rule of thumb:** Open **`spec/ROADMAP.md`** to see the build order, **`docs/status/STATUS.md`**
-to see current progress, **`recon/plans/FINAL_COMPREHENSIVE_PLAN.md`** and **`ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v7.0.md`** for the research/architecture
-bibles, and **`USETHISITSV79.md`** only when you need the original pre-split wording.
+**Rule of thumb:** Open **`docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md`** to see the 6-stage build roadmap, **`spec/ROADMAP.md`** for milestone phases, **`docs/status/STATUS.md`**
+to see current progress, and verify math/DAG via **`python scripts/verify_plan_v8.py`**.
 
 ---
 
@@ -39,16 +38,18 @@ bibles, and **`USETHISITSV79.md`** only when you need the original pre-split wor
 | Path | Role |
 |------|------|
 | `PLAN.md` | This reconciled index. |
+| `docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` | Authoritative Master Refactor Spec v8.2 (198 concrete features, 6 stages + 6 ports, supersedes v7.0). |
 | `spec/ROADMAP.md` | Build phases (P0–P4), topological build order, environment, verification tooling. |
 | `spec/_INDEX.md` | EXT block ID → file/line index (1079+ entries listed). |
 | `spec/M0.md` … `spec/M13.md` | Per-milestone specs (M0–M13). |
 | `spec/M2.6.md`, `M2.7.md`, `M2.8.md`, `M2.9.md`, `M4.5.md`, `M4.6.md`, `M5.1.md`–`M5.4.md`, `M6.5.md`, `M8.5.md`–`M8.7.md` | Sub-milestone / expansion specs. |
 | `spec/AGENTS.md`, `spec/APPENDICES.md`, `spec/APPENDIX_K.md`, `spec/APPENDIX_L.md`, `spec/APPENDIX_M.md`, `spec/00_PROTOCOL.md`, `spec/_frontmatter.md`, `spec/_v80_presplit.md` | Spec governance, gap-fill EXT blocks, protocol. |
 | `docs/status/STATUS.md` | Current build/position record (branch, completed milestones, open items). |
-| `C:\Users\jakeb\Documents\Plans\ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v7.0.md` | Master Refactor Spec v7.0 (supersedes v6.1 cited in AGENTS.md [REQ-05]). |
+| `C:\Users\jakeb\Documents\Plans\ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v7.0.md` | Historical Master Refactor Spec v7.0 (archived for deep reference). |
 | `docs/build/build.md`, `docs/verify/verify.md`, `docs/architecture/README.md`, `docs/research/engine_architecture_lessons.md`, `docs/research/reference_game_analysis.md`, `docs/guides/README.md` | Live build/verify/architecture/research docs. |
 | `recon/plans/FINAL_COMPREHENSIVE_PLAN.md` | Definitive Program Plan (research + architecture master blueprint). |
 | `recon/plans/EXT_BLOCK_COUNTS.md` | Generated, authoritative EXT block count (1040 total, see §3.4). |
+| `scripts/verify_plan_v8.py` | Automated DAG, dependency ordering, and mirror parity validator. |
 | `.hermes.md` | Hermes agent workflow rules (applies when cwd is under `C:\ZombieEngine`). |
 | `README.md`, `AGENTS.md`, `COMPREHENSIVE_TASKLIST.md`, `HANDOFF.md`, `MEMORY.md`, `SECURITY.md`, `CONTRIBUTING.md` | Repo-root orientation, tasklist, handoff, memory. |
 
@@ -154,13 +155,13 @@ This ledger establishes the uncompromising technical standard for ZombieEngine. 
 | **Dual-Core AI Director** | L4D2 Mathematical State Machine (60Hz tick) + Embedded GGUF (`llama.cpp`) on `SlmThread` | `SLMClient` configured for `Qwen2.5-3B-Instruct.Q4_K_M.gguf` | **Qwen2.5-3B-Instruct (Q4_K_M GGUF, ~1.9 GB)** + **Left 4 Dead 2 Intensity Pacing Machine** — Dual-core architecture. Mathematical stress/intensity curves drive real-time spawning, crescendo triggers, and pacing phases on the tick; neural SLM co-processor asynchronously generates dynamic survivor dialogue, emergency radio chatter, crescendo objectives, and procedural lore. Both systems mandatory (no fallback). Target: 8 GB VRAM baseline (RTX 2070 SUPER / 3060 / 4060) with 6 GB hybrid stretch. Steam Deck APUs explicitly deprioritized. | ✅ Reconciled. Both systems locked to execute in concert. |
 | **Memory Allocator** | Vulkan Memory Allocator (VMA) 3.4.0 | VMA 3.4.0 in vcpkg | **VMA 3.4.0** with 64-byte L1 alignment and defragmentation enabled. Raw `vkAllocateMemory` strictly prohibited. | ✅ Compliant. |
 | **Task / Job System** | enkiTS 1.12 | enkiTS 1.12 in vcpkg | **enkiTS Work-Stealing Task Scheduler 1.12**; 8-core CPU affinity (Core 0 Main, Core 1 Render, Core 2 Audio, Core 3 SLM, Cores 4-7 Workers). | Compliant with v7.0 spec. |
-| **Physics Engine** | Jolt Physics 5.6.0 | Jolt headers & lib in vcpkg / custom-ports | **Jolt Physics 5.6.0 (Double-Precision `dvec3`, Cross-Platform Determinism)** for zero floating-point jitter at >50km distances. | Newest release 5.6.0 (upgraded from 5.5.0); add to `vcpkg.json` during M2 subsystem re-integration. |
-| **Windowing & Input** | SDL3 | SDL 3.4.12 in vcpkg; SDL 3.4.16 newest release | **SDL3 3.4.16** (Sub-tick 1000Hz raw mouse input, high-precision event polling). | Upgrade to 3.4.16 in next dependency refresh. |
-| **Asset Parsing** | fastgltf 0.9.0 + simdjson | Present in vcpkg cache / ports | **fastgltf 0.9.0 + simdjson** for zero-copy DMA streaming from NVMe into GPU VRAM. | Upgraded from 0.8.0; add to `vcpkg.json` during M4 asset streamer integration. |
-| **Entity Component System** | EnTT 4.0.0 / 3.14 LTS | EnTT in vcpkg | **EnTT 4.0.0** (`view<Transform, MeshComponent>`) for cache-friendly archetype iteration. | Compliant; to be re-linked in CMake during M1 bridge pass. |
-| **Logging & Formatting** | spdlog 1.17.0 + fmt 11.x | Present in vcpkg | **spdlog 1.17.0 + fmt** for zero-alloc asynchronous ring buffer logging. | ✅ Compliant. |
-| **Data Interchange** | nlohmann-json 3.12.0 | Present in vcpkg | **nlohmann-json 3.12.0** for fast JSON mod manifests and config loading. | ✅ Compliant. |
-| **Unit Testing** | Catch2 3.16.0 | In vcpkg registry | **Catch2 3.16.0** for standalone subsystem test harness. | To be linked when re-enabling `tests/` target. |
+| **Physics Engine** | Jolt Physics 5.6.0 | Jolt 5.6.0 active in vcpkg.json | **Jolt Physics 5.6.0 (Double-Precision `dvec3`, Cross-Platform Determinism)** for zero floating-point jitter at >50km distances. | ✅ Active in `vcpkg.json` with `cross-platform-deterministic` & `debugrenderer`. |
+| **Windowing & Input** | SDL3 | SDL 3.4.12 in vcpkg.json | **SDL3 3.4.12** (Sub-tick 1000Hz raw mouse input, high-precision event polling). | ✅ Active in `vcpkg.json` with `vulkan` feature. |
+| **Asset Parsing** | fastgltf 0.9.0 | Active in vcpkg.json | **fastgltf 0.9.0** for zero-copy DMA streaming from NVMe into GPU VRAM. | ✅ Active in `vcpkg.json`. |
+| **Entity Component System** | EnTT 3.16.0 | Active in vcpkg.json | **EnTT 3.16.0** (`view<Transform, MeshComponent>`) for cache-friendly archetype iteration. | ✅ Active in `vcpkg.json`. |
+| **Logging & Formatting** | spdlog 1.17.0 | Active in vcpkg.json | **spdlog 1.17.0** for zero-alloc asynchronous ring buffer logging. | ✅ Compliant. |
+| **Data Interchange** | nlohmann-json 3.12.0 | Active in vcpkg.json | **nlohmann-json 3.12.0** for fast JSON mod manifests and config loading. | ✅ Compliant. |
+| **Unit Testing** | Catch2 3.15.2 | Active in vcpkg.json | **Catch2 3.15.2** for standalone subsystem test harness. | ✅ Active in `vcpkg.json`. |
 
 ---
 

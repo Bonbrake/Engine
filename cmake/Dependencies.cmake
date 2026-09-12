@@ -1,3 +1,4 @@
+find_package(Vulkan REQUIRED)
 find_package(SDL3 CONFIG REQUIRED)
 find_package(VulkanHeaders CONFIG REQUIRED)
 find_package(vk-bootstrap CONFIG REQUIRED)
@@ -23,7 +24,20 @@ target_include_directories(ze-deps INTERFACE
     ${CMAKE_SOURCE_DIR}/include
     ${STB_INCLUDE_DIR}
 )
-target_compile_definitions(ze-deps INTERFACE ENGINE_DEV_TOOLS)
+target_compile_definitions(ze-deps INTERFACE
+    NOMINMAX
+    WIN32_LEAN_AND_MEAN
+    ENGINE_DEV_TOOLS
+    JPH_CROSS_PLATFORM_DETERMINISTIC
+    JPH_DOUBLE_PRECISION
+    JPH_DEBUG_RENDERER
+    GLM_ENABLE_EXPERIMENTAL
+    IMGUI_IMPL_VULKAN_HAS_DYNAMIC_RENDERING=1
+    IMGUI_IMPL_VULKAN_USE_VOLK=1
+    VK_NO_PROTOTYPES
+    VULKAN_HPP_NO_EXCEPTIONS
+    VK_USE_PLATFORM_WIN32_KHR
+)
 target_link_libraries(ze-deps INTERFACE
     SDL3::SDL3
     Vulkan::Headers

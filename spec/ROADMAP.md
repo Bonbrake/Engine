@@ -18,12 +18,12 @@
 |-------|------|-----------|------------------|-------------------|
 | P0 | Foundation | M0, M1 | Vulkan 1.4 bootstrap + capability tiering; ECS core; DescriptorSlotAllocator (M0-EXT-08), PipelineCompatValidator (M0-EXT-10). | M0-EXT-08 ✅, M0-EXT-10 ✅ |
 | P1 | Core engine | M2, M3 | Jolt physics + EventBus; renderer (draw, passes, debug-draw). First triangle on screen. | — |
-| P2 | World & simulation | M4, M4.5, M5, M6, M6.5 | Procedural worldgen + streaming; render features; AI (scent/fear/horde); audio. **VERTICAL SLICE TARGET** | — |
+| P2 | World & simulation | M4, M4.5, M5, M6, M6.5, M2.8 | Procedural worldgen + streaming; render features; AI (scent/fear/horde); audio; local 2P splitscreen (M2.8). **VERTICAL SLICE TARGET** | — |
 | P3 | Systems & content | M7, M8, M9, M10 | Settlement sim (SEIR/faction/truss), vehicles, M10. Horde, villages, driving. | — |
-| P4 | Game layer | M11, M12, M13 | UI/HUD, M12, modding. The playable GAME. | — |
+| P4 | Game layer | M11, M12, M13 | UI/HUD, online co-op netcode (M12), modding. The playable GAME. | — |
 
 Build order (topological, engine-first):
-`M0 → M1 → M2 → M3 → M4 → M4.5 → M5 → M6 → M6.5 → M7 → M8 → M9 → M10 → M11 → M12 → M13`
+`M0 → M1 → M2 → M3 → M4 → M4.5 → M5 → M6 → M6.5 (incl. M2.8 Splitscreen) → M7 → M8 → M9 → M10 → M11 → M12 → M13`
 
 ## Canonical milestone frontmatter (NEW schema)
 Every `spec/Mx.md` MUST carry:
@@ -45,20 +45,20 @@ index: see llms.txt or the <details> block index below
 - `title` must be specific (M0 = "Vulkan 1.4 native bootstrap + capability tiering").
 
 ## Build environment (Windows)
-- **Compiler:** MSVC 2022 (19.44.35228) from VS dev command prompt (`vcvars64.bat`)
-- **Generator:** Ninja via CMake
-- **Dependencies:** vcpkg (29 packages, auto-installed via cmake configure)
-- **Build commands:**
-  1. Open VS 2022 Developer Command Prompt (x64)
-  2. `cd C:\ZombieEngine`
-  3. `cmake -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows`
-  4. `cmake --build build --target ZombieEngine -- -j4`
-- **Output:** `build/ZombieEngine.exe` (14+ MB debug build, 39+ translation units)
+- **Compiler:** MSVC 2022 v14.44 (VS 2022 Build Tools v17.14.40)
+- **Generator:** Ninja 1.13 via CMake 4.4.3
+- **Dependencies:** vcpkg manifest mode (`vcpkg_installed/x64-windows`)
+- **Canonical build command:**
+  ```cmd
+  cmd.exe /c "C:\ZombieEngine\scripts\build_ze.cmd"
+  ```
+- **Output:** `build/EndlessQuarantine.exe`
+- **Headless validation:** `build\EndlessQuarantine.exe --headless` (Zero Validation Layer Exceptions, [REQ-04])
 
 ## Verification tooling
-- `scripts/verify_m0_parity.py` — structural spec verifier (1,040 EXT blocks, all pass)
-- `recon/check_versions.py` — dependency freshness checker (queries vcpkg + GitHub APIs)
-- 3-pass verify discipline: read-verify → build-verify (MSVC compile) → functional-verify (standalone test run)
+- `scripts/verify_ext_block_counts.py` — authoritative EXT block count verifier (1,040 EXT blocks)
+- `scripts/check_versions.py` — dependency freshness checker (queries live GitHub API for latest releases)
+- 3-pass verify discipline: read-verify → build-verify (MSVC compile) → functional-verify (headless test run)
 
 ## Implemented M0-EXT blocks (src/render/)
 | Block | File | What it does | Status |

@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>      // glm::qua, glm::mat4_cast
+#include <filesystem>
 #include <fstream>
 #include <vector>
 #include <string.h>
@@ -33,9 +34,33 @@ struct DrawIndexedIndirectCommand {
 };
 
 static std::vector<uint32_t> readFile(const std::string& filename) {
-    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+    std::filesystem::path p(filename);
+    if (!std::filesystem::exists(p)) {
+        // If filename starts with "build/", try stripping it if cwd is already build/
+        if (filename.rfind("build/", 0) == 0) {
+            std::filesystem::path stripped = filename.substr(6);
+            if (std::filesystem::exists(stripped)) {
+                p = stripped;
+            }
+        }
+    }
+    if (!std::filesystem::exists(p)) {
+        // Try relative to parent directory
+        std::filesystem::path parent = std::filesystem::path("..") / filename;
+        if (std::filesystem::exists(parent)) {
+            p = parent;
+        }
+    }
+    if (!std::filesystem::exists(p)) {
+        // Try canonical repo root
+        std::filesystem::path root = std::filesystem::path("C:/ZombieEngine") / filename;
+        if (std::filesystem::exists(root)) {
+            p = root;
+        }
+    }
+    std::ifstream file(p, std::ios::ate | std::ios::binary);
     if (!file.is_open()) {
-        LOG_ERROR("Failed to open {}", filename);
+        LOG_ERROR("Failed to open shader file {} (resolved to {})", filename, p.string());
         return {};
     }
     size_t fileSize = (size_t)file.tellg();
@@ -458,6 +483,56 @@ void TriangleRenderer::createPipelines(Device* device, VkFormat colorFormat) {
     if (!meshPipelines.empty()) meshPipeline = meshPipelines[0];
     vkDestroyShaderModule(device->getLogicalDevice(), meshVertModule, nullptr);
 
+    // [T1-03] PBR Metallic-Roughness graphics pipeline
+    auto pbrVertCode = readFile("build/shaders/pbr.vert.spv");
+    auto pbrFragCode = readFile("build/shaders/pbr.frag.spv");
+    if (!pbrVertCode.empty() && !pbrFragCode.empty()) {
+        VkShaderModule pbrVertModule = createShaderModule(device->getLogicalDevice(), pbrVertCode);
+        VkShaderModule pbrFragModule = createShaderModule(device->getLogicalDevice(), pbrFragCode);
+
+        VkPipelineShaderStageCreateInfo pbrVertStage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
+        pbrVertStage.stage = VK_SHADER_STAGE_VERTEX_BIT;
+        pbrVertStage.module = pbrVertModule;
+        pbrVertStage.pName = "main";
+
+        VkPipelineShaderStageCreateInfo pbrFragStage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
+        pbrFragStage.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+        pbrFragStage.module = pbrFragModule;
+        pbrFragStage.pName = "main";
+
+        VkPipelineShaderStageCreateInfo pbrStages[] = { pbrVertStage, pbrFragStage };
+
+        VkVertexInputAttributeDescription pbrAttribs[3]{};
+        pbrAttribs[0].binding = 0; pbrAttribs[0].location = 0;
+        pbrAttribs[0].format = VK_FORMAT_R32G32B32_SFLOAT; pbrAttribs[0].offset = 0;
+        pbrAttribs[1].binding = 0; pbrAttribs[1].location = 1;
+        pbrAttribs[1].format = VK_FORMAT_R32G32B32_SFLOAT; pbrAttribs[1].offset = sizeof(float) * 3;
+        pbrAttribs[2].binding = 0; pbrAttribs[2].location = 2;
+        pbrAttribs[2].format = VK_FORMAT_R32G32_SFLOAT; pbrAttribs[2].offset = sizeof(float) * 6;
+
+        VkPipelineVertexInputStateCreateInfo pbrVii{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
+        pbrVii.vertexBindingDescriptionCount = 1;
+        pbrVii.pVertexBindingDescriptions = &meshBinding;
+        pbrVii.vertexAttributeDescriptionCount = 3;
+        pbrVii.pVertexAttributeDescriptions = pbrAttribs;
+
+        VkGraphicsPipelineCreateInfo pbrInfo = pipelineInfo;
+        pbrInfo.stageCount = 2;
+        pbrInfo.pStages = pbrStages;
+        pbrInfo.pVertexInputState = &pbrVii;
+        pbrInfo.pRasterizationState = &meshRast;
+
+        std::vector<VkGraphicsPipelineCreateInfo> pbrBatch = { pbrInfo };
+        auto pbrPipelines = PipelineBuilder::buildPipelines(pbrBatch, device);
+        if (!pbrPipelines.empty()) {
+            pbrPipeline = pbrPipelines[0];
+            LOG_INFO("TriangleRenderer: [T1-03] PBR metallic-roughness pipeline successfully created.");
+        }
+
+        vkDestroyShaderModule(device->getLogicalDevice(), pbrVertModule, nullptr);
+        vkDestroyShaderModule(device->getLogicalDevice(), pbrFragModule, nullptr);
+    }
+
     vkDestroyShaderModule(device->getLogicalDevice(), vertModule, nullptr);
     vkDestroyShaderModule(device->getLogicalDevice(), fragModule, nullptr);
 
@@ -512,37 +587,53 @@ void TriangleRenderer::cleanup(Device* device) {
         }
     }
 
-    if (pipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), pipeline, nullptr);
-    if (wireframePipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), wireframePipeline, nullptr);
-    if (meshPipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), meshPipeline, nullptr);
-    if (pipelineLayout != VK_NULL_HANDLE) vkDestroyPipelineLayout(device->getLogicalDevice(), pipelineLayout, nullptr);
-    if (cullPipeline != VK_NULL_HANDLE) vkDestroyPipeline(device->getLogicalDevice(), cullPipeline, nullptr);
+    if (pipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), pipeline, nullptr); pipeline = VK_NULL_HANDLE; }
+    if (wireframePipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), wireframePipeline, nullptr); wireframePipeline = VK_NULL_HANDLE; }
+    if (meshPipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), meshPipeline, nullptr); meshPipeline = VK_NULL_HANDLE; }
+    if (pbrPipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), pbrPipeline, nullptr); pbrPipeline = VK_NULL_HANDLE; }
+    if (pipelineLayout != VK_NULL_HANDLE) { vkDestroyPipelineLayout(device->getLogicalDevice(), pipelineLayout, nullptr); pipelineLayout = VK_NULL_HANDLE; }
+    if (cullPipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), cullPipeline, nullptr); cullPipeline = VK_NULL_HANDLE; }
+    if (cullPipelineLayout != VK_NULL_HANDLE) { vkDestroyPipelineLayout(device->getLogicalDevice(), cullPipelineLayout, nullptr); cullPipelineLayout = VK_NULL_HANDLE; }
     
-    if (vertexBuffer != VK_NULL_HANDLE) vmaDestroyBuffer(device->getAllocator(), vertexBuffer, vertexAllocation);
-    if (indexBuffer != VK_NULL_HANDLE) vmaDestroyBuffer(device->getAllocator(), indexBuffer, indexAllocation);
-    if (instanceBuffer != VK_NULL_HANDLE) vmaDestroyBuffer(device->getAllocator(), instanceBuffer, instanceAllocation);
+    if (vertexBuffer != VK_NULL_HANDLE) { vmaDestroyBuffer(device->getAllocator(), vertexBuffer, vertexAllocation); vertexBuffer = VK_NULL_HANDLE; }
+    if (indexBuffer != VK_NULL_HANDLE) { vmaDestroyBuffer(device->getAllocator(), indexBuffer, indexAllocation); indexBuffer = VK_NULL_HANDLE; }
+    if (instanceBuffer != VK_NULL_HANDLE) { vmaDestroyBuffer(device->getAllocator(), instanceBuffer, instanceAllocation); instanceBuffer = VK_NULL_HANDLE; }
     for (int i = 0; i < 3; i++) {
-        if (indirectBuffer[i] != VK_NULL_HANDLE) vmaDestroyBuffer(device->getAllocator(), indirectBuffer[i], indirectAllocation[i]);
-        if (countBuffer[i] != VK_NULL_HANDLE) vmaDestroyBuffer(device->getAllocator(), countBuffer[i], countAllocation[i]);
-        if (countReadbackBuffer[i] != VK_NULL_HANDLE) vmaDestroyBuffer(device->getAllocator(), countReadbackBuffer[i], countReadbackAllocation[i]);
+        if (indirectBuffer[i] != VK_NULL_HANDLE) { vmaDestroyBuffer(device->getAllocator(), indirectBuffer[i], indirectAllocation[i]); indirectBuffer[i] = VK_NULL_HANDLE; }
+        if (countBuffer[i] != VK_NULL_HANDLE) { vmaDestroyBuffer(device->getAllocator(), countBuffer[i], countAllocation[i]); countBuffer[i] = VK_NULL_HANDLE; }
+        if (countReadbackBuffer[i] != VK_NULL_HANDLE) { vmaDestroyBuffer(device->getAllocator(), countReadbackBuffer[i], countReadbackAllocation[i]); countReadbackBuffer[i] = VK_NULL_HANDLE; }
     }
 
     for(auto layout : graphicsSetLayouts) {
         if (layout != VK_NULL_HANDLE) vkDestroyDescriptorSetLayout(device->getLogicalDevice(), layout, nullptr);
     }
+    graphicsSetLayouts.clear();
     for(auto layout : computeSetLayouts) {
         if (layout != VK_NULL_HANDLE) vkDestroyDescriptorSetLayout(device->getLogicalDevice(), layout, nullptr);
     }
+    computeSetLayouts.clear();
     
     if (descriptorBuffer != VK_NULL_HANDLE) {
         vmaDestroyBuffer(device->getAllocator(), descriptorBuffer, descriptorAllocation);
+        descriptorBuffer = VK_NULL_HANDLE;
     }
     
-    if (depthSampler != VK_NULL_HANDLE) vkDestroySampler(device->getLogicalDevice(), depthSampler, nullptr);
+    if (depthSampler != VK_NULL_HANDLE) { vkDestroySampler(device->getLogicalDevice(), depthSampler, nullptr); depthSampler = VK_NULL_HANDLE; }
     if (dummyDepthImage != VK_NULL_HANDLE) {
         vkDestroyImageView(device->getLogicalDevice(), dummyDepthView, nullptr);
+        dummyDepthView = VK_NULL_HANDLE;
         vmaDestroyImage(device->getAllocator(), dummyDepthImage, dummyDepthAllocation);
+        dummyDepthImage = VK_NULL_HANDLE;
     }
+}
+
+bool TriangleRenderer::testPipelineCreation(Device* device, VkFormat colorFormat) {
+    createPipelines(device, colorFormat);
+    bool valid = (pipeline != VK_NULL_HANDLE &&
+                  meshPipeline != VK_NULL_HANDLE &&
+                  pbrPipeline != VK_NULL_HANDLE &&
+                  cullPipeline != VK_NULL_HANDLE);
+    return valid;
 }
 
 void TriangleRenderer::cull(VkCommandBuffer cmd, uint32_t imageIndex, VkImageView currentDepthView, Device* device) {
@@ -668,10 +759,11 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
     // [Slice 0a] Dev-test cube (bootstrap fallback, only when bridge absent): draw the
     // intact mesh directly, bypassing the ECS bridge. Gated to --dev via setDevTestMesh().
     MeshAsset* devTestMesh = sceneAssets_ ? sceneAssets_->GetMesh(devTestMeshHandle_) : nullptr;
+    VkPipeline activeMeshPipeline = (pbrPipeline != VK_NULL_HANDLE) ? pbrPipeline : meshPipeline;
     if (!bridgeActive && devTestMesh && devTestMesh->vertexBuffer != VK_NULL_HANDLE &&
-        devTestMesh->indexBuffer != VK_NULL_HANDLE && meshPipeline != VK_NULL_HANDLE) {
+        devTestMesh->indexBuffer != VK_NULL_HANDLE && activeMeshPipeline != VK_NULL_HANDLE) {
 
-        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, meshPipeline);
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, activeMeshPipeline);
 
         // Real perspective MVP for the Path A static cube (centered at origin).
         glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f)) *
@@ -699,10 +791,10 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
         uint32_t renderedEntities = 0;
         auto viewEnts = ecsCtx_->GetRegistry().view<ecs::Transform, ecs::MeshComponent>();
         frameArena_.Reset();
-        // Bridge draws real meshes through meshPipeline — must be bound (Path A did this at
+        // Bridge draws real meshes through activeMeshPipeline — must be bound (Path A did this at
         // line 650). With Path A gated off under bridgeActive, nothing else binds it, so the
         // draws would hit an unbound pipeline -> black frame.
-        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, meshPipeline);
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, activeMeshPipeline);
         for (entt::entity e : viewEnts) {
             const auto& mc = viewEnts.get<ecs::MeshComponent>(e);
             MeshAsset* mesh = sceneAssets_->GetMesh(mc.meshHandle);

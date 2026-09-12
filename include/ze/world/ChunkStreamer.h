@@ -76,8 +76,8 @@ public:
 
     // Configuration
     void setViewDistance(float meters) { viewDistance_ = meters; }
-    void setLODDistances(float near, float mid, float far) {
-        lodNear_ = near; lodMid_ = mid; lodFar_ = far;
+    void setLODDistances(float nearDist, float midDist, float farDist) {
+        lodNear_ = nearDist; lodMid_ = midDist; lodFar_ = farDist;
     }
 
 private:

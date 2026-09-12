@@ -1,0 +1,156 @@
+"Action Manifest"
+{
+	"configurations"
+	{
+		"controller_neptune"
+		{
+			"0"
+			{
+				"path" "steam_deck_bindings.vdf"
+			}
+		}
+		"controller_xbox360"
+		{
+			"0"
+			{
+				"path" "xbox_bindings.vdf"
+			}
+		}
+		"controller_ps5"
+		{
+			"0"
+			{
+				"path" "dualsense_bindings.vdf"
+			}
+		}
+	}
+	"actions"
+	{
+		"InGame"
+		{
+			"title" "#Set_InGame"
+			"StickPadGyro"
+			{
+				"Move"
+				{
+					"title" "#Action_Move"
+					"input_mode" "joystick_move"
+				}
+				"Aim"
+				{
+					"title" "#Action_Aim"
+					"input_mode" "joystick_move"
+				}
+			}
+			"Button"
+			{
+				"Fire"
+				{
+					"title" "#Action_Fire"
+				}
+				"Reload"
+				{
+					"title" "#Action_Reload"
+				}
+				"PointShootTuck"
+				{
+					"title" "#Action_PointShootTuck"
+				}
+				"PhysicsGrab"
+				{
+					"title" "#Action_PhysicsGrab"
+				}
+				"TacticalWheel"
+				{
+					"title" "#Action_TacticalWheel"
+				}
+				"Jump"
+				{
+					"title" "#Action_Jump"
+				}
+				"Crouch"
+				{
+					"title" "#Action_Crouch"
+				}
+				"Interact"
+				{
+					"title" "#Action_Interact"
+				}
+				"Flashlight"
+				{
+					"title" "#Action_Flashlight"
+				}
+				"MeleeBash"
+				{
+					"title" "#Action_MeleeBash"
+				}
+			}
+		}
+		"TacticalWheel"
+		{
+			"title" "#Set_TacticalWheel"
+			"StickPadGyro"
+			{
+				"SelectOrder"
+				{
+					"title" "#Action_SelectOrder"
+					"input_mode" "joystick_move"
+				}
+			}
+			"Button"
+			{
+				"ConfirmOrder"
+				{
+					"title" "#Action_ConfirmOrder"
+				}
+				"CancelOrder"
+				{
+					"title" "#Action_CancelOrder"
+				}
+			}
+		}
+		"Menu"
+		{
+			"title" "#Set_Menu"
+			"Button"
+			{
+				"MenuUp" "#Action_MenuUp"
+				"MenuDown" "#Action_MenuDown"
+				"MenuLeft" "#Action_MenuLeft"
+				"MenuRight" "#Action_MenuRight"
+				"MenuSelect" "#Action_MenuSelect"
+				"MenuBack" "#Action_MenuBack"
+			}
+		}
+	}
+	"localization"
+	{
+		"english"
+		{
+			"Set_InGame" "In-Game Quarantine Controls"
+			"Set_TacticalWheel" "Tactical Squad Command Wheel"
+			"Set_Menu" "Quarantine UI Menu"
+			"Action_Move" "Movement"
+			"Action_Aim" "Look / Weapon Free-Aim"
+			"Action_Fire" "Fire Weapon"
+			"Action_Reload" "Tactical Reload / Mag Check (Hold)"
+			"Action_PointShootTuck" "Compressed High-Ready Point Shooting"
+			"Action_PhysicsGrab" "Physics Grab / Item Arrange"
+			"Action_TacticalWheel" "Hold for Squad Command Radial"
+			"Action_Jump" "Vault / Jump"
+			"Action_Crouch" "Tactical Crouch"
+			"Action_Interact" "Interact / Open Door"
+			"Action_Flashlight" "Weapon Tactical Light"
+			"Action_MeleeBash" "Weapon Buttstock Bash"
+			"Action_SelectOrder" "Select Directive"
+			"Action_ConfirmOrder" "Issue Order"
+			"Action_CancelOrder" "Cancel Command"
+			"Action_MenuUp" "Navigate Up"
+			"Action_MenuDown" "Navigate Down"
+			"Action_MenuLeft" "Navigate Left"
+			"Action_MenuRight" "Navigate Right"
+			"Action_MenuSelect" "Select"
+			"Action_MenuBack" "Back"
+		}
+	}
+}

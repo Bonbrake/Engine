@@ -41,24 +41,14 @@ if(TEST_SRC_FILES)
     )
 
     # Ensure vcpkg release runtime DLLs are co-located for test execution.
-    set(VCPKG_RELEASE_BIN_DIR "$ENV{VCPKG_ROOT}/installed/x64-windows/bin")
-    if(EXISTS "${VCPKG_RELEASE_BIN_DIR}")
-        add_custom_command(TARGET ZombieEngineTests POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${VCPKG_RELEASE_BIN_DIR}/SDL3.dll"
-                "$<TARGET_FILE_DIR:ZombieEngineTests>")
-        add_custom_command(TARGET ZombieEngineTests POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${VCPKG_RELEASE_BIN_DIR}/enkiTS.dll"
-                "${VCPKG_RELEASE_BIN_DIR}/spdlog.dll"
-                "${VCPKG_RELEASE_BIN_DIR}/fmt.dll"
-                "${VCPKG_RELEASE_BIN_DIR}/msdfgen-core.dll"
-                "${VCPKG_RELEASE_BIN_DIR}/msdfgen-ext.dll"
-                "${VCPKG_RELEASE_BIN_DIR}/fastgltf.dll"
-                "${VCPKG_RELEASE_BIN_DIR}/vulkan-1.dll"
-                "$<TARGET_FILE_DIR:ZombieEngineTests>"
-            COMMENT "Copying vcpkg release runtime DLLs for test binary")
+    if(NOT DEFINED VCPKG_INSTALLED_DIR)
+        set(VCPKG_INSTALLED_DIR "${CMAKE_SOURCE_DIR}/vcpkg_installed")
     endif()
+    add_custom_command(TARGET ZombieEngineTests POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${VCPKG_INSTALLED_DIR}/x64-windows/bin"
+            "$<TARGET_FILE_DIR:ZombieEngineTests>"
+        COMMENT "Copying vcpkg release runtime DLLs for test binary")
 
     # Ensure vcpkg debug runtime DLLs are co-located for test discovery/run.
     set(VCPKG_DEBUG_BIN_DIR "$ENV{VCPKG_ROOT}/installed/x64-windows/debug/bin")

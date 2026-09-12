@@ -18,9 +18,11 @@ int main(int argc, char* argv[]) {
 
         if (core::Config::get().headless) {
             if (engine.verifyHeadlessInit()) {
+                std::printf("HEADLESS_BOOT_OK\n");
                 LOG_INFO("HEADLESS CI SMOKE TEST: SUCCESS");
                 return 0;
             } else {
+                std::fprintf(stderr, "HEADLESS CI SMOKE TEST: FAILED\n");
                 LOG_CRITICAL("HEADLESS CI SMOKE TEST: FAILED");
                 return 1;
             }
@@ -33,7 +35,7 @@ int main(int argc, char* argv[]) {
             } else {
                 std::cerr << "Vulkan Device Lost: " << msg << std::endl;
             }
-            return -4; // VK_ERROR_DEVICE_LOST exit code
+            return -4;
         }
         if (core::Logger::get()) {
             LOG_CRITICAL("Engine terminated unexpectedly: {}", msg);

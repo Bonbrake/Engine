@@ -43,3 +43,27 @@ archive/old_milestones/*bak*/
 
 # Keep docs/build/ tracked — intentionally not ignored
 scripts/vcpkg-manifest-install.log
+
+# Root build artifacts and loose binaries
+/.ninja_deps
+/.ninja_log
+/build.ninja
+/CTestTestfile.cmake
+tests/CTestTestfile.cmake
+tests/*.dll
+*.spv
+/*.dll
+/*.exe
+/crash_dump.dmp
+/crash_sidecar.txt
+/vcpkg-manifest-install.log
+/vcpkg-bootstrap.log
+
+# Scratch tools and logs
+tools/__pycache__/
+tools/*.log
+hello_rust.rs
+test_action_bindings.txt
+run_build.bat
+build_setup.bat
+rebuild.bat

@@ -35,6 +35,9 @@ public:
     // For logging reduction
     void readbackCount(Device* device, uint32_t imageIndex);
     
+    // [T1-03] Headless pipeline creation and validation test
+    bool testPipelineCreation(Device* device, VkFormat colorFormat = VK_FORMAT_B8G8R8A8_UNORM);
+    
 private:
     void createBuffers(Device* device);
     void createPipelines(Device* device, VkFormat colorFormat);
@@ -44,6 +47,7 @@ private:
     VkPipeline pipeline = VK_NULL_HANDLE;
     VkPipeline wireframePipeline = VK_NULL_HANDLE; // [M1-EXT-04] Derivative variant
     VkPipeline meshPipeline = VK_NULL_HANDLE;       // Slice 0a: dev-test cube (pos+normal, 32B stride)
+    VkPipeline pbrPipeline = VK_NULL_HANDLE;        // [T1-03] PBR metallic-roughness mesh pipeline
     
     // Slice 0a: dev-test mesh HANDLE (first LoadMesh), gated to --dev rendering.
     // Stored as a handle, resolved via GetMesh() at point of use — NOT a cached

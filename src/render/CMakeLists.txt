@@ -1,4 +1,5 @@
 set(SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/AssetCooker.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AssetManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CommandManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DescriptorSlotAllocator.cpp
@@ -8,6 +9,8 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PipelineBuilder.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PipelineCacheManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PipelineCompatValidator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PipelineWarmup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ProceduralWeaponAnim.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/RenderGraph.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ShaderManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Swapchain.cpp

@@ -1,43 +1,35 @@
-cmake_minimum_required(VERSION 3.20)
-project(ZombieEngine CXX)
+cmake_minimum_required(VERSION 3.28)
+project(EndlessQuarantine LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+# --- vcpkg integration ---
+# Dependencies were installed via `vcpkg install` into ./vcpkg_installed/x64-windows
+# (see tools/vcpkg_install.bat). We point CMAKE_PREFIX_PATH at that tree rather than
+# using the vcpkg toolchain file, so CMake's auto-manifest-install doesn't re-trigger.
+if(NOT DEFINED ENV{VCPKG_INSTALLED_DIR})
+    # Fallback if run without the wrapper script.
+    set(VCPKG_INSTALLED_DIR "${CMAKE_SOURCE_DIR}/vcpkg_installed")
+endif()
+list(PREPEND CMAKE_PREFIX_PATH "${VCPKG_INSTALLED_DIR}/x64-windows")
 
 include(cmake/CompilerFlags.cmake)
 include(cmake/Dependencies.cmake)
 include(cmake/Shaders.cmake)
 
 # Subsystems
-add_subdirectory(src/ai)
-add_subdirectory(src/audio)
-add_subdirectory(src/combat)
-add_subdirectory(src/core)
-add_subdirectory(src/debug)
-add_subdirectory(src/ecs)
-add_subdirectory(src/events)
-add_subdirectory(src/modding)
-add_subdirectory(src/net)
-add_subdirectory(src/physics)
-add_subdirectory(src/render)
-add_subdirectory(src/save)
-add_subdirectory(src/slm)
-add_subdirectory(src/survival)
-add_subdirectory(src/ui)
-add_subdirectory(src/vehicle)
-add_subdirectory(src/world)
+add_subdirectory(src)
 
-# Main executable
-add_executable(ZombieEngine
-    src/main.cpp
-    ${SHADER_SPV_FILES}
-)
-target_include_directories(ZombieEngine PRIVATE
-    include
-    ${STB_INCLUDE_DIR}
-)
-target_link_libraries(ZombieEngine PRIVATE
+set(ZE_ALL_SUBSYSTEMS
+    ze-ai
+    ze-audio
+    ze-combat
     ze-core
     ze-debug
     ze-ecs
@@ -48,56 +40,58 @@ target_link_libraries(ZombieEngine PRIVATE
     ze-render
     ze-save
     ze-slm
-    ze-ui
-    ze-world
-    ze-audio
-    ze-ai
-    ze-combat
     ze-survival
+    ze-ui
     ze-vehicle
-    SDL3::SDL3
-    Vulkan::Headers
-    vk-bootstrap::vk-bootstrap
-    glm::glm
-    volk::volk
-    spdlog::spdlog
-    enkiTS::enkiTS
-    nlohmann_json::nlohmann_json
-    cxxopts::cxxopts
-    GPUOpen::VulkanMemoryAllocator
-    EnTT::EnTT
-    imgui::imgui
-    msdfgen::msdfgen-core
-    msdfgen::msdfgen-ext
-    unofficial::spirv-reflect
-    fastgltf::fastgltf
-    Jolt::Jolt
+    ze-world
 )
-apply_engine_definitions(ZombieEngine)
-apply_sanitizer(ZombieEngine)
 
-# Focus probe
-add_executable(focus_probe archive/phase1_verify/focus_probe.cpp)
-target_link_libraries(focus_probe PRIVATE SDL3::SDL3)
+add_executable(EndlessQuarantine
+    src/main.cpp
+    ${SHADER_SPV_FILES}
+)
+target_include_directories(EndlessQuarantine PRIVATE
+    include
+    ${STB_INCLUDE_DIR}
+)
+target_link_libraries(EndlessQuarantine PRIVATE
+    ${ZE_ALL_SUBSYSTEMS}
+    ze-deps
+)
+apply_engine_definitions(EndlessQuarantine)
 
-# Standalone sanity suite (zero-dependency, stdlib-only)
-add_executable(sanity_suite sanity_suite_harness/sanity.cpp)
-apply_sanitizer(sanity_suite)
+# Alias ZombieEngine -> EndlessQuarantine
+add_executable(ZombieEngine ALIAS EndlessQuarantine)
 
-# Tests
+# Copy DLLs post-build
+add_custom_command(TARGET EndlessQuarantine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${VCPKG_INSTALLED_DIR}/x64-windows/bin"
+        "$<TARGET_FILE_DIR:EndlessQuarantine>"
+)
+
 enable_testing()
-add_subdirectory(tests)
-apply_sanitizer(ZombieEngineTests)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sanity_suite_harness/sanity.cpp")
+    add_executable(sanity_suite sanity_suite_harness/sanity.cpp)
+    target_link_libraries(sanity_suite PRIVATE
+        ${ZE_ALL_SUBSYSTEMS}
+        ze-deps
+    )
+    target_include_directories(sanity_suite PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        ${STB_INCLUDE_DIR}
+    )
+    apply_engine_definitions(sanity_suite)
+    add_test(NAME sanity_suite COMMAND sanity_suite)
 
-# Profiling
-if(ENGINE_ENABLE_PROFILING)
-    target_link_libraries(ZombieEngine PRIVATE Tracy::TracyClient)
+    add_custom_command(TARGET sanity_suite POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${VCPKG_INSTALLED_DIR}/x64-windows/bin"
+            "$<TARGET_FILE_DIR:sanity_suite>"
+    )
 endif()
 
-# Install rules
-include(GNUInstallDirs)
-install(TARGETS ZombieEngine DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(TARGETS ZombieEngineTests DESTINATION ${CMAKE_INSTALL_BINDIR})
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
+    add_subdirectory(tests)
+endif()
 
-# Register top-level test
-add_test(NAME ZombieEngineTests COMMAND ZombieEngineTests)

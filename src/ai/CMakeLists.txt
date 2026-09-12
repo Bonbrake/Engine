@@ -1,6 +1,11 @@
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/AIDirector.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/L4D2Director.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/L4D2SLMBridge.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ResponseSystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ScentGrid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SquadCommandWheel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SwarmEngine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ZombieFSM.cpp
 )
 

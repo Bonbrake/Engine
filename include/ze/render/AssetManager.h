@@ -3,8 +3,10 @@
 #include "AssetTypes.h"
 #include "ze/ecs/GenerationalTable.h"
 #include "ze/render/Device.h"
+#include "ze/render/StagingRingBuffer.h"
 #include <filesystem>
 #include <string>
+#include <functional>
 
 namespace render {
 
@@ -19,6 +21,8 @@ public:
     MeshAsset* GetMesh(ecs::Handle handle);
     TextureAsset* GetTexture(ecs::Handle handle);
 
+    static std::filesystem::path ResolveAssetPath(const std::filesystem::path& path);
+
 private:
     Device* device_ = nullptr;
     
@@ -27,7 +31,9 @@ private:
     
     ecs::Handle fallbackTextureHandle_{0xFFFFFFFF, 0};
     
-    void ExecuteOneShotStaging(size_t size, void* data, std::function<void(VkCommandBuffer, VkBuffer)> recordCmd);
+    StagingRingBuffer stagingRingBuffer_;
+    
+    void ExecuteStagingUpload(size_t size, const void* data, std::function<void(VkCommandBuffer, VkBuffer, size_t offset)> recordCmd);
 };
 
 } // namespace render

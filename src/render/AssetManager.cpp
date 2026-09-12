@@ -9,9 +9,34 @@
 
 namespace render {
 
+std::filesystem::path AssetManager::ResolveAssetPath(const std::filesystem::path& path) {
+    if (std::filesystem::exists(path)) {
+        return path;
+    }
+    // Check parent directory (e.g. running from build/ or build-asan/)
+    std::filesystem::path parentPath = std::filesystem::path("..") / path;
+    if (std::filesystem::exists(parentPath)) {
+        return parentPath;
+    }
+    // Check two directories up (e.g. running from build/tests/)
+    std::filesystem::path grandParentPath = std::filesystem::path("../..") / path;
+    if (std::filesystem::exists(grandParentPath)) {
+        return grandParentPath;
+    }
+    // Check canonical engine root
+    std::filesystem::path rootPath = std::filesystem::path("C:/ZombieEngine") / path;
+    if (std::filesystem::exists(rootPath)) {
+        return rootPath;
+    }
+    return path;
+}
+
 void AssetManager::Initialize(Device* device) {
     device_ = device;
     
+    // Initialize 64MB Persistent Mapped Staging Ring Buffer [M1-EXT-05 / T1-02]
+    stagingRingBuffer_.Initialize(device_->getAllocator(), 64 * 1024 * 1024);
+
     // Create 1x1 magenta fallback texture
     uint32_t magentaPixel = 0xFFFF00FF; // ABGR for full alpha magenta
     
@@ -43,7 +68,7 @@ void AssetManager::Initialize(Device* device) {
     
     vmaCreateImage(device_->getAllocator(), &imageInfo, &allocInfo, &tex.image, &tex.allocation, nullptr);
     
-    ExecuteOneShotStaging(imageSize, &magentaPixel, [&](VkCommandBuffer cmd, VkBuffer stagingBuffer) {
+    ExecuteStagingUpload(imageSize, &magentaPixel, [&](VkCommandBuffer cmd, VkBuffer stagingBuffer, size_t offset) {
         VkImageMemoryBarrier2 barrier1{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2};
         barrier1.srcStageMask = VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT;
         barrier1.srcAccessMask = 0;
@@ -60,6 +85,7 @@ void AssetManager::Initialize(Device* device) {
         vkCmdPipelineBarrier2(cmd, &dep1);
         
         VkBufferImageCopy region{};
+        region.bufferOffset = offset;
         region.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
         region.imageExtent = {1, 1, 1};
         vkCmdCopyBufferToImage(cmd, stagingBuffer, tex.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
@@ -89,7 +115,7 @@ void AssetManager::Initialize(Device* device) {
     
     fallbackTextureHandle_ = textures_.Insert(tex);
 
-    LOG_INFO("AssetManager initialized with fallback texture");
+    LOG_INFO("AssetManager initialized with persistent staging ring buffer and fallback texture");
 }
 
 void AssetManager::Destroy() {
@@ -111,31 +137,18 @@ void AssetManager::Destroy() {
         }
     }
     
+    stagingRingBuffer_.Destroy();
     LOG_INFO("AssetManager destroyed");
 }
 
-void AssetManager::ExecuteOneShotStaging(size_t size, void* data, std::function<void(VkCommandBuffer, VkBuffer)> recordCmd) {
-    // Allocate staging buffer
-    VkBufferCreateInfo bufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
-    bufInfo.size = size;
-    bufInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+void AssetManager::ExecuteStagingUpload(size_t size, const void* data, std::function<void(VkCommandBuffer, VkBuffer, size_t offset)> recordCmd) {
+    if (size == 0) return;
+
+    size_t offset = stagingRingBuffer_.Allocate(size);
+    uint8_t* dst = static_cast<uint8_t*>(stagingRingBuffer_.GetMappedPtr()) + offset;
+    memcpy(dst, data, size);
     
-    VmaAllocationCreateInfo allocInfo{};
-    allocInfo.usage = VMA_MEMORY_USAGE_AUTO;
-    allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT;
-    
-    VkBuffer stagingBuffer;
-    VmaAllocation stagingAlloc;
-    VmaAllocationInfo stagingAllocInfo;
-    
-    if (vmaCreateBuffer(device_->getAllocator(), &bufInfo, &allocInfo, &stagingBuffer, &stagingAlloc, &stagingAllocInfo) != VK_SUCCESS) {
-        LOG_CRITICAL("Failed to allocate one-shot staging buffer of size {}", size);
-        return;
-    }
-    
-    memcpy(stagingAllocInfo.pMappedData, data, size);
-    
-    // Create transient command buffer
+    // Create transient command buffer for transfer
     VkCommandPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
     poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     poolInfo.queueFamilyIndex = device_->getGraphicsQueueIndex();
@@ -156,7 +169,7 @@ void AssetManager::ExecuteOneShotStaging(size_t size, void* data, std::function<
     
     vkBeginCommandBuffer(cmd, &beginInfo);
     
-    recordCmd(cmd, stagingBuffer);
+    recordCmd(cmd, stagingRingBuffer_.GetBuffer(), offset);
     
     vkEndCommandBuffer(cmd);
     
@@ -170,15 +183,16 @@ void AssetManager::ExecuteOneShotStaging(size_t size, void* data, std::function<
     
     vkQueueSubmit(device_->getGraphicsQueue(), 1, &submitInfo, fence);
     
-    // Fence/sync before destroying staging buffer
+    // Fence/sync before freeing staging buffer
     vkWaitForFences(device_->getLogicalDevice(), 1, &fence, VK_TRUE, UINT64_MAX);
     
     vkDestroyFence(device_->getLogicalDevice(), fence, nullptr);
     vkDestroyCommandPool(device_->getLogicalDevice(), pool, nullptr);
-    vmaDestroyBuffer(device_->getAllocator(), stagingBuffer, stagingAlloc);
+    stagingRingBuffer_.Free(size);
 }
 
-ecs::Handle AssetManager::LoadTexture(const std::filesystem::path& path) {
+ecs::Handle AssetManager::LoadTexture(const std::filesystem::path& inputPath) {
+    std::filesystem::path path = ResolveAssetPath(inputPath);
     int texWidth, texHeight, texChannels;
     stbi_uc* pixels = stbi_load(path.string().c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     
@@ -215,7 +229,7 @@ ecs::Handle AssetManager::LoadTexture(const std::filesystem::path& path) {
     
     vmaCreateImage(device_->getAllocator(), &imageInfo, &allocInfo, &tex.image, &tex.allocation, nullptr);
     
-    ExecuteOneShotStaging(imageSize, pixels, [&](VkCommandBuffer cmd, VkBuffer stagingBuffer) {
+    ExecuteStagingUpload(imageSize, pixels, [&](VkCommandBuffer cmd, VkBuffer stagingBuffer, size_t offset) {
         // UNDEFINED -> TRANSFER_DST_OPTIMAL
         VkImageMemoryBarrier2 barrier1{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2};
         barrier1.srcStageMask = VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT;
@@ -233,6 +247,7 @@ ecs::Handle AssetManager::LoadTexture(const std::filesystem::path& path) {
         vkCmdPipelineBarrier2(cmd, &dep1);
         
         VkBufferImageCopy region{};
+        region.bufferOffset = offset;
         region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         region.imageSubresource.mipLevel = 0;
         region.imageSubresource.baseArrayLayer = 0;
@@ -272,7 +287,8 @@ ecs::Handle AssetManager::LoadTexture(const std::filesystem::path& path) {
     return handle;
 }
 
-ecs::Handle AssetManager::LoadMesh(const std::filesystem::path& path) {
+ecs::Handle AssetManager::LoadMesh(const std::filesystem::path& inputPath) {
+    std::filesystem::path path = ResolveAssetPath(inputPath);
     fastgltf::Parser parser;
     auto data = fastgltf::GltfDataBuffer::FromPath(path);
     if (data.error() != fastgltf::Error::None) {
@@ -387,15 +403,15 @@ ecs::Handle AssetManager::LoadMesh(const std::filesystem::path& path) {
         return ecs::Handle();
     }
     
-    ExecuteOneShotStaging(totalSize, mergedData.data(), [&](VkCommandBuffer cmd, VkBuffer stagingBuffer) {
+    ExecuteStagingUpload(totalSize, mergedData.data(), [&](VkCommandBuffer cmd, VkBuffer stagingBuffer, size_t offset) {
         VkBufferCopy vCopy{};
-        vCopy.srcOffset = 0;
+        vCopy.srcOffset = offset;
         vCopy.dstOffset = 0;
         vCopy.size = vSize;
         vkCmdCopyBuffer(cmd, stagingBuffer, mesh.vertexBuffer, 1, &vCopy);
         
         VkBufferCopy iCopy{};
-        iCopy.srcOffset = vSize;
+        iCopy.srcOffset = offset + vSize;
         iCopy.dstOffset = 0;
         iCopy.size = iSize;
         vkCmdCopyBuffer(cmd, stagingBuffer, mesh.indexBuffer, 1, &iCopy);

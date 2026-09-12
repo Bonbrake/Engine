@@ -6,6 +6,7 @@
 #include "ze/core/JobSystem.h"
 #include "ze/core/TeardownTracker.h"
 #include "ze/render/VulkanContext.h"
+#include "ze/render/TriangleRenderer.h"
 #include "ze/render/MSDFPipeline.h"
 #include "ze/render/Device.h"
 #include "ze/debug/FlyCamera.h"
@@ -840,6 +841,18 @@ static bool runRenderTests(render::Device* device) {
     LOG_INFO("RENDER TEST: Capability tier — descriptorBuffer={} shaderObject={} unifiedImageLayouts={} meshShaders={} rtPipeline={} queryTimestamps={}",
         caps.descriptorBuffer, caps.shaderObject, caps.unifiedImageLayouts,
         caps.meshShaders, caps.rtPipeline, caps.queryTimestamps);
+
+    // --- Test 4: Headless Pipeline Compilation Verification (PBR & Graphics Pipelines) ---
+    {
+        render::TriangleRenderer testRenderer;
+        bool pipeOk = testRenderer.testPipelineCreation(device, VK_FORMAT_B8G8R8A8_UNORM);
+        testRenderer.cleanup(device);
+        if (!pipeOk) {
+            LOG_CRITICAL("RENDER TEST FAIL: Headless graphics/PBR pipeline compilation failed!");
+            return false;
+        }
+        LOG_INFO("RENDER TEST PASS: Headless pipeline compilation verified (simple, wireframe, mesh, PBR, cull)");
+    }
 
     return true;
 }

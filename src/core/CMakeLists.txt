@@ -1,13 +1,16 @@
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/ActionState.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/BodycamCamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CVarSystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Config.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Engine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FileSystem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GamepadController.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Input.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/JobSystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Platform.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SteamworksManager.cpp
 )
 
 add_library(ze-core OBJECT ${SOURCE_FILES})

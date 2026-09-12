@@ -125,8 +125,8 @@ def fetch_vehicle_sources() -> dict:
 def fetch_gsound_sources() -> dict:
     """Fetch GSound audio propagation sources for M6 research."""
     sources = {
-        "gsound_doi": "https://doi.org/10.1145/1273440.1273456",
-        "gsound_crossref": "https://api.crossref.org/works/10.1145/1273440.1273456",
+        "gsound_aes41st_pdf": "http://gamma-web.iacs.umd.edu/GSOUND/gsound_aes41st.pdf",
+        "gsound_gamma_umd": "https://gamma.umd.edu/publication/380",
         "gsound_unc": "https://www.cs.unc.edu/~sonic/gsound/",
     }
     results = {}

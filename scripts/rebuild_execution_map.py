@@ -18,25 +18,15 @@ for ms in required:
     ids = sorted(set(re.findall(rf"{ms}-EXT-(\d+)", text)), key=int)
     max_id = ids[-1] if ids else 0
     block_count = len(ids)
-    
     # Extract titles for first few blocks
     samples = []
     for block_num in ids[:3]:
         block_id = f"{ms}-EXT-{block_num}"
-        anchor = f"#### [{block_id}]"
-        idx = text.find(anchor)
-        if idx == -1:
-            anchor_lower = anchor.lower()
-            idx = text.lower().find(anchor_lower)
-        if idx != -1:
-            snippet = text[idx:idx + 600]
-            m = re.search(r"^####\s*\[[^\]]+\]\s*(.*)$", snippet, re.MULTILINE)
-            if m:
-                title = m.group(1).strip()
-                if title:
-                    samples.append(f"{block_id}: {title}")
-                    continue
-        samples.append(f"{block_id}: Systems Touched")
+        m = re.search(rf"^#+\s*`?\[{block_id}\]`?\s*(.*)$", text, re.MULTILINE | re.IGNORECASE)
+        if m and m.group(1).strip():
+            samples.append(f"{block_id}: {m.group(1).strip()}")
+        else:
+            samples.append(f"{block_id}: Core System")
     
     milestones[ms] = {
         "count": block_count,

@@ -1,8 +1,8 @@
 ---
 document: Zombie Engine Master Refactor Plan v8.0
-version: 8.1-AUDITED-CROSSREFERENCED
-author: Reconciled from v7.0 via Architectural Audit + Cross-Reference (September 2026)
-supersedes: v7.0-AAA-RECONCILED (11,802 lines → deduplicated to ~133 unique features)
+version: 8.2-AUDITED-EARLY-VERSIONS-RECONCILED
+author: Reconciled from v7.0 and Early Versions (v1-v7, IDEA.md, Master Plan v79) via Comprehensive Audit (September 2026)
+supersedes: v7.0-AAA-RECONCILED (11,802 lines → deduplicated to 198 concrete features across Stages 0-5 + 6 platform ports in Stage 6)
 single_source_of_truth: true
 hardware_floors:
   minimum: 1080p @ 30 FPS (RTX 2060 6GB / RX 6600 8GB / Arc A580 8GB) | 5.0GB VRAM Cap
@@ -22,16 +22,18 @@ core_tech_stack:
 
 # ZOMBIE ENGINE MASTER REFACTOR PLAN v8.0
 ## "The Endless Quarantine" — Audited, Deduplicated, Buildable
-## Supersedes v7.0 (480 parts → 133 unique features across 6 tiers)
+## Supersedes v7.0 (480 parts → 198 concrete features across 6 stages + 6 platform ports)
 
 ---
 
-## AUDIT CHANGELOG (v7.0 → v8.0)
+## AUDIT CHANGELOG (v7.0 & Early Versions → v8.0)
 
 | Change | Detail |
 |--------|--------|
-| **Deduplication** | 480 parts collapsed to 133 unique features (many were described 2-5x at different detail levels) |
-| **Cross-reference pass (v8.1)** | 46 additional unique features recovered from v7.0 Parts 23-210 that were missed in initial dedup |
+| **Deduplication** | 480 parts collapsed to 198 concrete features across Stages 0–5 + 6 platform ports (many were described 2-5x at different detail levels) |
+| **Stage Clarification** | Stages renamed to intuitive, plain-English milestones so current progress is instantly understandable |
+| **Early Splitscreen (M2.8)** | Local 2-player couch co-op splitscreen moved forward to Stage 3 (Playable Demo) — independent of online netcode |
+| **Early Versions Recovery (v8.2)** | Recovered all unique systems from earliest versions (v1–v7, IDEA.md, Master Plan v79, WHY-FANS-LOVE): The Remnant (5th faction), Dual-Axis Fame/Infamy vectors, Nocturnal Runner threat inversion, World-Epoch offline clock, Offscreen fluid horde density, RVT terrain layers, Bernoulli fuel leaks, and ≤50 authored asset cap |
 | **Contradiction resolution** | 8 technology contradictions resolved with firm decisions (see §2) |
 | **Removed (8 items)** | Custom assembly fibers, custom hash map, custom FixedString, custom SIMD math, GGPO rollback, C++20 modules, quantum networking, "DirectX 13" |
 | **Platform ports deferred** | PS5, Xbox, Apple Silicon, Android, Switch ports moved to Tier 6 (post-PC-launch) — all preserved, not deleted |
@@ -160,17 +162,17 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 - **CPU:** Ryzen 7 5700X / Core i7-11700K (8C/16T)
 - **RAM:** 16-32 GB DDR4/DDR5
 
-### VRAM Allocation (6.2 GB Hard Ceiling on 8GB cards)
+### VRAM Allocation (Dual Hardware Target Budget)
 
-| Budget Slice | VRAM |
-|-------------|------|
-| Mip-Streamed BC7/BC5 Textures | 2.5 GB |
-| SLM Co-Processor (Qwen2.5-3B) | 1.9 GB |
-| Render Targets & G-Buffers | 0.8 GB |
-| Geometry & Vertex Buffers | 0.7 GB |
-| Jolt Physics + Audio Buffers | 0.3 GB |
-| **TOTAL GAME** | **6.2 GB** |
-| **Reserved OS / Background** | **1.8 GB** |
+| Budget Slice | 6GB Floor (RTX 2060 / 1080p @ 30) | 8GB Recommended (RTX 2070S / 1440p @ 60) |
+|---|---|---|
+| Mip-Streamed BC7/BC5 Textures | 1.8 GB | 2.5 GB |
+| SLM Co-Processor (Qwen2.5-3B Q4_K_M) | 1.8 GB | 1.9 GB |
+| Render Targets & G-Buffers | 0.6 GB (1080p Dynamic) | 0.8 GB (1440p Native) |
+| Geometry & Vertex Buffers | 0.5 GB | 0.7 GB |
+| Jolt Physics + Audio Buffers | 0.3 GB | 0.3 GB |
+| **TOTAL GAME BUDGET** | **5.0 GB (Hard Cap)** | **6.2 GB (Hard Cap)** |
+| **Reserved OS / Display Overhead** | **1.0 GB** | **1.8 GB** |
 
 ### System RAM Budget (16 GB Total)
 
@@ -217,15 +219,28 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 
 ---
 
-## §5 FEATURE ROADMAP — 6 TIERS (87 UNIQUE FEATURES)
+## §5 ROADMAP — 6 PRACTICAL STAGES (198 UNIQUE FEATURES + 6 PLATFORM PORTS)
 
 > Every unique feature from v7.0 appears below. Nothing is deleted — only deduplicated,
-> sequenced by dependency, and assigned a tier. Each tier has a **gate criterion** that
-> must pass before the next tier begins.
+> sequenced by dependency, and assigned a stage. Each stage has a **gate criterion** that
+> must pass before the next stage begins.
+
+### Roadmap At A Glance
+
+| Stage | Milestone Alignment | Plain English | Gate Criterion | Status |
+|---|---|---|---|---|
+| **Stage 0** | Tier 0 (M0/M1 Infra) | **Engine Boot** | Starts cleanly on discrete GPU with 0 errors | ✅ **Done** |
+| **Stage 1** | Tier 1 (M2 Core Render) | **3D Model & Lights** | 3D zombie model visible with shadows & lighting | 🎯 **Current Focus** |
+| **Stage 2** | Tier 2 (M1/M2/M5 Basics) | **Walking & Shooting** | Shoot a walking zombie; it falls down with ragdoll | Next |
+| **Stage 3** | Tier 3 (M3/M4/M5/M7/M8 + M2.8) | **Playable Demo & Local Splitscreen** | 10-min survival run (loot, hordes, save/load, 2P splitscreen) | Future |
+| **Stage 4** | Tier 4 (M10/M11/M2.9) | **AAA Graphics & Polish** | Rain, fog, Ray Tracing, and DLSS/FSR upscaling | Future |
+| **Stage 5** | Tier 5 (M8.6/M9/M12/M13) | **Full Campaign & Online Co-op** | Driving cars, base building, 4P online co-op, AI chat | Future |
+| **Stage 6** | Tier 6 (Consoles) | **Console Ports** | Port to PS5 Pro, Xbox Series X, Switch 2, Steam Deck | Post-PC |
 
 ---
 
-### TIER 0: FOUNDATION (Complete)
+### STAGE 0 (TIER 0): ENGINE BOOT — Completed ✅
+**Plain English:** The engine starts up, initializes Vulkan 1.4 & hardware, and shuts down with 0 errors.
 **Gate:** `HEADLESS_BOOT_OK` with clean Vulkan validation layers
 
 | # | Feature | Status |
@@ -253,7 +268,8 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 
 ---
 
-### TIER 1: CORE RENDERING ← CURRENT PRIORITY
+### STAGE 1 (TIER 1): 3D MODEL & LIGHTS ← CURRENT PRIORITY 🎯
+**Plain English:** You can see a textured 3D zombie in the scene with real lighting and shadows.
 **Gate:** Load a glTF zombie model, PBR-shade it with directional light, shadows on screen
 
 | # | Feature | Description | Deps |
@@ -284,7 +300,8 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 
 ---
 
-### TIER 2: GAME LOOP FOUNDATION
+### STAGE 2 (TIER 2): WALKING & SHOOTING
+**Plain English:** Move your character, aim your gun, watch the zombie walk towards you, shoot it, and watch it ragdoll onto the ground.
 **Gate:** Zombie entity spawns with physics, walks via flowfield AI, can be shot and ragdolls
 
 | # | Feature | Description | Deps |
@@ -311,11 +328,14 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T2-20 | **C++20 coroutine task scheduler** | std::coroutine for clean async asset loading, network RPCs without callback hell | T2-04 |
 | T2-21 | **Cache-line false-sharing prevention** | alignas(std::hardware_destructive_interference_size) on all atomic/cross-thread data | T2-04 |
 | T2-22 | **Material acoustic absorption coefficients** | Per-material dB loss (Concrete -30dB, Wood -8dB, Glass -3dB) for sound propagation | T2-12 |
+| T2-23 | **Parent-child transform hierarchy (M1-EXT-41)** | EnTT parent/child entity relationships, local-to-world matrix propagation, socket attachment for weapon mods/gear | T2-01 |
+| T2-24 | **First-person traversal & parkour (M2.9)** | Contextual obstacle vaulting, ledge mantling, physical ladder climbing, sprint-sliding with Jolt shape height adjust | T2-02, T2-04 |
 
 ---
 
-### TIER 3: GAMEPLAY SYSTEMS
-**Gate:** Playable 10-minute demo. Explore, fight hordes, find loot, save and load
+### STAGE 3 (TIER 3): PLAYABLE DEMO & LOCAL SPLITSCREEN
+**Plain English:** A real 10-minute game you can play alone or 2-player couch co-op on one screen: loot buildings, survive 500-zombie hordes, and save your progress.
+**Gate:** Playable 10-minute demo. Explore, fight hordes, find loot, save and load, optional 2-player local splitscreen (M2.8)
 
 | # | Feature | Description | Deps |
 |---|---------|-------------|------|
@@ -358,10 +378,20 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T3-37 | **Ragdoll momentum blend-back** | Evaluate bone velocities on recovery, context-sensitive get-up locomotion matching momentum | T2-09, T2-02 |
 | T3-38 | **NPC cognitive load and decision latency** | Stress increases reaction time: green bandits hesitate, veteran soldiers react instantly | T2-06 |
 | T3-39 | **Blood clotting and coagulation** | Dynamic viscosity, gravity runoff, temporal coagulation turning arterial spray to dark pools | T3-05 |
+| T3-40 | **Local splitscreen co-op (M2.8)** | Dual/quad viewport division (VkViewport/VkRect2D), multi-gamepad assignment, dual cameras, split spatial audio | T1-12, T2-04 |
+| T3-41 | **Web-based perk & progression system (M8.7)** | Non-linear skill web (Combat, Survival, Scavenging, Leadership), EventBus PerkPoints via survival milestones/factions | T2-05, T2-14 |
+| T3-42 | **Seamless interior cell streaming (M2.6)** | Portal-based occlusion & streaming transitions between exterior world chunks and building interiors with zero load screens | T3-13 |
+| T3-43 | **Diegetic wristwatch & survival compass (M10-EXT-24, M11-EXT-63)** | Physical wrist inspection showing analog time, dusk siren alarm trigger, radiation Geiger meter, and compass needle | T3-07, T1-12 |
+| T3-44 | **Dual-axis faction reputation (Fame/Infamy) & The Remnant (M8-EXT-53, Decision 2)** | Independent {Fame, Infamy} vectors per faction (Raiders, Militia, Cultists, Nomads, The Remnant military). Shopkeeper trade pricing and guard hostility derive from cross-faction bias matrix | T3-35, T2-14 |
+| T3-45 | **Nocturnal runner shift & day/night danger inversion (M5, M10)** | Daytime zombies are sluggish shamblers; at sundown (lux < threshold), infected undergo metabolic shift into sprint runners (speed 3x, detection 3x, double loot) | T3-01, T3-17 |
+| T3-46 | **World-epoch offline fast-forward clock (M0-EXT-21)** | Stores real-world wall clock at save. On reload, offline elapsed time simulates crop growth/decay, food spoilage, barricade weathering fatigue, and faction shifts | T3-10, T3-12 |
+| T3-47 | **Offscreen continuum-fluid macro-horde simulation (M5.4-EXT-08)** | Simulates thousands of offscreen zombies as a 2D continuum-fluid density field through corridors; discretizes into 3D kinematic/ragdoll actors within chunk streaming radius | T3-02, T3-13 |
+| T3-48 | **Deterministic input replay & spectator ghost (M2.8-EXT-09)** | Circular ring buffer recording inputs, RNG seeds, and tick state hashes for instant replay, killcams, anti-cheat desync validation, and ghost playback (<1% pose error) | T2-07, T0-17 |
 
 ---
 
-### TIER 4: ADVANCED RENDERING & POLISH
+### STAGE 4 (TIER 4): AAA GRAPHICS & POLISH
+**Plain English:** Blockbuster visuals: rainstorms, reflective puddles, thick volumetric fog, ray-traced lighting, and DLSS/FSR upscaling.
 **Gate:** Visually competitive. Weather, volumetrics, ray tracing, upscaling all functional
 
 | # | Feature | Description | Deps |
@@ -410,10 +440,13 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-42 | **Foliage motion vectors for DLSS/FSR** | Per-leaf procedural velocity generation eliminating upscaler ghosting on vegetation | T4-05, T4-31 |
 | T4-43 | **RT acceleration structure compaction** | Dynamic BVH compaction after build passes, reclaim 50% RT VRAM | T4-04 |
 | T4-44 | **Spatiotemporal path tracing denoiser** | SVGF + AI denoiser for clean 1-spp path traced images | T4-23 |
+| T4-45 | **Planar & stochastic ray-marched water reflections (Part 451)** | Hi-Z screen-space reflections (SSR) with ray query fallback for reflective puddles and wet streets | T4-25, T4-04 |
+| T4-46 | **Runtime virtual texturing (RVT) for terrain & dynamic stains (M4.5, Part 452)** | GPU-cached virtual texture system baking multi-layer terrain blends, muddy vehicle tire tracks, footprint impressions, and blood spatters directly into terrain tiles without individual quad draw overhead | T3-14, T4-10 |
 
 ---
 
-### TIER 5: LATE-GAME FEATURES
+### STAGE 5 (TIER 5): FULL CAMPAIGN & ONLINE CO-OP
+**Plain English:** Full open-world features: drive physical cars, build safehouses with electric wiring, 4-player online co-op with friends, and AI survivor chatter.
 **Gate:** Feature-complete for Early Access or vertical slice
 
 | # | Feature | Description | Deps |
@@ -452,10 +485,14 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T5-32 | **Component-based vehicle damage** | Sub-collider destruction: engine block, fuel tank, tires, windshield as separate damageable parts | T5-12 |
 | T5-33 | **Voronoi door and hinge destruction** | Shots at hinges detach pins, explosions fracture doors into physical 3D splinters | T2-02, T3-36 |
 | T5-34 | **Dynamic faction schisms** | Internal rivalries split large settlements into hostile splinter factions during crises | T3-35, T5-18 |
+| T5-35 | **Narrative diorama set-piece placer (M11-EXT-58, M12-EXT-28)** | Procedural environmental storytelling vignettes (abandoned survivor camps, tragedy beats, warning graffiti) | T3-13, T5-27 |
+| T5-36 | **Neutral haven safe-zones (M12-EXT-32)** | Barricaded safe-towns with merchant hubs, neutral armistice rules, dynamic casino/trade mini-economies | T3-35, T5-14 |
+| T5-37 | **Volatile fuel tank puncture & Bernoulli drainage (M9-EXT-09)** | Ballistic or debris puncture to vehicle fuel tanks causes real-time drainage rate Q = C_d * A * sqrt(2gh), laying down flammable fuel trails on roads that can be ignited | T5-12, T5-32 |
 
 ---
 
-### TIER 6: PLATFORM PORTS (Post-PC-Launch)
+### STAGE 6 (TIER 6): CONSOLE PORTS (Post-PC-Launch)
+**Plain English:** Porting the finished PC game to PlayStation 5 Pro, Xbox Series X, Nintendo Switch 2, Steam Deck, and Android.
 **Gate:** PC version stable. Port per platform as business justifies.
 
 | Platform | Key Technologies | v7.0 Source |
@@ -500,8 +537,11 @@ cmd.exe /c "C:\ZombieEngine\scripts\build_ze.cmd"
 REM Headless runtime verification:
 cmd.exe /c "cd /d C:\ZombieEngine\build && EndlessQuarantine.exe --headless"
 
-REM Spec block count verification:
+REM Spec block count verification (1,040 blocks):
 python scripts/verify_ext_block_counts.py
+
+REM Master Plan DAG & binary-parity verification (198 features, 0 cycles):
+python scripts/verify_plan_v8.py
 
 REM Unit tests (when Catch2 re-linked):
 build\tests\ZombieEngineTests.exe
@@ -536,6 +576,9 @@ These are non-negotiable design pillars preserved from v7.0:
 6. **Bethesda Item Persistence** — Every placed/dropped item retains exact resting transform. 3-tier lifecycle.
 7. **Data-Driven Everything** — Weapon ballistics, AI params, director coefficients in JSON. Zero-recompile tuning.
 8. **Dual-Core AI Director** — L4D2 mathematical pacing (60Hz) + SLM co-processor (async, eventual consistency).
+9. **Hard Authored-Asset Budget (≤ 50 Assets)** — The entire engine operates under a hard cap of ≤ 50 authored 3D models/textures. All world variety is mathematical (WFC interiors, L-systems, Voronoi decals, MSDF signage grammar, procedural voice DSP).
+10. **Player Leads Survivors, Never Hordes** — Player can recruit, command, and lead survivor NPCs and faction squads via the Command Wheel, but zombies are wild biological entities manipulated only via noise, lures, and pheromones.
+11. **Multi-Solution Quests (Fight, Talk, Sneak, Bribe)** — Every major quest and encounter resolution must support ≥ 2 mechanical pathways (combat, diplomacy, stealth, economic trade), with no rigid class archetype lockouts.
 
 ---
 

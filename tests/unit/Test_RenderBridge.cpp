@@ -30,12 +30,12 @@ TEST_CASE("BuildEntityMVP is camera-relative at 50km (M2.6 precision)", "[M1][M2
     const glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 200000.0f);
 
     // A real entity at ~50km world magnitude (the old M2.6 far-cube probe position).
-    ecs::Transform far;
-    far.position = glm::dvec3(50000.0, 0.0, 0.0);
-    far.rotation = glm::dquat(1.0, 0.0, 0.0, 0.0);
-    far.scale    = glm::dvec3(1.0);
+    ecs::Transform farTransform;
+    farTransform.position = glm::dvec3(50000.0, 0.0, 0.0);
+    farTransform.rotation = glm::dquat(1.0, 0.0, 0.0, 0.0);
+    farTransform.scale    = glm::dvec3(1.0);
 
-    const glm::mat4 mvp = render::BuildEntityMVP(far, camPos, view, proj);
+    const glm::mat4 mvp = render::BuildEntityMVP(farTransform, camPos, view, proj);
 
     // The entity is ~50km away along +X. After camera-relative subtraction the GPU
     // only ever sees renderPos = (vec3)(50000,0,-4), so the clip-space position must
@@ -53,9 +53,9 @@ TEST_CASE("BuildEntityMVP is camera-relative at 50km (M2.6 precision)", "[M1][M2
     // drift. Use K = 1e6 so a naive path would lose precision.
     const double K = 1'000'000.0;
     const glm::dvec3 camRebased{0.0 + K, 0.0, 4.0};
-    ecs::Transform farRebased = far;
-    farRebased.position += glm::dvec3(K, 0.0, 0.0);
-    const glm::mat4 mvpRebased = render::BuildEntityMVP(farRebased, camRebased, view, proj);
+    ecs::Transform farRebasedTransform = farTransform;
+    farRebasedTransform.position += glm::dvec3(K, 0.0, 0.0);
+    const glm::mat4 mvpRebased = render::BuildEntityMVP(farRebasedTransform, camRebased, view, proj);
     const glm::vec4 clipRebased = mvpRebased * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     REQUIRE(clip.x == Catch::Approx(clipRebased.x).epsilon(1e-3));
     REQUIRE(clip.y == Catch::Approx(clipRebased.y).epsilon(1e-3));
