@@ -22,7 +22,7 @@ each serving a different purpose. The contradiction came from four files each ca
 | **0 — Reconciled index** | `PLAN.md` (this file, repo root) | Disambiguates the docs below | "Which file is the plan?", contradiction history |
 | **1 — Milestone working set** | `spec/` (M0–M13, M4.5, M6.5, sub-milestones) + `spec/ROADMAP.md` + `spec/_INDEX.md` | **What** to build, **in what order** | The live build map and per-milestone acceptance criteria (1,040 verified EXT blocks) |
 | **2 — Master blueprint (research/architecture)** | `recon/plans/FINAL_COMPREHENSIVE_PLAN.md` | Definitive Program Plan: 100-paper research benchmark, EXT architecture, verification gates | Rationale, architecture decisions, research citations |
-| **2b — Master Refactor Spec (v8.0)** | `docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` *(also at `C:\Users\jakeb\Documents\Plans\`)* | **198 concrete features across 6 Plain-English Stages + 6 Console Ports (v8.2)**, verified 0-cycle DAG, local couch co-op in Stage 3, dual VRAM budgets (6GB/8GB), thread affinity | The authoritative buildable roadmap — what to build next and in what order |
+| **2b — Master Refactor Spec (v8.0)** | `docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` *(also at `C:\Users\jakeb\Documents\Plans\`)* | **198 concrete features across 6 Plain-English Stages + 5 Console Ports (v8.2)**, verified 0-cycle DAG, local couch co-op in Stage 3, dual VRAM budgets (6GB/8GB), thread affinity | The authoritative buildable roadmap — what to build next and in what order |
 | **2c — Historical Refactor Spec (v7.0)** | `C:\Users\jakeb\Documents\Plans\ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v7.0.md` | Archived 480-part execution spec (superseded by v8.0 deduplication audit) | Deep algorithmic reference; do NOT use as build roadmap |
 | **3 — Current position** | `docs/status/STATUS.md` | Session-independent record of where the project actually stands | "What's done / open right now?" |
 | **4 — Historical origin** | `docs/legacy-desktop/ZombieEngine-Plan/USETHISITSV79.md` | The v79 pre-split master spec the milestones were split from (rescued from Desktop) | Cross-reference only; archived by `STATUS.md` |
@@ -38,7 +38,7 @@ to see current progress, and verify math/DAG via **`python scripts/verify_plan_v
 | Path | Role |
 |------|------|
 | `PLAN.md` | This reconciled index. |
-| `docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` | Authoritative Master Refactor Spec v8.2 (198 concrete features, 6 stages + 6 ports, supersedes v7.0). |
+| `docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` | Authoritative Master Refactor Spec v8.2 (198 concrete features, 6 stages + 5 ports, supersedes v7.0). |
 | `spec/ROADMAP.md` | Build phases (P0–P4), topological build order, environment, verification tooling. |
 | `spec/_INDEX.md` | EXT block ID → file/line index (1079+ entries listed). |
 | `spec/M0.md` … `spec/M13.md` | Per-milestone specs (M0–M13). |

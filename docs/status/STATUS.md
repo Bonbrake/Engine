@@ -82,7 +82,7 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 
 ## Last Verified Build
 - Branch: `main`
-- Master Refactor Plan: **198 concrete features across 6 Plain-English Stages + 6 Console Ports (v8.2)** (verified 0-cycle DAG, 0 dangling, 100% mirror parity via `scripts/verify_plan_v8.py`).
+- Master Refactor Plan: **198 concrete features across 6 Plain-English Stages + 5 Console Ports (v8.2)** (verified 0-cycle DAG, 0 dangling, 100% mirror parity via `scripts/verify_plan_v8.py`).
 - Spec corpus: **1,040 EXT blocks** (authoritative — `recon/plans/EXT_BLOCK_COUNTS.md`, verified via `scripts/verify_ext_block_counts.py`).
 - Subsystem Architecture: **All 17 modular engine subsystems** (`ze-ai`, `ze-audio`, `ze-combat`, `ze-core`, `ze-debug`, `ze-ecs`, `ze-events`, `ze-modding`, `ze-net`, `ze-physics`, `ze-render`, `ze-save`, `ze-slm`, `ze-survival`, `ze-ui`, `ze-vehicle`, `ze-world`) are fully integrated and linked in `CMakeLists.txt`.
 - Full Subsystem Test Suite: **77 test cases, 300 assertions** (`build\tests\ZombieEngineTests.exe` — 76 passed, 1 skipped for headless video, 300/300 passed, 0 failures).
