@@ -2,7 +2,7 @@
 document: Zombie Engine Master Refactor Plan v8.0
 version: 8.2-AUDITED-EARLY-VERSIONS-RECONCILED
 author: Reconciled from v7.0 and Early Versions (v1-v7, IDEA.md, Master Plan v79) via Comprehensive Audit (September 2026)
-supersedes: v7.0-AAA-RECONCILED (11,802 lines → deduplicated to 198 concrete features across Stages 0-5 + 5 platform ports in Stage 6)
+supersedes: v7.0-AAA-RECONCILED (11,802 lines → deduplicated to 198 concrete features across Stages 0-5 + 4 platform ports in Stage 6)
 single_source_of_truth: true
 hardware_targets:
   baseline: 1440p @ 60 FPS (RTX 2070 8GB / RTX 2070S 8GB / RX 6700 XT 8GB / Arc A770 16GB) | 6.2GB VRAM Cap (1.8GB OS Reserve)
@@ -22,7 +22,7 @@ core_tech_stack:
 
 # ZOMBIE ENGINE MASTER REFACTOR PLAN v8.0
 ## "The Endless Quarantine" — Audited, Deduplicated, Buildable
-## Supersedes v7.0 (480 parts → 198 concrete features across 6 stages + 5 platform ports)
+## Supersedes v7.0 (480 parts → 198 concrete features across 6 stages + 4 platform ports)
 
 ---
 
@@ -30,13 +30,13 @@ core_tech_stack:
 
 | Change | Detail |
 |--------|--------|
-| **Deduplication** | 480 parts collapsed to 198 concrete features across Stages 0–5 + 5 platform ports (many were described 2-5x at different detail levels) |
+| **Deduplication** | 480 parts collapsed to 198 concrete features across Stages 0–5 + 4 platform ports (many were described 2-5x at different detail levels) |
 | **Stage Clarification** | Stages renamed to intuitive, plain-English milestones so current progress is instantly understandable |
 | **Early Splitscreen (M2.8)** | Local 2-player couch co-op splitscreen moved forward to Stage 3 (Playable Demo) — independent of online netcode |
 | **Early Versions Recovery (v8.2)** | Recovered all unique systems from earliest versions (v1–v7, IDEA.md, Master Plan v79, WHY-FANS-LOVE): The Remnant (5th faction), Dual-Axis Fame/Infamy vectors, Nocturnal Runner threat inversion, World-Epoch offline clock, Offscreen fluid horde density, RVT terrain layers, Bernoulli fuel leaks, and ≤50 authored asset cap |
 | **Contradiction resolution** | 8 technology contradictions resolved with firm decisions (see §2) |
 | **Removed (8 items)** | Custom assembly fibers, custom hash map, custom FixedString, custom SIMD math, GGPO rollback, C++20 modules, quantum networking, "DirectX 13" |
-| **Platform ports deferred** | PS5 Pro, Xbox Series X, Apple Silicon, Android, Steam Deck ports moved to Tier 6 (post-PC-launch); Switch 2 removed |
+| **Platform ports deferred** | PS5 Pro, Xbox Series X, Apple Silicon, Steam Deck ports moved to Tier 6 (post-PC-launch); Switch 2 & Android removed |
 | **Build ordering** | All features sequenced into 6 dependency-gated tiers |
 | **SLM model locked** | Qwen2.5-3B-Instruct (Q4_K_M, ~1.9GB) — supersedes all DeepSeek-R1 1.5B references |
 
@@ -529,7 +529,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 ---
 
 ### STAGE 6 (TIER 6): CONSOLE PORTS (Post-PC-Launch)
-**Plain English:** Porting the finished PC game to PlayStation 5 Pro, Xbox Series X, Steam Deck, Apple Silicon, and Android.
+**Plain English:** Porting the finished PC game to PlayStation 5 Pro, Xbox Series X, Steam Deck, and Apple Silicon.
 **Gate:** PC version stable. Port per platform as business justifies.
 
 | Platform | Key Technologies | v7.0 Source |
@@ -537,7 +537,6 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | **PS5 Pro** | PSSR upscaling, DualSense haptics, Tempest audio, Kraken decompression | Parts 236, 244 |
 | **Xbox Series X** | DirectSR, DirectStorage GPU decompress, DXR Tier 1.1 / Work Graphs, GDK core isolation, Quick Resume | Parts 237, 245 |
 | **Apple Silicon (M5)** | Metal 3.x, ANE offload, TBDR discard arenas, unified memory | Parts 238, 247 |
-| **Android** | Vulkan 1.4 mobile, VRS Tier 2, ASTC compression, ADPF thermals | Part 248 |
 | **Steam Deck 2 / ROG Ally** | Dynamic TDP governors, packed mesh attributes, battery-aware frame gen | Part 246 |
 
 > All platform-specific optimizations from v7.0 are preserved here.
