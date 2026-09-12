@@ -125,7 +125,7 @@ gantt
   - Cascaded Shadow Maps (Time-sliced 4 cascades): 3.5ms
   - Hi-Z Occlusion & Compute Culling: 1.0ms
   - PBR Clustered Lighting & Decals: 4.0ms
-  - FSR 4 / DLSS Upscaling (720p $\to$ 1080p): 3.5ms
+  - Neural Upscaling (DLSS 4.5 / FSR 4 / XeSS 2.0+ from 540p/720p $\to$ 1080p): 3.5ms
   - Post-processing (AgX Tonemap, Bloom, HUD): 1.5ms
 * **CPU Execution Budget (14.0ms total / 19.3ms idle headroom on 6C/12T):**
   - Jolt Physics (2x sub-ticks at 60Hz): 6.0ms
@@ -189,7 +189,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 |---|---|---|
 | Mip-Streamed BC7/BC5 Textures | 1.0 GB (Shed Mip 0 on environment) | 2.5 GB (Full Mip 0, 2K/4K) |
 | SLM Co-Processor (Qwen2.5-3B Q4_K_M) | 1.9 GB (VRAM resident) or 0.0 GB (CPU mode) | 1.9 GB (100% VRAM resident) |
-| Render Targets & G-Buffers | 0.4 GB (720p internal + FSR 4 / DLSS) | 0.8 GB (1440p Native / Dynamic) |
+| Render Targets & G-Buffers | 0.4 GB (720p internal + DLSS 4.5 / FSR 4 / XeSS 2.0+) | 0.8 GB (1440p Native / Dynamic) |
 | Geometry & Vertex Buffers | 0.4 GB (Aggressive cluster culling) | 0.7 GB (Dense meshlets) |
 | Jolt Physics + Audio Buffers | 0.2 GB | 0.3 GB |
 | Dynamic Internal Engine Cushion | 0.6 GB | — |
@@ -270,7 +270,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | **Stage 1** | Tier 1 (M2 Core Render) | **3D Model & Lights** | 3D zombie model visible with shadows & lighting | 🎯 **Current Focus** |
 | **Stage 2** | Tier 2 (M1/M2/M5 Basics) | **Walking & Shooting** | Shoot a walking zombie; it falls down with ragdoll | Next |
 | **Stage 3** | Tier 3 (M3/M4/M5/M7/M8 + M2.8) | **Playable Demo & Local Splitscreen** | 10-min survival run (loot, hordes, save/load, 2P splitscreen) | Future |
-| **Stage 4** | Tier 4 (M10/M11/M2.9) | **AAA Graphics & Polish** | Rain, fog, Ray Tracing, and DLSS/FSR upscaling | Future |
+| **Stage 4** | Tier 4 (M10/M11/M2.9) | **AAA Graphics & Polish** | Rain, fog, Ray Tracing, and DLSS 4.5 / FSR 4 / XeSS 2.0+ neural upscaling | Future |
 | **Stage 5** | Tier 5 (M8.6/M9/M12/M13) | **Full Campaign & Online Co-op** | Driving cars, base building, 4P online co-op, AI chat | Future |
 | **Stage 6** | Tier 6 (Consoles) | **Console Ports** | Port to PS5 Pro, Xbox Series X, Switch 2, Steam Deck | Post-PC |
 
@@ -428,7 +428,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 ---
 
 ### STAGE 4 (TIER 4): AAA GRAPHICS & POLISH
-**Plain English:** Blockbuster visuals: rainstorms, reflective puddles, thick volumetric fog, ray-traced lighting, and DLSS/FSR upscaling.
+**Plain English:** Blockbuster visuals: rainstorms, reflective puddles, thick volumetric fog, ray-traced lighting, and DLSS 4.5 / FSR 4 / XeSS 2.0+ neural upscaling.
 **Gate:** Visually competitive. Weather, volumetrics, ray tracing, upscaling all functional
 
 | # | Feature | Description | Deps |
@@ -438,7 +438,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-03 | **Variable rate shading (VRS Tier 2)** | 2x2/4x4 for background/fast-moving pixels. 30% GPU savings | T4-01 |
 | T4-04 | **Hardware ray queries** | RT shadows + RTAO via VK_KHR_ray_query in compute/fragment | T4-01 |
 | T4-05 | **Motion vector export** | 32-bit motion vectors + depth + reactive masks to render targets | T1-10 |
-| T4-06 | **Neural upscaling & frame generation (FSR 4 / DLSS 3.7+ / XeSS 1.3+)** | AMD FidelityFX SDK (AI-driven FSR 4) + NVIDIA Streamline (DLSS Ray Reconstruction & Frame Gen) on Vulkan 1.4 (DirectSR reserved for Stage 6 Xbox) | T4-05 |
+| T4-06 | **Neural upscaling & multi-frame generation (DLSS 4.5 / FSR 4 / XeSS 2.0+)** | NVIDIA Streamline 3.x+ (DLSS 4.5 Transformer Super Resolution, Multi-Frame Gen & Ray Reconstruction) + AMD FidelityFX SDK (AI-driven FSR 4) + Intel XeSS 2.0+ on Vulkan 1.4 (DirectSR reserved for Stage 6 Xbox) | T4-05 |
 | T4-07 | **NVIDIA Reflex 2.0 / AMD Anti-Lag 2** | Latency markers in swapchain presentation | T0-20 |
 | T4-08 | **Volumetric 3D froxel atmosphere** | Fog/dust/rain density varies by altitude, humidity, enclosures | T1-06, T1-10 |
 | T4-09 | **Weather system** | Rain, fog, Mie phase scattering, dynamic cloud cover | T4-08 |
@@ -474,9 +474,9 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-39 | **Retroreflection shader** | Micro-facet retroreflection BRDF for road signs, safety vests, cat-eye markers | T1-03 |
 | T4-40 | **Emissive surface voxel bounce light** | Voxelize high-intensity emissive triangles into GI structure for neon illumination | T4-18, T4-23 |
 | T4-41 | **Wind occlusion for vegetation** | 3D wind occlusion compute shader: indoor plants and sheltered trees stay still | T4-09, T3-13 |
-| T4-42 | **Foliage motion vectors for DLSS/FSR** | Per-leaf procedural velocity generation eliminating upscaler ghosting on vegetation | T4-05, T4-31 |
+| T4-42 | **Foliage motion vectors for DLSS 4.5 / FSR 4** | Per-leaf procedural velocity generation eliminating upscaler ghosting on vegetation | T4-05, T4-31 |
 | T4-43 | **RT acceleration structure compaction** | Dynamic BVH compaction after build passes, reclaim 50% RT VRAM | T4-04 |
-| T4-44 | **Spatiotemporal path tracing denoiser** | SVGF + AI denoiser for clean 1-spp path traced images | T4-23, T4-05 |
+| T4-44 | **Spatiotemporal path tracing denoiser** | DLSS 4.5 Neural Ray Reconstruction (RR) + FSR 4 Ray Regeneration / SVGF fallback for clean 1-spp path traced images | T4-23, T4-05 |
 | T4-45 | **Planar & stochastic ray-marched water reflections (Part 451)** | Hi-Z screen-space reflections (SSR) with ray query fallback for reflective puddles and wet streets | T4-25, T4-04 |
 | T4-46 | **Runtime virtual texturing (RVT) for terrain & dynamic stains (M4.5, Part 452)** | GPU-cached virtual texture system baking multi-layer terrain blends, muddy vehicle tire tracks, footprint impressions, and blood spatters directly into terrain tiles without individual quad draw overhead | T3-14, T4-10 |
 
@@ -539,7 +539,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | **Apple Silicon (M5)** | Metal 3.x, ANE offload, TBDR discard arenas, unified memory | Parts 238, 247 |
 | **Android** | Vulkan 1.4 mobile, VRS Tier 2, ASTC compression, ADPF thermals | Part 248 |
 | **Steam Deck 2 / ROG Ally** | Dynamic TDP governors, packed mesh attributes, battery-aware frame gen | Part 246 |
-| **Nintendo Switch 2** | Portable adaptation | Part 235 |
+| **Nintendo Switch 2** | NVIDIA Tegra custom SoC, hardware DLSS upscaling, NVN2 API, battery-aware scaling | Part 235 |
 
 > All platform-specific optimizations from v7.0 are preserved here.
 > They are built after PC ships.
