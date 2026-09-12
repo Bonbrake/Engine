@@ -7,13 +7,16 @@ single_source_of_truth: true
 hardware_targets:
   baseline: 1440p @ 60 FPS (RTX 2070 8GB / RTX 2070S 8GB / RX 6700 XT 8GB / Arc A770 16GB) | 6.2GB VRAM Cap (1.8GB OS Reserve)
   low_spec_minimum: 1080p @ 30 FPS (RTX 2060 6GB / RX 6600 8GB / Arc A580 8GB) | 4.5GB VRAM Cap (1.6GB OS Reserve)
+  arm_target_floor: 1440p @ 60 FPS (Qualcomm Snapdragon X Elite / Apple Silicon M-series / Linux AArch64) | 16GB Unified RAM Floor (6.2GB allocatable) | Zero-Degradation Floor
+  steamos_living_room: 1440p/4K @ 60 FPS (SteamOS Desktop / Living Room Console "Steam Cube") | Desktop APU/dGPU (100-250W+) | Gamescope HDR | Zero TDP Down-Throttling
 core_tech_stack:
   language: C++20 (MSVC 2022 v14.44, /std:c++20)
+  supported_architectures: x86-64 (AVX2/FMA), ARM64 / AArch64 (ARMv8.4-A+, NEON, KleidiAI)
   graphics_api: Vulkan 1.4 (volk + Dynamic Rendering + Descriptor Indexing / Bindless) | SPIR-V Reflect
   physics_engine: Jolt Physics 5.6.0 (Double-Precision dvec3, Cross-Platform Determinism)
   modding: C++ std::function Hook Registry & JSON Manifests (Lua/Luau stripped per APPENDIX_L)
   audio_engine: SDL3 Audio Subsystem / Procedural Spatial DSP (128MB RAM Budget)
-  slm_target: Qwen2.5-3B-Instruct (Q4_K_M GGUF, ~1.9GB VRAM Baseline on SlmThread / AVX2 CPU Fallback in 16GB System RAM)
+  slm_target: Qwen2.5-3B-Instruct (Q4_K_M GGUF, ~1.9GB VRAM Baseline on SlmThread / AVX2 & ARM NEON KleidiAI CPU Fallback in 16GB System RAM)
   template_engine: Inja C++ (header-only lightweight templating)
   tts_engine: Kokoro-82M ONNX Runtime (CPU, 50x real-time)
   cell_size: 128m x 128m WorldPartition Grid
@@ -36,7 +39,7 @@ core_tech_stack:
 | **Early Versions Recovery (v8.2)** | Recovered all unique systems from earliest versions (v1–v7, IDEA.md, Master Plan v79, WHY-FANS-LOVE): The Remnant (5th faction), Dual-Axis Fame/Infamy vectors, Nocturnal Runner threat inversion, World-Epoch offline clock, Offscreen fluid horde density, RVT terrain layers, Bernoulli fuel leaks, and ≤50 authored asset cap |
 | **Contradiction resolution** | 8 technology contradictions resolved with firm decisions (see §2) |
 | **Removed (8 items)** | Custom assembly fibers, custom hash map, custom FixedString, custom SIMD math, GGPO rollback, C++20 modules, quantum networking, "DirectX 13" |
-| **Platform ports deferred** | PS5 Pro, Xbox Series X, Apple Silicon, Steam Deck ports moved to Tier 6 (post-PC-launch); Switch 2 & Android removed |
+| **Platform ports deferred** | PS5 Pro, Xbox Series X, Apple Silicon, and SteamOS Living Room Console ("Steam Cube" / Steam Machine) ports moved to Tier 6 (post-PC-launch); Switch 2 & Android removed |
 | **Build ordering** | All features sequenced into 6 dependency-gated tiers |
 | **SLM model locked** | Qwen2.5-3B-Instruct (Q4_K_M, ~1.9GB) — supersedes all DeepSeek-R1 1.5B references |
 
@@ -91,6 +94,11 @@ graph TD
 | **3** | `SlmThread` | Qwen2.5-3B inference (llama.cpp) | No (compute-bound) |
 | **4-7** | `WorkerPool` | enkiTS tasks: physics, ECS, AI, streaming | Yes (work-stealing) |
 
+> **Weak Memory & Heterogeneous Core Topology (ARM64 & x86):**
+> - **Weak Memory Ordering:** ARM64 operates under a weak memory model. All lock-free queues (`SPSCRequestQueue`, `SLMResultQueue`, `SPSCMutationQueue`, `FileHandleRing`, `ThreadAffinityAllocator`) strictly enforce explicit acquire-release memory orders (`std::memory_order_acquire`, `std::memory_order_release`).
+> - **Cache Separation:** 128-byte cache line alignment (`CACHE_LINE_SIZE = 128`) on ARM64 eliminates false sharing across Apple Silicon M-series and Snapdragon Oryon performance cores.
+> - **Core Affinity:** In big.LITTLE / Oryon topologies, `MainThread`, `RenderThread`, and `WorkerPool` pin to Performance cores; `SlmThread` and background streaming pin to remaining execution cores.
+
 ### Frame Budget (Dual Performance Profiles)
 
 #### Profile A: RTX 2070 8GB Baseline (16.6ms / 60 FPS Target @ 1440p)
@@ -133,7 +141,7 @@ gantt
   - Render Thread Command Recording: 5.0ms
   - Audio DSP & Mixing: 2.5ms
 * **Physics & Motion Pacing:** Jolt physics runs at **60 Hz fixed timestep** (2 sub-ticks per 30 FPS rendered frame). Feature `T2-18` (*Async physics interpolation*) smoothly lerps rigid body transforms between ticks, guaranteeing stutter-free motion with a flat 30.0 FPS frame-time line.
-* **SLM Concurrency:** Qwen2.5-3B runs asynchronously out-of-band on `SlmThread` (VRAM default with Mip-1 texture shedding, or AVX2 CPU offload in 16GB System RAM under VRAM pressure).
+* **SLM Concurrency:** Qwen2.5-3B runs asynchronously out-of-band on `SlmThread` (VRAM default with Mip-1 texture shedding, or AVX2 / ARM NEON KleidiAI CPU offload in 16GB System RAM under VRAM pressure).
 
 
 ### Zero-Copy Asset Streaming Pipeline
@@ -198,7 +206,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 
 > **3-Tier SLM Execution Policy on 6GB Hardware:**
 > 1. *Default:* Qwen2.5-3B runs in VRAM (1.9 GB) paired with the 2.0 GB compact graphics profile (total game VRAM: 3.9 GB + dynamic cushion up to 0.6 GB, strictly bounded by the 4.5 GB cap).
-> 2. *Low-VRAM Fallback:* If VMA reports `< 600 MB` headroom, `SLMClient` transparently runs inference on CPU threads via AVX2 in the 16 GB System RAM pool, instantly freeing 1.9 GB of VRAM for rendering. To accommodate the 1.9 GB model weights in System RAM without exceeding the 16.0 GB physical RAM ceiling, the Asset Streaming & VFS Ring Cache dynamically contracts from 4.5 GB down to 2.6 GB.
+> 2. *Low-VRAM Fallback:* If VMA reports `< 600 MB` headroom, `SLMClient` transparently runs inference on CPU threads via AVX2 / ARM NEON KleidiAI in the 16 GB System RAM pool, instantly freeing 1.9 GB of VRAM for rendering. To accommodate the 1.9 GB model weights in System RAM without exceeding the 16.0 GB physical RAM ceiling, the Asset Streaming & VFS Ring Cache dynamically contracts from 4.5 GB down to 2.6 GB.
 > 3. *Combat Pacing:* During heavy 500-zombie horde crescendos (`SustainPeak`), SLM generation halts while the 60Hz mathematical L4D2 state machine governs combat.
 
 ### System RAM Budget (16 GB Total)
@@ -231,7 +239,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | `spdlog` | 1.17.0 | Async logging | 0 ✅ |
 | `tracy` | 0.13.1 | Frame profiling | 0 ✅ |
 | `imgui` (freetype, sdl3, vulkan) | 1.92.8 | Debug UI | 0 ✅ |
-| `glm` | 1.0.3 | Math (GLM_FORCE_AVX2) | 0 ✅ |
+| `glm` | 1.0.3 | Math (GLM_FORCE_AVX2 on x64, GLM_FORCE_INTRINSICS on ARM64) | 0 ✅ |
 | `nlohmann-json` | 3.12.0 | Config/data files | 0 ✅ |
 | `cxxopts` | 3.3.1 | CLI parsing | 0 ✅ |
 | `stb` | 2024+ | Image loading | 0 ✅ |
@@ -272,7 +280,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | **Stage 3** | Tier 3 (M3/M4/M5/M7/M8 + M2.8) | **Playable Demo & Local Splitscreen** | 10-min survival run (loot, hordes, save/load, 2P splitscreen) | Future |
 | **Stage 4** | Tier 4 (M10/M11/M2.9) | **AAA Graphics & Polish** | Rain, fog, Ray Tracing, and DLSS 4.5 / FSR 4 / XeSS 2.0+ neural upscaling | Future |
 | **Stage 5** | Tier 5 (M8.6/M9/M12/M13) | **Full Campaign & Online Co-op** | Driving cars, base building, 4P online co-op, AI chat | Future |
-| **Stage 6** | Tier 6 (Consoles) | **Console Ports** | Port to PS5 Pro, Xbox Series X, Steam Deck, Apple Silicon | Post-PC |
+| **Stage 6** | Tier 6 (Consoles) | **Console Ports** | Port to PS5 Pro, Xbox Series X, SteamOS Desktop/Console ("Steam Cube"), Apple Silicon | Post-PC |
 
 ---
 
@@ -494,7 +502,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T5-04 | **Client-side hit registration & rewind** | Client-side raycast hit detection with host capsule validation and player sub-tick rewind (excluding macro swarm physics) | T5-01, T2-02 |
 | T5-05 | **Epic Online Services (EOS)** | Free P2P lobbies, NAT punch-through, voice chat | T5-01 |
 | T5-06 | **Union frustum BVH sharing** | Co-op players share culling results to reduce GPU work | T5-01, T1-08 |
-| T5-07 | **SLM integration (Qwen2.5-3B)** | Qwen2.5-3B on SlmThread via llama.cpp (Vulkan compute on 2070 baseline, AVX2 CPU in 16GB RAM on 2060 low-spec). SPSC queues | T2-04 |
+| T5-07 | **SLM integration (Qwen2.5-3B)** | Qwen2.5-3B on SlmThread via llama.cpp (Vulkan compute on 2070 baseline, AVX2 / ARM NEON KleidiAI CPU in 16GB RAM on 2060 low-spec). SPSC queues | T2-04 |
 | T5-08 | **Inja prompt templates + hot-reload** | ReadDirectoryChangesW file watcher, hash-based cache invalidation | T5-07 |
 | T5-09 | **20 SLM EXT subsystems** | Mission bounty, forensic autopsy, faction radio, companion barks, terminal logs, etc. | T5-07 |
 | T5-10 | **Kokoro-82M TTS** | CPU ONNX inference, 50x realtime, dual-path (recording override) | T5-07, T2-12 |
@@ -510,7 +518,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T5-20 | **Creation Engine editor** | ImGuizmo gizmos, compute terrain sculptor, entity placement | T1, T2-01 |
 | T5-21 | **Dialogue/quest graph VM** | Node-based dialogue trees, quest stages, condition edges | T5-20 |
 | T5-22 | **Steam Input API + gyro aiming** | ISteamInput action sets, dynamic glyphs, flick stick | T0-17 |
-| T5-23 | **Steam Deck native profile** | 1280x800, 1.25x HUD scale, 40/60Hz cap, gyro layers | T5-22 |
+| T5-23 | **SteamOS Console & Living Room profile ("Steam Cube")** | Gamescope HDR, 1440p/4K 10-foot TV UI (1.5x-2.0x), multi-gamepad ISteamInput, zero TDP degradation | T5-22 |
 | T5-24 | **.zesave cloud persistence** | LZ4/Zstd compressed binary chunks, CRC32 checksums, < 5MB | T3-12 |
 | T5-25 | **Destructible voxel walls and breaching** | Real-time structural load degradation, convex chunk fragmentation from explosives | T2-02, T3-13 |
 | T5-26 | **Voxel fire propagation** | Material flammability (Wood 90%, Grass 100%, Metal 0%), wind-driven spread, fuel consumption | T3-18, T3-13 |
@@ -529,7 +537,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 ---
 
 ### STAGE 6 (TIER 6): CONSOLE PORTS (Post-PC-Launch)
-**Plain English:** Porting the finished PC game to PlayStation 5 Pro, Xbox Series X, Steam Deck, and Apple Silicon.
+**Plain English:** Porting the finished PC game to PlayStation 5 Pro, Xbox Series X, SteamOS Living Room Console ("Steam Cube" / Steam Machine), and Apple Silicon.
 **Gate:** PC version stable. Port per platform as business justifies.
 
 | Platform | Key Technologies | v7.0 Source |
@@ -537,7 +545,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | **PS5 Pro** | PSSR upscaling, DualSense haptics, Tempest audio, Kraken decompression | Parts 236, 244 |
 | **Xbox Series X** | DirectSR, DirectStorage GPU decompress, DXR Tier 1.1 / Work Graphs, GDK core isolation, Quick Resume | Parts 237, 245 |
 | **Apple Silicon (M5)** | Metal 3.x, ANE offload, TBDR discard arenas, unified memory | Parts 238, 247 |
-| **Steam Deck 2 / ROG Ally** | Dynamic TDP governors, packed mesh attributes, battery-aware frame gen | Part 246 |
+| **SteamOS Console / "Steam Cube"** | Gamescope HDR compositor, living room TV UI scaling (1.5x-2.0x), multi-gamepad couch co-op (ISteamInput), Mesa RADV Vulkan 1.4 Native Core | Part 246 |
 
 > All platform-specific optimizations from v7.0 are preserved here.
 > They are built after PC ships.
@@ -560,9 +568,13 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 ### Build Pipeline
 - **Canonical build:** `scripts\build_ze.cmd` (MSVC 2022, CMake 4.4.3, Ninja 1.13)
 - **Never invoke raw CMake.** Always use the build script.
-- **Compiler flags:** `/std:c++20`, `/O2`, `/fp:precise`, `/GL`, `/LTCG` (strict IEEE-754 precision mandated for deterministic physics & replay; fast-math strictly isolated to GPU compute shaders)
+- **Architectures:** Native x86-64 (AVX2/FMA) & ARM64 / AArch64 (Qualcomm Snapdragon X Elite, Apple Silicon M-series, Linux AArch64)
+- **Compiler flags:**
+  - x86-64: `/std:c++20`, `/O2`, `/fp:precise`, `/GL`, `/LTCG` (strict IEEE-754 precision mandated for deterministic physics & replay; fast-math strictly isolated to GPU compute shaders)
+  - ARM64: `/std:c++20`, `/O2`, `/fp:precise` (MSVC ARM64) or `-ffp-contract=off` (Clang AArch64) to preserve cross-platform IEEE-754 determinism with x86
 - **Sanitizers (debug):** ASan, TSan
-- **SIMD:** AVX2 (`GLM_FORCE_AVX2`)
+- **SIMD:** AVX2 on x86-64 (`GLM_FORCE_AVX2`), ARM NEON / ARMv8.4-A+ on ARM64 (`GLM_FORCE_INTRINSICS`, KleidiAI for SLM)
+- **Memory Safety:** Explicit acquire-release atomics across all lock-free structures; 128-byte cache line alignment on ARM64
 
 ### Verification Commands
 ```bat
@@ -591,7 +603,7 @@ build\tests\ZombieEngineTests.exe
 | Custom x86-64 assembly fiber switching | enkiTS (already working, sub-15ns) | Unnecessary risk |
 | Custom lock-free hash map | robin_hood::unordered_map (add when needed) | Battle-tested alternatives exist |
 | Custom FixedString<N> | std::string + SSO + std::string_view | Profile before custom-rolling |
-| Custom SIMD math library | GLM + GLM_FORCE_AVX2 (already in vcpkg) | Don't rewrite math libraries |
+| Custom SIMD math library | GLM + GLM_FORCE_AVX2 / GLM_FORCE_INTRINSICS (already in vcpkg) | Don't rewrite math libraries |
 | GGPO rollback netcode | Client-server with prediction | GGPO is for fighting games, not co-op PvE |
 | C++20 modules (import std) | Precompiled headers (already working) | MSVC module support still unreliable |
 | Quantum-Safe Networking | Nothing | Fictional concept for game engines |
@@ -633,9 +645,12 @@ These are non-negotiable design pillars preserved from v7.0:
 |-----------|-------|--------|
 | C++ Standard | `/std:c++20` | Concepts, std::span, constexpr, std::format |
 | Optimization | `/O2`, `/fp:precise` | Maximum vectorization with strict IEEE-754 determinism for Jolt & replay |
+| Clang/GCC ARM64 | `-ffp-contract=off` | Disables non-deterministic FMA contraction to preserve cross-platform determinism |
 | LTCG | `/GL` + `/LTCG` | Whole program optimization |
 | Sanitizers | ASan, TSan (debug only) | Memory/thread validation |
-| SIMD | AVX2 (Zen / Zen 2+ / Intel Haswell+) | Optimal 256-bit SIMD execution for dvec3 double-precision math |
+| SIMD (x86-64) | AVX2 (Zen / Zen 2+ / Intel Haswell+) | Optimal 256-bit SIMD execution for dvec3 double-precision math |
+| SIMD (ARM64) | ARM NEON / KleidiAI (ARMv8.4-A+) | 128-bit vector execution & accelerated GEMM kernels for SLM inference |
+| Memory Ordering | Weak memory safety (Acquire/Release) | Safe out-of-order execution across ARM64 & x86 TSO |
 
 ---
 

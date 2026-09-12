@@ -9,7 +9,9 @@
 
 ## Current Milestone
 **Stage 1 (Tier 1): 3D Model & Lights** 🎯 (Stage 0 / M0–M2 Core Verified ✅)  
-- **Canonical Master Refactor Plan:** [`docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md`](../plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md) (v8.2 — 198 concrete features across 6 Plain-English Stages).
+- **Canonical Master Refactor Plan:** [`docs/plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md`](../plans/ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md) (v8.2 — 198 concrete features across 6 Plain-English Stages + 4 Platform Ports).
+- **Target Architectures:** Native x86-64 (AVX2/FMA) & ARM64 / AArch64 (Snapdragon X Elite, Apple Silicon, Linux AArch64) with Zero Degradation Floor.
+- **Living Room Console Target:** SteamOS Desktop / Living Room Console ("Steam Cube" / Steam Machine) with Gamescope HDR and 10-foot UI scaling.
 - **Validation Pipeline:** `scripts\test_all.cmd` (Build + Headless `HEADLESS_BOOT_OK` + Sanity Harness + Catch2 76 tests + EXT 1,040 blocks + Plan v8.0 DAG).
 - **Current Active Target:** `T1-01` glTF mesh loading (`fastgltf`) + `T1-03` PBR metallic-roughness shader.
 

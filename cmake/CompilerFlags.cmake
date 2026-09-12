@@ -1,4 +1,16 @@
 function(apply_engine_definitions target)
+    if(ZE_TARGET_ARCH STREQUAL "arm64")
+        target_compile_definitions(${target} PRIVATE
+            ZE_ARCH_ARM64=1
+            GLM_FORCE_INTRINSICS=1
+        )
+    else()
+        target_compile_definitions(${target} PRIVATE
+            ZE_ARCH_X64=1
+            GLM_FORCE_AVX2=1
+        )
+    endif()
+
     target_compile_definitions(${target} PRIVATE
         IMGUI_IMPL_VULKAN_HAS_DYNAMIC_RENDERING=1
         IMGUI_IMPL_VULKAN_USE_VOLK=1
@@ -10,6 +22,12 @@ function(apply_engine_definitions target)
         JPH_DOUBLE_PRECISION
         JPH_DEBUG_RENDERER
     )
+
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /fp:precise)
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+        target_compile_options(${target} PRIVATE -ffp-contract=off)
+    endif()
 endfunction()
 
 function(apply_sanitizer target)

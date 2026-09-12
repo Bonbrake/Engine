@@ -9,15 +9,33 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# --- vcpkg integration ---
-# Dependencies were installed via `vcpkg install` into ./vcpkg_installed/x64-windows
-# (see tools/vcpkg_install.bat). We point CMAKE_PREFIX_PATH at that tree rather than
-# using the vcpkg toolchain file, so CMake's auto-manifest-install doesn't re-trigger.
+# --- Target Architecture & vcpkg Triplet Resolution ---
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|ARM64|arm64)" OR CMAKE_GENERATOR_PLATFORM MATCHES "^(ARM64|arm64)")
+    set(ZE_TARGET_ARCH "arm64")
+else()
+    set(ZE_TARGET_ARCH "x64")
+endif()
+
+if(WIN32)
+    set(VCPKG_TARGET_TRIPLET "${ZE_TARGET_ARCH}-windows")
+elseif(APPLE)
+    set(VCPKG_TARGET_TRIPLET "${ZE_TARGET_ARCH}-osx")
+else()
+    set(VCPKG_TARGET_TRIPLET "${ZE_TARGET_ARCH}-linux")
+endif()
+
 if(NOT DEFINED ENV{VCPKG_INSTALLED_DIR})
-    # Fallback if run without the wrapper script.
     set(VCPKG_INSTALLED_DIR "${CMAKE_SOURCE_DIR}/vcpkg_installed")
 endif()
-list(PREPEND CMAKE_PREFIX_PATH "${VCPKG_INSTALLED_DIR}/x64-windows")
+
+# Check for target-specific installed directory; fallback to x64-windows for host builds if present
+if(EXISTS "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}")
+    set(VCPKG_RESOLVED_TRIPLET "${VCPKG_TARGET_TRIPLET}")
+else()
+    set(VCPKG_RESOLVED_TRIPLET "x64-windows")
+endif()
+
+list(PREPEND CMAKE_PREFIX_PATH "${VCPKG_INSTALLED_DIR}/${VCPKG_RESOLVED_TRIPLET}")
 
 include(cmake/CompilerFlags.cmake)
 include(cmake/Dependencies.cmake)
@@ -64,11 +82,13 @@ apply_engine_definitions(EndlessQuarantine)
 add_executable(ZombieEngine ALIAS EndlessQuarantine)
 
 # Copy DLLs post-build
-add_custom_command(TARGET EndlessQuarantine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${VCPKG_INSTALLED_DIR}/x64-windows/bin"
-        "$<TARGET_FILE_DIR:EndlessQuarantine>"
-)
+if(EXISTS "${VCPKG_INSTALLED_DIR}/${VCPKG_RESOLVED_TRIPLET}/bin")
+    add_custom_command(TARGET EndlessQuarantine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${VCPKG_INSTALLED_DIR}/${VCPKG_RESOLVED_TRIPLET}/bin"
+            "$<TARGET_FILE_DIR:EndlessQuarantine>"
+    )
+endif()
 
 enable_testing()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sanity_suite_harness/sanity.cpp")

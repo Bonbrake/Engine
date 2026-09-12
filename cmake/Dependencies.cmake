@@ -25,8 +25,6 @@ target_include_directories(ze-deps INTERFACE
     ${STB_INCLUDE_DIR}
 )
 target_compile_definitions(ze-deps INTERFACE
-    NOMINMAX
-    WIN32_LEAN_AND_MEAN
     ENGINE_DEV_TOOLS
     JPH_CROSS_PLATFORM_DETERMINISTIC
     JPH_DOUBLE_PRECISION
@@ -36,8 +34,25 @@ target_compile_definitions(ze-deps INTERFACE
     IMGUI_IMPL_VULKAN_USE_VOLK=1
     VK_NO_PROTOTYPES
     VULKAN_HPP_NO_EXCEPTIONS
-    VK_USE_PLATFORM_WIN32_KHR
 )
+if(WIN32)
+    target_compile_definitions(ze-deps INTERFACE
+        NOMINMAX
+        WIN32_LEAN_AND_MEAN
+        VK_USE_PLATFORM_WIN32_KHR
+    )
+endif()
+if(ZE_TARGET_ARCH STREQUAL "arm64")
+    target_compile_definitions(ze-deps INTERFACE
+        ZE_ARCH_ARM64=1
+        GLM_FORCE_INTRINSICS=1
+    )
+else()
+    target_compile_definitions(ze-deps INTERFACE
+        ZE_ARCH_X64=1
+        GLM_FORCE_AVX2=1
+    )
+endif()
 target_link_libraries(ze-deps INTERFACE
     SDL3::SDL3
     Vulkan::Headers

@@ -32,15 +32,25 @@ enum class AnalogAction : uint32_t {
     Count
 };
 
-struct SteamDeckProfile {
-    bool isDeck = false;
-    uint32_t displayWidth = 1280;
-    uint32_t displayHeight = 800;
-    float aspectRatio = 16.0f / 10.0f;
-    float uiScaleMultiplier = 1.25f;
+// Profile for SteamOS / Steamworks runtime environments:
+// Supports living room SteamOS Console / "Steam Cube" (1440p/4K TV, Gamescope HDR, 10-foot UI)
+// and legacy handheld emulation.
+struct SteamOSDeviceProfile {
+    bool isSteamOSConsole = false;  // SteamOS Desktop / Living Room Console ("Steam Cube")
+    bool isDeck = false;            // Handheld Steam Deck (preserved for backwards-compatibility)
+    bool isGamescope = false;       // Running within Gamescope micro-compositor
+    bool isLivingRoomTV = false;    // 10-foot living room display output
+    bool hdr10Enabled = false;      // HDR10 / HDR PQ metadata passthrough
+    uint32_t displayWidth = 2560;
+    uint32_t displayHeight = 1440;
+    float aspectRatio = 16.0f / 9.0f;
+    float uiScaleMultiplier = 1.75f;// 10-foot TV UI scale
     bool gyroAdsEnabled = true;
     uint32_t targetFrameRate = 60;
 };
+
+// Backwards-compatible alias for existing code / unit tests
+using SteamDeckProfile = SteamOSDeviceProfile;
 
 // Compression header for .zesave cloud chunks
 #pragma pack(push, 1)
@@ -75,8 +85,12 @@ public:
     void getAnalogAction(AnalogAction action, float& outX, float& outY) const;
     void setAnalogAction(AnalogAction action, float x, float y);
 
-    // Steam Deck Profile & Display
+    // SteamOS Console / "Steam Cube" & Device Profile
+    const SteamOSDeviceProfile& getDeviceProfile() const { return m_deckProfile; }
     const SteamDeckProfile& getDeckProfile() const { return m_deckProfile; }
+    bool isRunningOnSteamOSConsole() const { return m_deckProfile.isSteamOSConsole; }
+    bool isSteamCube() const { return m_deckProfile.isSteamOSConsole; }
+    bool isGamescopeActive() const { return m_deckProfile.isGamescope; }
     bool isRunningOnSteamDeck() const { return m_deckProfile.isDeck; }
 
     // Cloud Persistence Serialization (.zesave)

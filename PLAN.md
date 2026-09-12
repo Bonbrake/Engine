@@ -249,8 +249,8 @@ Permanent physical world state persistence where every placed, dropped, or distu
 ### 4.4 Primary Controller Input Architecture, Steam Input & Gyro Aiming
 
 Authoritative controller ergonomics engineered for tactical free-aim gunplay:
-- **Steam Input API (`ISteamInput`) + SDL3 Fallback:** Native Steamworks integration ensuring day-one **Steam Deck Verified** compatibility and flawless PS5 DualSense / Switch Pro support.
-- **Dynamic Platform Glyphs:** Automatically resolves native glyphs (`DualSense` $\times/\square/\triangle/\bigcirc$, `Xbox` $A/B/X/Y$, `Steam Deck`, `Switch` $B/A/Y/X$).
+- **Steam Input API (`ISteamInput`) + SDL3 Fallback:** Native Steamworks integration ensuring day-one **SteamOS Console / Desktop ("Steam Cube")** living-room readiness and flawless PS5 DualSense / Xbox Wireless controller support.
+- **Dynamic Platform Glyphs:** Automatically resolves native glyphs (`DualSense` $\times/\square/\triangle/\bigcirc$, `Xbox` $A/B/X/Y$, `Steam Controller / SteamOS`).
 - **Gyro Aiming (Motion Aiming) & Flick Stick:** 1:1 gyroscope micro-corrections during Aim-Down-Sights (ADS) for mouse-like precision without arcade auto-aim snapping, with optional flick stick for instant $180^\circ$ snap turns.
 - **Dual-Zone Radial Stick Response Curve:** Exponential curve ($\gamma = 2.4$) for fine free-aim and acceleration ramp for torso turning.
 - **Contextual Hold-Timer Discrimination:** Tap reload ($< 300\text{ms}$) executes tactical reload; hold reload ($\ge 300\text{ms}$) initiates physical magazine check; hold interact ($\ge 350\text{ms}$) activates physics grab.
@@ -276,10 +276,10 @@ Authoritative controller ergonomics engineered for tactical free-aim gunplay:
 
 ---
 
-### 4.7 Steamworks Native Input, Steam Deck Architecture & Cloud Persistence
+### 4.7 Steamworks Native Input, SteamOS Console Architecture ("Steam Cube") & Cloud Persistence
 
-- **Steam Input API (`ISteamInput`) Action Sets:** Defines an authoritative action manifest (`assets/steam/game_actions.vdf`) isolating hardware inputs into contextual action sets (`InGame`, `Menu`, `TacticalWheel`). Eliminates direct button hardcoding and ensures seamless dynamic glyph resolution (`Steam Deck`, `DualSense`, `Xbox`).
-- **Steam Deck Native Profile:** Automated detection of Steam Deck APU and 16:10 aspect ratio ($1280 \times 800$). Enforces readable HUD/text scaling ($\ge 1.25\times$), native gyro aiming layers active during ADS, and frame-pacing capped at 40/60Hz for battery efficiency.
+- **Steam Input API (`ISteamInput`) Action Sets:** Defines an authoritative action manifest (`assets/steam/game_actions.vdf`) isolating hardware inputs into contextual action sets (`InGame`, `Menu`, `TacticalWheel`). Eliminates direct button hardcoding and ensures seamless dynamic glyph resolution (`SteamOS`, `DualSense`, `Xbox`).
+- **SteamOS Living Room & Console Profile ("Steam Cube"):** Automated detection of SteamOS Gamescope compositor session and living-room environment. Enforces 1440p/4K 10-foot TV UI scaling ($\ge 1.5\times - 2.0\times$), native HDR10 / HDR PQ metadata passthrough, multi-gamepad couch co-op routing via `ISteamInput`, and full uncompromised desktop Vulkan 1.4 Native Core execution without battery or TDP down-throttling.
 - **`.zesave` Binary Chunk Cloud Persistence:** Bethesda-style 3-tier persistence serialized into compact binary chunk snapshots compressed via LZ4/Zstandard. Chunk checksums (CRC32/XXH64) prevent corrupted cloud syncs and guarantee save payloads stay under $5\text{ MB}$ per quarantine sector.
 
 ---
@@ -342,6 +342,16 @@ To guarantee flawless stability across consumer gaming hardware while accounting
   - Dynamic Safety Headroom: **$0.6\text{ GB}$**
 - **Reserved OS / Background Headroom:** **$1.5\text{ GB}$** permanently reserved.
 - **Frame Pacing:** Locked 30 FPS cap via timeline semaphore frame pacing to guarantee thermal and frame-time stability on 6 GB silicon.
+
+#### Tier ARM: Native ARM64 Target Floor — Snapdragon X Elite / Apple Silicon / Linux AArch64 (1440p @ 60 FPS)
+- **Mandatory Zero Degradation Floor:** Never compromises Vulkan 1.4 Native Core requirements, double-precision physics (`dvec3`), 1,024-agent WWZ swarm sizes, or the dual-core AI Director (Qwen2.5-3B + L4D2 60Hz machine).
+- **Hardware Prerequisites:** Requires 64-bit ARMv8.4-A+ with NEON, native Vulkan 1.4 Native Core GPU (Dynamic Rendering Local Read, Push Descriptors, Descriptor Buffers, Timeline Semaphores, Bindless, Mesh Shaders), and $\ge 16\text{ GB}$ Unified RAM ($\ge 6.2\text{ GB}$ allocatable to game).
+- **Weak Memory Ordering Safety:** Explicit acquire-release atomics across all lock-free structures (`SPSCRequestQueue`, `SLMResultQueue`, `SPSCMutationQueue`, `FileHandleRing`, `ThreadAffinityAllocator`) with 128-byte cache line alignment (`CACHE_LINE_SIZE = 128`).
+- **Hardware Rejection:** Devices failing validation cleanly halt at boot (`ZERR_UNSUPPORTED_HARDWARE` / `ZERR_INSUFFICIENT_MEMORY`).
+
+#### Tier SteamOS: Living Room Console / "Steam Cube" — Desktop APU/dGPU (1440p/4K @ 60 FPS)
+- **Full Desktop Power:** Operates at full desktop power (100W–250W+ TDP) with zero battery down-throttling or 15W handheld TDP clamps.
+- **Gamescope HDR & 10-Foot UI:** Native Gamescope compositor direct DRM lease, HDR10 / HDR PQ metadata passthrough, 1.5x–2.0x 10-foot TV HUD scaling, and multi-gamepad couch co-op via `ISteamInput`.
 
 ---
 

@@ -28,18 +28,49 @@ SteamworksManager::~SteamworksManager() {
 bool SteamworksManager::initialize(bool forceSteamDeckEmulation) {
     m_initialized = true;
 
-    // Check Steam Deck environment variable or hardware emulation
+    // Check SteamOS / Gamescope / SteamCube environment variables or hardware emulation
     const char* deckEnv = std::getenv("SteamDeck");
+    const char* gamescopeEnv = std::getenv("GAMESCOPE_WAYLAND_DISPLAY");
+    const char* steamCubeEnv = std::getenv("SteamCube");
+    const char* steamMachineEnv = std::getenv("SteamMachine");
+    const char* steamOSEnv = std::getenv("SteamOS");
+
     if (forceSteamDeckEmulation || (deckEnv && std::strcmp(deckEnv, "1") == 0)) {
+        // Handheld emulation mode (for sanity harness / legacy test compatibility)
         m_deckProfile.isDeck = true;
+        m_deckProfile.isSteamOSConsole = false;
+        m_deckProfile.isGamescope = (gamescopeEnv != nullptr);
+        m_deckProfile.isLivingRoomTV = false;
+        m_deckProfile.hdr10Enabled = false;
         m_deckProfile.displayWidth = 1280;
         m_deckProfile.displayHeight = 800;
         m_deckProfile.aspectRatio = 16.0f / 10.0f;
         m_deckProfile.uiScaleMultiplier = 1.25f;
         m_deckProfile.gyroAdsEnabled = true;
         m_deckProfile.targetFrameRate = 60;
-    } else {
+    } else if ((steamCubeEnv && std::strcmp(steamCubeEnv, "1") == 0) ||
+               (steamMachineEnv && std::strcmp(steamMachineEnv, "1") == 0) ||
+               (steamOSEnv && std::strcmp(steamOSEnv, "1") == 0) ||
+               (gamescopeEnv != nullptr)) {
+        // SteamOS Desktop / Living Room Console ("Steam Cube" / Steam Machine)
         m_deckProfile.isDeck = false;
+        m_deckProfile.isSteamOSConsole = true;
+        m_deckProfile.isGamescope = true;
+        m_deckProfile.isLivingRoomTV = true;
+        m_deckProfile.hdr10Enabled = true;
+        m_deckProfile.displayWidth = 2560;
+        m_deckProfile.displayHeight = 1440;
+        m_deckProfile.aspectRatio = 16.0f / 9.0f;
+        m_deckProfile.uiScaleMultiplier = 1.75f;
+        m_deckProfile.gyroAdsEnabled = true;
+        m_deckProfile.targetFrameRate = 60;
+    } else {
+        // Standard Desktop PC
+        m_deckProfile.isDeck = false;
+        m_deckProfile.isSteamOSConsole = false;
+        m_deckProfile.isGamescope = false;
+        m_deckProfile.isLivingRoomTV = false;
+        m_deckProfile.hdr10Enabled = false;
         m_deckProfile.displayWidth = 1920;
         m_deckProfile.displayHeight = 1080;
         m_deckProfile.aspectRatio = 16.0f / 9.0f;
