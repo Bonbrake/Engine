@@ -285,10 +285,10 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T0-01 | SDL3 window + Vulkan 1.4 instance/device | ✅ Done |
 | T0-02 | vk-bootstrap physical device selection (discrete GPU, Vulkan 1.4, RT tier check) | ✅ Done |
 | T0-03 | VMA 3.4.0 allocator (no raw vkAllocateMemory) | ✅ Done |
-| T0-04 | Dynamic rendering (VK_KHR_dynamic_rendering) | ✅ Done |
-| T0-05 | Synchronization2 barriers (VK_KHR_synchronization2) | ✅ Done |
-| T0-06 | Timeline semaphores (VK_KHR_timeline_semaphore) | ✅ Done |
-| T0-07 | Buffer device address (VK_KHR_buffer_device_address) | ✅ Done |
+| T0-04 | Vulkan 1.4 core dynamic rendering + local read (tile local read for deferred) | ✅ Done |
+| T0-05 | Vulkan 1.4 core synchronization2 (vkCmdPipelineBarrier2 + unified 64-bit stage masks) | ✅ Done |
+| T0-06 | Vulkan 1.4 core timeline semaphores (64-bit monotonic GPU-CPU frame sync) | ✅ Done |
+| T0-07 | Vulkan 1.4 core buffer device address (64-bit direct GPU memory pointers) | ✅ Done |
 | T0-08 | Pipeline cache persistence (pipeline_cache.bin) | ✅ Done |
 | T0-09 | spdlog async ring buffer + Tracy profiler | ✅ Done |
 | T0-10 | Crashpad / SEH minidump handler | ✅ Done |
@@ -314,7 +314,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T1-01 | **glTF mesh loading** | fastgltf parses .glb/.gltf, vertex/index data uploaded to VMA buffers | T0 |
 | T1-02 | **Persistent mapped staging ring buffer** | CPU-visible VMA ring for async uploads to GPU-local memory | T0-03 |
 | T1-03 | **PBR metallic-roughness shader** | Standard PBR: albedo, normal, metallic-roughness, AO maps | T1-01 |
-| T1-04 | **Bindless texture array** | VK_EXT_descriptor_indexing, partially-bound, 500K handle capacity | T1-03 |
+| T1-04 | **Bindless texture array** | Vulkan 1.4 core descriptor indexing + push descriptors, partially-bound, 500K handle capacity | T1-03 |
 | T1-05 | **BC7/BC5 texture compression** | BC7 for albedo/metallic, BC5 for normals. Pre-computed mip chains | T1-04 |
 | T1-06 | **Directional + point lighting** | Forward+ or deferred. One cascaded shadow + N point lights | T1-03 |
 | T1-07 | **Cascaded shadow mapping** | 4-cascade CSM with PCF soft shadows | T1-06 |
@@ -326,7 +326,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T1-13 | **Compute histogram eye adaptation** | Human iris dilation simulation for dark/bright transitions | T1-10 |
 | T1-14 | **Pipeline warmup** | Pre-compile all shader permutations at boot. Zero in-game stutter | T1-11 |
 | T1-15 | **VRAM memory budget guard** | Track VMA budget, shed mip levels dynamically at min(device_vram * 0.80, 6.2GB) ceiling (4.5GB on 2060, 6.2GB on 2070) | T0-03 |
-| T1-16 | **Scalar block layout** | Vulkan 1.2+ core scalarBlockLayout for 1:1 CPU/GPU struct matching | T0 |
+| T1-16 | **Scalar block layout** | Vulkan 1.4 core scalar memory layout for 1:1 CPU/GPU struct matching (zero packing waste) | T0 |
 | T1-17 | **Shader hot-reload** | ReadDirectoryChangesW watcher, async SPIR-V recompile, live VkPipeline swap without restart | T0-14 |
 | T1-18 | **Packed ARM texture layout** | AO+Roughness+Metallic in single RGB texture, 60% fewer material bindings | T1-03 |
 | T1-19 | **Compute GPU skeletal skinning** | Skin once per frame in compute, share output buffer across all passes (shadow, depth, color) | T1-01, T1-04 |
@@ -438,7 +438,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-03 | **Variable rate shading (VRS Tier 2)** | 2x2/4x4 for background/fast-moving pixels. 30% GPU savings | T4-01 |
 | T4-04 | **Hardware ray queries** | RT shadows + RTAO via VK_KHR_ray_query in compute/fragment | T4-01 |
 | T4-05 | **Motion vector export** | 32-bit motion vectors + depth + reactive masks to render targets | T1-10 |
-| T4-06 | **DLSS / FSR 4 / XeSS upscaling** | NVIDIA Streamline + AMD FidelityFX SDK (FSR 4) on Vulkan (DirectSR reserved for Stage 6 Xbox). Frame generation | T4-05 |
+| T4-06 | **Neural upscaling & frame generation (FSR 4 / DLSS 3.7+ / XeSS 1.3+)** | AMD FidelityFX SDK (AI-driven FSR 4) + NVIDIA Streamline (DLSS Ray Reconstruction & Frame Gen) on Vulkan 1.4 (DirectSR reserved for Stage 6 Xbox) | T4-05 |
 | T4-07 | **NVIDIA Reflex 2.0 / AMD Anti-Lag 2** | Latency markers in swapchain presentation | T0-20 |
 | T4-08 | **Volumetric 3D froxel atmosphere** | Fog/dust/rain density varies by altitude, humidity, enclosures | T1-06, T1-10 |
 | T4-09 | **Weather system** | Rain, fog, Mie phase scattering, dynamic cloud cover | T4-08 |
@@ -535,7 +535,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | Platform | Key Technologies | v7.0 Source |
 |----------|-----------------|-------------|
 | **PS5 Pro** | PSSR upscaling, DualSense haptics, Tempest audio, Kraken decompression | Parts 236, 244 |
-| **Xbox Series X** | DirectSR, DirectStorage GPU decompress, DXR 1.2, GDK core isolation, Quick Resume | Parts 237, 245 |
+| **Xbox Series X** | DirectSR, DirectStorage GPU decompress, DXR Tier 1.1 / Work Graphs, GDK core isolation, Quick Resume | Parts 237, 245 |
 | **Apple Silicon (M5)** | Metal 3.x, ANE offload, TBDR discard arenas, unified memory | Parts 238, 247 |
 | **Android** | Vulkan 1.4 mobile, VRS Tier 2, ASTC compression, ADPF thermals | Part 248 |
 | **Steam Deck 2 / ROG Ally** | Dynamic TDP governors, packed mesh attributes, battery-aware frame gen | Part 246 |
