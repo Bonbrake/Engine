@@ -9,7 +9,7 @@ hardware_targets:
   low_spec_minimum: 1080p @ 30 FPS (RTX 2060 6GB / RX 6600 8GB / Arc A580 8GB) | 4.5GB VRAM Cap (1.6GB OS Reserve)
 core_tech_stack:
   language: C++20 (MSVC 2022 v14.44, /std:c++20)
-  graphics_api: Vulkan 1.4 (volk + Dynamic Rendering + Descriptor Buffers) | SPIR-V Reflect
+  graphics_api: Vulkan 1.4 (volk + Dynamic Rendering + Descriptor Indexing / Bindless) | SPIR-V Reflect
   physics_engine: Jolt Physics 5.6.0 (Double-Precision dvec3, Cross-Platform Determinism)
   modding: C++ std::function Hook Registry & JSON Manifests (Lua/Luau stripped per APPENDIX_L)
   audio_engine: SDL3 Audio Subsystem / Procedural Spatial DSP (128MB RAM Budget)
@@ -318,15 +318,15 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T1-05 | **BC7/BC5 texture compression** | BC7 for albedo/metallic, BC5 for normals. Pre-computed mip chains | T1-04 |
 | T1-06 | **Directional + point lighting** | Forward+ or deferred. One cascaded shadow + N point lights | T1-03 |
 | T1-07 | **Cascaded shadow mapping** | 4-cascade CSM with PCF soft shadows | T1-06 |
-| T1-08 | **Hi-Z two-pass occlusion culling** | Depth pyramid then visibility test. Budget: < 0.1ms | T1-07 |
+| T1-08 | **Hi-Z two-pass occlusion culling** | Depth pyramid then visibility test. Budget: < 0.1ms | T1-03, T1-12 |
 | T1-09 | **GPU-driven multi-draw indirect** | Single vkCmdDrawIndexedIndirect for entire visible scene | T1-08 |
-| T1-10 | **Render graph resource management** | Automatic transient attachment allocation, aliasing | T1-09 |
+| T1-10 | **Render graph resource management** | Automatic transient attachment allocation, aliasing | T1-03 |
 | T1-11 | **SPIRV-Reflect auto shader bindings** | Auto-generate descriptor layouts from SPIR-V bytecode | T1-03 |
 | T1-12 | **Camera system** | Debug fly cam + game camera with head inertia (spring-damper) | T1-01 |
 | T1-13 | **Compute histogram eye adaptation** | Human iris dilation simulation for dark/bright transitions | T1-10 |
 | T1-14 | **Pipeline warmup** | Pre-compile all shader permutations at boot. Zero in-game stutter | T1-11 |
 | T1-15 | **VRAM memory budget guard** | Track VMA budget, shed mip levels dynamically at min(device_vram * 0.80, 6.2GB) ceiling (4.5GB on 2060, 6.2GB on 2070) | T0-03 |
-| T1-16 | **Scalar block layout** | VK_EXT_scalar_block_layout for 1:1 CPU/GPU struct matching | T0 |
+| T1-16 | **Scalar block layout** | Vulkan 1.2+ core scalarBlockLayout for 1:1 CPU/GPU struct matching | T0 |
 | T1-17 | **Shader hot-reload** | ReadDirectoryChangesW watcher, async SPIR-V recompile, live VkPipeline swap without restart | T0-14 |
 | T1-18 | **Packed ARM texture layout** | AO+Roughness+Metallic in single RGB texture, 60% fewer material bindings | T1-03 |
 | T1-19 | **Compute GPU skeletal skinning** | Skin once per frame in compute, share output buffer across all passes (shadow, depth, color) | T1-01, T1-04 |
@@ -345,7 +345,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 |---|---------|-------------|------|
 | T2-01 | **EnTT ECS integration** | Registry, views, component iteration for all game entities | T1 |
 | T2-02 | **Jolt Physics 5.6.0** | Double-precision origin, character controllers, raycasts | T1 |
-| T2-03 | **Floating origin shift (dvec3)** | Re-center world origin to prevent jitter at >50km distances | T2-02 |
+| T2-03 | **Floating origin shift & camera-relative rendering** | 64-bit dvec3 world coordinates on CPU/Jolt; camera-relative single-precision vec3 on GPU; re-center origin at >50km distances | T2-02 |
 | T2-04 | **Core game loop** | Spawn, Update(dt), Physics step, Render. Fixed timestep | T2-01, T2-02 |
 | T2-05 | **EventBus (zero-alloc ring)** | Compile-time type-indexed, SPSC/MPMC atomic queues | T2-04 |
 | T2-06 | **Zombie FSM** | Idle, Wander, Alert, Chase, Attack, Stumble, Ragdoll | T2-04 |
@@ -377,13 +377,13 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | # | Feature | Description | Deps |
 |---|---------|-------------|------|
 | T3-01 | **L4D2 AI Director** | Stress-curve pacing: BuildUp, SustainPeak, PeakFade, Relax | T2-06, T2-07 |
-| T3-02 | **WWZ two-tier swarm engine** | Tier A: macro flockers (VAT GPU skinning). Tier B: micro combat actors (full skeleton, ragdoll). Promote within 6m | T3-01 |
+| T3-02 | **WWZ two-tier swarm engine** | Tier A: macro flockers (VAT GPU skinning). Tier B: micro combat actors (full skeleton, ragdoll). Promote within 6m | T3-01, T2-09, T2-02 |
 | T3-03 | **VAT GPU-skinned macro zombies** | Baked animation textures, 1000+ instances via vertex shader lookup | T3-02 |
 | T3-04 | **6DOF bullet drag ballistics** | Cd=0.295, gravity drop, wind drift. 100% real-time, no time-slow | T2-02, T2-11 |
 | T3-05 | **Skeletal limb dismemberment & gore caps** | Pre-split sub-mesh bone groups, baked stub caps, dynamic wound decals, compute bone mask toggling (upgrades to meshlet culling in T4-01) | T3-04 |
 | T3-06 | **Acoustic AI hearing + light perception** | Ray-traced acoustic reflection through corridors. Compute light-level vision | T2-13, T2-22, T2-06 |
 | T3-07 | **Bodycam first-person camera** | Eye-level 1.68m, head/neck spring-damper inertia, kinetic footfall impacts | T1-12 |
-| T3-08 | **Soft proportional free-aim** | 75% gun / 25% camera inside +/-12 deg deadzone | T3-07 |
+| T3-08 | **Soft proportional free-aim** | 75% gun / 25% camera inside +/-12 deg deadzone | T3-07, T2-11 |
 | T3-09 | **Physical magazine inspection** | Multi-stage: DropToPalm, InspectWitnessHoles, Reseat | T2-11 |
 | T3-10 | **Bethesda 3-tier item persistence** | Eternal (weapons) / Clutter LRU (256/chunk) / Ephemeral (brass, blood) | T2-01 |
 | T3-11 | **Kinematic sleep-on-load** | Items init as kinematic, 3-frame soft contact relaxation (v_max = 1.5 m/s) | T3-10, T2-02 |
@@ -401,17 +401,17 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T3-23 | **Physics grab and arrange** | 6-DOF spring-damper constraint for lifting/rotating items | T2-02 |
 | T3-24 | **Supersonic ballistic acoustics** | Mach cone shockwave, crack/muzzle separation, subsonic whiz-bys | T3-04, T2-12 |
 | T3-25 | **Surface-dependent brass impacts** | Concrete/wood/metal/carpet resonant filter profiles | T2-12 |
-| T3-26 | **Kinetic gear rattle** | Plate carrier / Molle clatter driven by acceleration and angular jerk | T3-07 |
+| T3-26 | **Kinetic gear rattle** | Plate carrier / Molle clatter driven by acceleration and angular jerk | T3-07, T2-12 |
 | T3-27 | **Weapon jamming and fouling** | Barrel heat, carbon fouling, magazine spring tension. FTF/FTE jams require manual clearing | T3-04 |
 | T3-28 | **Heart rate and lungs stamina** | Physical BPM (60-180), O2 deficit, breath gasping audio, weapon sway tied to recovery time | T3-17 |
 | T3-29 | **Compute stealth illuminance** | Dynamic screen-space lux compute integrator. Smooth 0-100 stealth visibility meter | T2-06, T1-06 |
 | T3-30 | **RVO2 companion collision avoidance** | Reciprocal velocity obstacles + contextual doorway yielding to prevent blocking | T2-06 |
 | T3-31 | **Dynamic Recast navmesh carving** | Player barricades/explosions carve 128x128 navmesh tiles in <1ms, auto off-mesh vault links | T2-07 |
 | T3-32 | **Weapon sway fatigue and adrenaline** | ADS accumulates lactic acid fatigue increasing sway. Damage spikes adrenaline micro-tremor | T2-11, T3-28 |
-| T3-33 | **Center-of-mass encumbrance shift** | Heavy backpack shifts 3D CoM, causing momentum drift in turns and stamina drain crouching | T3-16 |
+| T3-33 | **Center-of-mass encumbrance shift** | Heavy backpack shifts 3D CoM, causing momentum drift in turns and stamina drain crouching | T3-16, T2-02 |
 | T3-34 | **Dynamic wildlife AI** | Deer, wolves, birds with graze/hunt/scatter behaviors reacting to gunfire and hordes | T2-06, T3-13 |
 | T3-35 | **Faction territorial Voronoi** | Dynamic 2D Voronoi grid, faction pressure causes organic border skirmishes and raids | T3-12, T2-14 |
-| T3-36 | **Voronoi glass window shatter** | Impact-point-centered Voronoi fracture, physical glass shard projectiles | T2-02, T3-05 |
+| T3-36 | **Voronoi glass window shatter** | Impact-point-centered Voronoi fracture, physical glass shard projectiles | T2-02, T3-04 |
 | T3-37 | **Ragdoll momentum blend-back** | Evaluate bone velocities on recovery, context-sensitive get-up locomotion matching momentum | T2-09, T2-02 |
 | T3-38 | **NPC cognitive load and decision latency** | Stress increases reaction time: green bandits hesitate, veteran soldiers react instantly | T2-06 |
 | T3-39 | **Blood clotting and coagulation** | Dynamic viscosity, gravity runoff, temporal coagulation turning arterial spray to dark pools | T3-05 |
