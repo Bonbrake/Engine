@@ -102,8 +102,9 @@ gantt
     axisFormat %S.%L
     section Main Thread (Core 0)
     SDL3 Events + Input     : 0, 1ms
-    ECS Logic               : 1, 3ms
-    Kick enkiTS Tasks       : 4, 1ms
+    Dispatch enkiTS Sim     : 1, 1ms
+    ECS Logic               : 2, 2ms
+    Render Snapshot Prep    : 4, 1ms
     section Render Thread (Core 1)
     Frustum/Occlusion Cull  : 5, 2ms
     Vulkan Cmd Recording    : 7, 4ms
@@ -126,6 +127,11 @@ gantt
   - PBR Clustered Lighting & Decals: 4.0ms
   - FSR 4 / DLSS Upscaling (720p $\to$ 1080p): 3.5ms
   - Post-processing (AgX Tonemap, Bloom, HUD): 1.5ms
+* **CPU Execution Budget (14.0ms total / 19.3ms idle headroom on 6C/12T):**
+  - Jolt Physics (2x sub-ticks at 60Hz): 6.0ms
+  - Main Thread ECS & Game Logic: 4.5ms
+  - Render Thread Command Recording: 5.0ms
+  - Audio DSP & Mixing: 2.5ms
 * **Physics & Motion Pacing:** Jolt physics runs at **60 Hz fixed timestep** (2 sub-ticks per 30 FPS rendered frame). Feature `T2-18` (*Async physics interpolation*) smoothly lerps rigid body transforms between ticks, guaranteeing stutter-free motion with a flat 30.0 FPS frame-time line.
 * **SLM Concurrency:** Qwen2.5-3B runs asynchronously out-of-band on `SlmThread` (VRAM default with Mip-1 texture shedding, or AVX2 CPU offload in 16GB System RAM under VRAM pressure).
 
@@ -191,8 +197,8 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | **Reserved OS / Display Overhead** | **1.6 GB (Safe Overhead Cushion)** | **1.8 GB (DWM / OBS / Discord)** |
 
 > **3-Tier SLM Execution Policy on 6GB Hardware:**
-> 1. *Default:* Qwen2.5-3B runs in VRAM (1.9 GB) paired with the 2.1 GB compact graphics profile (total game VRAM: 4.0 GB, leaving 500 MB headroom under the 4.5 GB cap).
-> 2. *Low-VRAM Fallback:* If VMA reports `< 600 MB` headroom, `SLMClient` transparently runs inference on CPU threads via AVX2 in the 16 GB System RAM pool, instantly freeing 1.9 GB of VRAM for rendering.
+> 1. *Default:* Qwen2.5-3B runs in VRAM (1.9 GB) paired with the 2.0 GB compact graphics profile (total game VRAM: 3.9 GB + dynamic cushion up to 0.6 GB, strictly bounded by the 4.5 GB cap).
+> 2. *Low-VRAM Fallback:* If VMA reports `< 600 MB` headroom, `SLMClient` transparently runs inference on CPU threads via AVX2 in the 16 GB System RAM pool, instantly freeing 1.9 GB of VRAM for rendering. To accommodate the 1.9 GB model weights in System RAM without exceeding the 16.0 GB physical RAM ceiling, the Asset Streaming & VFS Ring Cache dynamically contracts from 4.5 GB down to 2.6 GB.
 > 3. *Combat Pacing:* During heavy 500-zombie horde crescendos (`SustainPeak`), SLM generation halts while the 60Hz mathematical L4D2 state machine governs combat.
 
 ### System RAM Budget (16 GB Total)
@@ -200,12 +206,12 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | Budget Slice | RAM |
 |-------------|-----|
 | Windows OS Overhead | 4.0 GB |
-| Asset Streaming & VFS Ring Cache | 4.5 GB |
+| Asset Streaming & VFS Ring Cache | 4.5 GB (scales to 2.6 GB during CPU SLM mode) |
 | Game State & ECS | 4.0 GB |
 | Jolt Physics (dvec3) | 1.5 GB |
 | enkiTS Task Scheduler | 0.5 GB |
 | Audio DSP & Buffers | 0.13 GB (128 MB) |
-| SLM KV-Cache & Prompts | 1.0 GB |
+| SLM KV-Cache & Prompts | 1.0 GB (+ 1.9 GB weights during CPU fallback) |
 | Unallocated Safety Pool | 0.37 GB |
 
 ---
@@ -277,7 +283,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | # | Feature | Status |
 |---|---------|--------|
 | T0-01 | SDL3 window + Vulkan 1.4 instance/device | ✅ Done |
-| T0-02 | vk-bootstrap physical device selection (discrete GPU, RT required) | ✅ Done |
+| T0-02 | vk-bootstrap physical device selection (discrete GPU, Vulkan 1.4, RT tier check) | ✅ Done |
 | T0-03 | VMA 3.4.0 allocator (no raw vkAllocateMemory) | ✅ Done |
 | T0-04 | Dynamic rendering (VK_KHR_dynamic_rendering) | ✅ Done |
 | T0-05 | Synchronization2 barriers (VK_KHR_synchronization2) | ✅ Done |
@@ -345,8 +351,8 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T2-06 | **Zombie FSM** | Idle, Wander, Alert, Chase, Attack, Stumble, Ragdoll | T2-04 |
 | T2-07 | **Eikonal flowfield pathfinding** | Density-cost wavefront. 500+ zombies without A* collapse | T2-06 |
 | T2-08 | **Morton 64-bit spatial hashing** | O(1) spatial queries, cache-friendly contiguous memory | T2-07 |
-| T2-09 | **Skeletal animation** | Runtime skeletal evaluation, blend trees | T1-01 |
-| T2-10 | **Two-bone analytical foot IK** | Feet align to terrain slopes, stairs, rocks via Jolt raycasts | T2-09 |
+| T2-09 | **Skeletal animation** | Runtime skeletal evaluation, blend trees feeding GPU skinning pass | T1-01, T1-19 |
+| T2-10 | **Two-bone analytical foot IK** | Feet align to terrain slopes, stairs, rocks via Jolt raycasts | T2-09, T2-02 |
 | T2-11 | **Procedural weapon animation** | Weapon mass inertia, compressed high-ready, barrel lag | T2-09 |
 | T2-12 | **SDL3 audio engine** | Audio output streaming via SDL3, procedural spatial DSP & HRTF binaural convolution | T2-04 |
 | T2-13 | **Acoustic wave propagation** | Speed-of-sound delay (343 m/s), ring-buffered acoustic queue | T2-12 |
@@ -374,8 +380,8 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T3-02 | **WWZ two-tier swarm engine** | Tier A: macro flockers (VAT GPU skinning). Tier B: micro combat actors (full skeleton, ragdoll). Promote within 6m | T3-01 |
 | T3-03 | **VAT GPU-skinned macro zombies** | Baked animation textures, 1000+ instances via vertex shader lookup | T3-02 |
 | T3-04 | **6DOF bullet drag ballistics** | Cd=0.295, gravity drop, wind drift. 100% real-time, no time-slow | T2-02, T2-11 |
-| T3-05 | **Meshlet dismemberment** | Pre-split skeletal meshlet clusters, baked stub caps, compute buffer visibility toggling | T3-04 |
-| T3-06 | **Acoustic AI hearing + light perception** | Ray-traced acoustic reflection through corridors. Compute light-level vision | T2-13, T2-06 |
+| T3-05 | **Skeletal limb dismemberment & gore caps** | Pre-split sub-mesh bone groups, baked stub caps, dynamic wound decals, compute bone mask toggling (upgrades to meshlet culling in T4-01) | T3-04 |
+| T3-06 | **Acoustic AI hearing + light perception** | Ray-traced acoustic reflection through corridors. Compute light-level vision | T2-13, T2-22, T2-06 |
 | T3-07 | **Bodycam first-person camera** | Eye-level 1.68m, head/neck spring-damper inertia, kinetic footfall impacts | T1-12 |
 | T3-08 | **Soft proportional free-aim** | 75% gun / 25% camera inside +/-12 deg deadzone | T3-07 |
 | T3-09 | **Physical magazine inspection** | Multi-stage: DropToPalm, InspectWitnessHoles, Reseat | T2-11 |
@@ -409,7 +415,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T3-37 | **Ragdoll momentum blend-back** | Evaluate bone velocities on recovery, context-sensitive get-up locomotion matching momentum | T2-09, T2-02 |
 | T3-38 | **NPC cognitive load and decision latency** | Stress increases reaction time: green bandits hesitate, veteran soldiers react instantly | T2-06 |
 | T3-39 | **Blood clotting and coagulation** | Dynamic viscosity, gravity runoff, temporal coagulation turning arterial spray to dark pools | T3-05 |
-| T3-40 | **Local splitscreen co-op (M2.8)** | Dual/quad viewport division (VkViewport/VkRect2D), multi-gamepad assignment, dual cameras, split spatial audio | T1-12, T2-04 |
+| T3-40 | **Local splitscreen co-op (M2.8)** | Dual/quad viewport division (VkViewport/VkRect2D), multi-gamepad assignment, dual cameras, split spatial audio | T1-12, T2-04, T2-12 |
 | T3-41 | **Web-based perk & progression system (M8.7)** | Non-linear skill web (Combat, Survival, Scavenging, Leadership), EventBus PerkPoints via survival milestones/factions | T2-05, T2-14 |
 | T3-42 | **Seamless interior cell streaming (M2.6)** | Portal-based occlusion & streaming transitions between exterior world chunks and building interiors with zero load screens | T3-13 |
 | T3-43 | **Diegetic wristwatch & survival compass (M10-EXT-24, M11-EXT-63)** | Physical wrist inspection showing analog time, dusk siren alarm trigger, radiation Geiger meter, and compass needle | T3-07, T1-12 |
@@ -444,7 +450,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-15 | **Threat-aware frequency ducking** | Duck 300Hz-3.4kHz during radio barks | T2-12 |
 | T4-16 | **Descriptor buffers** | VK_EXT_descriptor_buffer replacing descriptor pools | T1-04 |
 | T4-17 | **Shader objects** | VK_EXT_shader_object eliminating VkPipeline overhead | T1-14 |
-| T4-18 | **Conservative rasterization** | VK_EXT_conservative_rasterization for voxelization / LOS checks | T4-04 |
+| T4-18 | **Conservative rasterization** | VK_EXT_conservative_rasterization for voxelization / LOS checks | T1-10 |
 | T4-19 | **Async compute queues** | AI pathfinding + particle physics on VK_QUEUE_COMPUTE_BIT | T3-18 |
 | T4-20 | **Asset cooking (.zepak)** | Binary pack format, magic 0x5A45504B, zero-copy DMA from NVMe | T3-13 |
 | T4-21 | **Dynamic extended state 3** | VK_EXT_extended_dynamic_state3 for runtime rasterizer changes | T0-19 |
@@ -462,15 +468,15 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-33 | **Persistent blood/gore accumulation map** | 4K dynamic texture array, permanent blood/drag trails, no memory leak | T3-05 |
 | T4-34 | **GPU XPBD cloth and rope simulation** | Clothing capes, cables, tarps react to movement, wind, body collision on compute | T2-09, T3-18 |
 | T4-35 | **Helmet visor optics shader** | Internal breath fogging, external rain droplets, glass scratches, hand-wipe clearing | T3-07, T4-09 |
-| T4-36 | **Infrared thermal and NVG optics** | Physical body temp (37C human, 90C engine), emissivity maps, phosphor tube noise | T1-06 |
+| T4-36 | **Infrared thermal and NVG optics** | Physical body temp (37C human, 90C engine), emissivity maps, phosphor tube noise | T1-06, T1-10 |
 | T4-37 | **Weapon carbon/rust wear shaders** | GPU procedural carbon residue, metal scratches, mud accumulation based on use | T3-27 |
 | T4-38 | **Atmospheric dust and spore particles** | 3D micro-particle volume emitters illuminated by flashlight shafts in dark spaces | T3-18, T4-08 |
 | T4-39 | **Retroreflection shader** | Micro-facet retroreflection BRDF for road signs, safety vests, cat-eye markers | T1-03 |
-| T4-40 | **Emissive surface voxel bounce light** | Voxelize high-intensity emissive triangles into GI structure for neon illumination | T4-23 |
+| T4-40 | **Emissive surface voxel bounce light** | Voxelize high-intensity emissive triangles into GI structure for neon illumination | T4-18, T4-23 |
 | T4-41 | **Wind occlusion for vegetation** | 3D wind occlusion compute shader: indoor plants and sheltered trees stay still | T4-09, T3-13 |
 | T4-42 | **Foliage motion vectors for DLSS/FSR** | Per-leaf procedural velocity generation eliminating upscaler ghosting on vegetation | T4-05, T4-31 |
 | T4-43 | **RT acceleration structure compaction** | Dynamic BVH compaction after build passes, reclaim 50% RT VRAM | T4-04 |
-| T4-44 | **Spatiotemporal path tracing denoiser** | SVGF + AI denoiser for clean 1-spp path traced images | T4-23 |
+| T4-44 | **Spatiotemporal path tracing denoiser** | SVGF + AI denoiser for clean 1-spp path traced images | T4-23, T4-05 |
 | T4-45 | **Planar & stochastic ray-marched water reflections (Part 451)** | Hi-Z screen-space reflections (SSR) with ray query fallback for reflective puddles and wet streets | T4-25, T4-04 |
 | T4-46 | **Runtime virtual texturing (RVT) for terrain & dynamic stains (M4.5, Part 452)** | GPU-cached virtual texture system baking multi-layer terrain blends, muddy vehicle tire tracks, footprint impressions, and blood spatters directly into terrain tiles without individual quad draw overhead | T3-14, T4-10 |
 
@@ -518,7 +524,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T5-34 | **Dynamic faction schisms** | Internal rivalries split large settlements into hostile splinter factions during crises | T3-35, T5-18 |
 | T5-35 | **Narrative diorama set-piece placer (M11-EXT-58, M12-EXT-28)** | Procedural environmental storytelling vignettes (abandoned survivor camps, tragedy beats, warning graffiti) | T3-13, T5-27 |
 | T5-36 | **Neutral haven safe-zones (M12-EXT-32)** | Barricaded safe-towns with merchant hubs, neutral armistice rules, dynamic casino/trade mini-economies | T3-35, T5-14 |
-| T5-37 | **Volatile fuel tank puncture & Bernoulli drainage (M9-EXT-09)** | Ballistic or debris puncture to vehicle fuel tanks causes real-time drainage rate Q = C_d * A * sqrt(2gh), laying down flammable fuel trails on roads that can be ignited | T5-12, T5-32 |
+| T5-37 | **Volatile fuel tank puncture & Bernoulli drainage (M9-EXT-09)** | Ballistic or debris puncture to vehicle fuel tanks causes real-time drainage rate Q = C_d * A * sqrt(2gh), laying down flammable fuel trails on roads that can be ignited | T5-12, T5-32, T5-26 |
 
 ---
 
@@ -556,7 +562,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 ### Build Pipeline
 - **Canonical build:** `scripts\build_ze.cmd` (MSVC 2022, CMake 4.4.3, Ninja 1.13)
 - **Never invoke raw CMake.** Always use the build script.
-- **Compiler flags:** `/std:c++20`, `/O2`, `/fp:fast`, `/GL`, `/LTCG`
+- **Compiler flags:** `/std:c++20`, `/O2`, `/fp:precise`, `/GL`, `/LTCG` (strict IEEE-754 precision mandated for deterministic physics & replay; fast-math strictly isolated to GPU compute shaders)
 - **Sanitizers (debug):** ASan, TSan
 - **SIMD:** AVX2 (`GLM_FORCE_AVX2`)
 
@@ -628,7 +634,7 @@ These are non-negotiable design pillars preserved from v7.0:
 | Constraint | Value | Reason |
 |-----------|-------|--------|
 | C++ Standard | `/std:c++20` | Concepts, std::span, constexpr, std::format |
-| Optimization | `/O2`, `/fp:fast` | Maximum vectorization and speed |
+| Optimization | `/O2`, `/fp:precise` | Maximum vectorization with strict IEEE-754 determinism for Jolt & replay |
 | LTCG | `/GL` + `/LTCG` | Whole program optimization |
 | Sanitizers | ASan, TSan (debug only) | Memory/thread validation |
 | SIMD | AVX2 (Zen / Zen 2+ / Intel Haswell+) | Optimal 256-bit SIMD execution for dvec3 double-precision math |
