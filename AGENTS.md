@@ -10,7 +10,7 @@ Any deviation from these parameters is considered a **CRITICAL SEVERITY (CVSS 10
 *   **[REQ-02] Build Pipeline:** Never invoke raw CMake commands. All build orchestration MUST route through the canonical build script: `scripts\\build_ze.cmd`. *(Corrected 2026-08-13: `tools\\build_skeleton.bat` `cd`s to a nonexistent path `C:\\Users\\jakeb\\ZombieEngine`; the repo root is `C:\\ZombieEngine`.)*
 *   **[REQ-03] Memory Architecture:** Vulkan Memory Allocator (VMA) is mandatory. The use of raw `vkAllocateMemory` is an immediate audit failure.
 *   **[REQ-04] Verification Standard:** No PR or branch merge is accepted until verified via `build\EndlessQuarantine.exe --headless` (Zero Validation Layer Exceptions).
-*   **[REQ-05] Architectural Alignment:** All structural changes must strictly mirror `ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v6.1.md`. Hallucination of architecture is forbidden.
+*   **[REQ-05] Architectural Alignment:** All structural changes must strictly mirror `ZOMBIE_ENGINE_MASTER_REFACTOR_PLAN_v8.0.md` (located in `docs/plans/` and `C:\Users\jakeb\Documents\Plans\`; supersedes v7.0 via September 2026 deduplication audit). v7.0 is archived for deep algorithmic reference only. Hallucination of architecture is forbidden.
 
 ## 2. 5 C'S DEBUGGING PROTOCOL (MANDATORY)
 When encountering a compilation or runtime failure, Subagents MUST execute the following framework before modifying C++ source:
