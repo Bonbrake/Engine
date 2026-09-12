@@ -15,6 +15,10 @@ struct Config {
     int crashFrame = -1;
     int quitFrame = -1;
     float exposure = 1.0f;   // [M4.5-EXT-33] AgX tonemapper exposure multiplier
+    // Easy Automatic HDR settings
+    int hdrMode = 2; // 0 = Force SDR, 1 = Force HDR, 2 = Auto (default: zero-friction auto-detection)
+    float hdrPaperWhiteNits = 200.0f; // reference white for 2D UI / HUD (nits)
+    float hdrPeakNits = 1000.0f;       // peak display luminance (nits, auto-calibrated)
     std::string settingsPath = "settings.json";
     // Frame-dump tool (windowed --dev only; headless has no swapchain to capture).
     std::string dumpFramePath;   // empty => disabled

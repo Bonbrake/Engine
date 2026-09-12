@@ -15,6 +15,16 @@ namespace render {
 
 class Device;
 
+struct HdrDisplayCapabilities {
+    bool hdrSupported = false;
+    bool hdrActive = false;
+    VkFormat format = VK_FORMAT_UNDEFINED;
+    VkColorSpaceKHR colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    float peakLuminanceNits = 1000.0f;
+    float paperWhiteNits = 200.0f;
+    float minLuminanceNits = 0.0001f;
+};
+
 class Swapchain {
 public:
     Swapchain(Device* device, SDL_Window* window);
@@ -22,6 +32,12 @@ public:
 
     void acquireAndPresent(debug::ImGuiOverlay* imguiOverlay, class MaterialSystem* materialSystem = nullptr);
     void recreate();
+
+    // Easy Auto-HDR queries
+    VkFormat getImageFormat() const { return vkbSwapchain_.image_format; }
+    VkColorSpaceKHR getColorSpace() const { return vkbSwapchain_.color_space; }
+    bool isHdrActive() const { return hdrCaps_.hdrActive; }
+    const HdrDisplayCapabilities& getHdrCapabilities() const { return hdrCaps_; }
 
     // Slice 0a: access the owned renderer to wire the dev-test mesh (gated to --dev).
     TriangleRenderer* triangleRenderer() { return &triangleRenderer_; }
@@ -89,6 +105,7 @@ private:
     void* exposureMapped_ = nullptr;
 
     VkSampler tonemapSampler_ = VK_NULL_HANDLE;
+    HdrDisplayCapabilities hdrCaps_{};
 };
 
 } // namespace render

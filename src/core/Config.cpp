@@ -29,6 +29,9 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         std::string cl_scriptInput;
         std::string cl_dumpState;
         float cl_exposure = 1.0f;
+        int cl_hdrMode = 2;
+        float cl_hdrPeakNits = 1000.0f;
+        float cl_hdrPaperWhiteNits = 200.0f;
 
         options.add_options()
             ("headless", "Run without display", cxxopts::value<bool>(cl_headless))
@@ -44,6 +47,9 @@ void Config::parseCommandLine(int argc, char* argv[]) {
             ("script-input", "Scripted-input text file (headless self-verify)", cxxopts::value<std::string>(cl_scriptInput)->default_value(""))
             ("dump-state", "Per-frame FlyCamera pose JSON output path", cxxopts::value<std::string>(cl_dumpState)->default_value(""))
             ("exposure", "AgX tonemapper exposure multiplier", cxxopts::value<float>(cl_exposure)->default_value("1.0"))
+            ("hdr", "Easy Auto-HDR mode (0=SDR, 1=HDR, 2=Auto)", cxxopts::value<int>(cl_hdrMode)->default_value("2"))
+            ("hdr-peak-nits", "Display peak luminance in nits (Auto-calibrated if not set)", cxxopts::value<float>(cl_hdrPeakNits)->default_value("1000.0"))
+            ("hdr-paper-white", "Paper-white UI luminance in nits", cxxopts::value<float>(cl_hdrPaperWhiteNits)->default_value("200.0"))
             ("settings", "Path to settings.json", cxxopts::value<std::string>(cl_settingsPath)->default_value("settings.json"))
             ("h,help", "Print usage");
 
@@ -72,6 +78,9 @@ void Config::parseCommandLine(int argc, char* argv[]) {
         if (result.count("script-input")) { scriptInput = cl_scriptInput; overriddenFields.insert("scriptInput"); }
         if (result.count("dump-state")) { dumpState = cl_dumpState; overriddenFields.insert("dumpState"); }
         if (result.count("exposure")) { exposure = cl_exposure; overriddenFields.insert("exposure"); }
+        if (result.count("hdr")) { hdrMode = cl_hdrMode; overriddenFields.insert("hdrMode"); }
+        if (result.count("hdr-peak-nits")) { hdrPeakNits = cl_hdrPeakNits; overriddenFields.insert("hdrPeakNits"); }
+        if (result.count("hdr-paper-white")) { hdrPaperWhiteNits = cl_hdrPaperWhiteNits; overriddenFields.insert("hdrPaperWhiteNits"); }
 
     } catch (const cxxopts::exceptions::exception& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;

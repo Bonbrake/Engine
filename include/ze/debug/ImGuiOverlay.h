@@ -9,7 +9,7 @@ namespace debug {
 
 class ImGuiOverlay {
 public:
-    void Initialize(VkDevice device, VkInstance instance, VkPhysicalDevice physicalDevice, VkQueue graphicsQueue, uint32_t queueFamily, SDL_Window* window);
+    void Initialize(VkDevice device, VkInstance instance, VkPhysicalDevice physicalDevice, VkQueue graphicsQueue, uint32_t queueFamily, SDL_Window* window, VkFormat colorFormat = VK_FORMAT_R8G8B8A8_UNORM);
     void Destroy(VkDevice device);
 
     void NewFrame();

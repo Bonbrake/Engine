@@ -21,6 +21,7 @@ core_tech_stack:
   tts_engine: Kokoro-82M ONNX Runtime (CPU, 50x real-time)
   cell_size: 128m x 128m WorldPartition Grid
   netcode: Client-Server with Host Authority + FlatBuffers Delta Compression
+  color_science: AgX Wide-Gamut + Easy Auto-HDR (Auto-Negotiated HDR10 ST.2084 / scRGB FP16, Zero-Calibration Display EDID Metadata, Paper-White UI Protection)
 ---
 
 # ZOMBIE ENGINE MASTER REFACTOR PLAN v8.0
@@ -98,6 +99,12 @@ graph TD
 > - **Weak Memory Ordering:** ARM64 operates under a weak memory model. All lock-free queues (`SPSCRequestQueue`, `SLMResultQueue`, `SPSCMutationQueue`, `FileHandleRing`, `ThreadAffinityAllocator`) strictly enforce explicit acquire-release memory orders (`std::memory_order_acquire`, `std::memory_order_release`).
 > - **Cache Separation:** 128-byte cache line alignment (`CACHE_LINE_SIZE = 128`) on ARM64 eliminates false sharing across Apple Silicon M-series and Snapdragon Oryon performance cores.
 > - **Core Affinity:** In big.LITTLE / Oryon topologies, `MainThread`, `RenderThread`, and `WorkerPool` pin to Performance cores; `SlmThread` and background streaming pin to remaining execution cores.
+
+### Easy Automatic HDR Architecture ("Zero-Friction / Just Works")
+
+- **Zero-Friction Auto-Negotiation:** Default mode `Auto` (`hdrMode = 2`, CLI `--hdr` / `--no-hdr`) queries physical display capabilities via `vkGetPhysicalDeviceSurfaceFormatsKHR`. Priority order: `VK_FORMAT_A2B10G10R10_UNORM_PACK32` with `VK_COLOR_SPACE_HDR10_ST2084_EXT` (Native 10-bit HDR10 PQ) → `VK_FORMAT_R16G16B16A16_SFLOAT` with `VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT` (scRGB Linear FP16) → Seamless fallback to `VK_FORMAT_R8G8B8A8_UNORM` (sRGB SDR). Requires zero manual user toggles, exhibits zero validation layer errors, and handles SDR displays gracefully without crashes.
+- **Zero-Calibration Display Metadata:** Automatically configures `VkHdrMetadataEXT` via `vkSetHdrMetadataEXT` using display luminance bounds (or configurable target defaults: 1000 nits peak, 0.0001 nits OLED min black) and sets BT.2020 color primaries with D65 white point. Eliminates tedious in-game calibration sliders while preventing highlight clipping and black crush.
+- **Paper-White UI Protection:** 2D UI / HUD and ImGui overlay elements are rendered with a reference paper-white clamp (200–250 nits), eliminating eye fatigue and blinding 1000-nit UI elements while scene highlights hit full display peak luminance.
 
 ### Frame Budget (Dual Performance Profiles)
 
@@ -309,7 +316,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T0-17 | Input system (keyboard + mouse + gamepad via SDL3) | ✅ Done |
 | T0-18 | Headless CI smoke test | ✅ Done |
 | T0-19 | Pipeline builder + compatibility validator | ✅ Done |
-| T0-20 | Swapchain management (mailbox / FIFO present modes) | ✅ Done |
+| T0-20 | Swapchain management (mailbox/FIFO, Easy Auto-HDR surface negotiation & zero-calibration metadata) | ✅ Done |
 
 ---
 
@@ -451,7 +458,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-08 | **Volumetric 3D froxel atmosphere** | Fog/dust/rain density varies by altitude, humidity, enclosures | T1-06, T1-10 |
 | T4-09 | **Weather system** | Rain, fog, Mie phase scattering, dynamic cloud cover | T4-08 |
 | T4-10 | **Puddle accumulation** | Heightmap accumulation buffer, roughness to 0.001, albedo darken 30%, SSR activate | T4-09 |
-| T4-11 | **Dynamic time-of-day** | Sun/moon cycle, atmospheric scattering, auto-exposure | T1-06, T1-13 |
+| T4-11 | **Dynamic time-of-day & AgX HDR color pipeline** | Sun/moon cycle, atmospheric scattering, auto-exposure, AgX wide-gamut tonemapping, Easy Auto-HDR paper-white UI clamp | T1-06, T1-13 |
 | T4-12 | **GPU-driven vector HUD** | Single GPU pass, crisp at 4K, zero CPU draw call overhead | T1-10 |
 | T4-13 | **Diegetic 3D UI projection** | Holographic / helmet visor UI elements in world space | T4-12 |
 | T4-14 | **FFT formant lip-sync** | Real-time viseme morph weights from audio FFT | T2-09, T2-12 |

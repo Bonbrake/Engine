@@ -152,7 +152,7 @@ This ledger establishes the uncompromising technical standard for ZombieEngine. 
 |---|---|---|---|---|
 | **Graphics API** | Vulkan 1.4 Native Core (`volk` + `Vulkan-Hpp`) | Vulkan SDK 1.4.350.0 installed; Driver `616.92` reports **Vulkan 1.4.351** on RTX 2070S | **Vulkan 1.4 Native Core** (`VK_KHR_dynamic_rendering_local_read`, `VK_KHR_push_descriptor`, `VK_KHR_maintenance5/6/9`, `VK_EXT_descriptor_buffer`, `VK_EXT_shader_object`, Timeline Semaphores, Synchronization2). Zero legacy Vulkan 1.2/1.3 constructs. | Driver supports 1.4.351; Khronos/LunarG SDK 1.4.357.0 available for next SDK update cycle. |
 | **Upscaling & Frame Generation** | NVIDIA DLSS 4.5 / AMD FSR 4 / Intel XeSS 2.0+ | Shader architecture integrated; velocity buffer planned | **NVIDIA DLSS 4.5** (Multi-Frame Generation, Transformer Super Resolution & Neural Ray Reconstruction) + **AMD FidelityFX Super Resolution 4 (FSR 4 Neural Upscaling & Frame Gen)** + **Intel XeSS 2.0+**. Vendor-detected runtime dispatch over per-pixel motion velocity buffer. | ✅ Formalized in Master Plan v8.0 Stage 4 (`T4-06`, `T4-42`, `T4-44`). |
-| **Color Science & HDR** | AgX Color Science + Khronos PBR Neutral | Shaders implemented in `shaders/` (`agx_tonemap.comp.glsl`) | **AgX Color Science** tonemapping + **Khronos PBR Neutral** fallback; wide-gamut BT.2020 and HDR10 PQ delivery. Eliminates saturation burn-in and hue shifting in high-luminance muzzle flashes and explosions. | ✅ Validated clean on GPU across 3 passes. |
+| **Color Science & Easy Auto-HDR** | AgX Color Science + Easy Automatic HDR | Swapchain auto-negotiation, ST.2084 / scRGB FP16, zero-calibration display metadata | **AgX Color Science** tonemapping + **Easy Automatic HDR** ("Just Works" zero-calibration surface negotiation across 10-bit HDR10 PQ & scRGB Linear FP16 with automatic fallback to sRGB SDR, zero display toggling, `VkHdrMetadataEXT` EDID peak luminance injection, and paper-white UI protection). | ✅ Active in `Swapchain.cpp` & `Device.cpp`. |
 | **Compiler & Toolchain** | MSVC 2022 (v14.44), C++20 | Host verified: MSVC v14.44 (VS2022 BuildTools 17.14.40), CMake 4.4.3, Ninja 1.13 | **MSVC 2022 v17.14 / MSVC v14.44 (C++20)** + **CMake 4.4.3** + **Ninja 1.13**; `/fp:precise` strictly mandated on host for physics determinism. | ✅ Installed, configured, and verified active in `scripts/build_ze.cmd`. |
 | **Dual-Core AI Director** | L4D2 Mathematical State Machine (60Hz tick) + Embedded GGUF (`llama.cpp`) on `SlmThread` | `SLMClient` configured for `Qwen2.5-3B-Instruct.Q4_K_M.gguf` | **Qwen2.5-3B-Instruct (Q4_K_M GGUF, ~1.9 GB)** + **Left 4 Dead 2 Intensity Pacing Machine** — Dual-core architecture. Mathematical stress/intensity curves drive real-time spawning, crescendo triggers, and pacing phases on the tick; neural SLM co-processor asynchronously generates dynamic survivor dialogue, emergency radio chatter, crescendo objectives, and procedural lore. Both systems mandatory (no fallback). Baseline: RTX 2070 SUPER 8GB (6.2 GB cap); Low-spec floor: RTX 2060 6GB (4.5 GB cap @ 30 FPS). | ✅ Reconciled. Both systems locked to execute in concert. |
 | **Memory Allocator** | Vulkan Memory Allocator (VMA) 3.4.0 | VMA 3.4.0 in vcpkg | **VMA 3.4.0** with 64-byte L1 alignment and defragmentation enabled. Raw `vkAllocateMemory` strictly prohibited. | ✅ Compliant. |
@@ -360,6 +360,28 @@ To guarantee flawless stability across consumer gaming hardware while accounting
 - **Decoupled Data Architecture:** All firearm ballistic profiles (chamber pressure, muzzle velocity, recoil impulses, sear cycle timings), zombie attributes (health, stumble resistance, dismemberment thresholds), and L4D2 Director pacing coefficients are defined in human-readable JSON files (`data/weapons/*.json`, `data/director/*.json`).
 - **Zero-Recompile Gameplay Tuning:** Allows instantaneous modification of game feel, weapon recoil balance, and horde wave intensities without rebuilding C++ source binaries.
 - **Modding Directory Support:** Game automatically scans and mounts overrides from a `mods/` directory, laying the foundation for custom community weapons, sound replacements, and quarantine sectors.
+
+---
+
+### 4.13 Easy Automatic HDR ("Zero-Friction / Just Works") Architecture
+
+To eliminate the common hurdles PC gamers and developers face with HDR (blinding 1000-nit UI, washed-out SDR-in-HDR, missing luminance metadata causing clipped highlights or crushed blacks, and complex multi-step calibration menus), ZombieEngine implements an **Easy Automatic HDR** pipeline:
+
+1. **Zero-Friction Display Auto-Negotiation:**
+   - Default mode is **Auto** (`hdrMode = 2` / CLI `--hdr` / `--no-hdr`).
+   - The engine automatically queries connected physical display surface formats via `vkGetPhysicalDeviceSurfaceFormatsKHR`.
+   - **Priority 1 (Native 10-bit HDR10):** `VK_FORMAT_A2B10G10R10_UNORM_PACK32` (or `A2R10G10B10`) with `VK_COLOR_SPACE_HDR10_ST2084_EXT` (PQ ST.2084 curve, standard across 4K HDR TVs and HDR gaming monitors).
+   - **Priority 2 (scRGB Linear FP16):** `VK_FORMAT_R16G16B16A16_SFLOAT` with `VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT` (wide-gamut precision for pro HDR gaming displays).
+   - **Graceful Fallback (Standard SDR):** If connected to an SDR monitor or running in headless CI, the engine automatically selects `VK_FORMAT_R8G8B8A8_UNORM` + `VK_COLOR_SPACE_SRGB_NONLINEAR_KHR`. No crashes, zero validation layer exceptions, and no manual display toggles required.
+   - Dynamic storage bit gating (`vkGetPhysicalDeviceFormatProperties`) ensures only supported usage flags are requested for the chosen surface format.
+
+2. **Zero-Calibration Display Metadata (`VkHdrMetadataEXT`):**
+   - Automatically injects calibrated luminance metadata via `vkSetHdrMetadataEXT` without requiring tedious in-game calibration sliders.
+   - Sets standard BT.2020 color primaries and D65 reference white point (`0.3127, 0.3290`).
+   - Dynamically reports display peak luminance (`maxLuminance = 1000` nits default), OLED true black floor (`minLuminance = 0.0001` nits), and paper-white frame average (`maxFrameAverageLightLevel = 200` nits).
+
+3. **Paper-White UI Protection:**
+   - 2D HUD elements and ImGui debug overlay are rendered with reference paper-white clamping (200–250 nits), eliminating blinding UI burn and eye fatigue while allowing scene highlights to achieve full display HDR peak luminance.
 
 ---
 

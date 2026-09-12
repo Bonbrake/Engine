@@ -107,6 +107,7 @@ void Device::selectPhysicalDevice(VulkanContext* context) {
     physDevice.enable_extension_if_present(VK_EXT_MESH_SHADER_EXTENSION_NAME);
     physDevice.enable_extension_if_present(VK_EXT_SHADER_OBJECT_EXTENSION_NAME);
     physDevice.enable_extension_if_present(VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME);
+    physDevice.enable_extension_if_present(VK_EXT_HDR_METADATA_EXTENSION_NAME);
     
     // Vendor diagnostic extensions
     physDevice.enable_extension_if_present(VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME);
@@ -349,6 +350,7 @@ void Device::checkCapabilities() {
         if (ext == VK_EXT_ATTACHMENT_FEEDBACK_LOOP_LAYOUT_EXTENSION_NAME) caps_.attachmentFeedbackLoop = true;
         if (ext == VK_EXT_SHADER_OBJECT_EXTENSION_NAME) caps_.shaderObject = true;
         if (ext == VK_KHR_UNIFIED_IMAGE_LAYOUTS_EXTENSION_NAME) hasUnifiedExtension = true;
+        if (ext == VK_EXT_HDR_METADATA_EXTENSION_NAME) caps_.hdrMetadata = true;
         
         if (ext == VK_NV_DEVICE_DIAGNOSTIC_CHECKPOINTS_EXTENSION_NAME) caps_.supportsNVCheckpoints = true;
         if (ext == VK_AMD_BUFFER_MARKER_EXTENSION_NAME) caps_.supportsAMDMarkers = true;

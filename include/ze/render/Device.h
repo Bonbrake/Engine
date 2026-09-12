@@ -22,6 +22,7 @@ struct CapabilityTier {
     bool unifiedImageLayouts = false;
     bool queryTimestamps = false;
     bool shaderObject = false;
+    bool hdrMetadata = false; // [Auto-HDR] VK_EXT_hdr_metadata support
     
     uint32_t vendorID = 0;
     bool supportsNVCheckpoints = false;
@@ -41,6 +42,7 @@ public:
     vkb::Device getVkbDevice() const { return vkbDevice_; }
     VkDevice getLogicalDevice() const { return vkbDevice_.device; }
     VkPhysicalDevice getPhysicalDevice() const { return vkbDevice_.physical_device.physical_device; }
+    VkSurfaceKHR getSurface() const { return vkbDevice_.physical_device.surface; }
     VmaAllocator getAllocator() const { return allocator_; }
     const CapabilityTier& getCapabilities() const { return caps_; }
 

@@ -27,7 +27,7 @@ bool CallImGuiInit(ImGui_ImplVulkan_InitInfo* info) {
 
 namespace debug {
 
-void ImGuiOverlay::Initialize(VkDevice device, VkInstance instance, VkPhysicalDevice physicalDevice, VkQueue graphicsQueue, uint32_t queueFamily, SDL_Window* window) {
+void ImGuiOverlay::Initialize(VkDevice device, VkInstance instance, VkPhysicalDevice physicalDevice, VkQueue graphicsQueue, uint32_t queueFamily, SDL_Window* window, VkFormat colorFormat) {
     // 1: create descriptor pool for IMGUI
     VkDescriptorPoolSize pool_sizes[] =
     {
@@ -84,12 +84,12 @@ void ImGuiOverlay::Initialize(VkDevice device, VkInstance instance, VkPhysicalDe
     init_info.UseDynamicRendering = true;
     init_info.PipelineInfoMain.RenderPass = VK_NULL_HANDLE;
     
-    // Default format for swapchain is usually B8G8R8A8_UNORM, but we should pass it properly
-    // Using an arbitrary format here as placeholder; in a real app, pass the actual swapchain format.
-    static VkFormat colorFormat = VK_FORMAT_B8G8R8A8_UNORM; 
+    // Set color attachment format from swapchain (SDR or HDR)
+    static VkFormat activeColorFormat;
+    activeColorFormat = colorFormat;
     init_info.PipelineInfoMain.PipelineRenderingCreateInfo = { VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO };
     init_info.PipelineInfoMain.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-    init_info.PipelineInfoMain.PipelineRenderingCreateInfo.pColorAttachmentFormats = &colorFormat;
+    init_info.PipelineInfoMain.PipelineRenderingCreateInfo.pColorAttachmentFormats = &activeColorFormat;
     
     auto func1 = vkGetDeviceProcAddr(device, "vkCmdBeginRendering");
     auto func2 = vkGetDeviceProcAddr(device, "vkCmdBeginRenderingKHR");

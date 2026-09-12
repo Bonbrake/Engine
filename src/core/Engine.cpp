@@ -6,6 +6,7 @@
 #include "ze/core/JobSystem.h"
 #include "ze/core/TeardownTracker.h"
 #include "ze/render/VulkanContext.h"
+#include "ze/render/Swapchain.h"
 #include "ze/render/TriangleRenderer.h"
 #include "ze/render/MSDFPipeline.h"
 #include "ze/render/Device.h"
@@ -191,13 +192,15 @@ Engine::Engine() {
         LOG_INFO("ENGINE: VehicleSystem initialized");
 
         if (!Config::get().headless) {
+            VkFormat scFormat = vulkanContext_->getSwapchain() ? vulkanContext_->getSwapchain()->getImageFormat() : VK_FORMAT_R8G8B8A8_UNORM;
             imguiOverlay_.Initialize(
                 vulkanContext_->getDevice()->getLogicalDevice(),
                 vulkanContext_->getInstance(),
                 vulkanContext_->getDevice()->getPhysicalDevice(),
                 vulkanContext_->getDevice()->getGraphicsQueue(),
                 vulkanContext_->getDevice()->getGraphicsQueueIndex(),
-                window_
+                window_,
+                scFormat
             );
             TeardownTracker::RegisterInit(TeardownTracker::Stage::ImGui, "ImGui");
             

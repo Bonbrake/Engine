@@ -52,28 +52,163 @@ static std::vector<uint32_t> readSpvFile(const std::string& path) {
 }
 
 void Swapchain::create() {
+    VkSurfaceKHR surface = device_->getSurface();
+    VkPhysicalDevice physDev = device_->getPhysicalDevice();
+
+    bool hdrDisplayFound = false;
+    VkSurfaceFormatKHR chosenFormat{VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
+
+    hdrCaps_ = HdrDisplayCapabilities{};
+    hdrCaps_.peakLuminanceNits = core::Config::get().hdrPeakNits;
+    hdrCaps_.paperWhiteNits = core::Config::get().hdrPaperWhiteNits;
+    hdrCaps_.minLuminanceNits = 0.0001f;
+
+    if (surface != VK_NULL_HANDLE && physDev != VK_NULL_HANDLE) {
+        uint32_t formatCount = 0;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(physDev, surface, &formatCount, nullptr);
+        if (formatCount > 0) {
+            std::vector<VkSurfaceFormatKHR> surfaceFormats(formatCount);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(physDev, surface, &formatCount, surfaceFormats.data());
+
+            for (const auto& sf : surfaceFormats) {
+                if (sf.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT ||
+                    sf.colorSpace == VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT) {
+                    hdrCaps_.hdrSupported = true;
+                    break;
+                }
+            }
+
+            int mode = core::Config::get().hdrMode; // 0=Force SDR, 1=Force HDR, 2=Auto
+            if (mode != 0 && hdrCaps_.hdrSupported) {
+                // Priority 1: 10-bit HDR10 (ST.2084 PQ)
+                for (const auto& sf : surfaceFormats) {
+                    if (sf.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT &&
+                        (sf.format == VK_FORMAT_A2B10G10R10_UNORM_PACK32 || sf.format == VK_FORMAT_A2R10G10B10_UNORM_PACK32)) {
+                        chosenFormat = sf;
+                        hdrDisplayFound = true;
+                        break;
+                    }
+                }
+
+                // Priority 2: scRGB Linear FP16 (Extended sRGB Linear)
+                if (!hdrDisplayFound) {
+                    for (const auto& sf : surfaceFormats) {
+                        if (sf.colorSpace == VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT &&
+                            sf.format == VK_FORMAT_R16G16B16A16_SFLOAT) {
+                            chosenFormat = sf;
+                            hdrDisplayFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Priority 3: Any HDR format supported by the display
+                if (!hdrDisplayFound) {
+                    for (const auto& sf : surfaceFormats) {
+                        if (sf.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT) {
+                            chosenFormat = sf;
+                            hdrDisplayFound = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (hdrDisplayFound) {
+        hdrCaps_.hdrActive = true;
+        hdrCaps_.format = chosenFormat.format;
+        hdrCaps_.colorSpace = chosenFormat.colorSpace;
+        LOG_INFO("[Auto-HDR] Easy Auto-HDR engaged! Format: {}, ColorSpace: {}, Peak: {} nits, PaperWhite: {} nits",
+                 static_cast<uint32_t>(chosenFormat.format),
+                 static_cast<uint32_t>(chosenFormat.colorSpace),
+                 hdrCaps_.peakLuminanceNits,
+                 hdrCaps_.paperWhiteNits);
+    } else {
+        hdrCaps_.hdrActive = false;
+        hdrCaps_.format = chosenFormat.format;
+        hdrCaps_.colorSpace = chosenFormat.colorSpace;
+        if (core::Config::get().hdrMode == 1) {
+            LOG_WARN("[Auto-HDR] Force HDR requested, but display does not support HDR10 or scRGB. Falling back to SDR.");
+        } else {
+            LOG_INFO("[Auto-HDR] Display operates in SDR mode (sRGB pipeline active).");
+        }
+    }
+
+    // Dynamic storage usage flag checking based on physical format support
+    VkImageUsageFlags usageFlags = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                                   VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+                                   VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+    if (physDev != VK_NULL_HANDLE) {
+        VkFormatProperties formatProps{};
+        vkGetPhysicalDeviceFormatProperties(physDev, chosenFormat.format, &formatProps);
+        if (formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) {
+            usageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+        }
+    }
+
     vkb::SwapchainBuilder swapchainBuilder{device_->getVkbDevice()};
-    
-    // Prefer R8G8B8A8_UNORM explicitly: RTSS/MSI Afterburner injects STORAGE_BIT
-    // into the swapchain, and R8G8B8A8_UNORM supports it (unlike B8G8R8A8_SRGB).
-    // Being explicit avoids VUID-VkSwapchainCreateInfoKHR-imageFormat-01778 validation errors.
     auto vkb_swapchain_ret = swapchainBuilder
-        .set_desired_format({VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR})
+        .set_desired_format(chosenFormat)
         .set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR)
-        // Explicit usage: color attachment (AgX tonemap + ImGui) + transfer for readback/dump.
-        // Include STORAGE_BIT explicitly: RTSS.exe (RivaTuner overlay) injects this flag
-        // into the swapchain, and R8G8B8A8_UNORM supports it (unlike B8G8R8A8_SRGB).
-        // Being explicit avoids VUID-VkSwapchainCreateInfoKHR-imageFormat-01778 validation errors.
-        .set_image_usage_flags(VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
-                               VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
-                               VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-                               VK_IMAGE_USAGE_STORAGE_BIT)
+        .set_image_usage_flags(usageFlags)
         .build();
+
+    // Zero-friction fallback: if HDR swapchain creation failed on driver, fall back to standard SDR
+    if (!vkb_swapchain_ret && hdrCaps_.hdrActive) {
+        LOG_WARN("[Auto-HDR] Swapchain creation with HDR format failed ({}); falling back to standard SDR format.",
+                 vkb_swapchain_ret.error().message());
+        hdrCaps_.hdrActive = false;
+        chosenFormat = {VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
+        hdrCaps_.format = chosenFormat.format;
+        hdrCaps_.colorSpace = chosenFormat.colorSpace;
+        
+        usageFlags = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                     VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+                     VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                     VK_IMAGE_USAGE_STORAGE_BIT;
+        vkb::SwapchainBuilder fallbackBuilder{device_->getVkbDevice()};
+        vkb_swapchain_ret = fallbackBuilder
+            .set_desired_format(chosenFormat)
+            .set_desired_present_mode(VK_PRESENT_MODE_MAILBOX_KHR)
+            .set_image_usage_flags(usageFlags)
+            .build();
+    }
 
     if (!vkb_swapchain_ret) {
         LOG_CRITICAL("Failed to create swapchain: {}", vkb_swapchain_ret.error().message());
     } else {
         vkbSwapchain_ = vkb_swapchain_ret.value();
+
+        // If HDR is active and metadata extension is available, push zero-calibration display metadata
+        if (hdrCaps_.hdrActive && device_->getCapabilities().hdrMetadata && vkSetHdrMetadataEXT) {
+            VkHdrMetadataEXT metadata{};
+            metadata.sType = VK_STRUCTURE_TYPE_HDR_METADATA_EXT;
+            metadata.pNext = nullptr;
+            if (chosenFormat.colorSpace == VK_COLOR_SPACE_HDR10_ST2084_EXT) {
+                // Rec. 2020 color primaries
+                metadata.displayPrimaryRed   = { 0.708f, 0.292f };
+                metadata.displayPrimaryGreen = { 0.170f, 0.797f };
+                metadata.displayPrimaryBlue  = { 0.131f, 0.046f };
+                metadata.whitePoint          = { 0.3127f, 0.3290f }; // D65
+            } else {
+                // Rec. 709 primaries (for scRGB)
+                metadata.displayPrimaryRed   = { 0.640f, 0.330f };
+                metadata.displayPrimaryGreen = { 0.300f, 0.600f };
+                metadata.displayPrimaryBlue  = { 0.150f, 0.060f };
+                metadata.whitePoint          = { 0.3127f, 0.3290f }; // D65
+            }
+            metadata.maxLuminance = hdrCaps_.peakLuminanceNits;
+            metadata.minLuminance = hdrCaps_.minLuminanceNits;
+            metadata.maxContentLightLevel = hdrCaps_.peakLuminanceNits;
+            metadata.maxFrameAverageLightLevel = hdrCaps_.paperWhiteNits;
+
+            VkSwapchainKHR swapchainHandle = vkbSwapchain_.swapchain;
+            vkSetHdrMetadataEXT(device_->getLogicalDevice(), 1, &swapchainHandle, &metadata);
+            LOG_INFO("[Auto-HDR] Applied zero-calibration VkHdrMetadataEXT: Peak={} nits, PaperWhite={} nits, Min={} nits",
+                     hdrCaps_.peakLuminanceNits, hdrCaps_.paperWhiteNits, hdrCaps_.minLuminanceNits);
+        }
         
         // [M4.5-EXT-33] Pull swapchain images + views via vkb API (required pattern)
         auto images_ret = vkbSwapchain_.get_images();

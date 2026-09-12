@@ -37,6 +37,7 @@ public:
     vkb::Instance getInstance() const { return vkbInstance_; }
     VkSurfaceKHR getSurface() const { return surface_; }
     Device* getDevice() const { return device_.get(); }
+    Swapchain* getSwapchain() const { return swapchain_.get(); }
 
 private:
     void initVulkan(SDL_Window* window);
