@@ -84,11 +84,14 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 - Branch: `main`
 - Master Refactor Plan: **198 concrete features across 6 Plain-English Stages + 6 Console Ports (v8.2)** (verified 0-cycle DAG, 0 dangling, 100% mirror parity via `scripts/verify_plan_v8.py`).
 - Spec corpus: **1,040 EXT blocks** (authoritative — `recon/plans/EXT_BLOCK_COUNTS.md`, verified via `scripts/verify_ext_block_counts.py`).
-- Full Subsystem Test Suite: **76 test cases, 259 assertions** (`build\tests\ZombieEngineTests.exe` — 75 passed, 1 skipped for headless video, 0 failures).
+- Subsystem Architecture: **All 17 modular engine subsystems** (`ze-ai`, `ze-audio`, `ze-combat`, `ze-core`, `ze-debug`, `ze-ecs`, `ze-events`, `ze-modding`, `ze-net`, `ze-physics`, `ze-render`, `ze-save`, `ze-slm`, `ze-survival`, `ze-ui`, `ze-vehicle`, `ze-world`) are fully integrated and linked in `CMakeLists.txt`.
+- Full Subsystem Test Suite: **77 test cases, 300 assertions** (`build\tests\ZombieEngineTests.exe` — 76 passed, 1 skipped for headless video, 300/300 passed, 0 failures).
 - Headless Boot: **`HEADLESS_BOOT_OK` (Zero validation layer exceptions)** via `build\EndlessQuarantine.exe --headless`.
 - Capability Tier (RTX 2070 Super):
   - `descriptorBuffer` ✅ | `shaderObject` ✅ | `unifiedImageLayouts` ✅ | `meshShaders` ✅ | `queryTimestamps` ✅ | `rtPipeline` (Turing hardware RT cores present, scheduled for Stage 4 activation).
-- In-Game AI Director: **Dual-Core Architecture Locked** — Left 4 Dead 2 mathematical intensity pacing state machine (60Hz tick) coupled with asynchronous `Qwen2.5-3B-Instruct` (Q4_K_M GGUF, ~1.9 GB) on `SlmThread`. 8 GB VRAM baseline (6.2 GB hard cap), 6 GB low-spec target (4.5 GB hard cap @ 30 FPS).
+- Graphics & Upscaling: **Vulkan 1.4 Native Core** (`VK_KHR_dynamic_rendering_local_read`, `VK_KHR_push_descriptor`, `VK_KHR_maintenance5/6/9`, `VK_EXT_descriptor_buffer`, `VK_EXT_shader_object`), **AgX Color Science** tonemapping, and multi-vendor neural upscaler integration (**AMD FSR 4**, **NVIDIA DLSS 3.7+**, **Intel XeSS 1.3+**).
+- In-Game AI Director: **Dual-Core Architecture Locked** — Left 4 Dead 2 mathematical intensity pacing state machine (60Hz tick) coupled with asynchronous `Qwen2.5-3B-Instruct` (Q4_K_M GGUF, ~1.9 GB) on `SlmThread`.
+- Hardware Target Standard: **Primary Baseline: RTX 2070 SUPER 8 GB** (6.2 GB VRAM hard cap, 1440p @ 60 FPS); **Low-Spec Minimum Floor: RTX 2060 6 GB** (4.5 GB VRAM hard cap @ 1080p 30 FPS lock, FSR 4 Performance mode).
 
 ## Commits This Pass (spec/m0-parity-reformat, 25 commits)
 - `83c0d43` — [M4.5-EXT-33] Work around RTSS swapchain STORAGE_BIT injection
