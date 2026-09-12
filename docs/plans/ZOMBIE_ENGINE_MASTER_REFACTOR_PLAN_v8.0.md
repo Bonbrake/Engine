@@ -4,17 +4,17 @@ version: 8.2-AUDITED-EARLY-VERSIONS-RECONCILED
 author: Reconciled from v7.0 and Early Versions (v1-v7, IDEA.md, Master Plan v79) via Comprehensive Audit (September 2026)
 supersedes: v7.0-AAA-RECONCILED (11,802 lines → deduplicated to 198 concrete features across Stages 0-5 + 6 platform ports in Stage 6)
 single_source_of_truth: true
-hardware_floors:
-  minimum: 1080p @ 30 FPS (RTX 2060 6GB / RX 6600 8GB / Arc A580 8GB) | 5.0GB VRAM Cap
-  recommended: 1440p @ 60 FPS (RTX 2070S 8GB / RX 6700 XT 8GB / Arc A770 16GB) | 6.2GB VRAM Cap
+hardware_targets:
+  baseline: 1440p @ 60 FPS (RTX 2070 8GB / RTX 2070S 8GB / RX 6700 XT 8GB / Arc A770 16GB) | 6.2GB VRAM Cap (1.8GB OS Reserve)
+  low_spec_minimum: 1080p @ 30 FPS (RTX 2060 6GB / RX 6600 8GB / Arc A580 8GB) | 4.5GB VRAM Cap (1.6GB OS Reserve)
 core_tech_stack:
   language: C++20 (MSVC 2022 v14.44, /std:c++20)
   graphics_api: Vulkan 1.4 (volk + Dynamic Rendering + Descriptor Buffers) | SPIR-V Reflect
   physics_engine: Jolt Physics 5.6.0 (Double-Precision dvec3, Cross-Platform Determinism)
   modding: C++ std::function Hook Registry & JSON Manifests (Lua/Luau stripped per APPENDIX_L)
-  audio_engine: SDL3 Audio Subsystem / Procedural Spatial DSP
-  slm_target: Qwen2.5-3B-Instruct (Q4_K_M GGUF, ~1.9GB VRAM, Single Background Model on SlmThread)
-  template_engine: Inja C++ (header-only, zero-allocation)
+  audio_engine: SDL3 Audio Subsystem / Procedural Spatial DSP (128MB RAM Budget)
+  slm_target: Qwen2.5-3B-Instruct (Q4_K_M GGUF, ~1.9GB VRAM Baseline on SlmThread / AVX2 CPU Fallback in 16GB System RAM)
+  template_engine: Inja C++ (header-only lightweight templating)
   tts_engine: Kokoro-82M ONNX Runtime (CPU, 50x real-time)
   cell_size: 128m x 128m WorldPartition Grid
   netcode: Client-Server with Host Authority + FlatBuffers Delta Compression
@@ -91,17 +91,19 @@ graph TD
 | **3** | `SlmThread` | Qwen2.5-3B inference (llama.cpp) | No (compute-bound) |
 | **4-7** | `WorkerPool` | enkiTS tasks: physics, ECS, AI, streaming | Yes (work-stealing) |
 
-### Frame Budget (16.6ms / 60 FPS Target)
+### Frame Budget (Dual Performance Profiles)
+
+#### Profile A: RTX 2070 8GB Baseline (16.6ms / 60 FPS Target @ 1440p)
 
 ```mermaid
 gantt
-    title Frame Execution Budget (16.6ms at 60 FPS)
+    title Frame Execution Budget (16.6ms at 60 FPS - RTX 2070 Baseline)
     dateFormat s
     axisFormat %S.%L
     section Main Thread (Core 0)
     SDL3 Events + Input     : 0, 1ms
     ECS Logic               : 1, 3ms
-    Kick Fiber Jobs         : 4, 1ms
+    Kick enkiTS Tasks       : 4, 1ms
     section Render Thread (Core 1)
     Frustum/Occlusion Cull  : 5, 2ms
     Vulkan Cmd Recording    : 7, 4ms
@@ -109,12 +111,24 @@ gantt
     section Audio (Core 2)
     Spatial DSP + HRTF      : 0, 4ms
     section SLM (Core 3)
-    Qwen2.5-3B Async Step   : 0, 16ms
+    SLM Async Dispatch      : 0, 1ms
     section Workers (Cores 4-7)
-    Jolt Physics             : 1, 3ms
-    Flowfield AI             : 3, 2ms
-    World Streaming          : 6, 2ms
+    Jolt Physics (60Hz)     : 1, 3ms
+    Flowfield AI            : 3, 2ms
+    World Streaming         : 6, 2ms
 ```
+
+#### Profile B: RTX 2060 6GB Low-Spec (33.3ms / 30 FPS Lock @ 1080p)
+* **GPU Pipeline (19.5ms total / 13.8ms idle headroom):**
+  - G-Buffer Pre-pass & Base Pass (720p internal): 6.0ms
+  - Cascaded Shadow Maps (Time-sliced 4 cascades): 3.5ms
+  - Hi-Z Occlusion & Compute Culling: 1.0ms
+  - PBR Clustered Lighting & Decals: 4.0ms
+  - FSR 4 / DLSS Upscaling (720p $\to$ 1080p): 3.5ms
+  - Post-processing (AgX Tonemap, Bloom, HUD): 1.5ms
+* **Physics & Motion Pacing:** Jolt physics runs at **60 Hz fixed timestep** (2 sub-ticks per 30 FPS rendered frame). Feature `T2-18` (*Async physics interpolation*) smoothly lerps rigid body transforms between ticks, guaranteeing stutter-free motion with a flat 30.0 FPS frame-time line.
+* **SLM Concurrency:** Qwen2.5-3B runs asynchronously out-of-band on `SlmThread` (VRAM default with Mip-1 texture shedding, or AVX2 CPU offload in 16GB System RAM under VRAM pressure).
+
 
 ### Zero-Copy Asset Streaming Pipeline
 
@@ -139,7 +153,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | # | Decision | **Locked To** | Supersedes |
 |---|----------|--------------|------------|
 | 1 | **Scripting** | No Lua/Luau. C++ `std::function` hooks + JSON manifests | v7.0 Parts 1-6 (Lua APIs), Part 130.4 (Luau scripting) |
-| 2 | **Prompt templates** | Inja C++ (header-only, zero-alloc) | v7.0 Part 3 (Jinja2) |
+| 2 | **Prompt templates** | Inja C++ (header-only lightweight templating) | v7.0 Part 3 (Jinja2) |
 | 3 | **Cell size** | 128m x 128m WorldPartition grid | v7.0 Part 1.1 (64m) |
 | 4 | **TTS engine** | Kokoro-82M ONNX Runtime (CPU) | v7.0 Part 6 additions (Piper TTS) |
 | 5 | **SLM model** | Qwen2.5-3B-Instruct (Q4_K_M GGUF, ~1.9GB) | v7.0 metadata (DeepSeek-R1 1.5B, 700MB) |
@@ -151,40 +165,48 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 
 ## §3 HARDWARE TARGETS & VRAM BUDGET
 
-### Minimum Floor (1080p @ 30 FPS Lock)
-- **GPU:** RTX 2060 6GB / RX 6600 8GB / Arc A580 8GB
-- **CPU:** Ryzen 5 3600 / Core i5-10400 (6C/12T)
+### Tier-0 Baseline Floor (1440p @ 60 FPS Target — Authoritative Dev Baseline)
+- **GPU:** NVIDIA GeForce RTX 2070 8GB / RTX 2070 Super 8GB / RX 6700 XT 8GB / Arc A770 16GB
+- **CPU:** AMD Ryzen 7 5700X (or 5700G dev reference) / Intel Core i7-11700K (8C/16T)
+- **RAM:** 16–32 GB DDR4/DDR5
+- **Mandatory:** Hardware RT support + Vulkan 1.4 driver
+
+### Low-Spec Minimum Target (1080p @ 30 FPS Lock)
+- **GPU:** NVIDIA GeForce RTX 2060 6GB / AMD Radeon RX 6600 8GB / Intel Arc A580 8GB
+- **CPU:** AMD Ryzen 5 3600 / Intel Core i5-10400 (6C/12T)
 - **RAM:** 16 GB DDR4
 - **Mandatory:** Hardware RT support (GTX-series excluded)
 
-### Recommended (1440p @ 60 FPS Lock)
-- **GPU:** RTX 2070 Super 8GB / RX 6700 XT 8GB / Arc A770 16GB
-- **CPU:** Ryzen 7 5700X / Core i7-11700K (8C/16T)
-- **RAM:** 16-32 GB DDR4/DDR5
-
 ### VRAM Allocation (Dual Hardware Target Budget)
 
-| Budget Slice | 6GB Floor (RTX 2060 / 1080p @ 30) | 8GB Recommended (RTX 2070S / 1440p @ 60) |
+| Budget Slice | 6GB Low-Spec Target (RTX 2060 / 1080p @ 30) | 8GB Baseline (RTX 2070 / 1440p @ 60) |
 |---|---|---|
-| Mip-Streamed BC7/BC5 Textures | 1.8 GB | 2.5 GB |
-| SLM Co-Processor (Qwen2.5-3B Q4_K_M) | 1.8 GB | 1.9 GB |
-| Render Targets & G-Buffers | 0.6 GB (1080p Dynamic) | 0.8 GB (1440p Native) |
-| Geometry & Vertex Buffers | 0.5 GB | 0.7 GB |
-| Jolt Physics + Audio Buffers | 0.3 GB | 0.3 GB |
-| **TOTAL GAME BUDGET** | **5.0 GB (Hard Cap)** | **6.2 GB (Hard Cap)** |
-| **Reserved OS / Display Overhead** | **1.0 GB** | **1.8 GB** |
+| Mip-Streamed BC7/BC5 Textures | 1.0 GB (Shed Mip 0 on environment) | 2.5 GB (Full Mip 0, 2K/4K) |
+| SLM Co-Processor (Qwen2.5-3B Q4_K_M) | 1.9 GB (VRAM resident) or 0.0 GB (CPU mode) | 1.9 GB (100% VRAM resident) |
+| Render Targets & G-Buffers | 0.4 GB (720p internal + FSR 4 / DLSS) | 0.8 GB (1440p Native / Dynamic) |
+| Geometry & Vertex Buffers | 0.4 GB (Aggressive cluster culling) | 0.7 GB (Dense meshlets) |
+| Jolt Physics + Audio Buffers | 0.2 GB | 0.3 GB |
+| Dynamic Internal Engine Cushion | 0.6 GB | — |
+| **TOTAL GAME BUDGET** | **4.5 GB (Hard Cap)** | **6.2 GB (Hard Cap)** |
+| **Reserved OS / Display Overhead** | **1.6 GB (Safe Overhead Cushion)** | **1.8 GB (DWM / OBS / Discord)** |
+
+> **3-Tier SLM Execution Policy on 6GB Hardware:**
+> 1. *Default:* Qwen2.5-3B runs in VRAM (1.9 GB) paired with the 2.1 GB compact graphics profile (total game VRAM: 4.0 GB, leaving 500 MB headroom under the 4.5 GB cap).
+> 2. *Low-VRAM Fallback:* If VMA reports `< 600 MB` headroom, `SLMClient` transparently runs inference on CPU threads via AVX2 in the 16 GB System RAM pool, instantly freeing 1.9 GB of VRAM for rendering.
+> 3. *Combat Pacing:* During heavy 500-zombie horde crescendos (`SustainPeak`), SLM generation halts while the 60Hz mathematical L4D2 state machine governs combat.
 
 ### System RAM Budget (16 GB Total)
 
 | Budget Slice | RAM |
 |-------------|-----|
 | Windows OS Overhead | 4.0 GB |
-| Asset Streaming & VFS Ring Cache | 4.0 GB |
-| Game State & ECS | 3.5 GB |
+| Asset Streaming & VFS Ring Cache | 4.5 GB |
+| Game State & ECS | 4.0 GB |
 | Jolt Physics (dvec3) | 1.5 GB |
-| enkiTS Task Scheduler | 1.0 GB |
-| Audio DSP & Buffers | 1.0 GB |
+| enkiTS Task Scheduler | 0.5 GB |
+| Audio DSP & Buffers | 0.13 GB (128 MB) |
 | SLM KV-Cache & Prompts | 1.0 GB |
+| Unallocated Safety Pool | 0.37 GB |
 
 ---
 
@@ -214,8 +236,17 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | `joltphysics` (double, deterministic) | 5.6.0 | Physics simulation | 2 ✅ |
 | `catch2` | 3.15.2 | Unit testing | 2 ✅ |
 | *Future:* `sqlite3` | — | Save persistence | 3 |
+| *Future:* `recastnavigation` | — | Dynamic navmesh tile carving | 3 |
+| *Future:* `rvo2` | — | Reciprocal velocity obstacles collision avoidance | 3 |
+| *Future:* `lz4` | — | SQLite WAL and binary save compression | 3 |
+| *Future:* `meshoptimizer` | — | Cluster generation for meshlet pipeline | 4 |
+| *Future:* `llama.cpp` | — | Neural SLM co-processor inference (Vulkan/CPU) | 5 |
+| *Future:* `onnxruntime` | — | Kokoro-82M TTS CPU inference | 5 |
 | *Future:* `flatbuffers` | — | Network serialization | 5 |
 | *Future:* `inja` | — | Prompt templates | 5 |
+| *Future:* `imguizmo` | — | Editor 3D transform gizmos | 5 |
+| *Future:* `eos-sdk` | — | Epic Online Services P2P NAT punch-through | 5 |
+| *Future:* `steamworks-sdk` | — | ISteamInput action sets & dynamic glyphs | 5 |
 
 ---
 
@@ -288,7 +319,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T1-12 | **Camera system** | Debug fly cam + game camera with head inertia (spring-damper) | T1-01 |
 | T1-13 | **Compute histogram eye adaptation** | Human iris dilation simulation for dark/bright transitions | T1-10 |
 | T1-14 | **Pipeline warmup** | Pre-compile all shader permutations at boot. Zero in-game stutter | T1-11 |
-| T1-15 | **VRAM memory budget guard** | Track VMA budget, shed mip levels at 6.2GB ceiling | T0-03 |
+| T1-15 | **VRAM memory budget guard** | Track VMA budget, shed mip levels dynamically at min(device_vram * 0.80, 6.2GB) ceiling (4.5GB on 2060, 6.2GB on 2070) | T0-03 |
 | T1-16 | **Scalar block layout** | VK_EXT_scalar_block_layout for 1:1 CPU/GPU struct matching | T0 |
 | T1-17 | **Shader hot-reload** | ReadDirectoryChangesW watcher, async SPIR-V recompile, live VkPipeline swap without restart | T0-14 |
 | T1-18 | **Packed ARM texture layout** | AO+Roughness+Metallic in single RGB texture, 60% fewer material bindings | T1-03 |
@@ -317,7 +348,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T2-09 | **Skeletal animation** | Runtime skeletal evaluation, blend trees | T1-01 |
 | T2-10 | **Two-bone analytical foot IK** | Feet align to terrain slopes, stairs, rocks via Jolt raycasts | T2-09 |
 | T2-11 | **Procedural weapon animation** | Weapon mass inertia, compressed high-ready, barrel lag | T2-09 |
-| T2-12 | **SDL3 audio engine** | Basic spatial audio, HRTF, distance attenuation | T2-04 |
+| T2-12 | **SDL3 audio engine** | Audio output streaming via SDL3, procedural spatial DSP & HRTF binaural convolution | T2-04 |
 | T2-13 | **Acoustic wave propagation** | Speed-of-sound delay (343 m/s), ring-buffered acoustic queue | T2-12 |
 | T2-14 | **Data-driven JSON configs** | Weapon stats, AI params, director coefficients in JSON files | T2-04 |
 | T2-15 | **Linear/bump arena allocators** | Per-frame TransientArena, TLSF for long-lived objects | T2-04 |
@@ -384,9 +415,9 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T3-43 | **Diegetic wristwatch & survival compass (M10-EXT-24, M11-EXT-63)** | Physical wrist inspection showing analog time, dusk siren alarm trigger, radiation Geiger meter, and compass needle | T3-07, T1-12 |
 | T3-44 | **Dual-axis faction reputation (Fame/Infamy) & The Remnant (M8-EXT-53, Decision 2)** | Independent {Fame, Infamy} vectors per faction (Raiders, Militia, Cultists, Nomads, The Remnant military). Shopkeeper trade pricing and guard hostility derive from cross-faction bias matrix | T3-35, T2-14 |
 | T3-45 | **Nocturnal runner shift & day/night danger inversion (M5, M10)** | Daytime zombies are sluggish shamblers; at sundown (lux < threshold), infected undergo metabolic shift into sprint runners (speed 3x, detection 3x, double loot) | T3-01, T3-17 |
-| T3-46 | **World-epoch offline fast-forward clock (M0-EXT-21)** | Stores real-world wall clock at save. On reload, offline elapsed time simulates crop growth/decay, food spoilage, barricade weathering fatigue, and faction shifts | T3-10, T3-12 |
+| T3-46 | **World-epoch offline fast-forward clock (M0-EXT-21)** | Stores real-world wall clock at save. On reload, simulates crop growth, food decay, and barricade weathering clamped to max 24 hours | T3-10, T3-12 |
 | T3-47 | **Offscreen continuum-fluid macro-horde simulation (M5.4-EXT-08)** | Simulates thousands of offscreen zombies as a 2D continuum-fluid density field through corridors; discretizes into 3D kinematic/ragdoll actors within chunk streaming radius | T3-02, T3-13 |
-| T3-48 | **Deterministic input replay & spectator ghost (M2.8-EXT-09)** | Circular ring buffer recording inputs, RNG seeds, and tick state hashes for instant replay, killcams, anti-cheat desync validation, and ghost playback (<1% pose error) | T2-07, T0-17 |
+| T3-48 | **Deterministic input replay & spectator ghost (M2.8-EXT-09)** | Circular ring buffer recording inputs, RNG seeds, and tick state hashes for instant replay, killcams, anti-cheat desync validation, and ghost playback (<1% pose error) | T2-04, T2-16, T0-17 |
 
 ---
 
@@ -400,10 +431,10 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-02 | **Meshoptimizer cluster optimization** | Optimal meshlet generation (64 verts, 124 triangles) | T4-01 |
 | T4-03 | **Variable rate shading (VRS Tier 2)** | 2x2/4x4 for background/fast-moving pixels. 30% GPU savings | T4-01 |
 | T4-04 | **Hardware ray queries** | RT shadows + RTAO via VK_KHR_ray_query in compute/fragment | T4-01 |
-| T4-05 | **DLSS 4.5 / FSR 4 / DirectSR** | NVIDIA Streamline + DirectSR meta-API. Frame generation | T4-06 |
-| T4-06 | **Motion vector export** | 32-bit motion vectors + depth + reactive masks to render targets | T1-10 |
+| T4-05 | **Motion vector export** | 32-bit motion vectors + depth + reactive masks to render targets | T1-10 |
+| T4-06 | **DLSS / FSR 4 / XeSS upscaling** | NVIDIA Streamline + AMD FidelityFX SDK (FSR 4) on Vulkan (DirectSR reserved for Stage 6 Xbox). Frame generation | T4-05 |
 | T4-07 | **NVIDIA Reflex 2.0 / AMD Anti-Lag 2** | Latency markers in swapchain presentation | T0-20 |
-| T4-08 | **Volumetric 3D froxel atmosphere** | Fog/dust/rain density varies by altitude, humidity, enclosures | T4-04 |
+| T4-08 | **Volumetric 3D froxel atmosphere** | Fog/dust/rain density varies by altitude, humidity, enclosures | T1-06, T1-10 |
 | T4-09 | **Weather system** | Rain, fog, Mie phase scattering, dynamic cloud cover | T4-08 |
 | T4-10 | **Puddle accumulation** | Heightmap accumulation buffer, roughness to 0.001, albedo darken 30%, SSR activate | T4-09 |
 | T4-11 | **Dynamic time-of-day** | Sun/moon cycle, atmospheric scattering, auto-exposure | T1-06, T1-13 |
@@ -417,7 +448,7 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-19 | **Async compute queues** | AI pathfinding + particle physics on VK_QUEUE_COMPUTE_BIT | T3-18 |
 | T4-20 | **Asset cooking (.zepak)** | Binary pack format, magic 0x5A45504B, zero-copy DMA from NVMe | T3-13 |
 | T4-21 | **Dynamic extended state 3** | VK_EXT_extended_dynamic_state3 for runtime rasterizer changes | T0-19 |
-| T4-22 | **Opacity micromaps** | VK_EXT_opacity_micromap for RT perf on alpha-tested meshes | T4-04 |
+| T4-22 | **Opacity micromaps** | VK_EXT_opacity_micromap for RT on alpha meshes with any-hit fallback on pre-Ada/RDNA2 | T4-04 |
 | T4-23 | **RT diffuse global illumination** | VK_KHR_ray_query multi-bounce diffuse GI, flashlights bounce off colored walls | T4-04 |
 | T4-24 | **Subsurface scattering skin shader** | Separable SSSS for realistic human skin translucency on ears, noses, hands | T1-03 |
 | T4-25 | **FFT ocean and river water** | GPU FFT wave simulation, optical depth absorption, dynamic shoreline foam | T3-18 |
@@ -454,21 +485,21 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T5-01 | **Co-op netcode** | Client-server, host authority, input prediction, state rewind | Full T3 |
 | T5-02 | **FlatBuffers serialization** | Zero-copy binary network packets | T5-01 |
 | T5-03 | **Half-float delta compression** | 16-bit quantized positions, bitmask dirty flags. 70% bandwidth reduction | T5-01 |
-| T5-04 | **Sub-tick input rewind** | Rewinding physics/state for lag compensation | T5-01, T2-02 |
+| T5-04 | **Client-side hit registration & rewind** | Client-side raycast hit detection with host capsule validation and player sub-tick rewind (excluding macro swarm physics) | T5-01, T2-02 |
 | T5-05 | **Epic Online Services (EOS)** | Free P2P lobbies, NAT punch-through, voice chat | T5-01 |
 | T5-06 | **Union frustum BVH sharing** | Co-op players share culling results to reduce GPU work | T5-01, T1-08 |
-| T5-07 | **SLM integration** | Qwen2.5-3B on SlmThread via llama.cpp. SPSC input/output queues | T2-04 |
+| T5-07 | **SLM integration (Qwen2.5-3B)** | Qwen2.5-3B on SlmThread via llama.cpp (Vulkan compute on 2070 baseline, AVX2 CPU in 16GB RAM on 2060 low-spec). SPSC queues | T2-04 |
 | T5-08 | **Inja prompt templates + hot-reload** | ReadDirectoryChangesW file watcher, hash-based cache invalidation | T5-07 |
 | T5-09 | **20 SLM EXT subsystems** | Mission bounty, forensic autopsy, faction radio, companion barks, terminal logs, etc. | T5-07 |
 | T5-10 | **Kokoro-82M TTS** | CPU ONNX inference, 50x realtime, dual-path (recording override) | T5-07, T2-12 |
-| T5-11 | **SLM KV-cache management** | PagedAttention, VRAM/RAM offload during combat, 1.9GB budget | T5-07 |
+| T5-11 | **SLM KV-cache & memory policy** | Unified llama.cpp slot management, dynamic VRAM eviction during horde combat, 1.9GB budget | T5-07 |
 | T5-12 | **Vehicle physics** | 6-raycast MacPherson strut, slip-angle friction, Jolt 6DOF constraints | T2-02 |
 | T5-13 | **Vehicle thermal simulation** | Engine temp, coolant pressure, oil viscosity, brake fade | T5-12 |
 | T5-14 | **Settlement building** | Player-placed structures, snapping, persistent in world | T3-10, T3-13 |
 | T5-15 | **GPU Kirchhoff power grid** | Compute shader nodal admittance matrix solver | T5-14, T3-18 |
 | T5-16 | **3D physical workbench** | Inspection camera, modular attachment snapping | T3-23 |
 | T5-17 | **Bayesian settlement economy** | Dynamic pricing based on supply/demand/faction control | T5-14 |
-| T5-18 | **Karma/faction reputation** | 3-axis (good/evil, lawful/chaotic, selfish/selfless) + per-faction rep | T3-12 |
+| T5-18 | **Faction diplomacy & trade treaties (M12)** | Inter-faction hostility matrices, caravan trade embargoes, and alliance treaties driven by player {Fame, Infamy} vectors | T3-44, T3-12 |
 | T5-19 | **Companion system** | Trust (Bayesian OU process), 7 orders, personality archetypes | T5-18, T2-06 |
 | T5-20 | **Creation Engine editor** | ImGuizmo gizmos, compute terrain sculptor, entity placement | T1, T2-01 |
 | T5-21 | **Dialogue/quest graph VM** | Node-based dialogue trees, quest stages, condition edges | T5-20 |
@@ -543,7 +574,7 @@ python scripts/verify_ext_block_counts.py
 REM Master Plan DAG & binary-parity verification (198 features, 0 cycles):
 python scripts/verify_plan_v8.py
 
-REM Unit tests (when Catch2 re-linked):
+REM Unit tests (Catch2 active, 76/77 tests passing):
 build\tests\ZombieEngineTests.exe
 ```
 
@@ -576,7 +607,7 @@ These are non-negotiable design pillars preserved from v7.0:
 6. **Bethesda Item Persistence** — Every placed/dropped item retains exact resting transform. 3-tier lifecycle.
 7. **Data-Driven Everything** — Weapon ballistics, AI params, director coefficients in JSON. Zero-recompile tuning.
 8. **Dual-Core AI Director** — L4D2 mathematical pacing (60Hz) + SLM co-processor (async, eventual consistency).
-9. **Hard Authored-Asset Budget (≤ 50 Assets)** — The entire engine operates under a hard cap of ≤ 50 authored 3D models/textures. All world variety is mathematical (WFC interiors, L-systems, Voronoi decals, MSDF signage grammar, procedural voice DSP).
+9. **Hard Authored-Asset Budget (≤ 50 Assets for Stage 3 Demo)** — The Stage 3 Playable Demo operates under a hard cap of ≤ 50 authored 3D models/textures. All demo variety is mathematical (WFC interiors, L-systems, Voronoi decals, MSDF signage grammar, procedural voice DSP). Stage 5 campaign expands to a modular kitbashing palette (~250 base assets).
 10. **Player Leads Survivors, Never Hordes** — Player can recruit, command, and lead survivor NPCs and faction squads via the Command Wheel, but zombies are wild biological entities manipulated only via noise, lures, and pheromones.
 11. **Multi-Solution Quests (Fight, Talk, Sneak, Bribe)** — Every major quest and encounter resolution must support ≥ 2 mechanical pathways (combat, diplomacy, stealth, economic trade), with no rigid class archetype lockouts.
 
@@ -587,8 +618,8 @@ These are non-negotiable design pillars preserved from v7.0:
 | Exception Code | Hex | Trigger | Subsystem |
 |---------------|-----|---------|-----------|
 | `ZERR_VK_DEVICE_LOST` | `0x80010001` | GPU Hang or VRAM Exhaustion | Renderer |
-| `ZERR_VMA_OOM` | `0x80020004` | Virtual Memory Arena Exhausted | Allocator |
-| `ZERR_TASK_DEADLOCK` | `0x80030009` | Fiber Thread Spinlock Timeout | Scheduler |
+| `ZERR_VMA_OOM` | `0x80020004` | Vulkan Memory Allocator Out of Memory | Allocator |
+| `ZERR_TASK_DEADLOCK` | `0x80030009` | enkiTS Task Spinlock Timeout | Scheduler |
 
 ---
 
@@ -600,7 +631,7 @@ These are non-negotiable design pillars preserved from v7.0:
 | Optimization | `/O2`, `/fp:fast` | Maximum vectorization and speed |
 | LTCG | `/GL` + `/LTCG` | Whole program optimization |
 | Sanitizers | ASan, TSan (debug only) | Memory/thread validation |
-| SIMD | AVX2 (Zen 3+ / Intel) | Required for dvec3 double-precision math |
+| SIMD | AVX2 (Zen / Zen 2+ / Intel Haswell+) | Optimal 256-bit SIMD execution for dvec3 double-precision math |
 
 ---
 

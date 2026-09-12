@@ -346,7 +346,7 @@ To guarantee flawless stability on 8 GB cards (RTX 2070 SUPER, RTX 3060 8GB, RTX
     - The compiled bootstrap executable (`EndlessQuarantine.exe`) currently links the core Vulkan 1.4 context, capability detection, and minimal render loop.
     - Full modular subsystems (`src/render/TriangleRenderer.cpp`, `src/physics/` Jolt, `src/ecs/` EnTT, `src/combat/`, `src/ai/`) exist in the repository and are scheduled for staged re-linking into `CMakeLists.txt` during upcoming milestone passes without regressing the headless validation baseline.
 - **Capability Tier (RTX 2070 Super):**
-  - `descriptorBuffer` ✅ | `shaderObject` ✅ | `unifiedImageLayouts` ✅ | `meshShaders` ✅ | `queryTimestamps` ✅ | `rtPipeline` ✅ (Hardware RT Pipeline via dedicated Turing RT Cores).
+  - `descriptorBuffer` ✅ | `shaderObject` ✅ | `unifiedImageLayouts` ✅ | `meshShaders` ✅ | `queryTimestamps` ✅ | `rtPipeline` (Turing hardware RT cores present, scheduled for Stage 4 activation).
 
 ---
 

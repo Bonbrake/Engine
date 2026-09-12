@@ -83,12 +83,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sanity_suite_harness/sanity.cpp")
     )
     apply_engine_definitions(sanity_suite)
     add_test(NAME sanity_suite COMMAND sanity_suite)
-
-    add_custom_command(TARGET sanity_suite POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${VCPKG_INSTALLED_DIR}/x64-windows/bin"
-            "$<TARGET_FILE_DIR:sanity_suite>"
-    )
+    # Runtime DLLs for the build directory are already staged by EndlessQuarantine POST_BUILD
 endif()
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")

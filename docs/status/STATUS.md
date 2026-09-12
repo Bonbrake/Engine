@@ -87,8 +87,8 @@ GPU-driven *plumbing* built and run-verified. The ECS→render bridge **now exis
 - Full Subsystem Test Suite: **76 test cases, 259 assertions** (`build\tests\ZombieEngineTests.exe` — 75 passed, 1 skipped for headless video, 0 failures).
 - Headless Boot: **`HEADLESS_BOOT_OK` (Zero validation layer exceptions)** via `build\EndlessQuarantine.exe --headless`.
 - Capability Tier (RTX 2070 Super):
-  - `descriptorBuffer` ✅ | `shaderObject` ✅ | `unifiedImageLayouts` ✅ | `meshShaders` ✅ | `rtPipeline` ✅ | `queryTimestamps` ✅ (Hardware RT Pipeline via dedicated Turing RT Cores, `rtPipeline=1` verified in headless boot log).
-- In-Game AI Director: **Dual-Core Architecture Locked** — Left 4 Dead 2 mathematical intensity pacing state machine (60Hz tick) coupled with asynchronous `Qwen2.5-3B-Instruct` (Q4_K_M GGUF, ~1.9 GB) on `SlmThread`. 8 GB VRAM baseline (6.2 GB hard cap), 6 GB minimum floor (5.0 GB hard cap).
+  - `descriptorBuffer` ✅ | `shaderObject` ✅ | `unifiedImageLayouts` ✅ | `meshShaders` ✅ | `queryTimestamps` ✅ | `rtPipeline` (Turing hardware RT cores present, scheduled for Stage 4 activation).
+- In-Game AI Director: **Dual-Core Architecture Locked** — Left 4 Dead 2 mathematical intensity pacing state machine (60Hz tick) coupled with asynchronous `Qwen2.5-3B-Instruct` (Q4_K_M GGUF, ~1.9 GB) on `SlmThread`. 8 GB VRAM baseline (6.2 GB hard cap), 6 GB low-spec target (4.5 GB hard cap @ 30 FPS).
 
 ## Commits This Pass (spec/m0-parity-reformat, 25 commits)
 - `83c0d43` — [M4.5-EXT-33] Work around RTSS swapchain STORAGE_BIT injection
