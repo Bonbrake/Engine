@@ -1,8 +1,8 @@
 ---
 document: Zombie Engine Master Refactor Plan v8.0
-version: 8.0-AUDITED-DEDUPLICATED
-author: Reconciled from v7.0 via Architectural Audit (September 2026)
-supersedes: v7.0-AAA-RECONCILED (11,802 lines → deduplicated to ~87 unique features)
+version: 8.1-AUDITED-CROSSREFERENCED
+author: Reconciled from v7.0 via Architectural Audit + Cross-Reference (September 2026)
+supersedes: v7.0-AAA-RECONCILED (11,802 lines → deduplicated to ~133 unique features)
 single_source_of_truth: true
 hardware_floors:
   minimum: 1080p @ 30 FPS (RTX 2060 6GB / RX 6600 8GB / Arc A580 8GB) | 5.0GB VRAM Cap
@@ -22,7 +22,7 @@ core_tech_stack:
 
 # ZOMBIE ENGINE MASTER REFACTOR PLAN v8.0
 ## "The Endless Quarantine" — Audited, Deduplicated, Buildable
-## Supersedes v7.0 (480 parts → 87 unique features across 6 tiers)
+## Supersedes v7.0 (480 parts → 133 unique features across 6 tiers)
 
 ---
 
@@ -30,7 +30,8 @@ core_tech_stack:
 
 | Change | Detail |
 |--------|--------|
-| **Deduplication** | 480 parts collapsed to 87 unique features (many were described 2-5x at different detail levels) |
+| **Deduplication** | 480 parts collapsed to 133 unique features (many were described 2-5x at different detail levels) |
+| **Cross-reference pass (v8.1)** | 46 additional unique features recovered from v7.0 Parts 23-210 that were missed in initial dedup |
 | **Contradiction resolution** | 8 technology contradictions resolved with firm decisions (see §2) |
 | **Removed (8 items)** | Custom assembly fibers, custom hash map, custom FixedString, custom SIMD math, GGPO rollback, C++20 modules, quantum networking, "DirectX 13" |
 | **Platform ports deferred** | PS5, Xbox, Apple Silicon, Android, Switch ports moved to Tier 6 (post-PC-launch) — all preserved, not deleted |
@@ -273,6 +274,13 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T1-14 | **Pipeline warmup** | Pre-compile all shader permutations at boot. Zero in-game stutter | T1-11 |
 | T1-15 | **VRAM memory budget guard** | Track VMA budget, shed mip levels at 6.2GB ceiling | T0-03 |
 | T1-16 | **Scalar block layout** | VK_EXT_scalar_block_layout for 1:1 CPU/GPU struct matching | T0 |
+| T1-17 | **Shader hot-reload** | ReadDirectoryChangesW watcher, async SPIR-V recompile, live VkPipeline swap without restart | T0-14 |
+| T1-18 | **Packed ARM texture layout** | AO+Roughness+Metallic in single RGB texture, 60% fewer material bindings | T1-03 |
+| T1-19 | **Compute GPU skeletal skinning** | Skin once per frame in compute, share output buffer across all passes (shadow, depth, color) | T1-01, T1-04 |
+| T1-20 | **Parallel secondary command buffers** | Worker threads record VkCommandBuffer secondaries in parallel, concat into single primary | T0-13 |
+| T1-21 | **DAG async asset loader** | Directed acyclic graph dependency resolver, parallel texture+mesh+audio streaming across all cores | T0-13 |
+| T1-22 | **sccache compiler caching** | 90% faster incremental rebuilds via compiled object caching | T0 |
+| T1-23 | **VMA defragmentation telemetry** | Real-time VRAM fragmentation ratio, auto vmaDefragmentationPass at >15% | T0-03, T1-15 |
 
 ---
 
@@ -298,6 +306,11 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T2-15 | **Linear/bump arena allocators** | Per-frame TransientArena, TLSF for long-lived objects | T2-04 |
 | T2-16 | **Deterministic PRNG** | Seeded RNG for reproducible gameplay | T2-04 |
 | T2-17 | **Entity factory + generational table** | Stable IDs, pooled creation/destruction | T2-01 |
+| T2-18 | **Async physics interpolation** | Smooth rigidbody rendering between fixed physics ticks at any monitor refresh rate | T2-02, T2-04 |
+| T2-19 | **ECS prefab variant inheritance** | Hierarchical prefab templates: modify base "Zombie" → cascades to "Armored Zombie" with overrides | T2-01 |
+| T2-20 | **C++20 coroutine task scheduler** | std::coroutine for clean async asset loading, network RPCs without callback hell | T2-04 |
+| T2-21 | **Cache-line false-sharing prevention** | alignas(std::hardware_destructive_interference_size) on all atomic/cross-thread data | T2-04 |
+| T2-22 | **Material acoustic absorption coefficients** | Per-material dB loss (Concrete -30dB, Wood -8dB, Glass -3dB) for sound propagation | T2-12 |
 
 ---
 
@@ -332,6 +345,19 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T3-24 | **Supersonic ballistic acoustics** | Mach cone shockwave, crack/muzzle separation, subsonic whiz-bys | T3-04, T2-12 |
 | T3-25 | **Surface-dependent brass impacts** | Concrete/wood/metal/carpet resonant filter profiles | T2-12 |
 | T3-26 | **Kinetic gear rattle** | Plate carrier / Molle clatter driven by acceleration and angular jerk | T3-07 |
+| T3-27 | **Weapon jamming and fouling** | Barrel heat, carbon fouling, magazine spring tension. FTF/FTE jams require manual clearing | T3-04 |
+| T3-28 | **Heart rate and lungs stamina** | Physical BPM (60-180), O2 deficit, breath gasping audio, weapon sway tied to recovery time | T3-17 |
+| T3-29 | **Compute stealth illuminance** | Dynamic screen-space lux compute integrator. Smooth 0-100 stealth visibility meter | T2-06, T1-06 |
+| T3-30 | **RVO2 companion collision avoidance** | Reciprocal velocity obstacles + contextual doorway yielding to prevent blocking | T2-06 |
+| T3-31 | **Dynamic Recast navmesh carving** | Player barricades/explosions carve 128x128 navmesh tiles in <1ms, auto off-mesh vault links | T2-07 |
+| T3-32 | **Weapon sway fatigue and adrenaline** | ADS accumulates lactic acid fatigue increasing sway. Damage spikes adrenaline micro-tremor | T2-11, T3-28 |
+| T3-33 | **Center-of-mass encumbrance shift** | Heavy backpack shifts 3D CoM, causing momentum drift in turns and stamina drain crouching | T3-16 |
+| T3-34 | **Dynamic wildlife AI** | Deer, wolves, birds with graze/hunt/scatter behaviors reacting to gunfire and hordes | T2-06, T3-13 |
+| T3-35 | **Faction territorial Voronoi** | Dynamic 2D Voronoi grid, faction pressure causes organic border skirmishes and raids | T3-12, T2-14 |
+| T3-36 | **Voronoi glass window shatter** | Impact-point-centered Voronoi fracture, physical glass shard projectiles | T2-02, T3-05 |
+| T3-37 | **Ragdoll momentum blend-back** | Evaluate bone velocities on recovery, context-sensitive get-up locomotion matching momentum | T2-09, T2-02 |
+| T3-38 | **NPC cognitive load and decision latency** | Stress increases reaction time: green bandits hesitate, veteran soldiers react instantly | T2-06 |
+| T3-39 | **Blood clotting and coagulation** | Dynamic viscosity, gravity runoff, temporal coagulation turning arterial spray to dark pools | T3-05 |
 
 ---
 
@@ -362,6 +388,28 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T4-20 | **Asset cooking (.zepak)** | Binary pack format, magic 0x5A45504B, zero-copy DMA from NVMe | T3-13 |
 | T4-21 | **Dynamic extended state 3** | VK_EXT_extended_dynamic_state3 for runtime rasterizer changes | T0-19 |
 | T4-22 | **Opacity micromaps** | VK_EXT_opacity_micromap for RT perf on alpha-tested meshes | T4-04 |
+| T4-23 | **RT diffuse global illumination** | VK_KHR_ray_query multi-bounce diffuse GI, flashlights bounce off colored walls | T4-04 |
+| T4-24 | **Subsurface scattering skin shader** | Separable SSSS for realistic human skin translucency on ears, noses, hands | T1-03 |
+| T4-25 | **FFT ocean and river water** | GPU FFT wave simulation, optical depth absorption, dynamic shoreline foam | T3-18 |
+| T4-26 | **3D ray-marched volumetric clouds** | Physical cloud formations reacting to wind/humidity/sun with Mie scattering | T4-08 |
+| T4-27 | **Atmosphere multi-scattering LUTs** | GPU precomputed 4D atmospheric LUTs for photorealistic sunsets and twilight | T4-11 |
+| T4-28 | **SMAA 1x compute fallback** | Razor-sharp spatial AA alternative for players who dislike TAA blur | T1-10 |
+| T4-29 | **Clustered forward transparency** | Glass/ice/smoke forward-rendered using 3D clustered light grid after deferred pass | T1-06 |
+| T4-30 | **Clustered deferred decals** | Z-binning tiled decal projection, no early-Z breakage | T1-10 |
+| T4-31 | **GPU foliage bending and tread flattening** | Characters/vehicles push bending vectors into 2D deformation texture | T3-13, T1-10 |
+| T4-32 | **Height-based POM terrain blending** | Parallax occlusion mapping with per-texture heightmaps for sharp material edges | T3-14 |
+| T4-33 | **Persistent blood/gore accumulation map** | 4K dynamic texture array, permanent blood/drag trails, no memory leak | T3-05 |
+| T4-34 | **GPU XPBD cloth and rope simulation** | Clothing capes, cables, tarps react to movement, wind, body collision on compute | T2-09, T3-18 |
+| T4-35 | **Helmet visor optics shader** | Internal breath fogging, external rain droplets, glass scratches, hand-wipe clearing | T3-07, T4-09 |
+| T4-36 | **Infrared thermal and NVG optics** | Physical body temp (37C human, 90C engine), emissivity maps, phosphor tube noise | T1-06 |
+| T4-37 | **Weapon carbon/rust wear shaders** | GPU procedural carbon residue, metal scratches, mud accumulation based on use | T3-27 |
+| T4-38 | **Atmospheric dust and spore particles** | 3D micro-particle volume emitters illuminated by flashlight shafts in dark spaces | T3-18, T4-08 |
+| T4-39 | **Retroreflection shader** | Micro-facet retroreflection BRDF for road signs, safety vests, cat-eye markers | T1-03 |
+| T4-40 | **Emissive surface voxel bounce light** | Voxelize high-intensity emissive triangles into GI structure for neon illumination | T4-23 |
+| T4-41 | **Wind occlusion for vegetation** | 3D wind occlusion compute shader: indoor plants and sheltered trees stay still | T4-09, T3-13 |
+| T4-42 | **Foliage motion vectors for DLSS/FSR** | Per-leaf procedural velocity generation eliminating upscaler ghosting on vegetation | T4-05, T4-31 |
+| T4-43 | **RT acceleration structure compaction** | Dynamic BVH compaction after build passes, reclaim 50% RT VRAM | T4-04 |
+| T4-44 | **Spatiotemporal path tracing denoiser** | SVGF + AI denoiser for clean 1-spp path traced images | T4-23 |
 
 ---
 
@@ -394,6 +442,16 @@ These are **final**. All contradicting references in v7.0 and spec/ files are su
 | T5-22 | **Steam Input API + gyro aiming** | ISteamInput action sets, dynamic glyphs, flick stick | T0-17 |
 | T5-23 | **Steam Deck native profile** | 1280x800, 1.25x HUD scale, 40/60Hz cap, gyro layers | T5-22 |
 | T5-24 | **.zesave cloud persistence** | LZ4/Zstd compressed binary chunks, CRC32 checksums, < 5MB | T3-12 |
+| T5-25 | **Destructible voxel walls and breaching** | Real-time structural load degradation, convex chunk fragmentation from explosives | T2-02, T3-13 |
+| T5-26 | **Voxel fire propagation** | Material flammability (Wood 90%, Grass 100%, Metal 0%), wind-driven spread, fuel consumption | T3-18, T3-13 |
+| T5-27 | **WFC procedural interior solver** | Wave Function Collapse room layouts (kitchens, bedrooms, clinics), semantic furniture anchors | T3-13 |
+| T5-28 | **Utility-based settlement NPC AI** | Sims/RimWorld need-driven score curves: hunger, fatigue, defense, socializing | T5-14 |
+| T5-29 | **Procedural city block generator** | L-System street network, tensor field road splines, zoning commercial/residential | T3-13, T5-20 |
+| T5-30 | **Hermite spline netcode interpolation** | Cubic Hermite smoothing through packet jitter, 60fps visual smoothness at 150ms ping | T5-01 |
+| T5-31 | **Gear ratio and clutch transmission** | Manual/auto gear ratios, RPM torque curves, torque converters, clutch thermal wear | T5-12 |
+| T5-32 | **Component-based vehicle damage** | Sub-collider destruction: engine block, fuel tank, tires, windshield as separate damageable parts | T5-12 |
+| T5-33 | **Voronoi door and hinge destruction** | Shots at hinges detach pins, explosions fracture doors into physical 3D splinters | T2-02, T3-36 |
+| T5-34 | **Dynamic faction schisms** | Internal rivalries split large settlements into hostile splinter factions during crises | T3-35, T5-18 |
 
 ---
 
