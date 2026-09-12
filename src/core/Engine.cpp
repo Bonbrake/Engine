@@ -28,6 +28,18 @@
 #include "ze/slm/SLMClient.h"
 #include "ze/ui/HUD.h"
 #include "ze/vehicle/VehicleSystem.h"
+#include "ze/ai/L4D2Director.h"
+#include "ze/ai/SwarmEngine.h"
+#include "ze/ai/L4D2SLMBridge.h"
+#include "ze/ai/ResponseSystem.h"
+#include "ze/ai/SquadCommandWheel.h"
+#include "ze/world/ItemPersistence.h"
+#include "ze/core/BodycamCamera.h"
+#include "ze/core/GamepadController.h"
+#include "ze/core/SteamworksManager.h"
+#include "ze/audio/BodycamAcoustics.h"
+#include "ze/render/PipelineWarmup.h"
+#include "ze/render/ProceduralWeaponAnim.h"
 
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
@@ -154,7 +166,26 @@ Engine::Engine() {
         hud_            = std::make_unique<ui::HUD>();
 
         aiDirector_     = std::make_unique<ai::AIDirector>();
-        LOG_INFO("ENGINE: AI Director + new systems initialized");
+
+        // Master Plan v8.0 Architecture Subsystems (Stages 1-3)
+        l4d2Director_   = std::make_unique<ze::ai::L4D2Director>();
+        swarmEngine_    = std::make_unique<ze::ai::SwarmEngine>();
+        swarmEngine_->initialize(512);
+        l4d2SlmBridge_  = std::make_unique<ze::ai::L4D2SLMBridge>(*l4d2Director_, *slmClient_);
+        responseSystem_ = std::make_unique<ze::ai::ResponseSystem>();
+        responseSystem_->initialize();
+        squadWheel_     = std::make_unique<ze::ai::SquadCommandWheel>();
+        itemPersistence_= std::make_unique<ze::world::ItemPersistenceSystem>();
+        itemPersistence_->initialize();
+        bodycamCamera_  = std::make_unique<ze::core::BodycamCamera>();
+        gamepadController_ = std::make_unique<ze::core::GamepadController>();
+        steamworksManager_ = std::make_unique<ze::core::SteamworksManager>();
+        steamworksManager_->initialize(Config::get().headless);
+        acoustics_      = std::make_unique<ze::audio::BodycamAcousticsSystem>();
+        pipelineWarmup_ = std::make_unique<ze::render::PipelineWarmup>();
+        pipelineWarmup_->executeWarmup();
+        weaponAnim_     = std::make_unique<ze::render::ProceduralWeaponAnim>();
+        LOG_INFO("ENGINE: L4D2 Director, SwarmEngine, and Master Plan v8.0 systems initialized");
 
         vehicleSystem_  = std::make_unique<vehicle::VehicleSystem>();
         LOG_INFO("ENGINE: VehicleSystem initialized");
@@ -388,6 +419,34 @@ void Engine::mainLoop() {
             if (aiDirector_) {
                 glm::vec3 playerPos(0, 0, 0);
                 aiDirector_->tick(static_cast<float>(FIXED_DT), playerPos, 100.0f, 0.0f, 0.0f, 12.0f, 1);
+            }
+            if (l4d2Director_) {
+                std::vector<ze::ai::SurvivorTelemetry> team(1);
+                team[0].health = 100.0f;
+                team[0].ammoFraction = 1.0f;
+                team[0].isPinned = false;
+                l4d2Director_->update(static_cast<float>(FIXED_DT), team, 0);
+            }
+            if (l4d2SlmBridge_) {
+                l4d2SlmBridge_->update();
+            }
+            if (swarmEngine_) {
+                swarmEngine_->update(static_cast<float>(FIXED_DT), glm::vec3(0.0f), 0.0f);
+            }
+            if (responseSystem_) {
+                responseSystem_->update(static_cast<float>(FIXED_DT));
+            }
+            if (itemPersistence_) {
+                itemPersistence_->update(static_cast<float>(FIXED_DT));
+            }
+            if (bodycamCamera_) {
+                bodycamCamera_->update(static_cast<float>(FIXED_DT), 0.0f, 0.0f, 0.0f, 0.0f);
+            }
+            if (steamworksManager_) {
+                steamworksManager_->update();
+            }
+            if (weaponAnim_) {
+                weaponAnim_->update(static_cast<float>(FIXED_DT), 10.0f, glm::vec3(0.0f), 0.0f);
             }
             if (audioEngine_) {
                 audioEngine_->tick(static_cast<float>(FIXED_DT), glm::vec3(0), glm::vec3(0), glm::quat(1,0,0,0), frameCount);
@@ -933,6 +992,31 @@ bool Engine::verifyHeadlessInit() const {
     if (!runRenderTests(device)) return false;
     if (!runPhysicsTests(ecsContext_.get(), physicsSystem_.get(), eventBus_.get())) return false;
 #endif
+
+    if (!l4d2Director_ || l4d2Director_->getCurrentPhase() != ze::ai::PacingPhase::BuildUp) {
+        LOG_CRITICAL("VERIFICATION FAILURE: l4d2Director_ initialization failed!");
+        return false;
+    }
+    if (!swarmEngine_ || swarmEngine_->getActiveAgentCount() != 0) {
+        LOG_CRITICAL("VERIFICATION FAILURE: swarmEngine_ initialization failed!");
+        return false;
+    }
+    if (!responseSystem_ || responseSystem_->getRegisteredRuleCount() == 0) {
+        LOG_CRITICAL("VERIFICATION FAILURE: responseSystem_ initialization failed!");
+        return false;
+    }
+    if (!itemPersistence_) {
+        LOG_CRITICAL("VERIFICATION FAILURE: itemPersistence_ initialization failed!");
+        return false;
+    }
+    if (!bodycamCamera_) {
+        LOG_CRITICAL("VERIFICATION FAILURE: bodycamCamera_ initialization failed!");
+        return false;
+    }
+    if (!pipelineWarmup_ || !pipelineWarmup_->isWarmupComplete()) {
+        LOG_CRITICAL("VERIFICATION FAILURE: pipelineWarmup_ initialization failed!");
+        return false;
+    }
 
     return true;
 }

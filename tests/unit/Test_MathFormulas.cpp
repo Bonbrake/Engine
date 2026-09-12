@@ -138,6 +138,65 @@ TEST_CASE("Staging Ring Buffer Math", "[M1-EXT-05]") {
     
     // Ensure we catch freeing more than used
     REQUIRE_THROWS_AS(rb.Free(2000), std::out_of_range);
+
+    // Free remaining allocations to return to empty
+    rb.Free(1024 - 256); // frees offset 256..1024
+    REQUIRE(rb.GetTail() == 0);
+    rb.Free(128);        // frees offset 0..128
+    REQUIRE(rb.GetTail() == 128);
+    REQUIRE(rb.GetHead() == 128);
+    REQUIRE(rb.GetUsedCount() == 0);
+}
+
+TEST_CASE("Staging Ring Buffer Wrap and Padding Zero-Leak", "[M1-EXT-05]") {
+    render::StagingRingBuffer rb;
+    rb.Initialize(VK_NULL_HANDLE, 1024);
+
+    // 1. Allocate 512 bytes at 0
+    size_t off1 = rb.Allocate(512);
+    REQUIRE(off1 == 0);
+    REQUIRE(rb.GetHead() == 512);
+
+    // 2. Allocate 384 bytes at 512 (leaves 128 bytes at end: [896, 1024))
+    size_t off2 = rb.Allocate(384);
+    REQUIRE(off2 == 512);
+    REQUIRE(rb.GetHead() == 896);
+    REQUIRE(rb.GetUsedCount() == 896);
+
+    // 3. Free first block (512) -> tail moves to 512
+    rb.Free(512);
+    REQUIRE(rb.GetTail() == 512);
+    REQUIRE(rb.GetUsedCount() == 384);
+
+    // 4. Allocate 256 bytes -> does not fit in remaining 128 bytes at end!
+    // Must wrap to 0, wasting 128 bytes at end as padding.
+    size_t off3 = rb.Allocate(256);
+    REQUIRE(off3 == 0);
+    REQUIRE(rb.GetHead() == 256);
+    REQUIRE(rb.GetWrapPoint() == 896);
+    // usedCount = 384 active + 128 wasted + 256 active = 768
+    REQUIRE(rb.GetUsedCount() == 768);
+
+    // 5. Free second block (384) -> reaches wrapPoint (512 + 384 = 896)
+    // Must reclaim the 128 wasted padding bytes and wrap tail to 0!
+    rb.Free(384);
+    REQUIRE(rb.GetTail() == 0);
+    REQUIRE(rb.GetWrapPoint() == 0);
+    REQUIRE(rb.GetUsedCount() == 256); // Exactly only the 256 bytes of off3 remain!
+
+    // 6. Free third block (256) -> buffer should be 100% empty with ZERO phantom bytes!
+    rb.Free(256);
+    REQUIRE(rb.GetTail() == 256);
+    REQUIRE(rb.GetHead() == 256);
+    REQUIRE(rb.GetUsedCount() == 0);
+
+    // 7. Verify multiple wrap cycles run indefinitely without leaking
+    for (int cycle = 0; cycle < 10; ++cycle) {
+        size_t a = rb.Allocate(640);
+        REQUIRE(a % 64 == 0);
+        rb.Free(640);
+        REQUIRE(rb.GetUsedCount() == 0);
+    }
 }
 
 // ---------------------------------------------------------

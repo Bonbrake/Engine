@@ -99,33 +99,30 @@ PipelineLayoutData PipelineBuilder::buildLayouts(const std::vector<std::vector<u
     }
     
     // Create Descriptor Set Layouts
-    // Find the max set index to fill gaps
-    uint32_t maxSetIndex = 0;
     if (!setBindings.empty()) {
-        maxSetIndex = setBindings.rbegin()->first;
-    }
-    
-    result.setLayouts.resize(setBindings.empty() ? 0 : maxSetIndex + 1, VK_NULL_HANDLE);
-    
-    for (uint32_t s = 0; s <= maxSetIndex; ++s) {
-        std::vector<VkDescriptorSetLayoutBinding> bindingsArray;
+        uint32_t maxSetIndex = setBindings.rbegin()->first;
+        result.setLayouts.resize(maxSetIndex + 1, VK_NULL_HANDLE);
         
-        if (setBindings.find(s) != setBindings.end()) {
-            for (const auto& pair : setBindings[s]) {
-                bindingsArray.push_back(pair.second);
+        for (uint32_t s = 0; s <= maxSetIndex; ++s) {
+            std::vector<VkDescriptorSetLayoutBinding> bindingsArray;
+            
+            if (setBindings.find(s) != setBindings.end()) {
+                for (const auto& pair : setBindings[s]) {
+                    bindingsArray.push_back(pair.second);
+                }
             }
+            
+            VkDescriptorSetLayoutCreateInfo layoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+            layoutInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_DESCRIPTOR_BUFFER_BIT_EXT;
+            layoutInfo.bindingCount = static_cast<uint32_t>(bindingsArray.size());
+            layoutInfo.pBindings = bindingsArray.data();
+            
+            VkDescriptorSetLayout layout = VK_NULL_HANDLE;
+            if (vkCreateDescriptorSetLayout(device->getLogicalDevice(), &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
+                LOG_ERROR("PipelineBuilder: Failed to create descriptor set layout for set {}", s);
+            }
+            result.setLayouts[s] = layout;
         }
-        
-        VkDescriptorSetLayoutCreateInfo layoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
-        layoutInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_DESCRIPTOR_BUFFER_BIT_EXT;
-        layoutInfo.bindingCount = static_cast<uint32_t>(bindingsArray.size());
-        layoutInfo.pBindings = bindingsArray.data();
-        
-        VkDescriptorSetLayout layout;
-        if (vkCreateDescriptorSetLayout(device->getLogicalDevice(), &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
-            LOG_ERROR("PipelineBuilder: Failed to create descriptor set layout for set {}", s);
-        }
-        result.setLayouts[s] = layout;
     }
     
     // Create Pipeline Layout
@@ -135,10 +132,13 @@ PipelineLayoutData PipelineBuilder::buildLayouts(const std::vector<std::vector<u
     }
     
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
+    if (device->getCapabilities().descriptorBuffer) {
+        pipelineLayoutInfo.flags |= VK_PIPELINE_LAYOUT_CREATE_INDEPENDENT_SETS_BIT_EXT;
+    }
     pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(result.setLayouts.size());
-    pipelineLayoutInfo.pSetLayouts = result.setLayouts.data();
+    pipelineLayoutInfo.pSetLayouts = result.setLayouts.empty() ? nullptr : result.setLayouts.data();
     pipelineLayoutInfo.pushConstantRangeCount = static_cast<uint32_t>(pushConstantRanges.size());
-    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.data();
+    pipelineLayoutInfo.pPushConstantRanges = pushConstantRanges.empty() ? nullptr : pushConstantRanges.data();
     
     if (vkCreatePipelineLayout(device->getLogicalDevice(), &pipelineLayoutInfo, nullptr, &result.pipelineLayout) != VK_SUCCESS) {
         LOG_ERROR("PipelineBuilder: Failed to create pipeline layout");

@@ -32,6 +32,8 @@ private:
     ecs::Handle fallbackTextureHandle_{0xFFFFFFFF, 0};
     
     StagingRingBuffer stagingRingBuffer_;
+    VkCommandPool uploadCommandPool_ = VK_NULL_HANDLE;
+    VkFence uploadFence_ = VK_NULL_HANDLE;
     
     void ExecuteStagingUpload(size_t size, const void* data, std::function<void(VkCommandBuffer, VkBuffer, size_t offset)> recordCmd);
 };

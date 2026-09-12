@@ -48,6 +48,7 @@ private:
     VkPipeline wireframePipeline = VK_NULL_HANDLE; // [M1-EXT-04] Derivative variant
     VkPipeline meshPipeline = VK_NULL_HANDLE;       // Slice 0a: dev-test cube (pos+normal, 32B stride)
     VkPipeline pbrPipeline = VK_NULL_HANDLE;        // [T1-03] PBR metallic-roughness mesh pipeline
+    VkPipelineLayout pbrPipelineLayout = VK_NULL_HANDLE; // [T1-03] Dedicated PBR layout (128B push constants)
     
     // Slice 0a: dev-test mesh HANDLE (first LoadMesh), gated to --dev rendering.
     // Stored as a handle, resolved via GetMesh() at point of use — NOT a cached

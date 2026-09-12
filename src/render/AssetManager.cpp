@@ -37,6 +37,15 @@ void AssetManager::Initialize(Device* device) {
     // Initialize 64MB Persistent Mapped Staging Ring Buffer [M1-EXT-05 / T1-02]
     stagingRingBuffer_.Initialize(device_->getAllocator(), 64 * 1024 * 1024);
 
+    // Initialize persistent upload command pool and fence
+    VkCommandPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    poolInfo.queueFamilyIndex = device_->getGraphicsQueueIndex();
+    vkCreateCommandPool(device_->getLogicalDevice(), &poolInfo, nullptr, &uploadCommandPool_);
+
+    VkFenceCreateInfo fenceInfo{VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
+    vkCreateFence(device_->getLogicalDevice(), &fenceInfo, nullptr, &uploadFence_);
+
     // Create 1x1 magenta fallback texture
     uint32_t magentaPixel = 0xFFFF00FF; // ABGR for full alpha magenta
     
@@ -137,6 +146,15 @@ void AssetManager::Destroy() {
         }
     }
     
+    if (uploadFence_ != VK_NULL_HANDLE) {
+        vkDestroyFence(device_->getLogicalDevice(), uploadFence_, nullptr);
+        uploadFence_ = VK_NULL_HANDLE;
+    }
+    if (uploadCommandPool_ != VK_NULL_HANDLE) {
+        vkDestroyCommandPool(device_->getLogicalDevice(), uploadCommandPool_, nullptr);
+        uploadCommandPool_ = VK_NULL_HANDLE;
+    }
+
     stagingRingBuffer_.Destroy();
     LOG_INFO("AssetManager destroyed");
 }
@@ -148,46 +166,31 @@ void AssetManager::ExecuteStagingUpload(size_t size, const void* data, std::func
     uint8_t* dst = static_cast<uint8_t*>(stagingRingBuffer_.GetMappedPtr()) + offset;
     memcpy(dst, data, size);
     
-    // Create transient command buffer for transfer
-    VkCommandPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
-    poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    poolInfo.queueFamilyIndex = device_->getGraphicsQueueIndex();
-    
-    VkCommandPool pool;
-    vkCreateCommandPool(device_->getLogicalDevice(), &poolInfo, nullptr, &pool);
-    
     VkCommandBufferAllocateInfo cmdAllocInfo{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
-    cmdAllocInfo.commandPool = pool;
+    cmdAllocInfo.commandPool = uploadCommandPool_;
     cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     cmdAllocInfo.commandBufferCount = 1;
     
-    VkCommandBuffer cmd;
+    VkCommandBuffer cmd = VK_NULL_HANDLE;
     vkAllocateCommandBuffers(device_->getLogicalDevice(), &cmdAllocInfo, &cmd);
     
     VkCommandBufferBeginInfo beginInfo{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     
     vkBeginCommandBuffer(cmd, &beginInfo);
-    
     recordCmd(cmd, stagingRingBuffer_.GetBuffer(), offset);
-    
     vkEndCommandBuffer(cmd);
     
     VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &cmd;
     
-    VkFenceCreateInfo fenceInfo{VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
-    VkFence fence;
-    vkCreateFence(device_->getLogicalDevice(), &fenceInfo, nullptr, &fence);
+    vkResetFences(device_->getLogicalDevice(), 1, &uploadFence_);
+    vkQueueSubmit(device_->getGraphicsQueue(), 1, &submitInfo, uploadFence_);
     
-    vkQueueSubmit(device_->getGraphicsQueue(), 1, &submitInfo, fence);
+    vkWaitForFences(device_->getLogicalDevice(), 1, &uploadFence_, VK_TRUE, UINT64_MAX);
     
-    // Fence/sync before freeing staging buffer
-    vkWaitForFences(device_->getLogicalDevice(), 1, &fence, VK_TRUE, UINT64_MAX);
-    
-    vkDestroyFence(device_->getLogicalDevice(), fence, nullptr);
-    vkDestroyCommandPool(device_->getLogicalDevice(), pool, nullptr);
+    vkFreeCommandBuffers(device_->getLogicalDevice(), uploadCommandPool_, 1, &cmd);
     stagingRingBuffer_.Free(size);
 }
 

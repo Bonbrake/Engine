@@ -22,6 +22,12 @@ namespace ui { class HUD; }
 namespace combat { class DamageSystem; }
 namespace vehicle { class VehicleSystem; }
 
+namespace ze::ai { class L4D2Director; class SwarmEngine; class L4D2SLMBridge; class ResponseSystem; class SquadCommandWheel; }
+namespace ze::world { class ItemPersistenceSystem; }
+namespace ze::core { class BodycamCamera; class GamepadController; class SteamworksManager; }
+namespace ze::audio { class BodycamAcousticsSystem; }
+namespace ze::render { class PipelineWarmup; class ProceduralWeaponAnim; }
+
 namespace core {
 
 class Engine {
@@ -31,6 +37,11 @@ public:
 
     void run();
     bool verifyHeadlessInit() const;
+
+    ze::ai::L4D2Director* getL4D2Director() const { return l4d2Director_.get(); }
+    ze::ai::SwarmEngine* getSwarmEngine() const { return swarmEngine_.get(); }
+    ze::world::ItemPersistenceSystem* getItemPersistence() const { return itemPersistence_.get(); }
+    ze::core::BodycamCamera* getBodycamCamera() const { return bodycamCamera_.get(); }
 
 private:
     void mainLoop();
@@ -55,7 +66,7 @@ private:
     std::unique_ptr<events::EventBus>       eventBus_;      // [M2] entt::dispatcher
     debug::ImGuiOverlay imguiOverlay_;
 
-    // New systems (added 2026-07-22)
+    // Core & Gameplay Subsystems
     std::unique_ptr<audio::AudioEngine>          audioEngine_;
     std::unique_ptr<ai::AIDirector>              aiDirector_;
     std::unique_ptr<world::BiomeGraph>           biomeGraph_;
@@ -68,6 +79,20 @@ private:
     std::unique_ptr<slm::SLMClient>              slmClient_;
     std::unique_ptr<ui::HUD>                     hud_;
     std::unique_ptr<vehicle::VehicleSystem>      vehicleSystem_;
+
+    // Master Plan v8.0 Architecture Subsystems (Stages 1-3)
+    std::unique_ptr<ze::ai::L4D2Director>            l4d2Director_;
+    std::unique_ptr<ze::ai::SwarmEngine>             swarmEngine_;
+    std::unique_ptr<ze::ai::L4D2SLMBridge>           l4d2SlmBridge_;
+    std::unique_ptr<ze::ai::ResponseSystem>          responseSystem_;
+    std::unique_ptr<ze::ai::SquadCommandWheel>       squadWheel_;
+    std::unique_ptr<ze::world::ItemPersistenceSystem> itemPersistence_;
+    std::unique_ptr<ze::core::BodycamCamera>         bodycamCamera_;
+    std::unique_ptr<ze::core::GamepadController>     gamepadController_;
+    std::unique_ptr<ze::core::SteamworksManager>     steamworksManager_;
+    std::unique_ptr<ze::audio::BodycamAcousticsSystem> acoustics_;
+    std::unique_ptr<ze::render::PipelineWarmup>      pipelineWarmup_;
+    std::unique_ptr<ze::render::ProceduralWeaponAnim> weaponAnim_;
 
 #if ENGINE_DEV_TOOLS
     // [M2-#4] Dev-test hook state (devMode && !headless only)

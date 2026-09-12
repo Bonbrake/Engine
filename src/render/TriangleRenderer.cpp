@@ -162,19 +162,21 @@ void TriangleRenderer::setScene(ecs::ECSContext* ecsCtx, AssetManager* assetMana
 // [M1:EXIT-1] Single camera-relative cast: renderPos = (vec3)(entityPos - camPos).
 // Authoritative position is dvec3; the GPU only ever sees a vec3 relative to the
 // camera, so world magnitude (km-scale, M2.6) never enters single-precision math.
-glm::mat4 BuildEntityMVP(const ecs::Transform& t, const glm::dvec3& camPos,
-                         const glm::mat4& view, const glm::mat4& proj) {
+glm::mat4 BuildEntityModel(const ecs::Transform& t, const glm::dvec3& camPos) {
     const glm::vec3 renderPos = glm::vec3(t.position - camPos);
     glm::mat4 model = glm::translate(glm::mat4(1.0f), renderPos);
-    // dquat -> quat (rotation is float-precision by design). Build quat from the
-    // dquat's components to avoid the missing dquat->quat cast in glm.
     const glm::quat rot = glm::quat(static_cast<float>(t.rotation.w),
                                     static_cast<float>(t.rotation.x),
                                     static_cast<float>(t.rotation.y),
                                     static_cast<float>(t.rotation.z));
     model = model * glm::mat4_cast(rot);
     model = glm::scale(model, glm::vec3(t.scale));
-    return proj * view * model;
+    return model;
+}
+
+glm::mat4 BuildEntityMVP(const ecs::Transform& t, const glm::dvec3& camPos,
+                         const glm::mat4& view, const glm::mat4& proj) {
+    return proj * view * BuildEntityModel(t, camPos);
 }
 
 void TriangleRenderer::createDescriptorSets(Device* device) {
@@ -516,7 +518,11 @@ void TriangleRenderer::createPipelines(Device* device, VkFormat colorFormat) {
         pbrVii.vertexAttributeDescriptionCount = 3;
         pbrVii.pVertexAttributeDescriptions = pbrAttribs;
 
+        auto pbrLayoutData = PipelineBuilder::buildLayouts({pbrVertCode, pbrFragCode}, device);
+        pbrPipelineLayout = pbrLayoutData.pipelineLayout;
+
         VkGraphicsPipelineCreateInfo pbrInfo = pipelineInfo;
+        pbrInfo.layout = pbrPipelineLayout;
         pbrInfo.stageCount = 2;
         pbrInfo.pStages = pbrStages;
         pbrInfo.pVertexInputState = &pbrVii;
@@ -591,6 +597,7 @@ void TriangleRenderer::cleanup(Device* device) {
     if (wireframePipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), wireframePipeline, nullptr); wireframePipeline = VK_NULL_HANDLE; }
     if (meshPipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), meshPipeline, nullptr); meshPipeline = VK_NULL_HANDLE; }
     if (pbrPipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), pbrPipeline, nullptr); pbrPipeline = VK_NULL_HANDLE; }
+    if (pbrPipelineLayout != VK_NULL_HANDLE) { vkDestroyPipelineLayout(device->getLogicalDevice(), pbrPipelineLayout, nullptr); pbrPipelineLayout = VK_NULL_HANDLE; }
     if (pipelineLayout != VK_NULL_HANDLE) { vkDestroyPipelineLayout(device->getLogicalDevice(), pipelineLayout, nullptr); pipelineLayout = VK_NULL_HANDLE; }
     if (cullPipeline != VK_NULL_HANDLE) { vkDestroyPipeline(device->getLogicalDevice(), cullPipeline, nullptr); cullPipeline = VK_NULL_HANDLE; }
     if (cullPipelineLayout != VK_NULL_HANDLE) { vkDestroyPipelineLayout(device->getLogicalDevice(), cullPipelineLayout, nullptr); cullPipelineLayout = VK_NULL_HANDLE; }
@@ -741,6 +748,7 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
         ? devView_
         : glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     struct PC { float mvp[16]; } pc;
+    struct PbrPC { float mvp[16]; float model[16]; } pbrPc;
 
     // [M1:EXIT-1] The mesh pipeline uses VK_DYNAMIC_STATE_VIEWPORT/SCISSOR, so the
     // viewport+scissor MUST be set on the command buffer before any draw. Set it once,
@@ -771,8 +779,14 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
                            glm::scale(glm::mat4(1.0f), glm::vec3(0.7f));
         glm::mat4 mvp = proj * view * model;
 
-        memcpy(pc.mvp, &mvp[0][0], sizeof(pc.mvp));
-        vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
+        if (activeMeshPipeline == pbrPipeline && pbrPipelineLayout != VK_NULL_HANDLE) {
+            memcpy(pbrPc.mvp, &mvp[0][0], sizeof(pbrPc.mvp));
+            memcpy(pbrPc.model, &model[0][0], sizeof(pbrPc.model));
+            vkCmdPushConstants(cmd, pbrPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PbrPC), &pbrPc);
+        } else {
+            memcpy(pc.mvp, &mvp[0][0], sizeof(pc.mvp));
+            vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
+        }
 
         VkDeviceSize offsets[] = {0};
         vkCmdBindVertexBuffers(cmd, 0, 1, &devTestMesh->vertexBuffer, offsets);
@@ -804,10 +818,17 @@ void TriangleRenderer::draw(VkCommandBuffer cmd, uint32_t imageIndex, MaterialSy
                 continue;
             }
             const glm::dvec3 camPos = devViewSet_ ? devCamPos_ : glm::dvec3(0.0, 0.0, 4.0);
-            glm::mat4 eMvp = BuildEntityMVP(viewEnts.get<ecs::Transform>(e), camPos, view, proj);
+            glm::mat4 eModel = BuildEntityModel(viewEnts.get<ecs::Transform>(e), camPos);
+            glm::mat4 eMvp = proj * view * eModel;
 
-            memcpy(pc.mvp, &eMvp[0][0], sizeof(pc.mvp));
-            vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
+            if (activeMeshPipeline == pbrPipeline && pbrPipelineLayout != VK_NULL_HANDLE) {
+                memcpy(pbrPc.mvp, &eMvp[0][0], sizeof(pbrPc.mvp));
+                memcpy(pbrPc.model, &eModel[0][0], sizeof(pbrPc.model));
+                vkCmdPushConstants(cmd, pbrPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PbrPC), &pbrPc);
+            } else {
+                memcpy(pc.mvp, &eMvp[0][0], sizeof(pc.mvp));
+                vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PC), &pc);
+            }
 
             VkDeviceSize eOffsets[] = {0};
             vkCmdBindVertexBuffers(cmd, 0, 1, &mesh->vertexBuffer, eOffsets);

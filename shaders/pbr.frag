@@ -1,6 +1,6 @@
 #version 450
 
-layout(location = 0) in vec3 fragWorldPos;
+layout(location = 0) in vec3 fragCameraRelPos;
 layout(location = 1) in vec3 fragNormal;
 layout(location = 2) in vec2 fragTexCoord;
 
@@ -52,10 +52,9 @@ void main() {
     // Normal vector
     vec3 N = normalize(fragNormal);
     
-    // View vector (assuming camera is looking from +Z / standard coordinate)
-    // Camera is roughly at (0, 0, 4) in camera-relative coords
-    vec3 camPos = vec3(0.0, 0.0, 4.0);
-    vec3 V = normalize(camPos - fragWorldPos);
+    // In camera-relative rendering, camera is strictly at origin vec3(0.0, 0.0, 0.0).
+    // View vector points from fragment to camera:
+    vec3 V = normalize(-fragCameraRelPos);
     
     // Material parameters (PBR metallic-roughness baseline)
     vec3 albedo = vec3(0.75, 0.72, 0.68); // Realistic concrete/zombie flesh base
